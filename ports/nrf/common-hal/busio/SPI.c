@@ -143,10 +143,13 @@ static nrf_spim_frequency_t baudrate_to_spim_frequency(const uint32_t baudrate) 
     return 0;
 }
 
-void common_hal_busio_spi_construct(busio_spi_obj_t *self, const mcu_pin_obj_t *clock, const mcu_pin_obj_t *mosi, const mcu_pin_obj_t *miso, bool half_duplex) {
+void common_hal_busio_spi_construct(busio_spi_obj_t *self, const mcu_pin_obj_t *clock, const mcu_pin_obj_t *mosi, const mcu_pin_obj_t *miso, bool half_duplex, bool slave_mode) {
 
     if (half_duplex) {
         mp_raise_NotImplementedError(MP_ERROR_TEXT("Half duplex SPI is not implemented"));
+    }
+    if (slave_mode) {
+        mp_raise_NotImplementedError(MP_ERROR_TEXT("Slave mode SPI is not implemented"));
     }
 
     // Find a free instance, with most desirable (highest freq and not shared) allocated first.
