@@ -164,6 +164,7 @@ void status_led_init() {
         MICROPY_HW_APA102_SCK,
         MICROPY_HW_APA102_MOSI,
         NULL,
+        NULL,
         false,
         false);
     #endif
