@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 12:55-0600\n"
-"PO-Revision-Date: 2023-05-21 00:49+0000\n"
-"Last-Translator: Scott Shawcroft <scott@tannewt.org>\n"
+"PO-Revision-Date: 2023-11-16 15:03+0000\n"
+"Last-Translator: Jeff Epler <jepler@gmail.com>\n"
 "Language-Team: fil\n"
 "Language: fil\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1 && n != 2 && n != 3 && (n % 10 == 4 "
 "|| n % 10 == 6 || n % 10 == 9);\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 5.2\n"
 
 #: main.c
 msgid ""
@@ -73,40 +73,10 @@ msgstr " output:\n"
 msgid "%%c requires int or char"
 msgstr "%%c nangangailangan ng int o char"
 
-#: main.c
-#, c-format
-msgid "%02X"
-msgstr ""
-
-#: shared-module/os/getenv.c
-#, c-format
-msgid "%S"
-msgstr "%S"
-
 #: shared-bindings/rgbmatrix/RGBMatrix.c
 #, c-format
 msgid ""
 "%d address pins, %d rgb pins and %d tiles indicate a height of %d, not %d"
-msgstr ""
-
-#: ports/atmel-samd/common-hal/alarm/__init__.c
-#: ports/atmel-samd/common-hal/audiobusio/I2SOut.c
-#: ports/cxd56/common-hal/analogio/AnalogOut.c ports/cxd56/common-hal/rtc/RTC.c
-#: ports/espressif/common-hal/audiobusio/I2SOut.c
-#: ports/espressif/common-hal/rtc/RTC.c
-#: ports/mimxrt10xx/common-hal/analogio/AnalogOut.c
-#: ports/mimxrt10xx/common-hal/rtc/RTC.c ports/nrf/common-hal/alarm/__init__.c
-#: ports/nrf/common-hal/analogio/AnalogOut.c
-#: ports/nrf/common-hal/audiobusio/I2SOut.c ports/nrf/common-hal/rtc/RTC.c
-#: ports/raspberrypi/common-hal/alarm/__init__.c
-#: ports/raspberrypi/common-hal/analogio/AnalogOut.c
-#: ports/raspberrypi/common-hal/audiobusio/I2SOut.c
-#: ports/raspberrypi/common-hal/rtc/RTC.c ports/stm/common-hal/alarm/__init__.c
-#: ports/stm/common-hal/canio/Listener.c ports/stm/common-hal/rtc/RTC.c
-#: shared-bindings/audiobusio/I2SOut.c shared-bindings/audiobusio/PDMIn.c
-#: shared-bindings/keypad/KeyMatrix.c shared-bindings/keypad/Keys.c
-#: shared-bindings/keypad/ShiftRegisterKeys.c
-msgid "%q"
 msgstr ""
 
 #: shared-bindings/microcontroller/Pin.c
@@ -115,6 +85,14 @@ msgstr ""
 
 #: ports/atmel-samd/common-hal/audioio/AudioOut.c
 msgid "%q and %q must be different"
+msgstr ""
+
+#: ports/atmel-samd/common-hal/audiobusio/I2SOut.c
+msgid "%q and %q must share a clock unit"
+msgstr ""
+
+#: ports/nrf/common-hal/watchdog/WatchDogTimer.c
+msgid "%q cannot be changed once mode is set to %q"
 msgstr ""
 
 #: shared-bindings/microcontroller/Pin.c
@@ -229,13 +207,23 @@ msgstr ""
 msgid "%q must be array of type 'h'"
 msgstr ""
 
+#: shared-bindings/audiobusio/PDMIn.c
+msgid "%q must be multiple of 8."
+msgstr ""
+
 #: ports/raspberrypi/bindings/cyw43/__init__.c py/argcheck.c py/objexcept.c
-#: shared-bindings/canio/CAN.c shared-bindings/digitalio/Pull.c
+#: shared-bindings/bitmapfilter/__init__.c shared-bindings/canio/CAN.c
+#: shared-bindings/digitalio/Pull.c shared-bindings/supervisor/__init__.c
 #: shared-module/synthio/Synthesizer.c
 msgid "%q must be of type %q or %q, not %q"
 msgstr ""
 
-#: py/argcheck.c shared-module/synthio/__init__.c
+#: shared-bindings/jpegio/JpegDecoder.c
+msgid "%q must be of type %q, %q, or %q, not %q"
+msgstr ""
+
+#: py/argcheck.c py/runtime.c shared-bindings/bitmapfilter/__init__.c
+#: shared-module/synthio/__init__.c
 msgid "%q must be of type %q, not %q"
 msgstr ""
 
@@ -252,7 +240,7 @@ msgstr ""
 #: ports/nrf/common-hal/pulseio/PulseIn.c
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 #: ports/stm/common-hal/pulseio/PulseIn.c py/argcheck.c
-#: shared-bindings/canio/Match.c
+#: shared-bindings/canio/Match.c shared-bindings/time/__init__.c
 msgid "%q out of range"
 msgstr ""
 
@@ -264,10 +252,18 @@ msgstr ""
 msgid "%q step cannot be zero"
 msgstr ""
 
+#: shared-module/bitbangio/I2C.c
+msgid "%q too long"
+msgstr ""
+
 #: py/bc.c py/objnamedtuple.c
 msgid "%q() takes %d positional arguments but %d were given"
 msgstr ""
 "Ang %q() ay kumukuha ng %d positional arguments pero %d lang ang binigay"
+
+#: shared-module/jpegio/JpegDecoder.c
+msgid "%q() without %q()"
+msgstr ""
 
 #: shared-bindings/usb_hid/Device.c
 msgid "%q, %q, and %q must all be the same length"
@@ -291,11 +287,6 @@ msgstr ""
 
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 msgid "%q[%u] waits on input outside of count"
-msgstr ""
-
-#: py/runtime.c
-#, c-format
-msgid "%s"
 msgstr ""
 
 #: ports/espressif/common-hal/espidf/__init__.c
@@ -462,12 +453,6 @@ msgstr "0.0 para sa complex power"
 msgid "3-arg pow() not supported"
 msgstr "3-arg pow() hindi suportado"
 
-#: ports/atmel-samd/common-hal/alarm/pin/PinAlarm.c
-#: ports/atmel-samd/common-hal/countio/Counter.c
-#: ports/atmel-samd/common-hal/rotaryio/IncrementalEncoder.c
-msgid "A hardware interrupt channel is already in use"
-msgstr "Isang channel ng hardware interrupt ay ginagamit na"
-
 #: ports/raspberrypi/common-hal/wifi/Radio.c
 msgid "AP could not be started"
 msgstr ""
@@ -497,12 +482,6 @@ msgstr ""
 msgid "All I2C peripherals are in use"
 msgstr "Lahat ng I2C peripherals ginagamit"
 
-#: ports/espressif/common-hal/countio/Counter.c
-#: ports/espressif/common-hal/frequencyio/FrequencyIn.c
-#: ports/espressif/common-hal/rotaryio/IncrementalEncoder.c
-msgid "All PCNT units in use"
-msgstr ""
-
 #: ports/atmel-samd/common-hal/canio/Listener.c
 #: ports/espressif/common-hal/canio/Listener.c
 #: ports/stm/common-hal/canio/Listener.c
@@ -521,7 +500,6 @@ msgstr "Lahat ng I2C peripherals ginagamit"
 #: ports/nrf/common-hal/countio/Counter.c
 #: ports/nrf/common-hal/pulseio/PulseIn.c
 #: ports/nrf/common-hal/rotaryio/IncrementalEncoder.c
-#: shared-bindings/pwmio/PWMOut.c
 msgid "All channels in use"
 msgstr ""
 
@@ -544,24 +522,18 @@ msgid "All sync event channels in use"
 msgstr "Lahat ng sync event channels ay ginagamit"
 
 #: ports/raspberrypi/common-hal/picodvi/Framebuffer.c
-#: shared-bindings/pwmio/PWMOut.c
 msgid "All timers for this pin are in use"
 msgstr "Lahat ng timers para sa pin na ito ay ginagamit"
 
 #: ports/atmel-samd/common-hal/_pew/PewPew.c
 #: ports/atmel-samd/common-hal/audioio/AudioOut.c
-#: ports/atmel-samd/common-hal/frequencyio/FrequencyIn.c
 #: ports/atmel-samd/common-hal/pulseio/PulseIn.c
 #: ports/atmel-samd/common-hal/pulseio/PulseOut.c
 #: ports/cxd56/common-hal/pulseio/PulseOut.c
-#: ports/espressif/common-hal/frequencyio/FrequencyIn.c
-#: ports/espressif/common-hal/neopixel_write/__init__.c
-#: ports/espressif/common-hal/pulseio/PulseIn.c
-#: ports/espressif/common-hal/pulseio/PulseOut.c
 #: ports/nrf/common-hal/audiopwmio/PWMAudioOut.c
 #: ports/nrf/common-hal/pulseio/PulseIn.c ports/nrf/peripherals/nrf/timers.c
 #: ports/raspberrypi/common-hal/audiopwmio/PWMAudioOut.c
-#: ports/stm/peripherals/timers.c shared-bindings/pwmio/PWMOut.c
+#: ports/stm/peripherals/timers.c
 msgid "All timers in use"
 msgstr "Lahat ng timer ginagamit"
 
@@ -651,14 +623,6 @@ msgstr ""
 msgid "Bit clock and word select must be sequential GPIO pins"
 msgstr ""
 
-#: ports/atmel-samd/common-hal/audiobusio/I2SOut.c
-msgid "Bit clock and word select must share a clock unit"
-msgstr "Ang bit clock at word select dapat makibahagi sa isang clock unit"
-
-#: shared-bindings/audiobusio/PDMIn.c
-msgid "Bit depth must be multiple of 8."
-msgstr "Bit depth ay dapat multiple ng 8."
-
 #: shared-bindings/bitmaptools/__init__.c
 msgid "Bitmap size and bits per value must match"
 msgstr ""
@@ -670,10 +634,6 @@ msgstr ""
 #: ports/mimxrt10xx/common-hal/busio/UART.c
 msgid "Both RX and TX required for flow control"
 msgstr ""
-
-#: ports/atmel-samd/common-hal/rotaryio/IncrementalEncoder.c
-msgid "Both pins must support hardware interrupts"
-msgstr "Ang parehong mga pin ay dapat na sumusuporta sa hardware interrupts"
 
 #: shared-bindings/busdisplay/BusDisplay.c
 #: shared-bindings/framebufferio/FramebufferDisplay.c
@@ -717,10 +677,6 @@ msgstr ""
 #: shared-bindings/framebufferio/FramebufferDisplay.c
 #: shared-bindings/struct/__init__.c shared-module/struct/__init__.c
 msgid "Buffer too small"
-msgstr ""
-
-#: ports/espressif/common-hal/imagecapture/ParallelImageCapture.c
-msgid "Buffers must be same size"
 msgstr ""
 
 #: ports/atmel-samd/common-hal/paralleldisplaybus/ParallelBus.c
@@ -775,6 +731,7 @@ msgstr ""
 
 #: shared-bindings/storage/__init__.c shared-bindings/usb_cdc/__init__.c
 #: shared-bindings/usb_hid/__init__.c shared-bindings/usb_midi/__init__.c
+#: shared-bindings/usb_video/__init__.c
 msgid "Cannot change USB devices now"
 msgstr ""
 
@@ -816,16 +773,6 @@ msgstr "Hindi ma-record sa isang file"
 msgid "Cannot remount '/' when visible via USB."
 msgstr ""
 
-#: ports/atmel-samd/common-hal/microcontroller/__init__.c
-#: ports/cxd56/common-hal/microcontroller/__init__.c
-#: ports/mimxrt10xx/common-hal/microcontroller/__init__.c
-msgid "Cannot reset into bootloader because no bootloader is present"
-msgstr ""
-
-#: ports/espressif/common-hal/socketpool/Socket.c
-msgid "Cannot set socket options"
-msgstr ""
-
 #: shared-bindings/digitalio/DigitalInOut.c
 msgid "Cannot set value when direction is input."
 msgstr "Hindi ma i-set ang value kapag ang direksyon ay input."
@@ -838,10 +785,6 @@ msgstr ""
 #: py/objslice.c
 msgid "Cannot subclass slice"
 msgstr "Hindi magawa ang sublcass slice"
-
-#: shared-bindings/pwmio/PWMOut.c
-msgid "Cannot vary frequency on a timer that is already in use"
-msgstr ""
 
 #: ports/nrf/common-hal/alarm/pin/PinAlarm.c
 msgid "Cannot wake on pin edge, only level"
@@ -858,10 +801,6 @@ msgstr ""
 #: supervisor/shared/safe_mode.c
 msgid "CircuitPython core code crashed hard. Whoops!\n"
 msgstr ""
-
-#: shared-module/bitbangio/I2C.c
-msgid "Clock stretch too long"
-msgstr "Masyadong mahaba ang Clock stretch"
 
 #: ports/atmel-samd/common-hal/audiobusio/I2SOut.c
 msgid "Clock unit in use"
@@ -881,16 +820,8 @@ msgstr ""
 msgid "Coordinate arrays types have different sizes"
 msgstr ""
 
-#: ports/espressif/common-hal/neopixel_write/__init__.c
-msgid "Could not retrieve clock"
-msgstr ""
-
 #: shared-bindings/_bleio/Adapter.c
 msgid "Could not set address"
-msgstr ""
-
-#: shared-bindings/pwmio/PWMOut.c
-msgid "Could not start PWM"
 msgstr ""
 
 #: ports/stm/common-hal/busio/UART.c
@@ -923,6 +854,10 @@ msgstr "graphic ay dapat 2048 bytes ang haba"
 msgid "Data chunk must follow fmt chunk"
 msgstr "Dapat sunurin ng Data chunk ang fmt chunk"
 
+#: shared-module/jpegio/JpegDecoder.c
+msgid "Data format error (may be broken data)"
+msgstr ""
+
 #: ports/espressif/common-hal/_bleio/Adapter.c
 #: ports/nrf/common-hal/_bleio/Adapter.c
 msgid "Data not supported with directed advertising"
@@ -942,6 +877,10 @@ msgstr ""
 msgid "Destination capacity is smaller than destination_length."
 msgstr ""
 "Ang kapasidad ng destinasyon ay mas maliit kaysa sa destination_length."
+
+#: shared-module/jpegio/JpegDecoder.c
+msgid "Device error or wrong termination of input stream"
+msgstr ""
 
 #: ports/nrf/common-hal/audiobusio/I2SOut.c
 msgid "Device in use"
@@ -979,23 +918,12 @@ msgstr ""
 msgid "ESP-IDF memory allocation failed"
 msgstr ""
 
-#: ports/atmel-samd/common-hal/frequencyio/FrequencyIn.c
-#: ports/atmel-samd/common-hal/ps2io/Ps2.c
-#: ports/atmel-samd/common-hal/pulseio/PulseIn.c
-#: ports/cxd56/common-hal/pulseio/PulseIn.c
-msgid "EXTINT channel already in use"
-msgstr "Ginagamit na ang EXTINT channel"
-
 #: extmod/modre.c
 msgid "Error in regex"
 msgstr "May pagkakamali sa REGEX"
 
 #: supervisor/shared/safe_mode.c
 msgid "Error in safemode.py."
-msgstr ""
-
-#: shared-bindings/socketpool/Socket.c shared-bindings/ssl/SSLSocket.c
-msgid "Error: Failure to bind"
 msgstr ""
 
 #: shared-bindings/alarm/__init__.c
@@ -1013,10 +941,6 @@ msgstr ""
 
 #: extmod/ulab/code/numpy/fft/fft_tools.c
 msgid "FFT is implemented for linear arrays only"
-msgstr ""
-
-#: ports/espressif/common-hal/ssl/SSLSocket.c
-msgid "Failed SSL handshake"
 msgstr ""
 
 #: shared-bindings/ps2io/Ps2.c
@@ -1118,10 +1042,6 @@ msgid ""
 "Frequency must be 24, 150, 396, 450, 528, 600, 720, 816, 912, 960 or 1008 Mhz"
 msgstr ""
 
-#: shared-bindings/pwmio/PWMOut.c
-msgid "Frequency must match existing PWMOut using this timer"
-msgstr ""
-
 #: shared-bindings/bitbangio/I2C.c shared-bindings/bitbangio/SPI.c
 #: shared-bindings/busio/I2C.c shared-bindings/busio/SPI.c
 msgid "Function requires lock"
@@ -1141,13 +1061,6 @@ msgstr ""
 msgid "Group already used"
 msgstr ""
 
-#: ports/atmel-samd/common-hal/busio/SPI.c ports/cxd56/common-hal/busio/SPI.c
-#: ports/espressif/common-hal/busio/SPI.c
-#: ports/mimxrt10xx/common-hal/busio/SPI.c ports/nrf/common-hal/busio/SPI.c
-#: ports/raspberrypi/common-hal/busio/SPI.c
-msgid "Half duplex SPI is not implemented"
-msgstr ""
-
 #: supervisor/shared/safe_mode.c
 msgid "Hard fault: memory access or instruction error."
 msgstr ""
@@ -1161,11 +1074,6 @@ msgstr ""
 
 #: supervisor/shared/safe_mode.c
 msgid "Heap allocation when VM not running."
-msgstr ""
-
-#: supervisor/shared/safe_mode.c
-msgid ""
-"Heap was corrupted because the stack was too small. Increase stack size."
 msgstr ""
 
 #: extmod/vfs_posix_file.c py/objstringio.c
@@ -1210,7 +1118,7 @@ msgstr ""
 msgid "Input taking too long"
 msgstr ""
 
-#: ports/espressif/common-hal/neopixel_write/__init__.c py/moderrno.c
+#: py/moderrno.c
 msgid "Input/output error"
 msgstr "May mali sa Input/Output"
 
@@ -1220,6 +1128,14 @@ msgstr ""
 
 #: ports/nrf/common-hal/_bleio/__init__.c
 msgid "Insufficient encryption"
+msgstr ""
+
+#: shared-module/jpegio/JpegDecoder.c
+msgid "Insufficient memory pool for the image"
+msgstr ""
+
+#: shared-module/jpegio/JpegDecoder.c
+msgid "Insufficient stream input buffer"
 msgstr ""
 
 #: ports/espressif/common-hal/wifi/Radio.c
@@ -1234,14 +1150,23 @@ msgstr ""
 msgid "Internal define error"
 msgstr ""
 
-#: ports/espressif/common-hal/paralleldisplaybus/ParallelBus.c
-#: shared-module/os/getenv.c
+#: shared-bindings/pwmio/PWMOut.c shared-module/os/getenv.c
 msgid "Internal error"
 msgstr ""
 
 #: shared-module/rgbmatrix/RGBMatrix.c
 #, c-format
 msgid "Internal error #%d"
+msgstr ""
+
+#: ports/atmel-samd/common-hal/alarm/pin/PinAlarm.c
+#: ports/atmel-samd/common-hal/countio/Counter.c
+#: ports/atmel-samd/common-hal/frequencyio/FrequencyIn.c
+#: ports/atmel-samd/common-hal/ps2io/Ps2.c
+#: ports/atmel-samd/common-hal/pulseio/PulseIn.c
+#: ports/atmel-samd/common-hal/rotaryio/IncrementalEncoder.c
+#: ports/cxd56/common-hal/pulseio/PulseIn.c shared-bindings/pwmio/PWMOut.c
+msgid "Internal resource(s) in use"
 msgstr ""
 
 #: supervisor/shared/safe_mode.c
@@ -1252,12 +1177,16 @@ msgstr ""
 msgid "Interrupt error."
 msgstr ""
 
+#: shared-module/jpegio/JpegDecoder.c
+msgid "Interrupted by output function"
+msgstr ""
+
 #: ports/mimxrt10xx/common-hal/audiobusio/__init__.c
 #: ports/mimxrt10xx/common-hal/pwmio/PWMOut.c
 #: ports/raspberrypi/bindings/picodvi/Framebuffer.c
 #: ports/raspberrypi/common-hal/picodvi/Framebuffer.c py/argcheck.c
 #: shared-bindings/digitalio/DigitalInOut.c
-#: shared-bindings/epaperdisplay/EPaperDisplay.c
+#: shared-bindings/epaperdisplay/EPaperDisplay.c shared-bindings/pwmio/PWMOut.c
 msgid "Invalid %q"
 msgstr ""
 
@@ -1279,10 +1208,6 @@ msgstr ""
 
 #: shared-bindings/wifi/Radio.c
 msgid "Invalid BSSID"
-msgstr ""
-
-#: main.c
-msgid "Invalid CIRCUITPY_PYSTACK_SIZE\n"
 msgstr ""
 
 #: shared-bindings/wifi/Radio.c
@@ -1327,8 +1252,7 @@ msgstr ""
 msgid "Invalid size"
 msgstr ""
 
-#: ports/espressif/common-hal/ssl/SSLContext.c
-#: ports/raspberrypi/common-hal/ssl/SSLSocket.c
+#: shared-module/ssl/SSLSocket.c
 msgid "Invalid socket for TLS"
 msgstr ""
 
@@ -1372,10 +1296,6 @@ msgstr ""
 msgid "Mapping must be a tuple"
 msgstr ""
 
-#: shared-bindings/audiobusio/PDMIn.c
-msgid "Microphone startup delay must be in range 0.0 to 1.0"
-msgstr "Ang delay ng startup ng mikropono ay dapat na nasa 0.0 hanggang 1.0"
-
 #: ports/raspberrypi/bindings/rp2pio/StateMachine.c
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 msgid "Mismatched data size"
@@ -1411,6 +1331,10 @@ msgstr ""
 
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 msgid "Missing jmp_pin. %q[%u] jumps on pin"
+msgstr ""
+
+#: shared-module/storage/__init__.c
+msgid "Mount point directory missing"
 msgstr ""
 
 #: shared-bindings/busio/UART.c shared-bindings/displayio/Group.c
@@ -1497,12 +1421,10 @@ msgstr ""
 msgid "No IP"
 msgstr ""
 
-#: ports/atmel-samd/common-hal/frequencyio/FrequencyIn.c
-msgid "No available clocks"
-msgstr ""
-
-#: ports/espressif/common-hal/imagecapture/ParallelImageCapture.c
-msgid "No capture in progress"
+#: ports/atmel-samd/common-hal/microcontroller/__init__.c
+#: ports/cxd56/common-hal/microcontroller/__init__.c
+#: ports/mimxrt10xx/common-hal/microcontroller/__init__.c
+msgid "No bootloader present"
 msgstr ""
 
 #: shared-module/usb/core/Device.c
@@ -1517,6 +1439,8 @@ msgstr ""
 msgid "No default %q bus"
 msgstr "Walang default na %q bus"
 
+#: ports/atmel-samd/common-hal/audiobusio/I2SOut.c
+#: ports/atmel-samd/common-hal/audiobusio/PDMIn.c
 #: ports/atmel-samd/common-hal/touchio/TouchIn.c
 msgid "No free GCLKs"
 msgstr "Walang libreng GCLKs"
@@ -1596,6 +1520,10 @@ msgstr "Hindi maka connect sa AP"
 msgid "Not playing"
 msgstr "Hindi playing"
 
+#: shared-module/jpegio/JpegDecoder.c
+msgid "Not supported JPEG standard"
+msgstr ""
+
 #: ports/espressif/common-hal/paralleldisplaybus/ParallelBus.c
 #, c-format
 msgid "Number of data_pins must be 8 or 16, not %d"
@@ -1622,8 +1550,9 @@ msgstr ""
 
 #: ports/atmel-samd/common-hal/audiobusio/PDMIn.c
 #: ports/raspberrypi/common-hal/audiobusio/PDMIn.c
-msgid "Only 8 or 16 bit mono with "
-msgstr "Tanging 8 o 16 na bit mono na may "
+#, c-format
+msgid "Only 8 or 16 bit mono with %dx oversampling supported."
+msgstr ""
 
 #: ports/espressif/common-hal/wifi/__init__.c
 #: ports/raspberrypi/common-hal/wifi/__init__.c
@@ -1717,16 +1646,6 @@ msgstr ""
 msgid "Out-buffer elements must be <= 4 bytes long"
 msgstr ""
 
-#: shared-bindings/audiobusio/PDMIn.c
-msgid "Oversample must be multiple of 8."
-msgstr "Oversample ay dapat multiple ng 8."
-
-#: shared-bindings/pwmio/PWMOut.c
-msgid ""
-"PWM frequency not writable when variable_frequency is False on construction."
-msgstr ""
-"PWM frequency hindi writable kapag variable_frequency ay False sa pag buo."
-
 #: ports/stm/common-hal/pwmio/PWMOut.c
 msgid "PWM restart"
 msgstr ""
@@ -1737,6 +1656,10 @@ msgstr ""
 
 #: ports/raspberrypi/common-hal/countio/Counter.c
 msgid "PWM slice channel A already in use"
+msgstr ""
+
+#: shared-module/jpegio/JpegDecoder.c
+msgid "Parameter error"
 msgstr ""
 
 #: ports/espressif/common-hal/audiobusio/__init__.c
@@ -1766,10 +1689,6 @@ msgstr ""
 
 #: ports/raspberrypi/common-hal/countio/Counter.c
 msgid "Pin must be on PWM Channel B"
-msgstr ""
-
-#: ports/atmel-samd/common-hal/countio/Counter.c
-msgid "Pin must support hardware interrupts"
 msgstr ""
 
 #: shared-bindings/rgbmatrix/RGBMatrix.c
@@ -1844,6 +1763,10 @@ msgstr "Pull hindi ginagamit kapag ang direksyon ay output."
 msgid "RISE_AND_FALL not available on this chip"
 msgstr ""
 
+#: shared-module/displayio/OnDiskBitmap.c
+msgid "RLE-compressed BMP not supported"
+msgstr ""
+
 #: ports/stm/common-hal/os/__init__.c
 msgid "RNG DeInit Error"
 msgstr ""
@@ -1873,7 +1796,7 @@ msgstr ""
 #: shared-bindings/_bleio/__init__.c
 #: shared-bindings/memorymonitor/AllocationSize.c
 #: shared-bindings/pulseio/PulseIn.c shared-module/bitmaptools/__init__.c
-#: shared-module/displayio/Bitmap.c
+#: shared-module/displayio/Bitmap.c shared-module/displayio/Group.c
 msgid "Read-only"
 msgstr "Basahin-lamang"
 
@@ -1908,6 +1831,10 @@ msgstr ""
 #: ports/atmel-samd/common-hal/audioio/AudioOut.c
 msgid "Right channel unsupported"
 msgstr "Hindi supportado ang kanang channel"
+
+#: shared-module/jpegio/JpegDecoder.c
+msgid "Right format but not supported"
+msgstr ""
 
 #: main.c
 msgid "Running in safe mode! Not running saved code.\n"
@@ -1994,12 +1921,8 @@ msgstr ""
 msgid "Specify exactly one of data0 or data_pins"
 msgstr ""
 
-#: ports/raspberrypi/common-hal/audiopwmio/PWMAudioOut.c
-msgid "Stereo left must be on PWM channel A"
-msgstr ""
-
-#: ports/raspberrypi/common-hal/audiopwmio/PWMAudioOut.c
-msgid "Stereo right must be on PWM channel B"
+#: supervisor/shared/safe_mode.c
+msgid "Stack overflow. Increase stack size."
 msgstr ""
 
 #: shared-bindings/alarm/time/TimeAlarm.c
@@ -2099,7 +2022,6 @@ msgstr ""
 msgid "Total data to write is larger than %q"
 msgstr ""
 
-#: ports/atmel-samd/common-hal/alarm/touch/TouchAlarm.c
 #: ports/raspberrypi/common-hal/alarm/touch/TouchAlarm.c
 #: ports/stm/common-hal/alarm/touch/TouchAlarm.c
 msgid "Touch alarms not available"
@@ -2108,10 +2030,6 @@ msgstr ""
 #: py/obj.c
 msgid "Traceback (most recent call last):\n"
 msgstr "Traceback (pinakahuling huling tawag): \n"
-
-#: shared-bindings/time/__init__.c
-msgid "Tuple or struct_time argument required"
-msgstr "Tuple o struct_time argument kailangan"
 
 #: ports/stm/common-hal/busio/UART.c
 msgid "UART de-init"
@@ -2178,7 +2096,7 @@ msgid "Unable to allocate buffers for signed conversion"
 msgstr "Hindi ma-allocate ang buffers para sa naka-sign na conversion"
 
 #: supervisor/shared/safe_mode.c
-msgid "Unable to allocate the heap."
+msgid "Unable to allocate to the heap."
 msgstr ""
 
 #: ports/espressif/common-hal/busio/I2C.c
@@ -2190,11 +2108,6 @@ msgstr ""
 #, c-format
 msgid "Unable to find I2C Display at %x"
 msgstr ""
-
-#: ports/atmel-samd/common-hal/audiobusio/I2SOut.c
-#: ports/atmel-samd/common-hal/audiobusio/PDMIn.c
-msgid "Unable to find free GCLK"
-msgstr "Hindi mahanap ang libreng GCLK"
 
 #: py/parse.c
 msgid "Unable to init parser"
@@ -2225,11 +2138,6 @@ msgstr ""
 #, fuzzy
 msgid "Unexpected nrfx uuid type"
 msgstr "hindi inaasahang indent"
-
-#: ports/espressif/common-hal/ssl/SSLSocket.c
-#, c-format
-msgid "Unhandled ESP TLS error %d %d %x %d"
-msgstr ""
 
 #: ports/espressif/common-hal/_bleio/__init__.c
 #, c-format
@@ -2393,6 +2301,11 @@ msgstr ""
 msgid "You pressed the BOOT button at start up"
 msgstr ""
 
+#: ports/espressif/boards/adafruit_feather_esp32c6_4mbflash_nopsram/mpconfigboard.h
+#: ports/espressif/boards/adafruit_itsybitsy_esp32/mpconfigboard.h
+msgid "You pressed the BOOT button at start up."
+msgstr ""
+
 #: ports/espressif/boards/adafruit_huzzah32_breakout/mpconfigboard.h
 msgid "You pressed the GPIO0 button at start up."
 msgstr ""
@@ -2473,10 +2386,6 @@ msgstr ""
 msgid "argsort is not implemented for flattened arrays"
 msgstr ""
 
-#: py/runtime.c shared-bindings/supervisor/__init__.c
-msgid "argument has wrong type"
-msgstr "may maling type ang argument"
-
 #: py/compile.c
 msgid "argument name reused"
 msgstr ""
@@ -2485,10 +2394,6 @@ msgstr ""
 #: shared-bindings/digitalio/DigitalInOut.c
 msgid "argument num/types mismatch"
 msgstr "hindi tugma ang argument num/types"
-
-#: py/runtime.c
-msgid "argument should be a '%q' not a '%q'"
-msgstr "argument ay dapat na '%q' hindi '%q'"
 
 #: extmod/ulab/code/numpy/numerical.c extmod/ulab/code/numpy/transform.c
 msgid "arguments must be ndarrays"
@@ -2566,6 +2471,10 @@ msgstr "masamang typecode"
 #: py/emitnative.c
 msgid "binary op %q not implemented"
 msgstr "binary op %q hindi implemented"
+
+#: shared-module/bitmapfilter/__init__.c
+msgid "bitmap size and depth must match"
+msgstr ""
 
 #: shared-bindings/bitmaptools/__init__.c
 msgid "bitmap sizes must match"
@@ -2672,7 +2581,7 @@ msgstr "hindi ma-convert %s sa complex"
 msgid "can't convert %s to float"
 msgstr "hindi ma-convert %s sa int"
 
-#: py/runtime.c
+#: py/objint.c py/runtime.c
 #, c-format
 msgid "can't convert %s to int"
 msgstr "hindi ma-convert %s sa int"
@@ -2681,17 +2590,9 @@ msgstr "hindi ma-convert %s sa int"
 msgid "can't convert '%q' object to %q implicitly"
 msgstr "hindi maaaring i-convert ang '%q' na bagay sa %q nang walang pahiwatig"
 
-#: py/objint.c
-msgid "can't convert NaN to int"
-msgstr "hindi ma i-convert NaN sa int"
-
 #: extmod/ulab/code/numpy/vector.c
 msgid "can't convert complex to float"
 msgstr ""
-
-#: py/objint.c
-msgid "can't convert inf to int"
-msgstr "hindi ma i-convert inf sa int"
 
 #: py/obj.c
 msgid "can't convert to complex"
@@ -2753,7 +2654,7 @@ msgstr ""
 msgid "can't set attribute"
 msgstr "hindi ma i-set ang attribute"
 
-#: py/runtime.c shared-bindings/supervisor/Runtime.c
+#: py/runtime.c
 msgid "can't set attribute '%q'"
 msgstr ""
 
@@ -3030,12 +2931,6 @@ msgstr ""
 msgid "error = 0x%08lX"
 msgstr ""
 
-#: ports/espressif/common-hal/espcamera/Camera.c
-msgid ""
-"espcamera.Camera requires reserved PSRAM to be configured. See the "
-"documentation for instructions."
-msgstr ""
-
 #: py/runtime.c
 msgid "exceptions must derive from BaseException"
 msgstr "ang mga exceptions ay dapat makuha mula sa BaseException"
@@ -3194,10 +3089,6 @@ msgstr "function nangangailangan ng positional argument #%d"
 msgid "function takes %d positional arguments but %d were given"
 msgstr ""
 "ang function ay kumuhuha ng %d positional arguments ngunit %d ang ibinigay"
-
-#: shared-bindings/time/__init__.c
-msgid "function takes exactly 9 arguments"
-msgstr "function kumukuha ng 9 arguments"
 
 #: py/objgenerator.c
 msgid "generator already executing"
@@ -3388,7 +3279,7 @@ msgstr ""
 msgid "invalid bits_per_pixel %d, must be, 1, 2, 4, 8, 16, 24, or 32"
 msgstr ""
 
-#: ports/raspberrypi/common-hal/ssl/SSLSocket.c
+#: shared-module/ssl/SSLSocket.c
 msgid "invalid cert"
 msgstr "mali ang cert"
 
@@ -3414,7 +3305,7 @@ msgstr "mali ang format specifier"
 msgid "invalid hostname"
 msgstr ""
 
-#: ports/raspberrypi/common-hal/ssl/SSLSocket.c
+#: shared-module/ssl/SSLSocket.c
 msgid "invalid key"
 msgstr "mali ang key"
 
@@ -3926,11 +3817,6 @@ msgstr "ang mga parameter ay dapat na nagrerehistro sa sequence a2 hanggang a5"
 msgid "parameters must be registers in sequence r0 to r3"
 msgstr "ang mga parameter ay dapat na nagrerehistro sa sequence r0 hanggang r3"
 
-#: shared-bindings/bitmaptools/__init__.c
-#, fuzzy
-msgid "pixel coordinates out of bounds"
-msgstr "wala sa sakop ang address"
-
 #: extmod/vfs_posix_file.c
 msgid "poll on file not available on win32"
 msgstr ""
@@ -4055,10 +3941,6 @@ msgstr "sign hindi maari sa integer format specifier 'c'"
 #: extmod/ulab/code/ulab_tools.c
 msgid "size is defined for ndarrays only"
 msgstr ""
-
-#: shared-bindings/time/__init__.c
-msgid "sleep length must be non-negative"
-msgstr "sleep length ay dapat hindi negatibo"
 
 #: py/nativeglue.c
 msgid "slice unsupported"
@@ -4325,6 +4207,10 @@ msgstr "hindi sinusuportahan ang thumb instruktion '%s' sa %d argumento"
 msgid "unsupported Xtensa instruction '%s' with %d arguments"
 msgstr "hindi sinusuportahan ang instruction ng Xtensa '%s' sa %d argumento"
 
+#: shared-module/bitmapfilter/__init__.c
+msgid "unsupported bitmap depth"
+msgstr ""
+
 #: shared-module/gifio/GifWriter.c
 msgid "unsupported colorspace for GifWriter"
 msgstr ""
@@ -4369,6 +4255,16 @@ msgstr ""
 
 #: extmod/moddeflate.c
 msgid "wbits"
+msgstr ""
+
+#: shared-bindings/bitmapfilter/__init__.c
+msgid ""
+"weights must be a sequence with an odd square number of elements (usually 9 "
+"or 25)"
+msgstr ""
+
+#: shared-bindings/bitmapfilter/__init__.c
+msgid "weights must be an object of type %q, %q, %q, or %q, not %q "
 msgstr ""
 
 #: shared-bindings/is31fl3741/FrameBuffer.c
@@ -4442,463 +4338,81 @@ msgstr ""
 msgid "zi must be of shape (n_section, 2)"
 msgstr ""
 
-#~ msgid "'break' outside loop"
-#~ msgstr "'break' sa labas ng loop"
-
-#~ msgid "'continue' outside loop"
-#~ msgstr "'continue' sa labas ng loop"
-
-#~ msgid "Splitting with sub-captures"
-#~ msgstr "Binibiyak gamit ang sub-captures"
-
-#~ msgid "attributes not supported yet"
-#~ msgstr "attributes hindi sinusuportahan"
-
-#~ msgid "can't do truncated division of a complex number"
-#~ msgstr ""
-#~ "hindi maaaring gawin ang truncated division ng isang kumplikadong numero"
-
-#~ msgid "cannot import name %q"
-#~ msgstr "hindi ma-import ang name %q"
-
-#~ msgid "keyword argument(s) not yet implemented - use normal args instead"
-#~ msgstr ""
-#~ "kindi pa ipinapatupad ang (mga) argument(s) ng keyword - gumamit ng "
-#~ "normal args"
-
-#~ msgid "length argument not allowed for this type"
-#~ msgstr "length argument ay walang pahintulot sa ganitong type"
-
-#, fuzzy
-#~ msgid "offset out of bounds"
-#~ msgstr "wala sa sakop ang address"
-
-#~ msgid "string not supported; use bytes or bytearray"
-#~ msgstr "string hindi supportado; gumamit ng bytes o kaya bytearray"
-
-#~ msgid "queue overflow"
-#~ msgstr "puno na ang pila (overflow)"
-
-#~ msgid "pixel_shader must be displayio.Palette or displayio.ColorConverter"
-#~ msgstr "pixel_shader ay dapat displayio.Palette o displayio.ColorConverter"
+#~ msgid "EXTINT channel already in use"
+#~ msgstr "Ginagamit na ang EXTINT channel"
 
 #~ msgid ""
-#~ "Incompatible .mpy file. Please update all .mpy files. See http://adafru."
-#~ "it/mpy-update for more info."
+#~ "PWM frequency not writable when variable_frequency is False on "
+#~ "construction."
 #~ msgstr ""
-#~ ".mpy file hindi compatible. Maaring i-update lahat ng .mpy files. See "
-#~ "http://adafru.it/mpy-update for more info."
+#~ "PWM frequency hindi writable kapag variable_frequency ay False sa pag buo."
 
-#~ msgid "can't have multiple **x"
-#~ msgstr "hindi puede ang maraming **x"
+#~ msgid "Tuple or struct_time argument required"
+#~ msgstr "Tuple o struct_time argument kailangan"
 
-#~ msgid "can't have multiple *x"
-#~ msgstr "hindi puede ang maraming *x"
+#~ msgid "argument has wrong type"
+#~ msgstr "may maling type ang argument"
 
-#~ msgid "constant must be an integer"
-#~ msgstr "constant ay dapat na integer"
+#~ msgid "argument should be a '%q' not a '%q'"
+#~ msgstr "argument ay dapat na '%q' hindi '%q'"
 
-#~ msgid "invalid format"
-#~ msgstr "hindi wastong pag-format"
+#~ msgid "can't convert NaN to int"
+#~ msgstr "hindi ma i-convert NaN sa int"
 
-#~ msgid "keywords must be strings"
-#~ msgstr "ang keywords dapat strings"
+#~ msgid "can't convert inf to int"
+#~ msgstr "hindi ma i-convert inf sa int"
 
-#~ msgid "non-keyword arg after */**"
-#~ msgstr "non-keyword arg sa huli ng */**"
+#~ msgid "function takes exactly 9 arguments"
+#~ msgstr "function kumukuha ng 9 arguments"
 
-#~ msgid "non-keyword arg after keyword arg"
-#~ msgstr "non-keyword arg sa huli ng keyword arg"
-
-#~ msgid "No RX pin"
-#~ msgstr "Walang RX pin"
-
-#~ msgid "No TX pin"
-#~ msgstr "Walang TX pin"
+#~ msgid "sleep length must be non-negative"
+#~ msgstr "sleep length ay dapat hindi negatibo"
 
 #, fuzzy
-#~ msgid "x value out of bounds"
+#~ msgid "pixel coordinates out of bounds"
 #~ msgstr "wala sa sakop ang address"
 
-#, fuzzy
-#~ msgid "y value out of bounds"
-#~ msgstr "wala sa sakop ang address"
+#~ msgid "A hardware interrupt channel is already in use"
+#~ msgstr "Isang channel ng hardware interrupt ay ginagamit na"
 
-#~ msgid "too many arguments provided with the given format"
-#~ msgstr "masyadong maraming mga argumento na ibinigay sa ibinigay na format"
+#~ msgid "Bit clock and word select must share a clock unit"
+#~ msgstr "Ang bit clock at word select dapat makibahagi sa isang clock unit"
 
-#~ msgid "Expected a %q"
-#~ msgstr "Umasa ng %q"
+#~ msgid "Bit depth must be multiple of 8."
+#~ msgstr "Bit depth ay dapat multiple ng 8."
 
-#, fuzzy
-#~ msgid "Read-only object"
-#~ msgstr "Basahin-lamang"
+#~ msgid "Both pins must support hardware interrupts"
+#~ msgstr "Ang parehong mga pin ay dapat na sumusuporta sa hardware interrupts"
 
-#~ msgid "Invalid pins"
-#~ msgstr "Mali ang pins"
+#~ msgid "Clock stretch too long"
+#~ msgstr "Masyadong mahaba ang Clock stretch"
 
-#~ msgid "complex division by zero"
-#~ msgstr "kumplikadong dibisyon sa pamamagitan ng zero"
+#~ msgid "Microphone startup delay must be in range 0.0 to 1.0"
+#~ msgstr "Ang delay ng startup ng mikropono ay dapat na nasa 0.0 hanggang 1.0"
 
-#~ msgid "int() arg 2 must be >= 2 and <= 36"
-#~ msgstr "int() arg 2 ay dapat >=2 at <= 36"
+#~ msgid "Oversample must be multiple of 8."
+#~ msgstr "Oversample ay dapat multiple ng 8."
 
-#~ msgid "long int not supported in this build"
-#~ msgstr "long int hindi sinusuportahan sa build na ito"
+#~ msgid "Unable to find free GCLK"
+#~ msgstr "Hindi mahanap ang libreng GCLK"
 
-#~ msgid "slice step cannot be zero"
-#~ msgstr "slice step ay hindi puedeng 0"
-
-#~ msgid "step must be non-zero"
-#~ msgstr "step ay dapat hindi zero"
-
-#~ msgid "time.struct_time() takes a 9-sequence"
-#~ msgstr "time.struct_time() kumukuha ng 9-sequence"
-
-#~ msgid "zero step"
-#~ msgstr "zero step"
-
-#~ msgid "single '}' encountered in format string"
-#~ msgstr "isang '}' nasalubong sa format string"
-
-#~ msgid "threshold must be in the range 0-65536"
-#~ msgstr "ang threshold ay dapat sa range 0-65536"
-
-#~ msgid "unmatched '{' in format"
-#~ msgstr "hindi tugma ang '{' sa format"
-
-#~ msgid "To exit, please reset the board without "
-#~ msgstr "Para lumabas, paki-reset ang board na wala ang "
-
-#~ msgid "You requested starting safe mode by "
-#~ msgstr "Ikaw ang humiling sa safe mode sa pamamagitan ng "
-
-#~ msgid "Stream missing readinto() or write() method."
-#~ msgstr "Stream kulang ng readinto() o write() method."
+#, c-format
+#~ msgid "%S"
+#~ msgstr "%S"
 
 #, fuzzy
 #~ msgid "%q must be >= 1"
 #~ msgstr "aarehas na haba dapat ang buffer slices"
 
-#~ msgid "address out of bounds"
-#~ msgstr "wala sa sakop ang address"
-
-#~ msgid "destination_length must be an int >= 0"
-#~ msgstr "ang destination_length ay dapat na isang int >= 0"
-
-#~ msgid "color should be an int"
-#~ msgstr "color ay dapat na int"
-
-#, fuzzy
-#~ msgid "end_x should be an int"
-#~ msgstr "y ay dapat int"
-
-#~ msgid "palette_index should be an int"
-#~ msgstr "palette_index ay dapat na int"
-
-#, fuzzy
-#~ msgid "start_x should be an int"
-#~ msgstr "y ay dapat int"
-
-#~ msgid "y should be an int"
-#~ msgstr "y ay dapat int"
-
-#~ msgid ""
-#~ "sample_source buffer must be a bytearray or array of type 'h', 'H', 'b' "
-#~ "or 'B'"
-#~ msgstr ""
-#~ "ang sample_source buffer ay dapat na isang bytearray o array ng uri na "
-#~ "'h', 'H', 'b' o'B'"
-
 #, fuzzy
 #~ msgid "%q should be an int"
 #~ msgstr "y ay dapat int"
-
-#~ msgid "AnalogOut functionality not supported"
-#~ msgstr "Hindi supportado ang AnalogOut"
-
-#~ msgid "AnalogOut is only 16 bits. Value must be less than 65536."
-#~ msgstr "AnalogOut ay 16 bits. Value ay dapat hindi hihigit pa sa 65536."
-
-#~ msgid "AnalogOut not supported on given pin"
-#~ msgstr "Hindi supportado ang AnalogOut sa ibinigay na pin"
-
-#, c-format
-#~ msgid "Buffer incorrect size. Should be %d bytes."
-#~ msgstr "Mali ang size ng buffer. Dapat %d bytes."
-
-#~ msgid "Buffer must be at least length 1"
-#~ msgstr "Buffer dapat ay hindi baba sa 1 na haba"
-
-#~ msgid "Bytes must be between 0 and 255."
-#~ msgstr "Sa gitna ng 0 o 255 dapat ang bytes."
-
-#~ msgid "Cannot output both channels on the same pin"
-#~ msgstr "Hindi maaaring output ang mga parehong channel sa parehong pin"
-
-#~ msgid "Cannot read without MISO pin."
-#~ msgstr "Hindi maaring mabasa kapag walang MISO pin."
-
-#~ msgid "Cannot reset into bootloader because no bootloader is present."
-#~ msgstr "Hindi ma-reset sa bootloader dahil walang bootloader."
-
-#~ msgid "Cannot transfer without MOSI and MISO pins."
-#~ msgstr "Hindi maaaring ilipat kapag walang MOSI at MISO pin."
-
-#~ msgid "Cannot write without MOSI pin."
-#~ msgstr "Hindi maaring isulat kapag walang MOSI pin."
-
-#~ msgid "Clock pin init failed."
-#~ msgstr "Nabigo sa pag init ng Clock pin."
-
-#, fuzzy
-#~ msgid "Command must be an int between 0 and 255"
-#~ msgstr "Sa gitna ng 0 o 255 dapat ang bytes."
-
-#~ msgid "Could not initialize UART"
-#~ msgstr "Hindi ma-initialize ang UART"
-
-#~ msgid "Couldn't allocate first buffer"
-#~ msgstr "Hindi ma-iallocate ang first buffer"
-
-#~ msgid "Couldn't allocate second buffer"
-#~ msgstr "Hindi ma-iallocate ang second buffer"
-
-#~ msgid "Failed to allocate RX buffer"
-#~ msgstr "Nabigong ilaan ang RX buffer"
-
-#, c-format
-#~ msgid "Failed to allocate RX buffer of %d bytes"
-#~ msgstr "Nabigong ilaan ang RX buffer ng %d bytes"
-
-#~ msgid "Invalid BMP file"
-#~ msgstr "Mali ang BMP file"
-
-#~ msgid "Invalid PWM frequency"
-#~ msgstr "Mali ang PWM frequency"
-
-#~ msgid "Invalid buffer size"
-#~ msgstr "Mali ang buffer size"
-
-#~ msgid "Invalid channel count"
-#~ msgstr "Maling bilang ng channel"
-
-#~ msgid "Invalid direction."
-#~ msgstr "Mali ang direksyon."
-
-#~ msgid "Invalid file"
-#~ msgstr "Mali ang file"
-
-#~ msgid "Invalid number of bits"
-#~ msgstr "Mali ang bilang ng bits"
-
-#~ msgid "Invalid phase"
-#~ msgstr "Mali ang phase"
-
-#~ msgid "Invalid pin"
-#~ msgstr "Mali ang pin"
-
-#~ msgid "Invalid pin for left channel"
-#~ msgstr "Mali ang pin para sa kaliwang channel"
-
-#~ msgid "Invalid pin for right channel"
-#~ msgstr "Mali ang pin para sa kanang channel"
-
-#~ msgid "Invalid polarity"
-#~ msgstr "Mali ang polarity"
-
-#~ msgid "Invalid run mode."
-#~ msgstr "Mali ang run mode."
-
-#~ msgid "Invalid voice count"
-#~ msgstr "Maling bilang ng voice"
-
-#~ msgid "Invalid wave file"
-#~ msgstr "May hindi tama sa wave file"
-
-#~ msgid "MISO pin init failed."
-#~ msgstr "Hindi ma-initialize ang MISO pin."
-
-#~ msgid "MOSI pin init failed."
-#~ msgstr "Hindi ma-initialize ang MOSI pin."
-
-#~ msgid "No hardware support on pin"
-#~ msgstr "Walang support sa hardware ang pin"
-
-#~ msgid ""
-#~ "PWM duty_cycle must be between 0 and 65535 inclusive (16 bit resolution)"
-#~ msgstr "PWM duty_cycle ay dapat sa loob ng 0 at 65535 (16 bit resolution)"
-
-#~ msgid "Pin does not have ADC capabilities"
-#~ msgstr "Ang pin ay walang kakayahan sa ADC"
-
-#~ msgid "RTC calibration is not supported on this board"
-#~ msgstr "RTC calibration ay hindi supportado ng board na ito"
-
-#~ msgid "Sample rate must be positive"
-#~ msgstr "Sample rate ay dapat positibo"
-
-#, c-format
-#~ msgid "Sample rate too high. It must be less than %d"
-#~ msgstr "Sample rate ay masyadong mataas. Ito ay dapat hindi hiigit sa %d"
-
-#~ msgid "Stack size must be at least 256"
-#~ msgstr "Ang laki ng stack ay dapat na hindi bababa sa 256"
-
-#~ msgid "Unsupported baudrate"
-#~ msgstr "Hindi supportadong baudrate"
-
-#~ msgid "bytes > 8 bits not supported"
-#~ msgstr "hindi sinusuportahan ang bytes > 8 bits"
-
-#~ msgid "calibration value out of range +/-127"
-#~ msgstr "ang halaga ng pagkakalibrate ay wala sa sakop +/-127"
-
-#~ msgid "stop must be 1 or 2"
-#~ msgstr "stop dapat 1 o 2"
-
-#, fuzzy
-#~ msgid "timeout must be >= 0.0"
-#~ msgstr "bits ay dapat walo (8)"
-
-#~ msgid "Unsupported operation"
-#~ msgstr "Hindi sinusuportahang operasyon"
-
-#~ msgid "Brightness must be between 0 and 255"
-#~ msgstr "Ang liwanag ay dapat sa gitna ng 0 o 255"
-
-#~ msgid "cannot perform relative import"
-#~ msgstr "hindi maaring isagawa ang relative import"
-
-#~ msgid "Unsupported pull value."
-#~ msgstr "Hindi suportado ang pull value."
-
-#, c-format
-#~ msgid ""
-#~ "Welcome to Adafruit CircuitPython %s!\n"
-#~ "\n"
-#~ "Please visit learn.adafruit.com/category/circuitpython for project "
-#~ "guides.\n"
-#~ "\n"
-#~ "To list built-in modules please do `help(\"modules\")`.\n"
-#~ msgstr ""
-#~ "Mabuhay sa Adafruit CircuitPython %s!\n"
-#~ "\n"
-#~ "Mangyaring bisitahin ang learn.adafruit.com/category/circuitpython para "
-#~ "sa project guides.\n"
-#~ "\n"
-#~ "Para makita ang listahan ng modules, `help(\"modules\")`.\n"
-
-#~ msgid "integer required"
-#~ msgstr "kailangan ng int"
-
-#~ msgid "abort() called"
-#~ msgstr "abort() tinawag"
-
-#~ msgid "invalid arguments"
-#~ msgstr "mali ang mga argumento"
-
-#~ msgid "unindent does not match any outer indentation level"
-#~ msgstr "unindent hindi tugma sa indentation level sa labas"
-
-#, fuzzy
-#~ msgid "Expected a Characteristic"
-#~ msgstr "Hindi mabasa and Characteristic."
-
-#, fuzzy
-#~ msgid "Expected a UUID"
-#~ msgstr "Umasa ng %q"
-
-#~ msgid "no available NIC"
-#~ msgstr "walang magagamit na NIC"
-
-#~ msgid "USB Busy"
-#~ msgstr "Busy ang USB"
-
-#~ msgid "USB Error"
-#~ msgstr "May pagkakamali ang USB"
 
 #~ msgid "'%s' integer %d is not within range %d..%d"
 #~ msgstr "'%s' integer %d ay wala sa sakop ng %d..%d"
 
 #~ msgid "'%s' integer 0x%x does not fit in mask 0x%x"
 #~ msgstr "'%s' integer 0x%x ay wala sa mask na sakop ng 0x%x"
-
-#~ msgid "Cannot unambiguously get sizeof scalar"
-#~ msgstr "Hindi puedeng hindi sigurado ang get sizeof scalar"
-
-#~ msgid "Length must be an int"
-#~ msgstr "Haba ay dapat int"
-
-#~ msgid "Length must be non-negative"
-#~ msgstr "Haba ay dapat hindi negatibo"
-
-#~ msgid "name reused for argument"
-#~ msgstr "name muling ginamit para sa argument"
-
-#~ msgid "object does not support item assignment"
-#~ msgstr "ang object na '%s' ay hindi maaaring i-subscript"
-
-#~ msgid "object does not support item deletion"
-#~ msgstr "ang object ay hindi sumusuporta sa pagbura ng item"
-
-#~ msgid "object is not subscriptable"
-#~ msgstr "ang bagay ay hindi maaaring ma-subscript"
-
-#~ msgid "struct: cannot index"
-#~ msgstr "struct: hindi ma-index"
-
-#~ msgid "Cannot remount '/' when USB is active."
-#~ msgstr "Hindi ma-remount '/' kapag aktibo ang USB."
-
-#~ msgid "byte code not implemented"
-#~ msgstr "byte code hindi pa implemented"
-
-#~ msgid "can't pend throw to just-started generator"
-#~ msgstr "hindi mapadala ang send throw sa isang kaka umpisang generator"
-
-#~ msgid "invalid dupterm index"
-#~ msgstr "mali ang dupterm index"
-
-#~ msgid "schedule stack full"
-#~ msgstr "puno na ang schedule stack"
-
-#~ msgid "can only save bytecode"
-#~ msgstr "maaring i-save lamang ang bytecode"
-
-#~ msgid "Viper functions don't currently support more than 4 arguments"
-#~ msgstr ""
-#~ "Ang mga function ng Viper ay kasalukuyang hindi sumusuporta sa higit sa 4 "
-#~ "na argumento"
-
-#~ msgid "address %08x is not aligned to %d bytes"
-#~ msgstr "address %08x ay hindi pantay sa %d bytes"
-
-#~ msgid "function does not take keyword arguments"
-#~ msgstr "ang function ay hindi kumukuha ng mga argumento ng keyword"
-
-#~ msgid "parameter annotation must be an identifier"
-#~ msgstr "parameter annotation ay dapat na identifier"
-
-#~ msgid "buffer must be a bytes-like object"
-#~ msgstr "buffer ay dapat bytes-like object"
-
-#~ msgid "Group full"
-#~ msgstr "Puno ang group"
-
-#~ msgid "bits must be 7, 8 or 9"
-#~ msgstr "bits ay dapat 7, 8 o 9"
-
-#~ msgid "SDA or SCL needs a pull up"
-#~ msgstr "Kailangan ng pull up resistors ang SDA o SCL"
-
-#~ msgid "tuple index out of range"
-#~ msgstr "indeks ng tuple wala sa sakop"
-
-#~ msgid "Press any key to enter the REPL. Use CTRL-D to reload."
-#~ msgstr ""
-#~ "Pindutin ang anumang key upang pumasok sa REPL. Gamitin ang CTRL-D upang "
-#~ "i-reload."
 
 #~ msgid "'%s' object does not support item assignment"
 #~ msgstr "'%s' object hindi sumusuporta ng item assignment"
@@ -4918,32 +4432,36 @@ msgstr ""
 #~ msgid "'%s' object is not subscriptable"
 #~ msgstr "'%s' object ay hindi maaaring i-subscript"
 
-#~ msgid "Running in safe mode! Auto-reload is off.\n"
-#~ msgstr "Tumatakbo sa safe mode! Awtomatikong pag re-reload ay OFF.\n"
+#~ msgid "'break' outside loop"
+#~ msgstr "'break' sa labas ng loop"
 
-#~ msgid "can't convert address to int"
-#~ msgstr "hindi ma i-convert ang address sa INT"
-
-#~ msgid "object '%s' is not a tuple or list"
-#~ msgstr "object '%s' ay hindi tuple o list"
-
-#~ msgid "pop from an empty set"
-#~ msgstr "pop sa walang laman na set"
-
-#~ msgid "pop from empty list"
-#~ msgstr "pop galing sa walang laman na list"
-
-#~ msgid "popitem(): dictionary is empty"
-#~ msgstr "popitem(): dictionary ay walang laman"
-
-#~ msgid "unknown format code '%c' for object of type '%s'"
-#~ msgstr "hindi alam ang format code '%c' para sa object na ang type ay '%s'"
-
-#~ msgid "unsupported types for %q: '%s', '%s'"
-#~ msgstr "hindi sinusuportahang type para sa %q: '%s', '%s'"
+#~ msgid "'continue' outside loop"
+#~ msgstr "'continue' sa labas ng loop"
 
 #~ msgid "AP required"
 #~ msgstr "AP kailangan"
+
+#~ msgid "AnalogOut functionality not supported"
+#~ msgstr "Hindi supportado ang AnalogOut"
+
+#~ msgid "AnalogOut is only 16 bits. Value must be less than 65536."
+#~ msgstr "AnalogOut ay 16 bits. Value ay dapat hindi hihigit pa sa 65536."
+
+#~ msgid "AnalogOut not supported on given pin"
+#~ msgstr "Hindi supportado ang AnalogOut sa ibinigay na pin"
+
+#~ msgid "Brightness must be between 0 and 255"
+#~ msgstr "Ang liwanag ay dapat sa gitna ng 0 o 255"
+
+#, c-format
+#~ msgid "Buffer incorrect size. Should be %d bytes."
+#~ msgstr "Mali ang size ng buffer. Dapat %d bytes."
+
+#~ msgid "Buffer must be at least length 1"
+#~ msgstr "Buffer dapat ay hindi baba sa 1 na haba"
+
+#~ msgid "Bytes must be between 0 and 255."
+#~ msgstr "Sa gitna ng 0 o 255 dapat ang bytes."
 
 #~ msgid "C-level assert"
 #~ msgstr "C-level assert"
@@ -4966,11 +4484,48 @@ msgstr ""
 #~ msgid "Cannot disconnect from AP"
 #~ msgstr "Hindi ma disconnect sa AP"
 
+#~ msgid "Cannot output both channels on the same pin"
+#~ msgstr "Hindi maaaring output ang mga parehong channel sa parehong pin"
+
+#~ msgid "Cannot read without MISO pin."
+#~ msgstr "Hindi maaring mabasa kapag walang MISO pin."
+
+#~ msgid "Cannot remount '/' when USB is active."
+#~ msgstr "Hindi ma-remount '/' kapag aktibo ang USB."
+
+#~ msgid "Cannot reset into bootloader because no bootloader is present."
+#~ msgstr "Hindi ma-reset sa bootloader dahil walang bootloader."
+
 #~ msgid "Cannot set STA config"
 #~ msgstr "Hindi ma-set ang STA Config"
 
+#~ msgid "Cannot transfer without MOSI and MISO pins."
+#~ msgstr "Hindi maaaring ilipat kapag walang MOSI at MISO pin."
+
+#~ msgid "Cannot unambiguously get sizeof scalar"
+#~ msgstr "Hindi puedeng hindi sigurado ang get sizeof scalar"
+
 #~ msgid "Cannot update i/f status"
 #~ msgstr "Hindi ma-update i/f status"
+
+#~ msgid "Cannot write without MOSI pin."
+#~ msgstr "Hindi maaring isulat kapag walang MOSI pin."
+
+#~ msgid "Clock pin init failed."
+#~ msgstr "Nabigo sa pag init ng Clock pin."
+
+#, fuzzy
+#~ msgid "Command must be an int between 0 and 255"
+#~ msgstr "Sa gitna ng 0 o 255 dapat ang bytes."
+
+#~ msgid "Could not initialize UART"
+#~ msgstr "Hindi ma-initialize ang UART"
+
+#~ msgid "Couldn't allocate first buffer"
+#~ msgstr "Hindi ma-iallocate ang first buffer"
+
+#~ msgid "Couldn't allocate second buffer"
+#~ msgstr "Hindi ma-iallocate ang second buffer"
 
 #~ msgid "Crash into the HardFault_Handler.\n"
 #~ msgstr "Nagcrash sa HardFault_Handler.\n"
@@ -4991,6 +4546,17 @@ msgstr ""
 #~ msgid "Error in ffi_prep_cif"
 #~ msgstr "Pagkakamali sa ffi_prep_cif"
 
+#~ msgid "Expected a %q"
+#~ msgstr "Umasa ng %q"
+
+#, fuzzy
+#~ msgid "Expected a Characteristic"
+#~ msgstr "Hindi mabasa and Characteristic."
+
+#, fuzzy
+#~ msgid "Expected a UUID"
+#~ msgstr "Umasa ng %q"
+
 #, fuzzy
 #~ msgid "Failed to acquire mutex"
 #~ msgstr "Nabigo sa pag kuha ng mutex, status: 0x%08lX"
@@ -5006,6 +4572,13 @@ msgstr ""
 #, fuzzy
 #~ msgid "Failed to add service, err 0x%04x"
 #~ msgstr "Hindi matagumpay ang paglagay ng service, status: 0x%08lX"
+
+#~ msgid "Failed to allocate RX buffer"
+#~ msgstr "Nabigong ilaan ang RX buffer"
+
+#, c-format
+#~ msgid "Failed to allocate RX buffer of %d bytes"
+#~ msgstr "Nabigong ilaan ang RX buffer ng %d bytes"
 
 #, fuzzy
 #~ msgid "Failed to change softdevice state"
@@ -5102,17 +4675,81 @@ msgstr ""
 #~ msgid "GPIO16 does not support pull up."
 #~ msgstr "Walang pull down support ang GPI016."
 
+#~ msgid "Group full"
+#~ msgstr "Puno ang group"
+
 #~ msgid "I2C operation not supported"
 #~ msgstr "Hindi supportado ang operasyong I2C"
 
+#~ msgid ""
+#~ "Incompatible .mpy file. Please update all .mpy files. See http://adafru."
+#~ "it/mpy-update for more info."
+#~ msgstr ""
+#~ ".mpy file hindi compatible. Maaring i-update lahat ng .mpy files. See "
+#~ "http://adafru.it/mpy-update for more info."
+
+#~ msgid "Invalid BMP file"
+#~ msgstr "Mali ang BMP file"
+
+#~ msgid "Invalid PWM frequency"
+#~ msgstr "Mali ang PWM frequency"
+
 #~ msgid "Invalid bit clock pin"
 #~ msgstr "Mali ang bit clock pin"
+
+#~ msgid "Invalid buffer size"
+#~ msgstr "Mali ang buffer size"
+
+#~ msgid "Invalid channel count"
+#~ msgstr "Maling bilang ng channel"
 
 #~ msgid "Invalid clock pin"
 #~ msgstr "Mali ang clock pin"
 
 #~ msgid "Invalid data pin"
 #~ msgstr "Mali ang data pin"
+
+#~ msgid "Invalid direction."
+#~ msgstr "Mali ang direksyon."
+
+#~ msgid "Invalid file"
+#~ msgstr "Mali ang file"
+
+#~ msgid "Invalid number of bits"
+#~ msgstr "Mali ang bilang ng bits"
+
+#~ msgid "Invalid phase"
+#~ msgstr "Mali ang phase"
+
+#~ msgid "Invalid pin"
+#~ msgstr "Mali ang pin"
+
+#~ msgid "Invalid pin for left channel"
+#~ msgstr "Mali ang pin para sa kaliwang channel"
+
+#~ msgid "Invalid pin for right channel"
+#~ msgstr "Mali ang pin para sa kanang channel"
+
+#~ msgid "Invalid pins"
+#~ msgstr "Mali ang pins"
+
+#~ msgid "Invalid polarity"
+#~ msgstr "Mali ang polarity"
+
+#~ msgid "Invalid run mode."
+#~ msgstr "Mali ang run mode."
+
+#~ msgid "Invalid voice count"
+#~ msgstr "Maling bilang ng voice"
+
+#~ msgid "Invalid wave file"
+#~ msgstr "May hindi tama sa wave file"
+
+#~ msgid "Length must be an int"
+#~ msgstr "Haba ay dapat int"
+
+#~ msgid "Length must be non-negative"
+#~ msgstr "Haba ay dapat hindi negatibo"
 
 #~ msgid ""
 #~ "Looks like our core CircuitPython code crashed hard. Whoops!\n"
@@ -5123,6 +4760,12 @@ msgstr ""
 #~ "Maaring mag file ng issue sa https://github.com/adafruit/circuitpython/"
 #~ "issues\n"
 #~ "kasama ng laman ng iyong CIRCUITPY drive at ang message na ito:\n"
+
+#~ msgid "MISO pin init failed."
+#~ msgstr "Hindi ma-initialize ang MISO pin."
+
+#~ msgid "MOSI pin init failed."
+#~ msgstr "Hindi ma-initialize ang MOSI pin."
 
 #~ msgid "Maximum PWM frequency is %dhz."
 #~ msgstr "Pinakamataas na PWM frequency ay %dhz."
@@ -5144,8 +4787,20 @@ msgstr ""
 #~ msgid "No PulseIn support for %q"
 #~ msgstr "Walang PulseIn support sa %q"
 
+#~ msgid "No RX pin"
+#~ msgstr "Walang RX pin"
+
+#~ msgid "No TX pin"
+#~ msgstr "Walang TX pin"
+
 #~ msgid "No hardware support for analog out."
 #~ msgstr "Hindi supportado ng hardware ang analog out."
+
+#~ msgid "No hardware support on pin"
+#~ msgstr "Walang support sa hardware ang pin"
+
+#~ msgid "Only 8 or 16 bit mono with "
+#~ msgstr "Tanging 8 o 16 na bit mono na may "
 
 #~ msgid "Only Windows format, uncompressed BMP supported %d"
 #~ msgstr "Tanging Windows format, uncompressed BMP lamang ang supportado %d"
@@ -5164,11 +4819,18 @@ msgstr ""
 #~ msgid "Only tx supported on UART1 (GPIO2)."
 #~ msgstr "Tanging suportado ang TX sa UART1 (GPIO2)."
 
+#~ msgid ""
+#~ "PWM duty_cycle must be between 0 and 65535 inclusive (16 bit resolution)"
+#~ msgstr "PWM duty_cycle ay dapat sa loob ng 0 at 65535 (16 bit resolution)"
+
 #~ msgid "PWM not supported on pin %d"
 #~ msgstr "Walang PWM support sa pin %d"
 
 #~ msgid "Pin %q does not have ADC capabilities"
 #~ msgstr "Walang kakayahang ADC ang pin %q"
+
+#~ msgid "Pin does not have ADC capabilities"
+#~ msgstr "Ang pin ay walang kakayahan sa ADC"
 
 #~ msgid "Pin(16) doesn't support pull"
 #~ msgstr "Walang pull support ang Pin(16)"
@@ -5176,15 +4838,49 @@ msgstr ""
 #~ msgid "Pins not valid for SPI"
 #~ msgstr "Mali ang pins para sa SPI"
 
+#~ msgid "Press any key to enter the REPL. Use CTRL-D to reload."
+#~ msgstr ""
+#~ "Pindutin ang anumang key upang pumasok sa REPL. Gamitin ang CTRL-D upang "
+#~ "i-reload."
+
+#~ msgid "RTC calibration is not supported on this board"
+#~ msgstr "RTC calibration ay hindi supportado ng board na ito"
+
 #, fuzzy
 #~ msgid "Range out of bounds"
 #~ msgstr "wala sa sakop ang address"
+
+#, fuzzy
+#~ msgid "Read-only object"
+#~ msgstr "Basahin-lamang"
+
+#~ msgid "Running in safe mode! Auto-reload is off.\n"
+#~ msgstr "Tumatakbo sa safe mode! Awtomatikong pag re-reload ay OFF.\n"
+
+#~ msgid "SDA or SCL needs a pull up"
+#~ msgstr "Kailangan ng pull up resistors ang SDA o SCL"
 
 #~ msgid "STA must be active"
 #~ msgstr "Dapat aktibo ang STA"
 
 #~ msgid "STA required"
 #~ msgstr "STA kailangan"
+
+#~ msgid "Sample rate must be positive"
+#~ msgstr "Sample rate ay dapat positibo"
+
+#, c-format
+#~ msgid "Sample rate too high. It must be less than %d"
+#~ msgstr "Sample rate ay masyadong mataas. Ito ay dapat hindi hiigit sa %d"
+
+#~ msgid "Splitting with sub-captures"
+#~ msgstr "Binibiyak gamit ang sub-captures"
+
+#~ msgid "Stack size must be at least 256"
+#~ msgstr "Ang laki ng stack ay dapat na hindi bababa sa 256"
+
+#~ msgid "Stream missing readinto() or write() method."
+#~ msgstr "Stream kulang ng readinto() o write() method."
 
 #~ msgid ""
 #~ "The CircuitPython heap was corrupted because the stack was too small.\n"
@@ -5216,11 +4912,20 @@ msgstr ""
 #~ "Ang reset button ay pinindot habang nag boot ang CircuitPython. Pindutin "
 #~ "ulit para lumabas sa safe mode.\n"
 
+#~ msgid "To exit, please reset the board without "
+#~ msgstr "Para lumabas, paki-reset ang board na wala ang "
+
 #~ msgid "UART(%d) does not exist"
 #~ msgstr "Walang UART(%d)"
 
 #~ msgid "UART(1) can't read"
 #~ msgstr "Hindi mabasa ang UART(1)"
+
+#~ msgid "USB Busy"
+#~ msgstr "Busy ang USB"
+
+#~ msgid "USB Error"
+#~ msgstr "May pagkakamali ang USB"
 
 #~ msgid "Unable to remount filesystem"
 #~ msgstr "Hindi ma-remount ang filesystem"
@@ -5228,23 +4933,74 @@ msgstr ""
 #~ msgid "Unknown type"
 #~ msgstr "Hindi alam ang type"
 
+#~ msgid "Unsupported baudrate"
+#~ msgstr "Hindi supportadong baudrate"
+
+#~ msgid "Unsupported operation"
+#~ msgstr "Hindi sinusuportahang operasyon"
+
+#~ msgid "Unsupported pull value."
+#~ msgstr "Hindi suportado ang pull value."
+
 #~ msgid "Use esptool to erase flash and re-upload Python instead"
 #~ msgstr ""
 #~ "Gamitin ang esptool upang burahin ang flash at muling i-upload ang Python"
 
+#~ msgid "Viper functions don't currently support more than 4 arguments"
+#~ msgstr ""
+#~ "Ang mga function ng Viper ay kasalukuyang hindi sumusuporta sa higit sa 4 "
+#~ "na argumento"
+
 #~ msgid "Voice index too high"
 #~ msgstr "Index ng Voice ay masyadong mataas"
+
+#, c-format
+#~ msgid ""
+#~ "Welcome to Adafruit CircuitPython %s!\n"
+#~ "\n"
+#~ "Please visit learn.adafruit.com/category/circuitpython for project "
+#~ "guides.\n"
+#~ "\n"
+#~ "To list built-in modules please do `help(\"modules\")`.\n"
+#~ msgstr ""
+#~ "Mabuhay sa Adafruit CircuitPython %s!\n"
+#~ "\n"
+#~ "Mangyaring bisitahin ang learn.adafruit.com/category/circuitpython para "
+#~ "sa project guides.\n"
+#~ "\n"
+#~ "Para makita ang listahan ng modules, `help(\"modules\")`.\n"
 
 #~ msgid ""
 #~ "You are running in safe mode which means something unanticipated "
 #~ "happened.\n"
 #~ msgstr "Ikaw ay tumatakbo sa safe mode dahil may masamang nangyari.\n"
 
+#~ msgid "You requested starting safe mode by "
+#~ msgstr "Ikaw ang humiling sa safe mode sa pamamagitan ng "
+
 #~ msgid "[addrinfo error %d]"
 #~ msgstr "[addrinfo error %d]"
 
+#~ msgid "abort() called"
+#~ msgstr "abort() tinawag"
+
+#~ msgid "address %08x is not aligned to %d bytes"
+#~ msgstr "address %08x ay hindi pantay sa %d bytes"
+
+#~ msgid "address out of bounds"
+#~ msgstr "wala sa sakop ang address"
+
+#~ msgid "attributes not supported yet"
+#~ msgstr "attributes hindi sinusuportahan"
+
+#~ msgid "bits must be 7, 8 or 9"
+#~ msgstr "bits ay dapat 7, 8 o 9"
+
 #~ msgid "bits must be 8"
 #~ msgstr "bits ay dapat walo (8)"
+
+#~ msgid "buffer must be a bytes-like object"
+#~ msgstr "buffer ay dapat bytes-like object"
 
 #~ msgid "buffer too long"
 #~ msgstr "masyadong mahaba ng buffer"
@@ -5252,8 +5008,27 @@ msgstr ""
 #~ msgid "buffers must be the same length"
 #~ msgstr "ang buffers ay dapat parehas sa haba"
 
+#~ msgid "byte code not implemented"
+#~ msgstr "byte code hindi pa implemented"
+
+#~ msgid "bytes > 8 bits not supported"
+#~ msgstr "hindi sinusuportahan ang bytes > 8 bits"
+
+#~ msgid "calibration value out of range +/-127"
+#~ msgstr "ang halaga ng pagkakalibrate ay wala sa sakop +/-127"
+
+#~ msgid "can only save bytecode"
+#~ msgstr "maaring i-save lamang ang bytecode"
+
 #~ msgid "can query only one param"
 #~ msgstr "maaaring i-query lamang ang isang param"
+
+#~ msgid "can't convert address to int"
+#~ msgstr "hindi ma i-convert ang address sa INT"
+
+#~ msgid "can't do truncated division of a complex number"
+#~ msgstr ""
+#~ "hindi maaaring gawin ang truncated division ng isang kumplikadong numero"
 
 #~ msgid "can't get AP config"
 #~ msgstr "hindi makuha ang AP config"
@@ -5261,17 +5036,48 @@ msgstr ""
 #~ msgid "can't get STA config"
 #~ msgstr "hindi makuha ang STA config"
 
+#~ msgid "can't have multiple **x"
+#~ msgstr "hindi puede ang maraming **x"
+
+#~ msgid "can't have multiple *x"
+#~ msgstr "hindi puede ang maraming *x"
+
+#~ msgid "can't pend throw to just-started generator"
+#~ msgstr "hindi mapadala ang send throw sa isang kaka umpisang generator"
+
 #~ msgid "can't set AP config"
 #~ msgstr "hindi makuha ang AP config"
 
 #~ msgid "can't set STA config"
 #~ msgstr "hindi makuha ang STA config"
 
+#~ msgid "cannot import name %q"
+#~ msgstr "hindi ma-import ang name %q"
+
+#~ msgid "cannot perform relative import"
+#~ msgstr "hindi maaring isagawa ang relative import"
+
 #~ msgid "color buffer must be a buffer or int"
 #~ msgstr "color buffer ay dapat buffer or int"
 
+#~ msgid "color should be an int"
+#~ msgstr "color ay dapat na int"
+
+#~ msgid "complex division by zero"
+#~ msgstr "kumplikadong dibisyon sa pamamagitan ng zero"
+
+#~ msgid "constant must be an integer"
+#~ msgstr "constant ay dapat na integer"
+
+#~ msgid "destination_length must be an int >= 0"
+#~ msgstr "ang destination_length ay dapat na isang int >= 0"
+
 #~ msgid "either pos or kw args are allowed"
 #~ msgstr "pos o kw args ang pinahihintulutan"
+
+#, fuzzy
+#~ msgid "end_x should be an int"
+#~ msgstr "y ay dapat int"
 
 #~ msgid "expected a DigitalInOut"
 #~ msgstr "umasa ng DigitalInOut"
@@ -5291,8 +5097,17 @@ msgstr ""
 #~ msgid "frequency can only be either 80Mhz or 160MHz"
 #~ msgstr "ang frequency ay dapat 80Mhz or 160MHz lamang"
 
+#~ msgid "function does not take keyword arguments"
+#~ msgstr "ang function ay hindi kumukuha ng mga argumento ng keyword"
+
 #~ msgid "impossible baudrate"
 #~ msgstr "impossibleng baudrate"
+
+#~ msgid "int() arg 2 must be >= 2 and <= 36"
+#~ msgstr "int() arg 2 ay dapat >=2 at <= 36"
+
+#~ msgid "integer required"
+#~ msgstr "kailangan ng int"
 
 #~ msgid "invalid I2C peripheral"
 #~ msgstr "maling I2C peripheral"
@@ -5303,11 +5118,20 @@ msgstr ""
 #~ msgid "invalid alarm"
 #~ msgstr "mali ang alarm"
 
+#~ msgid "invalid arguments"
+#~ msgstr "mali ang mga argumento"
+
 #~ msgid "invalid buffer length"
 #~ msgstr "mali ang buffer length"
 
 #~ msgid "invalid data bits"
 #~ msgstr "mali ang data bits"
+
+#~ msgid "invalid dupterm index"
+#~ msgstr "mali ang dupterm index"
+
+#~ msgid "invalid format"
+#~ msgstr "hindi wastong pag-format"
 
 #~ msgid "invalid pin"
 #~ msgstr "mali ang pin"
@@ -5315,8 +5139,22 @@ msgstr ""
 #~ msgid "invalid stop bits"
 #~ msgstr "mali ang stop bits"
 
+#~ msgid "keyword argument(s) not yet implemented - use normal args instead"
+#~ msgstr ""
+#~ "kindi pa ipinapatupad ang (mga) argument(s) ng keyword - gumamit ng "
+#~ "normal args"
+
+#~ msgid "keywords must be strings"
+#~ msgstr "ang keywords dapat strings"
+
 #~ msgid "len must be multiple of 4"
 #~ msgstr "len ay dapat multiple ng 4"
+
+#~ msgid "length argument not allowed for this type"
+#~ msgstr "length argument ay walang pahintulot sa ganitong type"
+
+#~ msgid "long int not supported in this build"
+#~ msgstr "long int hindi sinusuportahan sa build na ito"
 
 #~ msgid "memory allocation failed, allocating %u bytes for native code"
 #~ msgstr ""
@@ -5329,14 +5167,63 @@ msgstr ""
 #~ msgid "name must be a string"
 #~ msgstr "ang keywords dapat strings"
 
+#~ msgid "name reused for argument"
+#~ msgstr "name muling ginamit para sa argument"
+
+#~ msgid "no available NIC"
+#~ msgstr "walang magagamit na NIC"
+
+#~ msgid "non-keyword arg after */**"
+#~ msgstr "non-keyword arg sa huli ng */**"
+
+#~ msgid "non-keyword arg after keyword arg"
+#~ msgstr "non-keyword arg sa huli ng keyword arg"
+
 #~ msgid "not a valid ADC Channel: %d"
 #~ msgstr "hindi tamang ADC Channel: %d"
+
+#~ msgid "object '%s' is not a tuple or list"
+#~ msgstr "object '%s' ay hindi tuple o list"
+
+#~ msgid "object does not support item assignment"
+#~ msgstr "ang object na '%s' ay hindi maaaring i-subscript"
+
+#~ msgid "object does not support item deletion"
+#~ msgstr "ang object ay hindi sumusuporta sa pagbura ng item"
+
+#~ msgid "object is not subscriptable"
+#~ msgstr "ang bagay ay hindi maaaring ma-subscript"
+
+#, fuzzy
+#~ msgid "offset out of bounds"
+#~ msgstr "wala sa sakop ang address"
+
+#~ msgid "palette_index should be an int"
+#~ msgstr "palette_index ay dapat na int"
+
+#~ msgid "parameter annotation must be an identifier"
+#~ msgstr "parameter annotation ay dapat na identifier"
 
 #~ msgid "pin does not have IRQ capabilities"
 #~ msgstr "walang IRQ capabilities ang pin"
 
+#~ msgid "pixel_shader must be displayio.Palette or displayio.ColorConverter"
+#~ msgstr "pixel_shader ay dapat displayio.Palette o displayio.ColorConverter"
+
+#~ msgid "pop from an empty set"
+#~ msgstr "pop sa walang laman na set"
+
+#~ msgid "pop from empty list"
+#~ msgstr "pop galing sa walang laman na list"
+
+#~ msgid "popitem(): dictionary is empty"
+#~ msgstr "popitem(): dictionary ay walang laman"
+
 #~ msgid "position must be 2-tuple"
 #~ msgstr "position ay dapat 2-tuple"
+
+#~ msgid "queue overflow"
+#~ msgstr "puno na ang pila (overflow)"
 
 #, fuzzy
 #~ msgid "readonly attribute"
@@ -5345,8 +5232,46 @@ msgstr ""
 #~ msgid "row must be packed and word aligned"
 #~ msgstr "row ay dapat packed at ang word nakahanay"
 
+#~ msgid ""
+#~ "sample_source buffer must be a bytearray or array of type 'h', 'H', 'b' "
+#~ "or 'B'"
+#~ msgstr ""
+#~ "ang sample_source buffer ay dapat na isang bytearray o array ng uri na "
+#~ "'h', 'H', 'b' o'B'"
+
 #~ msgid "scan failed"
 #~ msgstr "nabigo ang pag-scan"
+
+#~ msgid "schedule stack full"
+#~ msgstr "puno na ang schedule stack"
+
+#~ msgid "single '}' encountered in format string"
+#~ msgstr "isang '}' nasalubong sa format string"
+
+#~ msgid "slice step cannot be zero"
+#~ msgstr "slice step ay hindi puedeng 0"
+
+#, fuzzy
+#~ msgid "start_x should be an int"
+#~ msgstr "y ay dapat int"
+
+#~ msgid "step must be non-zero"
+#~ msgstr "step ay dapat hindi zero"
+
+#~ msgid "stop must be 1 or 2"
+#~ msgstr "stop dapat 1 o 2"
+
+#~ msgid "string not supported; use bytes or bytearray"
+#~ msgstr "string hindi supportado; gumamit ng bytes o kaya bytearray"
+
+#~ msgid "struct: cannot index"
+#~ msgstr "struct: hindi ma-index"
+
+#~ msgid "threshold must be in the range 0-65536"
+#~ msgstr "ang threshold ay dapat sa range 0-65536"
+
+#~ msgid "time.struct_time() takes a 9-sequence"
+#~ msgstr "time.struct_time() kumukuha ng 9-sequence"
 
 #~ msgid "time.struct_time() takes exactly 1 argument"
 #~ msgstr "time.struct_time() kumukuha ng 1 argument"
@@ -5354,11 +5279,27 @@ msgstr ""
 #~ msgid "timeout >100 (units are now seconds, not msecs)"
 #~ msgstr "timeout >100 (units ay seconds, hindi na msecs)"
 
+#, fuzzy
+#~ msgid "timeout must be >= 0.0"
+#~ msgstr "bits ay dapat walo (8)"
+
 #~ msgid "too many arguments"
 #~ msgstr "masyadong maraming argumento"
 
+#~ msgid "too many arguments provided with the given format"
+#~ msgstr "masyadong maraming mga argumento na ibinigay sa ibinigay na format"
+
+#~ msgid "tuple index out of range"
+#~ msgstr "indeks ng tuple wala sa sakop"
+
+#~ msgid "unindent does not match any outer indentation level"
+#~ msgstr "unindent hindi tugma sa indentation level sa labas"
+
 #~ msgid "unknown config param"
 #~ msgstr "hindi alam na config param"
+
+#~ msgid "unknown format code '%c' for object of type '%s'"
+#~ msgstr "hindi alam ang format code '%c' para sa object na ang type ay '%s'"
 
 #~ msgid "unknown format code '%c' for object of type 'float'"
 #~ msgstr "hindi alam ang format code '%c' sa object na ang type ay 'float'"
@@ -5370,5 +5311,25 @@ msgstr ""
 #~ msgid "unknown status param"
 #~ msgstr "hindi alam na status param"
 
+#~ msgid "unmatched '{' in format"
+#~ msgstr "hindi tugma ang '{' sa format"
+
+#~ msgid "unsupported types for %q: '%s', '%s'"
+#~ msgstr "hindi sinusuportahang type para sa %q: '%s', '%s'"
+
 #~ msgid "wifi_set_ip_info() failed"
 #~ msgstr "nabigo ang wifi_set_ip_info()"
+
+#, fuzzy
+#~ msgid "x value out of bounds"
+#~ msgstr "wala sa sakop ang address"
+
+#~ msgid "y should be an int"
+#~ msgstr "y ay dapat int"
+
+#, fuzzy
+#~ msgid "y value out of bounds"
+#~ msgstr "wala sa sakop ang address"
+
+#~ msgid "zero step"
+#~ msgstr "zero step"

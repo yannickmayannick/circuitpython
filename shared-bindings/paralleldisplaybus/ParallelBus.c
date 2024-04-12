@@ -30,7 +30,6 @@
 
 #include "shared/runtime/context_manager_helpers.h"
 #include "py/binary.h"
-#include "py/objproperty.h"
 #include "py/runtime.h"
 #include "shared-bindings/microcontroller/Pin.h"
 #include "shared-bindings/util.h"
@@ -44,10 +43,11 @@
 //|     def __init__(
 //|         self,
 //|         *,
-//|         data0: microcontroller.Pin,
 //|         command: microcontroller.Pin,
 //|         chip_select: microcontroller.Pin,
 //|         write: microcontroller.Pin,
+//|         data0: Optional[microcontroller.Pin] = None,
+//|         data_pins: Optional[Sequence[microcontroller.Pin]] = None,
 //|         read: Optional[microcontroller.Pin],
 //|         reset: Optional[microcontroller.Pin] = None,
 //|         frequency: int = 30_000_000,

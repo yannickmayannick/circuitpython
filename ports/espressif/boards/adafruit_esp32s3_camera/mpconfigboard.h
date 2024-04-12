@@ -3,7 +3,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2019 Scott Shawcroft for Adafruit Industries
+ * Copyright (c) 2023 Scott Shawcroft for Adafruit Industries
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,6 @@
  * THE SOFTWARE.
  */
 
-// Micropython setup
-
 #define MICROPY_HW_BOARD_NAME       "Adafruit Camera"
 #define MICROPY_HW_MCU_NAME         "ESP32S3"
 
@@ -40,5 +38,3 @@
 #define DEFAULT_SPI_BUS_MISO (&pin_GPIO37)
 
 #define DOUBLE_TAP_PIN (&pin_GPIO42)
-
-#define DEFAULT_RESERVED_PSRAM      (1048576)

@@ -50,9 +50,6 @@
 #include "common-hal/busio/I2C.h"
 #include "common-hal/busio/SPI.h"
 #include "common-hal/busio/UART.h"
-#include "common-hal/pulseio/PulseOut.h"
-#include "common-hal/pulseio/PulseIn.h"
-#include "common-hal/pwmio/PWMOut.h"
 #include "common-hal/rtc/RTC.h"
 #include "common-hal/neopixel_write/__init__.h"
 #include "common-hal/watchdog/WatchDogTimer.h"
@@ -226,20 +223,6 @@ void reset_port(void) {
     i2s_reset();
     #endif
 
-    #if CIRCUITPY_AUDIOPWMIO
-    audiopwmout_reset();
-    #endif
-
-
-    #if CIRCUITPY_PULSEIO
-    pulseout_reset();
-    pulsein_reset();
-    #endif
-
-    #if CIRCUITPY_PWMIO
-    pwmout_reset();
-    #endif
-
     #if CIRCUITPY_RTC
     rtc_reset();
     #endif
@@ -286,29 +269,30 @@ uint32_t *port_heap_get_bottom(void) {
 }
 
 uint32_t *port_heap_get_top(void) {
-    return port_stack_get_top();
-}
-
-bool port_has_fixed_stack(void) {
-    return false;
+    return port_stack_get_limit();
 }
 
 uint32_t *port_stack_get_limit(void) {
-    return &_euninitialized;
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Warray-bounds"
+    return port_stack_get_top() - (CIRCUITPY_DEFAULT_STACK_SIZE + CIRCUITPY_EXCEPTION_STACK_SIZE) / sizeof(uint32_t);
+    #pragma GCC diagnostic pop
 }
 
 uint32_t *port_stack_get_top(void) {
     return &_estack;
 }
 
-// Place the word in the uninitialized section so it won't get overwritten.
-__attribute__((section(".uninitialized"))) uint32_t _saved_word;
+// Place the word in the first 32k of RAM. This is saved by us and the
+// bootloader for the soft device. We only use it before the soft device uses
+// that memory.
+#define SAVED_WORD ((uint32_t *)(0x20008000 - 4))
 void port_set_saved_word(uint32_t value) {
-    _saved_word = value;
+    *SAVED_WORD = value;
 }
 
 uint32_t port_get_saved_word(void) {
-    return _saved_word;
+    return *SAVED_WORD;
 }
 
 uint64_t port_get_raw_ticks(uint8_t *subticks) {

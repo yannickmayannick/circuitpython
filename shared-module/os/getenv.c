@@ -42,7 +42,6 @@
 #include "py/parsenum.h"
 #include "py/runtime.h"
 #include "supervisor/filesystem.h"
-#include "supervisor/memory.h"
 
 #define GETENV_PATH "/settings.toml"
 
@@ -63,8 +62,12 @@ STATIC bool open_file(const char *name, file_arg *active_file) {
         return false;
     }
     #else
-    FATFS *fs = filesystem_circuitpy();
-    FRESULT result = f_open(fs, active_file, name, FA_READ);
+    fs_user_mount_t *fs_mount = filesystem_circuitpy();
+    if (fs_mount == NULL) {
+        return false;
+    }
+    FATFS *fatfs = &fs_mount->fatfs;
+    FRESULT result = f_open(fatfs, active_file, name, FA_READ);
     return result == FR_OK;
     #endif
 }
