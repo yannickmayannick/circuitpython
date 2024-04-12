@@ -177,7 +177,7 @@ void print_safe_mode_message(safe_mode_t reason) {
             break;
         #endif
         case SAFE_MODE_STACK_OVERFLOW:
-            message = MP_ERROR_TEXT("Heap was corrupted because the stack was too small. Increase stack size.");
+            message = MP_ERROR_TEXT("Stack overflow. Increase stack size.");
             break;
         case SAFE_MODE_USB_TOO_MANY_ENDPOINTS:
             message = MP_ERROR_TEXT("USB devices need more endpoints than are available.");
@@ -218,7 +218,7 @@ void print_safe_mode_message(safe_mode_t reason) {
                 message = MP_ERROR_TEXT("NLR jump failed. Likely memory corruption.");
                 break;
             case SAFE_MODE_NO_HEAP:
-                message = MP_ERROR_TEXT("Unable to allocate the heap.");
+                message = MP_ERROR_TEXT("Unable to allocate to the heap.");
                 break;
             case SAFE_MODE_SDK_FATAL_ERROR:
                 message = MP_ERROR_TEXT("Third-party firmware fatal error.");

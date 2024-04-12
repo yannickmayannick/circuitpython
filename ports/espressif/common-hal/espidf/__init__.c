@@ -25,7 +25,6 @@
  */
 
 #include "bindings/espidf/__init__.h"
-#include "supervisor/memory.h"
 #include "py/runtime.h"
 
 #include "esp_now.h"
@@ -43,7 +42,6 @@
 #else
 #define esp_himem_reserved_area_size() (0)
 #endif
-size_t reserved_psram = DEFAULT_RESERVED_PSRAM;
 #endif
 
 static size_t psram_size_usable(void) {
@@ -51,51 +49,6 @@ static size_t psram_size_usable(void) {
     /* PSRAM chip may be larger than the size we can map into address space */
     size_t s = MIN(esp_psram_get_size(), SOC_EXTRAM_DATA_SIZE);
     return s - esp_himem_reserved_area_size();
-    #else
-    return 0;
-    #endif
-}
-
-bool common_hal_espidf_set_reserved_psram(size_t amount) {
-    #ifdef CONFIG_SPIRAM
-    if (!esp_psram_is_initialized()) {
-        return false;
-    }
-    if (amount > psram_size_usable()) {
-        return false;
-    }
-    reserved_psram = amount;
-    return true;
-    #else
-    return false;
-    #endif
-}
-
-supervisor_allocation *psram_for_idf;
-
-void common_hal_espidf_reserve_psram(void) {
-    #ifdef CONFIG_SPIRAM_USE_MEMMAP
-    if (!psram_for_idf) {
-        ESP_LOGI(TAG, "Reserving %d bytes of psram", reserved_psram);
-        if (reserved_psram == 0) {
-            return;
-        }
-        psram_for_idf = allocate_memory(reserved_psram, true, false);
-        if (psram_for_idf) {
-            intptr_t psram_for_idf_start = (intptr_t)psram_for_idf->ptr;
-            intptr_t psram_for_idf_end = psram_for_idf_start + reserved_psram;
-            ESP_LOGI(TAG, "Reserved %x..%x", psram_for_idf_start, psram_for_idf_end);
-            heap_caps_add_region(psram_for_idf_start, psram_for_idf_end);
-        } else {
-            ESP_LOGE(TAG, "supervisor allocation failed");
-        }
-    }
-    #endif
-}
-
-size_t common_hal_espidf_get_reserved_psram(void) {
-    #ifdef CONFIG_SPIRAM
-    return reserved_psram;
     #else
     return 0;
     #endif

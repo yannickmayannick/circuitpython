@@ -157,7 +157,7 @@ void common_hal_audiobusio_pdmin_construct(audiobusio_pdmin_obj_t *self,
     }
 
     if (!(bit_depth == 16 || bit_depth == 8) || !mono || oversample != OVERSAMPLING) {
-        mp_raise_NotImplementedError(MP_ERROR_TEXT("Only 8 or 16 bit mono with " MP_STRINGIFY(OVERSAMPLING) "x oversampling is supported."));
+        mp_raise_NotImplementedError_varg(MP_ERROR_TEXT("Only 8 or 16 bit mono with %dx oversampling supported."), OVERSAMPLING);
     }
 
     turn_on_i2s();
@@ -194,7 +194,7 @@ void common_hal_audiobusio_pdmin_construct(audiobusio_pdmin_obj_t *self,
     // Find a free GCLK to generate the MCLK signal.
     uint8_t gclk = find_free_gclk(clock_divisor);
     if (gclk > GCLK_GEN_NUM) {
-        mp_raise_RuntimeError(MP_ERROR_TEXT("Unable to find free GCLK"));
+        mp_raise_RuntimeError(MP_ERROR_TEXT("No free GCLKs"));
     }
     self->gclk = gclk;
 

@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2023-05-21 00:49+0000\n"
-"Last-Translator: Scott Shawcroft <scott@tannewt.org>\n"
+"PO-Revision-Date: 2023-11-16 15:03+0000\n"
+"Last-Translator: Can Kocyigit <cank3698@googlemail.com>\n"
 "Language-Team: none\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 5.2\n"
 
 #: main.c
 msgid ""
@@ -78,16 +78,6 @@ msgstr " çıktı:\n"
 msgid "%%c requires int or char"
 msgstr "%%c int veya char tipine ihtiyaç duyar"
 
-#: main.c
-#, c-format
-msgid "%02X"
-msgstr "%02X"
-
-#: shared-module/os/getenv.c
-#, c-format
-msgid "%S"
-msgstr ""
-
 #: shared-bindings/rgbmatrix/RGBMatrix.c
 #, c-format
 msgid ""
@@ -96,26 +86,6 @@ msgstr ""
 "%d adres pinleri, %d RGB pinleri ve %d döşemeleri %d'nin yüksekliği "
 "gösterir, %d'nin değil"
 
-#: ports/atmel-samd/common-hal/alarm/__init__.c
-#: ports/atmel-samd/common-hal/audiobusio/I2SOut.c
-#: ports/cxd56/common-hal/analogio/AnalogOut.c ports/cxd56/common-hal/rtc/RTC.c
-#: ports/espressif/common-hal/audiobusio/I2SOut.c
-#: ports/espressif/common-hal/rtc/RTC.c
-#: ports/mimxrt10xx/common-hal/analogio/AnalogOut.c
-#: ports/mimxrt10xx/common-hal/rtc/RTC.c ports/nrf/common-hal/alarm/__init__.c
-#: ports/nrf/common-hal/analogio/AnalogOut.c
-#: ports/nrf/common-hal/audiobusio/I2SOut.c ports/nrf/common-hal/rtc/RTC.c
-#: ports/raspberrypi/common-hal/alarm/__init__.c
-#: ports/raspberrypi/common-hal/analogio/AnalogOut.c
-#: ports/raspberrypi/common-hal/audiobusio/I2SOut.c
-#: ports/raspberrypi/common-hal/rtc/RTC.c ports/stm/common-hal/alarm/__init__.c
-#: ports/stm/common-hal/canio/Listener.c ports/stm/common-hal/rtc/RTC.c
-#: shared-bindings/audiobusio/I2SOut.c shared-bindings/audiobusio/PDMIn.c
-#: shared-bindings/keypad/KeyMatrix.c shared-bindings/keypad/Keys.c
-#: shared-bindings/keypad/ShiftRegisterKeys.c
-msgid "%q"
-msgstr "%q"
-
 #: shared-bindings/microcontroller/Pin.c
 msgid "%q and %q contain duplicate pins"
 msgstr "%q ve %q yinelenen pinler içeriyor"
@@ -123,6 +93,14 @@ msgstr "%q ve %q yinelenen pinler içeriyor"
 #: ports/atmel-samd/common-hal/audioio/AudioOut.c
 msgid "%q and %q must be different"
 msgstr "%q ve %q farklı olmalılar"
+
+#: ports/atmel-samd/common-hal/audiobusio/I2SOut.c
+msgid "%q and %q must share a clock unit"
+msgstr ""
+
+#: ports/nrf/common-hal/watchdog/WatchDogTimer.c
+msgid "%q cannot be changed once mode is set to %q"
+msgstr ""
 
 #: shared-bindings/microcontroller/Pin.c
 msgid "%q contains duplicate pins"
@@ -236,13 +214,23 @@ msgstr ""
 msgid "%q must be array of type 'h'"
 msgstr ""
 
+#: shared-bindings/audiobusio/PDMIn.c
+msgid "%q must be multiple of 8."
+msgstr ""
+
 #: ports/raspberrypi/bindings/cyw43/__init__.c py/argcheck.c py/objexcept.c
-#: shared-bindings/canio/CAN.c shared-bindings/digitalio/Pull.c
+#: shared-bindings/bitmapfilter/__init__.c shared-bindings/canio/CAN.c
+#: shared-bindings/digitalio/Pull.c shared-bindings/supervisor/__init__.c
 #: shared-module/synthio/Synthesizer.c
 msgid "%q must be of type %q or %q, not %q"
 msgstr ""
 
-#: py/argcheck.c shared-module/synthio/__init__.c
+#: shared-bindings/jpegio/JpegDecoder.c
+msgid "%q must be of type %q, %q, or %q, not %q"
+msgstr ""
+
+#: py/argcheck.c py/runtime.c shared-bindings/bitmapfilter/__init__.c
+#: shared-module/synthio/__init__.c
 msgid "%q must be of type %q, not %q"
 msgstr ""
 
@@ -259,7 +247,7 @@ msgstr "%q sınırların dışında"
 #: ports/nrf/common-hal/pulseio/PulseIn.c
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 #: ports/stm/common-hal/pulseio/PulseIn.c py/argcheck.c
-#: shared-bindings/canio/Match.c
+#: shared-bindings/canio/Match.c shared-bindings/time/__init__.c
 msgid "%q out of range"
 msgstr "%q aralık dışında"
 
@@ -271,9 +259,17 @@ msgstr ""
 msgid "%q step cannot be zero"
 msgstr "%q sıfır olamaz"
 
+#: shared-module/bitbangio/I2C.c
+msgid "%q too long"
+msgstr ""
+
 #: py/bc.c py/objnamedtuple.c
 msgid "%q() takes %d positional arguments but %d were given"
 msgstr "%q(), %d konumsal argümanını alır ancak %d verildi"
+
+#: shared-module/jpegio/JpegDecoder.c
+msgid "%q() without %q()"
+msgstr ""
 
 #: shared-bindings/usb_hid/Device.c
 msgid "%q, %q, and %q must all be the same length"
@@ -297,11 +293,6 @@ msgstr ""
 
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 msgid "%q[%u] waits on input outside of count"
-msgstr ""
-
-#: py/runtime.c
-#, c-format
-msgid "%s"
 msgstr ""
 
 #: ports/espressif/common-hal/espidf/__init__.c
@@ -468,12 +459,6 @@ msgstr "0.0'dan bir karmaşık güce"
 msgid "3-arg pow() not supported"
 msgstr "3-argümanlı pow() desteklenmemektedir"
 
-#: ports/atmel-samd/common-hal/alarm/pin/PinAlarm.c
-#: ports/atmel-samd/common-hal/countio/Counter.c
-#: ports/atmel-samd/common-hal/rotaryio/IncrementalEncoder.c
-msgid "A hardware interrupt channel is already in use"
-msgstr "Bir donanım kesme kanalı halihazırda kullanılmaktadır"
-
 #: ports/raspberrypi/common-hal/wifi/Radio.c
 msgid "AP could not be started"
 msgstr ""
@@ -503,12 +488,6 @@ msgstr "Tüm CAN çevre birimleri kullanımda"
 msgid "All I2C peripherals are in use"
 msgstr "Tüm I2C çevre birimleri kullanımda"
 
-#: ports/espressif/common-hal/countio/Counter.c
-#: ports/espressif/common-hal/frequencyio/FrequencyIn.c
-#: ports/espressif/common-hal/rotaryio/IncrementalEncoder.c
-msgid "All PCNT units in use"
-msgstr "Tüm PCNT birimleri kullanımda"
-
 #: ports/atmel-samd/common-hal/canio/Listener.c
 #: ports/espressif/common-hal/canio/Listener.c
 #: ports/stm/common-hal/canio/Listener.c
@@ -526,7 +505,6 @@ msgstr "Tüm UART çevre birimleri kullanımda"
 #: ports/nrf/common-hal/countio/Counter.c
 #: ports/nrf/common-hal/pulseio/PulseIn.c
 #: ports/nrf/common-hal/rotaryio/IncrementalEncoder.c
-#: shared-bindings/pwmio/PWMOut.c
 msgid "All channels in use"
 msgstr "Tüm kanallar kullanımda"
 
@@ -549,24 +527,18 @@ msgid "All sync event channels in use"
 msgstr "Tüm asenkron olay kanalları kullanımda"
 
 #: ports/raspberrypi/common-hal/picodvi/Framebuffer.c
-#: shared-bindings/pwmio/PWMOut.c
 msgid "All timers for this pin are in use"
 msgstr "Bu pin için tüm zamanlayıcılar kullanımda"
 
 #: ports/atmel-samd/common-hal/_pew/PewPew.c
 #: ports/atmel-samd/common-hal/audioio/AudioOut.c
-#: ports/atmel-samd/common-hal/frequencyio/FrequencyIn.c
 #: ports/atmel-samd/common-hal/pulseio/PulseIn.c
 #: ports/atmel-samd/common-hal/pulseio/PulseOut.c
 #: ports/cxd56/common-hal/pulseio/PulseOut.c
-#: ports/espressif/common-hal/frequencyio/FrequencyIn.c
-#: ports/espressif/common-hal/neopixel_write/__init__.c
-#: ports/espressif/common-hal/pulseio/PulseIn.c
-#: ports/espressif/common-hal/pulseio/PulseOut.c
 #: ports/nrf/common-hal/audiopwmio/PWMAudioOut.c
 #: ports/nrf/common-hal/pulseio/PulseIn.c ports/nrf/peripherals/nrf/timers.c
 #: ports/raspberrypi/common-hal/audiopwmio/PWMAudioOut.c
-#: ports/stm/peripherals/timers.c shared-bindings/pwmio/PWMOut.c
+#: ports/stm/peripherals/timers.c
 msgid "All timers in use"
 msgstr "Tüm zamanlayıcılar kullanımda"
 
@@ -656,14 +628,6 @@ msgstr "Minimum kare hızından altında"
 msgid "Bit clock and word select must be sequential GPIO pins"
 msgstr ""
 
-#: ports/atmel-samd/common-hal/audiobusio/I2SOut.c
-msgid "Bit clock and word select must share a clock unit"
-msgstr "Bit saati ve kelime seçimi, bir saat birimini paylaşmalıdır"
-
-#: shared-bindings/audiobusio/PDMIn.c
-msgid "Bit depth must be multiple of 8."
-msgstr "Bit derinliği 8'in katı olacak şekilde olmalı."
-
 #: shared-bindings/bitmaptools/__init__.c
 msgid "Bitmap size and bits per value must match"
 msgstr "Bitmap boyutu ve bit başına değer uyuşmalı"
@@ -675,10 +639,6 @@ msgstr ""
 #: ports/mimxrt10xx/common-hal/busio/UART.c
 msgid "Both RX and TX required for flow control"
 msgstr "Hem RX hem de TX akış kontrolü için gerekli"
-
-#: ports/atmel-samd/common-hal/rotaryio/IncrementalEncoder.c
-msgid "Both pins must support hardware interrupts"
-msgstr "Her iki pin de donanım kesintilerini desteklemelidir"
 
 #: shared-bindings/busdisplay/BusDisplay.c
 #: shared-bindings/framebufferio/FramebufferDisplay.c
@@ -723,10 +683,6 @@ msgstr "Buffer bitten %d daha az"
 #: shared-bindings/struct/__init__.c shared-module/struct/__init__.c
 msgid "Buffer too small"
 msgstr ""
-
-#: ports/espressif/common-hal/imagecapture/ParallelImageCapture.c
-msgid "Buffers must be same size"
-msgstr "Arabellek boyutları aynı olmalı"
 
 #: ports/atmel-samd/common-hal/paralleldisplaybus/ParallelBus.c
 #: ports/espressif/common-hal/paralleldisplaybus/ParallelBus.c
@@ -779,6 +735,7 @@ msgstr ""
 
 #: shared-bindings/storage/__init__.c shared-bindings/usb_cdc/__init__.c
 #: shared-bindings/usb_hid/__init__.c shared-bindings/usb_midi/__init__.c
+#: shared-bindings/usb_video/__init__.c
 msgid "Cannot change USB devices now"
 msgstr "USB aygıtları şu an değiştirilemez"
 
@@ -820,16 +777,6 @@ msgstr "Dosyaya kayıt yapılamıyor"
 msgid "Cannot remount '/' when visible via USB."
 msgstr "'/' USB ile görünür olduğunda, yeniden bağlanamaz."
 
-#: ports/atmel-samd/common-hal/microcontroller/__init__.c
-#: ports/cxd56/common-hal/microcontroller/__init__.c
-#: ports/mimxrt10xx/common-hal/microcontroller/__init__.c
-msgid "Cannot reset into bootloader because no bootloader is present"
-msgstr "Hiçbir bootloader bulunmadığından bootloader sıfırlanamıyor"
-
-#: ports/espressif/common-hal/socketpool/Socket.c
-msgid "Cannot set socket options"
-msgstr "Soket seçenekleri ayarlanamıyor"
-
 #: shared-bindings/digitalio/DigitalInOut.c
 msgid "Cannot set value when direction is input."
 msgstr "Yön, giriş olduğunda değer ayarlanamıyor."
@@ -842,10 +789,6 @@ msgstr "RS485 modunda RTS veya CTS belirtilemez"
 #: py/objslice.c
 msgid "Cannot subclass slice"
 msgstr ""
-
-#: shared-bindings/pwmio/PWMOut.c
-msgid "Cannot vary frequency on a timer that is already in use"
-msgstr "Kullanımda olan bir zamanlayıcının frekansı değiştirilemez"
 
 #: ports/nrf/common-hal/alarm/pin/PinAlarm.c
 msgid "Cannot wake on pin edge, only level"
@@ -862,10 +805,6 @@ msgstr "CharacteristicBuffer yazılmı sağlanmadı"
 #: supervisor/shared/safe_mode.c
 msgid "CircuitPython core code crashed hard. Whoops!\n"
 msgstr "CircuitPython kor kodu patladı. Haydaaa!\n"
-
-#: shared-module/bitbangio/I2C.c
-msgid "Clock stretch too long"
-msgstr "Saat uzatması çok uzun"
 
 #: ports/atmel-samd/common-hal/audiobusio/I2SOut.c
 msgid "Clock unit in use"
@@ -885,17 +824,9 @@ msgstr ""
 msgid "Coordinate arrays types have different sizes"
 msgstr ""
 
-#: ports/espressif/common-hal/neopixel_write/__init__.c
-msgid "Could not retrieve clock"
-msgstr ""
-
 #: shared-bindings/_bleio/Adapter.c
 msgid "Could not set address"
 msgstr "Adres ayarlanamadı"
-
-#: shared-bindings/pwmio/PWMOut.c
-msgid "Could not start PWM"
-msgstr "PWM başlatılamadı"
 
 #: ports/stm/common-hal/busio/UART.c
 msgid "Could not start interrupt, RX busy"
@@ -926,6 +857,10 @@ msgstr "Data 0 pini bite hizalı olmalı"
 msgid "Data chunk must follow fmt chunk"
 msgstr "Veri öbeği, fmt yığınını takip etmelidir"
 
+#: shared-module/jpegio/JpegDecoder.c
+msgid "Data format error (may be broken data)"
+msgstr ""
+
 #: ports/espressif/common-hal/_bleio/Adapter.c
 #: ports/nrf/common-hal/_bleio/Adapter.c
 msgid "Data not supported with directed advertising"
@@ -943,6 +878,10 @@ msgstr ""
 #: shared-bindings/audiobusio/PDMIn.c
 msgid "Destination capacity is smaller than destination_length."
 msgstr "Hedef kapasitesi, hedef_uzunluğundan daha küçük."
+
+#: shared-module/jpegio/JpegDecoder.c
+msgid "Device error or wrong termination of input stream"
+msgstr ""
 
 #: ports/nrf/common-hal/audiobusio/I2SOut.c
 msgid "Device in use"
@@ -980,13 +919,6 @@ msgstr "ECB aynı anda yalnızca 16 baytla çalışır"
 msgid "ESP-IDF memory allocation failed"
 msgstr ""
 
-#: ports/atmel-samd/common-hal/frequencyio/FrequencyIn.c
-#: ports/atmel-samd/common-hal/ps2io/Ps2.c
-#: ports/atmel-samd/common-hal/pulseio/PulseIn.c
-#: ports/cxd56/common-hal/pulseio/PulseIn.c
-msgid "EXTINT channel already in use"
-msgstr "EXTINT kanalı zaten kullanımda"
-
 #: extmod/modre.c
 msgid "Error in regex"
 msgstr "regex'te hata"
@@ -994,10 +926,6 @@ msgstr "regex'te hata"
 #: supervisor/shared/safe_mode.c
 msgid "Error in safemode.py."
 msgstr ""
-
-#: shared-bindings/socketpool/Socket.c shared-bindings/ssl/SSLSocket.c
-msgid "Error: Failure to bind"
-msgstr "Hata: Bağlanamadı"
 
 #: shared-bindings/alarm/__init__.c
 msgid "Expected a kind of %q"
@@ -1015,10 +943,6 @@ msgstr "FFT sadece ndarrays'te tanımlandı"
 #: extmod/ulab/code/numpy/fft/fft_tools.c
 msgid "FFT is implemented for linear arrays only"
 msgstr "FFT yalnızca doğrusal diziler için uygulanır"
-
-#: ports/espressif/common-hal/ssl/SSLSocket.c
-msgid "Failed SSL handshake"
-msgstr "SSL el sıkışma hatası"
 
 #: shared-bindings/ps2io/Ps2.c
 msgid "Failed sending command."
@@ -1123,10 +1047,6 @@ msgstr ""
 "Frekans 24, 150, 396, 450, 528, 600, 720, 816, 912, 960 ya da 1008 Mhz "
 "olmalıdır"
 
-#: shared-bindings/pwmio/PWMOut.c
-msgid "Frequency must match existing PWMOut using this timer"
-msgstr "Frekans, bu zamanlayıcıyı kullanan mevcut PWMOut ile eşleşmelidir"
-
 #: shared-bindings/bitbangio/I2C.c shared-bindings/bitbangio/SPI.c
 #: shared-bindings/busio/I2C.c shared-bindings/busio/SPI.c
 msgid "Function requires lock"
@@ -1146,13 +1066,6 @@ msgstr ""
 msgid "Group already used"
 msgstr "Grup zaten kullanılıyor"
 
-#: ports/atmel-samd/common-hal/busio/SPI.c ports/cxd56/common-hal/busio/SPI.c
-#: ports/espressif/common-hal/busio/SPI.c
-#: ports/mimxrt10xx/common-hal/busio/SPI.c ports/nrf/common-hal/busio/SPI.c
-#: ports/raspberrypi/common-hal/busio/SPI.c
-msgid "Half duplex SPI is not implemented"
-msgstr ""
-
 #: supervisor/shared/safe_mode.c
 msgid "Hard fault: memory access or instruction error."
 msgstr ""
@@ -1166,11 +1079,6 @@ msgstr "Donanım kullanımda, alternatif pinleri deneyin"
 
 #: supervisor/shared/safe_mode.c
 msgid "Heap allocation when VM not running."
-msgstr ""
-
-#: supervisor/shared/safe_mode.c
-msgid ""
-"Heap was corrupted because the stack was too small. Increase stack size."
 msgstr ""
 
 #: extmod/vfs_posix_file.c py/objstringio.c
@@ -1215,7 +1123,7 @@ msgstr "Giriş buffer uzunluğu (%d) strand sayımının (%d) katı olmalıdır"
 msgid "Input taking too long"
 msgstr "Giriş çok uzun sürüyor"
 
-#: ports/espressif/common-hal/neopixel_write/__init__.c py/moderrno.c
+#: py/moderrno.c
 msgid "Input/output error"
 msgstr "Giriş/çıkış hatası"
 
@@ -1226,6 +1134,14 @@ msgstr "Yetersiz kimlik doğrulama"
 #: ports/nrf/common-hal/_bleio/__init__.c
 msgid "Insufficient encryption"
 msgstr "Yetersiz şifreleme"
+
+#: shared-module/jpegio/JpegDecoder.c
+msgid "Insufficient memory pool for the image"
+msgstr ""
+
+#: shared-module/jpegio/JpegDecoder.c
+msgid "Insufficient stream input buffer"
+msgstr ""
 
 #: ports/espressif/common-hal/wifi/Radio.c
 msgid "Interface must be started"
@@ -1239,8 +1155,7 @@ msgstr "Dahili ses arabelleği çok küçük"
 msgid "Internal define error"
 msgstr "Dahili tanımlama hatası"
 
-#: ports/espressif/common-hal/paralleldisplaybus/ParallelBus.c
-#: shared-module/os/getenv.c
+#: shared-bindings/pwmio/PWMOut.c shared-module/os/getenv.c
 msgid "Internal error"
 msgstr "Dahili hata"
 
@@ -1248,6 +1163,16 @@ msgstr "Dahili hata"
 #, c-format
 msgid "Internal error #%d"
 msgstr "Dahili hata #%d"
+
+#: ports/atmel-samd/common-hal/alarm/pin/PinAlarm.c
+#: ports/atmel-samd/common-hal/countio/Counter.c
+#: ports/atmel-samd/common-hal/frequencyio/FrequencyIn.c
+#: ports/atmel-samd/common-hal/ps2io/Ps2.c
+#: ports/atmel-samd/common-hal/pulseio/PulseIn.c
+#: ports/atmel-samd/common-hal/rotaryio/IncrementalEncoder.c
+#: ports/cxd56/common-hal/pulseio/PulseIn.c shared-bindings/pwmio/PWMOut.c
+msgid "Internal resource(s) in use"
+msgstr ""
 
 #: supervisor/shared/safe_mode.c
 msgid "Internal watchdog timer expired."
@@ -1257,12 +1182,16 @@ msgstr "Dahili bekçi zamanlayıcısının süresi doldu."
 msgid "Interrupt error."
 msgstr ""
 
+#: shared-module/jpegio/JpegDecoder.c
+msgid "Interrupted by output function"
+msgstr ""
+
 #: ports/mimxrt10xx/common-hal/audiobusio/__init__.c
 #: ports/mimxrt10xx/common-hal/pwmio/PWMOut.c
 #: ports/raspberrypi/bindings/picodvi/Framebuffer.c
 #: ports/raspberrypi/common-hal/picodvi/Framebuffer.c py/argcheck.c
 #: shared-bindings/digitalio/DigitalInOut.c
-#: shared-bindings/epaperdisplay/EPaperDisplay.c
+#: shared-bindings/epaperdisplay/EPaperDisplay.c shared-bindings/pwmio/PWMOut.c
 msgid "Invalid %q"
 msgstr "Geçersiz %q"
 
@@ -1285,10 +1214,6 @@ msgstr "Geçersiz BLE parametresi"
 #: shared-bindings/wifi/Radio.c
 msgid "Invalid BSSID"
 msgstr "Geçersiz BSSID"
-
-#: main.c
-msgid "Invalid CIRCUITPY_PYSTACK_SIZE\n"
-msgstr ""
 
 #: shared-bindings/wifi/Radio.c
 msgid "Invalid MAC address"
@@ -1333,8 +1258,7 @@ msgstr "Geçersiz multicast MAC adresi"
 msgid "Invalid size"
 msgstr "Geçersiz boyut"
 
-#: ports/espressif/common-hal/ssl/SSLContext.c
-#: ports/raspberrypi/common-hal/ssl/SSLSocket.c
+#: shared-module/ssl/SSLSocket.c
 msgid "Invalid socket for TLS"
 msgstr "TLS için geçersiz soket"
 
@@ -1378,10 +1302,6 @@ msgstr "MAC adresi geçersiz"
 msgid "Mapping must be a tuple"
 msgstr "Map tuple olmalıdır"
 
-#: shared-bindings/audiobusio/PDMIn.c
-msgid "Microphone startup delay must be in range 0.0 to 1.0"
-msgstr ""
-
 #: ports/raspberrypi/bindings/rp2pio/StateMachine.c
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 msgid "Mismatched data size"
@@ -1417,6 +1337,10 @@ msgstr ""
 
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 msgid "Missing jmp_pin. %q[%u] jumps on pin"
+msgstr ""
+
+#: shared-module/storage/__init__.c
+msgid "Mount point directory missing"
 msgstr ""
 
 #: shared-bindings/busio/UART.c shared-bindings/displayio/Group.c
@@ -1503,12 +1427,10 @@ msgstr ""
 msgid "No IP"
 msgstr "IP yok"
 
-#: ports/atmel-samd/common-hal/frequencyio/FrequencyIn.c
-msgid "No available clocks"
-msgstr "Kullanılabilir saat yok"
-
-#: ports/espressif/common-hal/imagecapture/ParallelImageCapture.c
-msgid "No capture in progress"
+#: ports/atmel-samd/common-hal/microcontroller/__init__.c
+#: ports/cxd56/common-hal/microcontroller/__init__.c
+#: ports/mimxrt10xx/common-hal/microcontroller/__init__.c
+msgid "No bootloader present"
 msgstr ""
 
 #: shared-module/usb/core/Device.c
@@ -1523,6 +1445,8 @@ msgstr ""
 msgid "No default %q bus"
 msgstr ""
 
+#: ports/atmel-samd/common-hal/audiobusio/I2SOut.c
+#: ports/atmel-samd/common-hal/audiobusio/PDMIn.c
 #: ports/atmel-samd/common-hal/touchio/TouchIn.c
 msgid "No free GCLKs"
 msgstr ""
@@ -1601,6 +1525,10 @@ msgstr ""
 msgid "Not playing"
 msgstr ""
 
+#: shared-module/jpegio/JpegDecoder.c
+msgid "Not supported JPEG standard"
+msgstr ""
+
 #: ports/espressif/common-hal/paralleldisplaybus/ParallelBus.c
 #, c-format
 msgid "Number of data_pins must be 8 or 16, not %d"
@@ -1625,7 +1553,8 @@ msgstr ""
 
 #: ports/atmel-samd/common-hal/audiobusio/PDMIn.c
 #: ports/raspberrypi/common-hal/audiobusio/PDMIn.c
-msgid "Only 8 or 16 bit mono with "
+#, c-format
+msgid "Only 8 or 16 bit mono with %dx oversampling supported."
 msgstr ""
 
 #: ports/espressif/common-hal/wifi/__init__.c
@@ -1720,15 +1649,6 @@ msgstr ""
 msgid "Out-buffer elements must be <= 4 bytes long"
 msgstr ""
 
-#: shared-bindings/audiobusio/PDMIn.c
-msgid "Oversample must be multiple of 8."
-msgstr ""
-
-#: shared-bindings/pwmio/PWMOut.c
-msgid ""
-"PWM frequency not writable when variable_frequency is False on construction."
-msgstr ""
-
 #: ports/stm/common-hal/pwmio/PWMOut.c
 msgid "PWM restart"
 msgstr ""
@@ -1739,6 +1659,10 @@ msgstr ""
 
 #: ports/raspberrypi/common-hal/countio/Counter.c
 msgid "PWM slice channel A already in use"
+msgstr ""
+
+#: shared-module/jpegio/JpegDecoder.c
+msgid "Parameter error"
 msgstr ""
 
 #: ports/espressif/common-hal/audiobusio/__init__.c
@@ -1768,10 +1692,6 @@ msgstr ""
 
 #: ports/raspberrypi/common-hal/countio/Counter.c
 msgid "Pin must be on PWM Channel B"
-msgstr ""
-
-#: ports/atmel-samd/common-hal/countio/Counter.c
-msgid "Pin must support hardware interrupts"
 msgstr ""
 
 #: shared-bindings/rgbmatrix/RGBMatrix.c
@@ -1849,6 +1769,10 @@ msgstr ""
 msgid "RISE_AND_FALL not available on this chip"
 msgstr ""
 
+#: shared-module/displayio/OnDiskBitmap.c
+msgid "RLE-compressed BMP not supported"
+msgstr ""
+
 #: ports/stm/common-hal/os/__init__.c
 msgid "RNG DeInit Error"
 msgstr ""
@@ -1878,7 +1802,7 @@ msgstr ""
 #: shared-bindings/_bleio/__init__.c
 #: shared-bindings/memorymonitor/AllocationSize.c
 #: shared-bindings/pulseio/PulseIn.c shared-module/bitmaptools/__init__.c
-#: shared-module/displayio/Bitmap.c
+#: shared-module/displayio/Bitmap.c shared-module/displayio/Group.c
 msgid "Read-only"
 msgstr ""
 
@@ -1912,6 +1836,10 @@ msgstr ""
 
 #: ports/atmel-samd/common-hal/audioio/AudioOut.c
 msgid "Right channel unsupported"
+msgstr ""
+
+#: shared-module/jpegio/JpegDecoder.c
+msgid "Right format but not supported"
 msgstr ""
 
 #: main.c
@@ -1999,12 +1927,8 @@ msgstr ""
 msgid "Specify exactly one of data0 or data_pins"
 msgstr ""
 
-#: ports/raspberrypi/common-hal/audiopwmio/PWMAudioOut.c
-msgid "Stereo left must be on PWM channel A"
-msgstr ""
-
-#: ports/raspberrypi/common-hal/audiopwmio/PWMAudioOut.c
-msgid "Stereo right must be on PWM channel B"
+#: supervisor/shared/safe_mode.c
+msgid "Stack overflow. Increase stack size."
 msgstr ""
 
 #: shared-bindings/alarm/time/TimeAlarm.c
@@ -2104,7 +2028,6 @@ msgstr ""
 msgid "Total data to write is larger than %q"
 msgstr ""
 
-#: ports/atmel-samd/common-hal/alarm/touch/TouchAlarm.c
 #: ports/raspberrypi/common-hal/alarm/touch/TouchAlarm.c
 #: ports/stm/common-hal/alarm/touch/TouchAlarm.c
 msgid "Touch alarms not available"
@@ -2112,10 +2035,6 @@ msgstr ""
 
 #: py/obj.c
 msgid "Traceback (most recent call last):\n"
-msgstr ""
-
-#: shared-bindings/time/__init__.c
-msgid "Tuple or struct_time argument required"
 msgstr ""
 
 #: ports/stm/common-hal/busio/UART.c
@@ -2183,7 +2102,7 @@ msgid "Unable to allocate buffers for signed conversion"
 msgstr ""
 
 #: supervisor/shared/safe_mode.c
-msgid "Unable to allocate the heap."
+msgid "Unable to allocate to the heap."
 msgstr ""
 
 #: ports/espressif/common-hal/busio/I2C.c
@@ -2194,11 +2113,6 @@ msgstr ""
 #: shared-module/is31fl3741/IS31FL3741.c
 #, c-format
 msgid "Unable to find I2C Display at %x"
-msgstr ""
-
-#: ports/atmel-samd/common-hal/audiobusio/I2SOut.c
-#: ports/atmel-samd/common-hal/audiobusio/PDMIn.c
-msgid "Unable to find free GCLK"
 msgstr ""
 
 #: py/parse.c
@@ -2228,11 +2142,6 @@ msgstr ""
 
 #: ports/nrf/common-hal/_bleio/UUID.c
 msgid "Unexpected nrfx uuid type"
-msgstr ""
-
-#: ports/espressif/common-hal/ssl/SSLSocket.c
-#, c-format
-msgid "Unhandled ESP TLS error %d %d %x %d"
 msgstr ""
 
 #: ports/espressif/common-hal/_bleio/__init__.c
@@ -2396,6 +2305,11 @@ msgstr ""
 msgid "You pressed the BOOT button at start up"
 msgstr ""
 
+#: ports/espressif/boards/adafruit_feather_esp32c6_4mbflash_nopsram/mpconfigboard.h
+#: ports/espressif/boards/adafruit_itsybitsy_esp32/mpconfigboard.h
+msgid "You pressed the BOOT button at start up."
+msgstr ""
+
 #: ports/espressif/boards/adafruit_huzzah32_breakout/mpconfigboard.h
 msgid "You pressed the GPIO0 button at start up."
 msgstr ""
@@ -2476,10 +2390,6 @@ msgstr ""
 msgid "argsort is not implemented for flattened arrays"
 msgstr ""
 
-#: py/runtime.c shared-bindings/supervisor/__init__.c
-msgid "argument has wrong type"
-msgstr ""
-
 #: py/compile.c
 msgid "argument name reused"
 msgstr ""
@@ -2487,10 +2397,6 @@ msgstr ""
 #: py/argcheck.c shared-bindings/_stage/__init__.c
 #: shared-bindings/digitalio/DigitalInOut.c
 msgid "argument num/types mismatch"
-msgstr ""
-
-#: py/runtime.c
-msgid "argument should be a '%q' not a '%q'"
 msgstr ""
 
 #: extmod/ulab/code/numpy/numerical.c extmod/ulab/code/numpy/transform.c
@@ -2568,6 +2474,10 @@ msgstr ""
 
 #: py/emitnative.c
 msgid "binary op %q not implemented"
+msgstr ""
+
+#: shared-module/bitmapfilter/__init__.c
+msgid "bitmap size and depth must match"
 msgstr ""
 
 #: shared-bindings/bitmaptools/__init__.c
@@ -2673,7 +2583,7 @@ msgstr ""
 msgid "can't convert %s to float"
 msgstr ""
 
-#: py/runtime.c
+#: py/objint.c py/runtime.c
 #, c-format
 msgid "can't convert %s to int"
 msgstr ""
@@ -2682,16 +2592,8 @@ msgstr ""
 msgid "can't convert '%q' object to %q implicitly"
 msgstr ""
 
-#: py/objint.c
-msgid "can't convert NaN to int"
-msgstr ""
-
 #: extmod/ulab/code/numpy/vector.c
 msgid "can't convert complex to float"
-msgstr ""
-
-#: py/objint.c
-msgid "can't convert inf to int"
 msgstr ""
 
 #: py/obj.c
@@ -2754,7 +2656,7 @@ msgstr ""
 msgid "can't set attribute"
 msgstr ""
 
-#: py/runtime.c shared-bindings/supervisor/Runtime.c
+#: py/runtime.c
 msgid "can't set attribute '%q'"
 msgstr ""
 
@@ -3023,12 +2925,6 @@ msgstr ""
 msgid "error = 0x%08lX"
 msgstr ""
 
-#: ports/espressif/common-hal/espcamera/Camera.c
-msgid ""
-"espcamera.Camera requires reserved PSRAM to be configured. See the "
-"documentation for instructions."
-msgstr ""
-
 #: py/runtime.c
 msgid "exceptions must derive from BaseException"
 msgstr ""
@@ -3185,10 +3081,6 @@ msgstr ""
 #: py/argcheck.c py/bc.c py/objnamedtuple.c shared-bindings/time/__init__.c
 #, c-format
 msgid "function takes %d positional arguments but %d were given"
-msgstr ""
-
-#: shared-bindings/time/__init__.c
-msgid "function takes exactly 9 arguments"
 msgstr ""
 
 #: py/objgenerator.c
@@ -3380,7 +3272,7 @@ msgstr ""
 msgid "invalid bits_per_pixel %d, must be, 1, 2, 4, 8, 16, 24, or 32"
 msgstr ""
 
-#: ports/raspberrypi/common-hal/ssl/SSLSocket.c
+#: shared-module/ssl/SSLSocket.c
 msgid "invalid cert"
 msgstr ""
 
@@ -3406,7 +3298,7 @@ msgstr ""
 msgid "invalid hostname"
 msgstr ""
 
-#: ports/raspberrypi/common-hal/ssl/SSLSocket.c
+#: shared-module/ssl/SSLSocket.c
 msgid "invalid key"
 msgstr ""
 
@@ -3916,10 +3808,6 @@ msgstr ""
 msgid "parameters must be registers in sequence r0 to r3"
 msgstr ""
 
-#: shared-bindings/bitmaptools/__init__.c
-msgid "pixel coordinates out of bounds"
-msgstr ""
-
 #: extmod/vfs_posix_file.c
 msgid "poll on file not available on win32"
 msgstr ""
@@ -4043,10 +3931,6 @@ msgstr ""
 
 #: extmod/ulab/code/ulab_tools.c
 msgid "size is defined for ndarrays only"
-msgstr ""
-
-#: shared-bindings/time/__init__.c
-msgid "sleep length must be non-negative"
 msgstr ""
 
 #: py/nativeglue.c
@@ -4314,6 +4198,10 @@ msgstr ""
 msgid "unsupported Xtensa instruction '%s' with %d arguments"
 msgstr ""
 
+#: shared-module/bitmapfilter/__init__.c
+msgid "unsupported bitmap depth"
+msgstr ""
+
 #: shared-module/gifio/GifWriter.c
 msgid "unsupported colorspace for GifWriter"
 msgstr ""
@@ -4358,6 +4246,16 @@ msgstr ""
 
 #: extmod/moddeflate.c
 msgid "wbits"
+msgstr ""
+
+#: shared-bindings/bitmapfilter/__init__.c
+msgid ""
+"weights must be a sequence with an odd square number of elements (usually 9 "
+"or 25)"
+msgstr ""
+
+#: shared-bindings/bitmapfilter/__init__.c
+msgid "weights must be an object of type %q, %q, %q, or %q, not %q "
 msgstr ""
 
 #: shared-bindings/is31fl3741/FrameBuffer.c
@@ -4431,6 +4329,114 @@ msgstr ""
 msgid "zi must be of shape (n_section, 2)"
 msgstr ""
 
+#~ msgid "Error: Failure to bind"
+#~ msgstr "Hata: Bağlanamadı"
+
+#~ msgid "Buffers must be same size"
+#~ msgstr "Arabellek boyutları aynı olmalı"
+
+#~ msgid "Cannot set socket options"
+#~ msgstr "Soket seçenekleri ayarlanamıyor"
+
+#~ msgid "Failed SSL handshake"
+#~ msgstr "SSL el sıkışma hatası"
+
+#~ msgid "All PCNT units in use"
+#~ msgstr "Tüm PCNT birimleri kullanımda"
+
+#~ msgid "Cannot reset into bootloader because no bootloader is present"
+#~ msgstr "Hiçbir bootloader bulunmadığından bootloader sıfırlanamıyor"
+
+#~ msgid "Cannot vary frequency on a timer that is already in use"
+#~ msgstr "Kullanımda olan bir zamanlayıcının frekansı değiştirilemez"
+
+#~ msgid "Could not start PWM"
+#~ msgstr "PWM başlatılamadı"
+
+#~ msgid "EXTINT channel already in use"
+#~ msgstr "EXTINT kanalı zaten kullanımda"
+
+#~ msgid "Frequency must match existing PWMOut using this timer"
+#~ msgstr "Frekans, bu zamanlayıcıyı kullanan mevcut PWMOut ile eşleşmelidir"
+
+#~ msgid "No available clocks"
+#~ msgstr "Kullanılabilir saat yok"
+
+#~ msgid "A hardware interrupt channel is already in use"
+#~ msgstr "Bir donanım kesme kanalı halihazırda kullanılmaktadır"
+
+#~ msgid "Bit clock and word select must share a clock unit"
+#~ msgstr "Bit saati ve kelime seçimi, bir saat birimini paylaşmalıdır"
+
+#~ msgid "Bit depth must be multiple of 8."
+#~ msgstr "Bit derinliği 8'in katı olacak şekilde olmalı."
+
+#~ msgid "Both pins must support hardware interrupts"
+#~ msgstr "Her iki pin de donanım kesintilerini desteklemelidir"
+
+#~ msgid "Clock stretch too long"
+#~ msgstr "Saat uzatması çok uzun"
+
+#~ msgid ""
+#~ "\n"
+#~ "Code stopped by auto-reload.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Program otomatik yeniden yükleme tarafından sonlandırıldı.\n"
+
+#~ msgid ""
+#~ "\n"
+#~ "Please file an issue with the contents of your CIRCUITPY drive at \n"
+#~ "https://github.com/adafruit/circuitpython/issues\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Lütfen, şu adrese CIRCUITPY sürücünüzün içerikleri ile beraber bir hata/"
+#~ "konu kaydı ekleyin\n"
+#~ "https://github.com/adafruit/circuitpython/issues\n"
+
+#, c-format
+#~ msgid "%02X"
+#~ msgstr "%02X"
+
+#~ msgid "%q"
+#~ msgstr "%q"
+
+#~ msgid "%q length must be >= 1"
+#~ msgstr "%q boyutu >=1 olmalıdır"
+
+#~ msgid "%q must be >= 0"
+#~ msgstr "%q >= 0 olmalıdır"
+
+#~ msgid "%q must be >= 1"
+#~ msgstr "%q >= 1 olmalıdır"
+
+#~ msgid "%q must be a string"
+#~ msgstr "%q bir string olmalıdır"
+
+#~ msgid "%q must be a tuple of length 2"
+#~ msgstr "%q, boyutu 2 olan bir tuple olmalıdır"
+
+#~ msgid "%q must be an int"
+#~ msgstr "%q bir tam sayı olmalıdır"
+
+#~ msgid "%q must be between %d and %d"
+#~ msgstr "%q, %d ile %d arasında olmalıdır"
+
+#~ msgid "%q must be of type %q"
+#~ msgstr "%q, %q türünde olmalıdır"
+
+#~ msgid "%q must be of type %q or None"
+#~ msgstr "%q, %q ya da None türünde olmalıdır"
+
+#~ msgid "%q pin invalid"
+#~ msgstr "%q pini geçersiz"
+
+#~ msgid "%q should be an int"
+#~ msgstr "%q bir int olmalıdır"
+
+#~ msgid "%q with a report ID of 0 must be of length 1"
+#~ msgstr "Rapor kimliği 0 olan %q, 1 uzunluğunda olmalıdır"
+
 #~ msgid "'await', 'async for' or 'async with' outside async function"
 #~ msgstr ""
 #~ "asenkron fonksiyon dışında kullanılan 'await', 'async for' ya da 'async "
@@ -4442,23 +4448,102 @@ msgstr ""
 #~ msgid "'continue' outside loop"
 #~ msgstr "döngü dışında 'continue'"
 
-#~ msgid "Bit clock and word select must be sequential pins"
-#~ msgstr "Bit saati ve kelime seçimi pinleri sıralı olmalıdır"
+#~ msgid "'coroutine' object is not an iterator"
+#~ msgstr "'coroutine' nesnesi bir iteratör değildir"
 
-#~ msgid "Initialization failed due to lack of memory"
-#~ msgstr "Bellek yetersizliği nedeniyle başlatma başarısız oldu"
+#~ msgid "(x,y) integers required"
+#~ msgstr "(x, y) integerları gereklidir"
+
+#~ msgid "64 bit types"
+#~ msgstr "64 bit tipler"
 
 #~ msgid "ADC2 is being used by WiFi"
 #~ msgstr "ADC2, WiFi tarafından kullanılmaktadır"
 
-#~ msgid "'coroutine' object is not an iterator"
-#~ msgstr "'coroutine' nesnesi bir iteratör değildir"
+#~ msgid "Address type out of range"
+#~ msgstr "Adres tipi beklenen aralığın dışında"
+
+#~ msgid "All I2C targets are in use"
+#~ msgstr "Tüm I2C hedefleri kullanımda"
+
+#~ msgid "AnalogIn not supported on given pin"
+#~ msgstr "Verilen pin için AnalogIn desteklenmemektedir"
+
+#~ msgid "AnalogOut functionality not supported"
+#~ msgstr "AnalogOut işlevi desteklenmemektedir"
+
+#~ msgid "AnalogOut is only 16 bits. Value must be less than 65536."
+#~ msgstr "AnalogOut yalnızca 16 bitlik. Değer 65536'dan küçük olmalıdır."
+
+#~ msgid "AnalogOut not supported on given pin"
+#~ msgstr "Verilen pin için AnalogOut desteklenmemektedir"
+
+#~ msgid "At most %d %q may be specified (not %d)"
+#~ msgstr "En az %d %q belirtilmeli (%d değil)"
+
+#~ msgid "Attempted heap allocation when VM not running."
+#~ msgstr "VM çalışmazken heap'ten alan tahsis edilmeye çalışıldı."
+
+#~ msgid "Bit clock and word select must be sequential pins"
+#~ msgstr "Bit saati ve kelime seçimi pinleri sıralı olmalıdır"
+
+#, c-format
+#~ msgid "Bit depth must be from 1 to 6 inclusive, not %d"
+#~ msgstr "Bit derinliği 1-6 aralığında olmalı, %d değil"
+
+#~ msgid "Boot device must be first device (interface #0)."
+#~ msgstr "Önyükleme cihazı ilk cihaz olmalı (arayüz #0)."
+
+#~ msgid "Both buttons were pressed at start up.\n"
+#~ msgstr "Başlatma sırasında her iki düğmeye de basıldı.\n"
+
+#~ msgid "Brightness must be 0-1.0"
+#~ msgstr "Parlaklık 0-1.0 aralığında olmalı"
+
+#, c-format
+#~ msgid "Buffer incorrect size. Should be %d bytes."
+#~ msgstr "Geçersiz arabellek boyutu. %d kadar olmalı"
 
 #~ msgid "Buffer is too small"
 #~ msgstr "Arabellek çok küçük"
 
+#~ msgid "Buffer must be at least length 1"
+#~ msgstr "Arabellek boyutu en az 1 olmalı"
+
+#~ msgid "Button A was pressed at start up.\n"
+#~ msgstr "Başlatma sırasında A düğmesine basıldı.\n"
+
+#~ msgid "Bytes must be between 0 and 255."
+#~ msgstr "Baytlar 0-255 aralığında olmalı"
+
+#~ msgid "Cannot transfer without MOSI and MISO pins"
+#~ msgstr "MOSI ve MISO pinleri olmadan transfer edilemiyor"
+
 #~ msgid "Corrupt .mpy file"
 #~ msgstr "Bozuk .mpy dosyası"
+
+#, c-format
+#~ msgid "Error in MIDI stream at position %d"
+#~ msgstr "%d konumundaki MIDI akışında hata"
+
+#~ msgid "Expected a %q"
+#~ msgstr "%q bekleniyor"
+
+#~ msgid "Expected a %q or %q"
+#~ msgstr "%q yada %q bekleniyor"
+
+#~ msgid "Expected an %q"
+#~ msgstr "%q bekleniyor"
+
+#~ msgid "Hardware busy, try alternative pins"
+#~ msgstr "Donanım meşgul, alternatif pinleri deneyin"
+
+#~ msgid "I2SOut not available"
+#~ msgstr "I2SOut uygundeğil"
+
+#, c-format
+#~ msgid "IV must be %d bytes long"
+#~ msgstr "IV %d bayt uzunluğunda olmalı"
 
 #~ msgid ""
 #~ "Incompatible .mpy file. Please update all .mpy files. See http://adafru."
@@ -4466,6 +4551,9 @@ msgstr ""
 #~ msgstr ""
 #~ "Uyumsuz .mpy dosyası. Lütfen tüm .mpy dosyalarını güncelleyin. Daha fazla "
 #~ "bilgi için http://adafru.it/mpy-update ."
+
+#~ msgid "Initialization failed due to lack of memory"
+#~ msgstr "Bellek yetersizliği nedeniyle başlatma başarısız oldu"
 
 #, c-format
 #~ msgid "Instruction %d shifts in more bits than pin count"
@@ -4483,11 +4571,12 @@ msgstr ""
 #~ msgid "Instruction %d waits on input outside of count"
 #~ msgstr "Komut %d sayım dışında, girişte bekler"
 
-#~ msgid "Cannot transfer without MOSI and MISO pins"
-#~ msgstr "MOSI ve MISO pinleri olmadan transfer edilemiyor"
+#~ msgid "Invalid memory access."
+#~ msgstr "Geçersiz bellek erişimi."
 
-#~ msgid "Hardware busy, try alternative pins"
-#~ msgstr "Donanım meşgul, alternatif pinleri deneyin"
+#, c-format
+#~ msgid "Maximum x value when mirrored is %d"
+#~ msgstr "İkizlendiğinde maksimum x değeri %d'dir"
 
 #~ msgid "Missing MISO or MOSI Pin"
 #~ msgstr "Eksik MISO veya MOSI pini"
@@ -4512,139 +4601,3 @@ msgstr ""
 
 #~ msgid "No TX pin"
 #~ msgstr "TX pini yok"
-
-#~ msgid "Brightness must be 0-1.0"
-#~ msgstr "Parlaklık 0-1.0 aralığında olmalı"
-
-#, c-format
-#~ msgid "Error in MIDI stream at position %d"
-#~ msgstr "%d konumundaki MIDI akışında hata"
-
-#, c-format
-#~ msgid "Maximum x value when mirrored is %d"
-#~ msgstr "İkizlendiğinde maksimum x değeri %d'dir"
-
-#~ msgid "I2SOut not available"
-#~ msgstr "I2SOut uygundeğil"
-
-#~ msgid "64 bit types"
-#~ msgstr "64 bit tipler"
-
-#~ msgid "%q pin invalid"
-#~ msgstr "%q pini geçersiz"
-
-#~ msgid ""
-#~ "\n"
-#~ "Please file an issue with the contents of your CIRCUITPY drive at \n"
-#~ "https://github.com/adafruit/circuitpython/issues\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Lütfen, şu adrese CIRCUITPY sürücünüzün içerikleri ile beraber bir hata/"
-#~ "konu kaydı ekleyin\n"
-#~ "https://github.com/adafruit/circuitpython/issues\n"
-
-#~ msgid "Attempted heap allocation when VM not running."
-#~ msgstr "VM çalışmazken heap'ten alan tahsis edilmeye çalışıldı."
-
-#~ msgid "Boot device must be first device (interface #0)."
-#~ msgstr "Önyükleme cihazı ilk cihaz olmalı (arayüz #0)."
-
-#~ msgid "Both buttons were pressed at start up.\n"
-#~ msgstr "Başlatma sırasında her iki düğmeye de basıldı.\n"
-
-#~ msgid "Button A was pressed at start up.\n"
-#~ msgstr "Başlatma sırasında A düğmesine basıldı.\n"
-
-#~ msgid "Invalid memory access."
-#~ msgstr "Geçersiz bellek erişimi."
-
-#~ msgid "%q must be of type %q"
-#~ msgstr "%q, %q türünde olmalıdır"
-
-#~ msgid "%q must be of type %q or None"
-#~ msgstr "%q, %q ya da None türünde olmalıdır"
-
-#~ msgid "Expected a %q"
-#~ msgstr "%q bekleniyor"
-
-#~ msgid "Expected a %q or %q"
-#~ msgstr "%q yada %q bekleniyor"
-
-#~ msgid "Expected an %q"
-#~ msgstr "%q bekleniyor"
-
-#, c-format
-#~ msgid "IV must be %d bytes long"
-#~ msgstr "IV %d bayt uzunluğunda olmalı"
-
-#~ msgid "%q length must be >= 1"
-#~ msgstr "%q boyutu >=1 olmalıdır"
-
-#~ msgid "%q must be a string"
-#~ msgstr "%q bir string olmalıdır"
-
-#~ msgid "%q must be an int"
-#~ msgstr "%q bir tam sayı olmalıdır"
-
-#~ msgid "%q with a report ID of 0 must be of length 1"
-#~ msgstr "Rapor kimliği 0 olan %q, 1 uzunluğunda olmalıdır"
-
-#~ msgid "At most %d %q may be specified (not %d)"
-#~ msgstr "En az %d %q belirtilmeli (%d değil)"
-
-#~ msgid "%q must be >= 0"
-#~ msgstr "%q >= 0 olmalıdır"
-
-#~ msgid "%q must be >= 1"
-#~ msgstr "%q >= 1 olmalıdır"
-
-#~ msgid "All I2C targets are in use"
-#~ msgstr "Tüm I2C hedefleri kullanımda"
-
-#~ msgid "%q must be a tuple of length 2"
-#~ msgstr "%q, boyutu 2 olan bir tuple olmalıdır"
-
-#~ msgid "%q must be between %d and %d"
-#~ msgstr "%q, %d ile %d arasında olmalıdır"
-
-#~ msgid "%q should be an int"
-#~ msgstr "%q bir int olmalıdır"
-
-#~ msgid "(x,y) integers required"
-#~ msgstr "(x, y) integerları gereklidir"
-
-#~ msgid "Address type out of range"
-#~ msgstr "Adres tipi beklenen aralığın dışında"
-
-#~ msgid "AnalogIn not supported on given pin"
-#~ msgstr "Verilen pin için AnalogIn desteklenmemektedir"
-
-#~ msgid "AnalogOut functionality not supported"
-#~ msgstr "AnalogOut işlevi desteklenmemektedir"
-
-#~ msgid "AnalogOut is only 16 bits. Value must be less than 65536."
-#~ msgstr "AnalogOut yalnızca 16 bitlik. Değer 65536'dan küçük olmalıdır."
-
-#~ msgid "AnalogOut not supported on given pin"
-#~ msgstr "Verilen pin için AnalogOut desteklenmemektedir"
-
-#, c-format
-#~ msgid "Bit depth must be from 1 to 6 inclusive, not %d"
-#~ msgstr "Bit derinliği 1-6 aralığında olmalı, %d değil"
-
-#, c-format
-#~ msgid "Buffer incorrect size. Should be %d bytes."
-#~ msgstr "Geçersiz arabellek boyutu. %d kadar olmalı"
-
-#~ msgid "Buffer must be at least length 1"
-#~ msgstr "Arabellek boyutu en az 1 olmalı"
-
-#~ msgid "Bytes must be between 0 and 255."
-#~ msgstr "Baytlar 0-255 aralığında olmalı"
-
-#~ msgid ""
-#~ "\n"
-#~ "Code stopped by auto-reload.\n"
-#~ msgstr ""
-#~ "\n"
-#~ "Program otomatik yeniden yükleme tarafından sonlandırıldı.\n"

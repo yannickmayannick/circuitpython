@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 12:55-0600\n"
-"PO-Revision-Date: 2023-05-21 00:49+0000\n"
-"Last-Translator: Scott Shawcroft <scott@tannewt.org>\n"
+"PO-Revision-Date: 2024-01-22 14:03+0000\n"
+"Last-Translator: Nemoto <sidespoilenm@gmail.com>\n"
 "Language-Team: none\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 5.4-dev\n"
 
 #: main.c
 msgid ""
@@ -40,18 +40,25 @@ msgid ""
 "Please file an issue with your program at github.com/adafruit/circuitpython/"
 "issues."
 msgstr ""
+"\n"
+"プログラムに問題がある場合は、github.com/adafruit/circuitpython/issues に問題"
+"を報告してください。"
 
 #: supervisor/shared/safe_mode.c
 msgid ""
 "\n"
 "Press reset to exit safe mode.\n"
 msgstr ""
+"\n"
+"セーフモードからぬけるにはリセットを押してください。\n"
 
 #: supervisor/shared/safe_mode.c
 msgid ""
 "\n"
 "You are in safe mode because:\n"
 msgstr ""
+"\n"
+"セーフモードに入った理由:\n"
 
 #: py/obj.c
 msgid "  File \"%q\""
@@ -63,7 +70,7 @@ msgstr "  ファイル \"%q\", 行 %d"
 
 #: py/builtinhelp.c
 msgid " is of type %q\n"
-msgstr ""
+msgstr " は %q 型\n"
 
 #: main.c
 msgid " not found.\n"
@@ -78,54 +85,31 @@ msgstr " 出力:\n"
 msgid "%%c requires int or char"
 msgstr "%%c にはintまたはcharが必要"
 
-#: main.c
-#, fuzzy, c-format
-msgid "%02X"
-msgstr "%02X"
-
-#: shared-module/os/getenv.c
-#, c-format
-msgid "%S"
-msgstr ""
-
 #: shared-bindings/rgbmatrix/RGBMatrix.c
 #, c-format
 msgid ""
 "%d address pins, %d rgb pins and %d tiles indicate a height of %d, not %d"
 msgstr "%dアドレスピン、%dRGBピン、%dタイルは%dの高さを指示する。%dではない。"
 
-#: ports/atmel-samd/common-hal/alarm/__init__.c
-#: ports/atmel-samd/common-hal/audiobusio/I2SOut.c
-#: ports/cxd56/common-hal/analogio/AnalogOut.c ports/cxd56/common-hal/rtc/RTC.c
-#: ports/espressif/common-hal/audiobusio/I2SOut.c
-#: ports/espressif/common-hal/rtc/RTC.c
-#: ports/mimxrt10xx/common-hal/analogio/AnalogOut.c
-#: ports/mimxrt10xx/common-hal/rtc/RTC.c ports/nrf/common-hal/alarm/__init__.c
-#: ports/nrf/common-hal/analogio/AnalogOut.c
-#: ports/nrf/common-hal/audiobusio/I2SOut.c ports/nrf/common-hal/rtc/RTC.c
-#: ports/raspberrypi/common-hal/alarm/__init__.c
-#: ports/raspberrypi/common-hal/analogio/AnalogOut.c
-#: ports/raspberrypi/common-hal/audiobusio/I2SOut.c
-#: ports/raspberrypi/common-hal/rtc/RTC.c ports/stm/common-hal/alarm/__init__.c
-#: ports/stm/common-hal/canio/Listener.c ports/stm/common-hal/rtc/RTC.c
-#: shared-bindings/audiobusio/I2SOut.c shared-bindings/audiobusio/PDMIn.c
-#: shared-bindings/keypad/KeyMatrix.c shared-bindings/keypad/Keys.c
-#: shared-bindings/keypad/ShiftRegisterKeys.c
-#, fuzzy
-msgid "%q"
-msgstr "%q"
-
 #: shared-bindings/microcontroller/Pin.c
 msgid "%q and %q contain duplicate pins"
-msgstr ""
+msgstr "%q と %q に重複するピンがあります"
 
 #: ports/atmel-samd/common-hal/audioio/AudioOut.c
 msgid "%q and %q must be different"
 msgstr "%qと%qが必ず異なるのは必要"
 
+#: ports/atmel-samd/common-hal/audiobusio/I2SOut.c
+msgid "%q and %q must share a clock unit"
+msgstr "%q と %q はクロックユニットを共有する必要があります"
+
+#: ports/nrf/common-hal/watchdog/WatchDogTimer.c
+msgid "%q cannot be changed once mode is set to %q"
+msgstr ""
+
 #: shared-bindings/microcontroller/Pin.c
 msgid "%q contains duplicate pins"
-msgstr ""
+msgstr "%q に重複するピンがあります"
 
 #: ports/atmel-samd/common-hal/sdioio/SDCard.c
 msgid "%q failure: %d"
@@ -133,7 +117,7 @@ msgstr "%q 失敗: %d"
 
 #: py/argcheck.c
 msgid "%q in %q must be of type %q, not %q"
-msgstr ""
+msgstr "%q 内の %q は %q 型である必要があり、 %q 型は使用できません"
 
 #: ports/espressif/common-hal/espulp/ULP.c
 #: ports/mimxrt10xx/common-hal/audiobusio/__init__.c
@@ -152,7 +136,7 @@ msgstr "%q インデックスは範囲外"
 
 #: py/obj.c
 msgid "%q indices must be integers, not %s"
-msgstr ""
+msgstr "%q インデックスは %s ではなく整数でなければなりません"
 
 #: shared-module/bitbangio/SPI.c
 msgid "%q init failed"
@@ -168,27 +152,27 @@ msgstr "このボードでは%qが読み取り専用"
 
 #: py/argcheck.c shared-bindings/usb_hid/Device.c
 msgid "%q length must be %d"
-msgstr ""
+msgstr "%q の長さは %d である必要があります"
 
 #: py/argcheck.c
 msgid "%q length must be %d-%d"
-msgstr ""
+msgstr "%q の長さは %d-%d である必要があります"
 
 #: py/argcheck.c
 msgid "%q length must be <= %d"
-msgstr ""
+msgstr "%q の長さは <= %d である必要があります"
 
 #: py/argcheck.c
 msgid "%q length must be >= %d"
-msgstr ""
+msgstr "%q の長さは >= %d である必要があります"
 
 #: py/objmodule.c py/runtime.c
 msgid "%q moved from %q to %q"
-msgstr ""
+msgstr "%q は %q から %q へ移動しました"
 
 #: py/argcheck.c
 msgid "%q must be %d"
-msgstr ""
+msgstr "%q は %d である必要があります"
 
 #: py/argcheck.c shared-bindings/busdisplay/BusDisplay.c
 #: shared-bindings/displayio/Bitmap.c
@@ -196,117 +180,132 @@ msgstr ""
 #: shared-bindings/is31fl3741/FrameBuffer.c
 #: shared-bindings/rgbmatrix/RGBMatrix.c
 msgid "%q must be %d-%d"
-msgstr ""
+msgstr "%q は %d-%d である必要があります"
 
 #: shared-bindings/busdisplay/BusDisplay.c
 msgid "%q must be 1 when %q is True"
-msgstr ""
+msgstr "%q は %q が True のとき 1 である必要があります"
 
 #: py/argcheck.c shared-bindings/gifio/GifWriter.c
 #: shared-module/gifio/OnDiskGif.c
 msgid "%q must be <= %d"
-msgstr ""
+msgstr "%q は <= %d である必要があります"
 
 #: ports/espressif/common-hal/watchdog/WatchDogTimer.c
 msgid "%q must be <= %u"
-msgstr ""
+msgstr "%q は <= %u である必要があります"
 
 #: py/argcheck.c
 msgid "%q must be >= %d"
-msgstr ""
+msgstr "%q は >= %d である必要があります"
 
 #: shared-bindings/analogbufio/BufferedIn.c
 msgid "%q must be a bytearray or array of type 'H' or 'B'"
-msgstr ""
+msgstr "%q は bytearray か、 'H' または 'B' 型の array である必要があります"
 
 #: shared-bindings/audiocore/RawSample.c
 msgid "%q must be a bytearray or array of type 'h', 'H', 'b', or 'B'"
 msgstr ""
+"%q は bytearray か、 'h', 'H', 'b', 'B' 型の array である必要があります"
 
 #: shared-bindings/warnings/__init__.c
 msgid "%q must be a subclass of %q"
-msgstr ""
+msgstr "%q は %q のサブクラスである必要があります"
 
 #: ports/espressif/common-hal/analogbufio/BufferedIn.c
 msgid "%q must be array of type 'H'"
-msgstr ""
+msgstr "%q は 'H' 型の array である必要があります"
 
 #: shared-module/synthio/__init__.c
 msgid "%q must be array of type 'h'"
-msgstr ""
+msgstr "%q は 'h' 型の array である必要があります"
+
+#: shared-bindings/audiobusio/PDMIn.c
+msgid "%q must be multiple of 8."
+msgstr "%q は 8 の倍数である必要があります"
 
 #: ports/raspberrypi/bindings/cyw43/__init__.c py/argcheck.c py/objexcept.c
-#: shared-bindings/canio/CAN.c shared-bindings/digitalio/Pull.c
+#: shared-bindings/bitmapfilter/__init__.c shared-bindings/canio/CAN.c
+#: shared-bindings/digitalio/Pull.c shared-bindings/supervisor/__init__.c
 #: shared-module/synthio/Synthesizer.c
 msgid "%q must be of type %q or %q, not %q"
-msgstr ""
+msgstr "%q は %q 型か %q 型である必要があります、 %q 型は使用できません"
 
-#: py/argcheck.c shared-module/synthio/__init__.c
-msgid "%q must be of type %q, not %q"
+#: shared-bindings/jpegio/JpegDecoder.c
+msgid "%q must be of type %q, %q, or %q, not %q"
 msgstr ""
+"%q は %q 型や %q 型または %q 型である必要があります、 %q 型は使用できません"
+
+#: py/argcheck.c py/runtime.c shared-bindings/bitmapfilter/__init__.c
+#: shared-module/synthio/__init__.c
+msgid "%q must be of type %q, not %q"
+msgstr "%q は %q 型である必要があります、 %q 型は使用できません"
 
 #: ports/atmel-samd/common-hal/busio/UART.c
 msgid "%q must be power of 2"
-msgstr ""
+msgstr "%q は 2 のべき乗である必要があります"
 
 #: shared-bindings/wifi/Monitor.c
 msgid "%q out of bounds"
-msgstr ""
+msgstr "%q が境界外"
 
 #: ports/atmel-samd/common-hal/pulseio/PulseIn.c
 #: ports/cxd56/common-hal/pulseio/PulseIn.c
 #: ports/nrf/common-hal/pulseio/PulseIn.c
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 #: ports/stm/common-hal/pulseio/PulseIn.c py/argcheck.c
-#: shared-bindings/canio/Match.c
+#: shared-bindings/canio/Match.c shared-bindings/time/__init__.c
 msgid "%q out of range"
 msgstr "%q が範囲外"
 
 #: py/objmodule.c py/runtime.c
 msgid "%q renamed %q"
-msgstr ""
+msgstr "%q は %q に名前を変更されました"
 
 #: py/objrange.c py/objslice.c shared-bindings/random/__init__.c
 msgid "%q step cannot be zero"
-msgstr ""
+msgstr "%q ステップを 0 にすることはできません"
+
+#: shared-module/bitbangio/I2C.c
+msgid "%q too long"
+msgstr "%q が長すぎます"
 
 #: py/bc.c py/objnamedtuple.c
 msgid "%q() takes %d positional arguments but %d were given"
 msgstr "%q() は %d 個の位置引数を取りますが、%d 個与えられました"
 
+#: shared-module/jpegio/JpegDecoder.c
+msgid "%q() without %q()"
+msgstr "%q() に %q() がありません"
+
 #: shared-bindings/usb_hid/Device.c
 msgid "%q, %q, and %q must all be the same length"
-msgstr ""
+msgstr "%q と %q および %q はすべて同じ長さである必要があります"
 
 #: py/objint.c shared-bindings/storage/__init__.c
 msgid "%q=%q"
-msgstr ""
+msgstr "%q=%q"
 
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 msgid "%q[%u] shifts in more bits than pin count"
-msgstr ""
+msgstr "%q[%u] はピン数よりも多くのビットをシフトインします"
 
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 msgid "%q[%u] shifts out more bits than pin count"
-msgstr ""
+msgstr "%q[%u] はピン数よりも多くのビットをシフトアウトします"
 
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 msgid "%q[%u] uses extra pin"
-msgstr ""
+msgstr "%q[%u] は指定外のピンを使用しています"
 
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 msgid "%q[%u] waits on input outside of count"
-msgstr ""
-
-#: py/runtime.c
-#, c-format
-msgid "%s"
-msgstr ""
+msgstr "%q[%u] はカウント外の入力を待機します"
 
 #: ports/espressif/common-hal/espidf/__init__.c
 #, c-format
 msgid "%s error 0x%x"
-msgstr ""
+msgstr "%s エラー 0x%x"
 
 #: py/argcheck.c
 msgid "'%q' argument required"
@@ -351,7 +350,7 @@ msgstr "'%s'にはFPUレジスタが必要"
 #: py/emitinlinethumb.c
 #, c-format
 msgid "'%s' expects an address of the form [a, b]"
-msgstr ""
+msgstr "'%s' には [a, b] 形式のアドレスが必要です"
 
 #: py/emitinlinethumb.c py/emitinlinextensa.c
 #, c-format
@@ -361,7 +360,7 @@ msgstr "'%s' には整数が必要"
 #: py/emitinlinethumb.c
 #, c-format
 msgid "'%s' expects at most r%d"
-msgstr ""
+msgstr "'%s' は最大でも r%d 必要です"
 
 #: py/emitinlinethumb.c
 #, c-format
@@ -371,35 +370,35 @@ msgstr "'%s'には{r0, r1, ...}が必要"
 #: py/emitinlinextensa.c
 #, c-format
 msgid "'%s' integer %d isn't within range %d..%d"
-msgstr ""
+msgstr "'%s' 整数 %d は範囲 %d..%d 内にありません"
 
 #: py/emitinlinethumb.c
 #, c-format
 msgid "'%s' integer 0x%x doesn't fit in mask 0x%x"
-msgstr ""
+msgstr "'%s' 整数 0x%x はマスク 0x%x に適合しません"
 
 #: py/obj.c
 #, c-format
 msgid "'%s' object doesn't support item assignment"
-msgstr ""
+msgstr "'%s' オブジェクトは要素の代入をサポートしていません"
 
 #: py/obj.c
 #, c-format
 msgid "'%s' object doesn't support item deletion"
-msgstr ""
+msgstr "'%s' オブジェクトは要素の削除をサポートしていません"
 
 #: py/runtime.c
 msgid "'%s' object has no attribute '%q'"
-msgstr ""
+msgstr "'%s' オブジェクトに '%q' という属性はありません"
 
 #: py/obj.c
 #, c-format
 msgid "'%s' object isn't subscriptable"
-msgstr ""
+msgstr "'%s' オブジェクトは添え字を使えません"
 
 #: py/objstr.c
 msgid "'=' alignment not allowed in string format specifier"
-msgstr ""
+msgstr "'=' は書式指定子での使用が認められていません"
 
 #: shared-module/struct/__init__.c
 msgid "'S' and 'O' are not supported format types"
@@ -415,7 +414,7 @@ msgstr "関数外でのawait"
 
 #: py/compile.c
 msgid "'break'/'continue' outside loop"
-msgstr ""
+msgstr "ループ外の 'break'/'continue'"
 
 #: py/compile.c
 msgid "'data' requires at least 2 arguments"
@@ -435,7 +434,7 @@ msgstr "関数外でのreturn"
 
 #: py/compile.c
 msgid "'yield from' inside async function"
-msgstr ""
+msgstr "'yield from' が非同期関数内にあります"
 
 #: py/compile.c
 msgid "'yield' outside function"
@@ -451,7 +450,7 @@ msgstr "*xは代入先でなければなりません"
 
 #: py/obj.c
 msgid ", in %q\n"
-msgstr ""
+msgstr "%q 内の\n"
 
 #: shared-bindings/busdisplay/BusDisplay.c
 #: shared-bindings/epaperdisplay/EPaperDisplay.c
@@ -466,12 +465,6 @@ msgstr "0.0を複素数でべき乗"
 #: py/modbuiltins.c
 msgid "3-arg pow() not supported"
 msgstr "引数3つのpow()は非対応"
-
-#: ports/atmel-samd/common-hal/alarm/pin/PinAlarm.c
-#: ports/atmel-samd/common-hal/countio/Counter.c
-#: ports/atmel-samd/common-hal/rotaryio/IncrementalEncoder.c
-msgid "A hardware interrupt channel is already in use"
-msgstr "ハードウェア割り込みチャネルは使用中"
 
 #: ports/raspberrypi/common-hal/wifi/Radio.c
 msgid "AP could not be started"
@@ -502,12 +495,6 @@ msgstr "全てのCAN周辺機器が使用中"
 msgid "All I2C peripherals are in use"
 msgstr "全てのI2C周辺機器が使用中"
 
-#: ports/espressif/common-hal/countio/Counter.c
-#: ports/espressif/common-hal/frequencyio/FrequencyIn.c
-#: ports/espressif/common-hal/rotaryio/IncrementalEncoder.c
-msgid "All PCNT units in use"
-msgstr ""
-
 #: ports/atmel-samd/common-hal/canio/Listener.c
 #: ports/espressif/common-hal/canio/Listener.c
 #: ports/stm/common-hal/canio/Listener.c
@@ -525,7 +512,6 @@ msgstr "全てのUART周辺機器が使用中"
 #: ports/nrf/common-hal/countio/Counter.c
 #: ports/nrf/common-hal/pulseio/PulseIn.c
 #: ports/nrf/common-hal/rotaryio/IncrementalEncoder.c
-#: shared-bindings/pwmio/PWMOut.c
 msgid "All channels in use"
 msgstr ""
 
@@ -548,24 +534,18 @@ msgid "All sync event channels in use"
 msgstr "全ての同期イベントチャネルが使用中"
 
 #: ports/raspberrypi/common-hal/picodvi/Framebuffer.c
-#: shared-bindings/pwmio/PWMOut.c
 msgid "All timers for this pin are in use"
 msgstr "このピン用の全てのタイマが使用中"
 
 #: ports/atmel-samd/common-hal/_pew/PewPew.c
 #: ports/atmel-samd/common-hal/audioio/AudioOut.c
-#: ports/atmel-samd/common-hal/frequencyio/FrequencyIn.c
 #: ports/atmel-samd/common-hal/pulseio/PulseIn.c
 #: ports/atmel-samd/common-hal/pulseio/PulseOut.c
 #: ports/cxd56/common-hal/pulseio/PulseOut.c
-#: ports/espressif/common-hal/frequencyio/FrequencyIn.c
-#: ports/espressif/common-hal/neopixel_write/__init__.c
-#: ports/espressif/common-hal/pulseio/PulseIn.c
-#: ports/espressif/common-hal/pulseio/PulseOut.c
 #: ports/nrf/common-hal/audiopwmio/PWMAudioOut.c
 #: ports/nrf/common-hal/pulseio/PulseIn.c ports/nrf/peripherals/nrf/timers.c
 #: ports/raspberrypi/common-hal/audiopwmio/PWMAudioOut.c
-#: ports/stm/peripherals/timers.c shared-bindings/pwmio/PWMOut.c
+#: ports/stm/peripherals/timers.c
 msgid "All timers in use"
 msgstr "全てのタイマーが使用中"
 
@@ -655,14 +635,6 @@ msgstr "最低のフレームレート未満"
 msgid "Bit clock and word select must be sequential GPIO pins"
 msgstr ""
 
-#: ports/atmel-samd/common-hal/audiobusio/I2SOut.c
-msgid "Bit clock and word select must share a clock unit"
-msgstr "bit clockとword selectはクロックユニットを共有しなければなりません"
-
-#: shared-bindings/audiobusio/PDMIn.c
-msgid "Bit depth must be multiple of 8."
-msgstr "ビット深度は8の倍数でなければなりません"
-
 #: shared-bindings/bitmaptools/__init__.c
 msgid "Bitmap size and bits per value must match"
 msgstr ""
@@ -674,10 +646,6 @@ msgstr ""
 #: ports/mimxrt10xx/common-hal/busio/UART.c
 msgid "Both RX and TX required for flow control"
 msgstr "フロー制御のためRXとTXの両方が必要"
-
-#: ports/atmel-samd/common-hal/rotaryio/IncrementalEncoder.c
-msgid "Both pins must support hardware interrupts"
-msgstr "両方のピンにハードウェア割り込み対応が必要"
 
 #: shared-bindings/busdisplay/BusDisplay.c
 #: shared-bindings/framebufferio/FramebufferDisplay.c
@@ -721,10 +689,6 @@ msgstr "バッファが %d バイト足りません"
 #: shared-bindings/framebufferio/FramebufferDisplay.c
 #: shared-bindings/struct/__init__.c shared-module/struct/__init__.c
 msgid "Buffer too small"
-msgstr ""
-
-#: ports/espressif/common-hal/imagecapture/ParallelImageCapture.c
-msgid "Buffers must be same size"
 msgstr ""
 
 #: ports/atmel-samd/common-hal/paralleldisplaybus/ParallelBus.c
@@ -780,6 +744,7 @@ msgstr "ローカルのCharacteristicにはCCCDを設定できません"
 
 #: shared-bindings/storage/__init__.c shared-bindings/usb_cdc/__init__.c
 #: shared-bindings/usb_hid/__init__.c shared-bindings/usb_midi/__init__.c
+#: shared-bindings/usb_video/__init__.c
 msgid "Cannot change USB devices now"
 msgstr ""
 
@@ -820,16 +785,6 @@ msgstr "ファイルへ記録できません"
 msgid "Cannot remount '/' when visible via USB."
 msgstr ""
 
-#: ports/atmel-samd/common-hal/microcontroller/__init__.c
-#: ports/cxd56/common-hal/microcontroller/__init__.c
-#: ports/mimxrt10xx/common-hal/microcontroller/__init__.c
-msgid "Cannot reset into bootloader because no bootloader is present"
-msgstr ""
-
-#: ports/espressif/common-hal/socketpool/Socket.c
-msgid "Cannot set socket options"
-msgstr ""
-
 #: shared-bindings/digitalio/DigitalInOut.c
 msgid "Cannot set value when direction is input."
 msgstr "方向がinputのときは値を設定できません"
@@ -842,10 +797,6 @@ msgstr "RS485モードにRTSまたはCTSを指定できません"
 #: py/objslice.c
 msgid "Cannot subclass slice"
 msgstr "sliceをサブクラス化することはできません"
-
-#: shared-bindings/pwmio/PWMOut.c
-msgid "Cannot vary frequency on a timer that is already in use"
-msgstr "使用中のタイマー上では周波数を変えられません"
 
 #: ports/nrf/common-hal/alarm/pin/PinAlarm.c
 msgid "Cannot wake on pin edge, only level"
@@ -862,10 +813,6 @@ msgstr ""
 #: supervisor/shared/safe_mode.c
 msgid "CircuitPython core code crashed hard. Whoops!\n"
 msgstr "CircuitPythonのコアコードが激しくクラッシュしました。おっと！\n"
-
-#: shared-module/bitbangio/I2C.c
-msgid "Clock stretch too long"
-msgstr "クロックのストレッチが長すぎ"
 
 #: ports/atmel-samd/common-hal/audiobusio/I2SOut.c
 msgid "Clock unit in use"
@@ -885,17 +832,9 @@ msgstr ""
 msgid "Coordinate arrays types have different sizes"
 msgstr ""
 
-#: ports/espressif/common-hal/neopixel_write/__init__.c
-msgid "Could not retrieve clock"
-msgstr ""
-
 #: shared-bindings/_bleio/Adapter.c
 msgid "Could not set address"
 msgstr "アドレスをセットできません"
-
-#: shared-bindings/pwmio/PWMOut.c
-msgid "Could not start PWM"
-msgstr "PWMをスタートできません"
 
 #: ports/stm/common-hal/busio/UART.c
 msgid "Could not start interrupt, RX busy"
@@ -926,6 +865,10 @@ msgstr "Data 0 ピンは、バイト整列されていなければなりませ�
 msgid "Data chunk must follow fmt chunk"
 msgstr "fmtチャンクの後にdataチャンクが続かなければなりません"
 
+#: shared-module/jpegio/JpegDecoder.c
+msgid "Data format error (may be broken data)"
+msgstr ""
+
 #: ports/espressif/common-hal/_bleio/Adapter.c
 #: ports/nrf/common-hal/_bleio/Adapter.c
 msgid "Data not supported with directed advertising"
@@ -943,6 +886,10 @@ msgstr ""
 #: shared-bindings/audiobusio/PDMIn.c
 msgid "Destination capacity is smaller than destination_length."
 msgstr "宛先バッファがdestination_lengthより小さい"
+
+#: shared-module/jpegio/JpegDecoder.c
+msgid "Device error or wrong termination of input stream"
+msgstr ""
 
 #: ports/nrf/common-hal/audiobusio/I2SOut.c
 msgid "Device in use"
@@ -980,23 +927,12 @@ msgstr "ECBは一度に16バイトの演算のみを行います"
 msgid "ESP-IDF memory allocation failed"
 msgstr ""
 
-#: ports/atmel-samd/common-hal/frequencyio/FrequencyIn.c
-#: ports/atmel-samd/common-hal/ps2io/Ps2.c
-#: ports/atmel-samd/common-hal/pulseio/PulseIn.c
-#: ports/cxd56/common-hal/pulseio/PulseIn.c
-msgid "EXTINT channel already in use"
-msgstr "EXTINTチャネルはすでに使用されています"
-
 #: extmod/modre.c
 msgid "Error in regex"
 msgstr "正規表現にエラーがあります"
 
 #: supervisor/shared/safe_mode.c
 msgid "Error in safemode.py."
-msgstr ""
-
-#: shared-bindings/socketpool/Socket.c shared-bindings/ssl/SSLSocket.c
-msgid "Error: Failure to bind"
 msgstr ""
 
 #: shared-bindings/alarm/__init__.c
@@ -1014,10 +950,6 @@ msgstr "FFTはndarrayでのみ使えます"
 
 #: extmod/ulab/code/numpy/fft/fft_tools.c
 msgid "FFT is implemented for linear arrays only"
-msgstr ""
-
-#: ports/espressif/common-hal/ssl/SSLSocket.c
-msgid "Failed SSL handshake"
 msgstr ""
 
 #: shared-bindings/ps2io/Ps2.c
@@ -1119,10 +1051,6 @@ msgid ""
 "Frequency must be 24, 150, 396, 450, 528, 600, 720, 816, 912, 960 or 1008 Mhz"
 msgstr ""
 
-#: shared-bindings/pwmio/PWMOut.c
-msgid "Frequency must match existing PWMOut using this timer"
-msgstr "このタイマーを使う既存のPWMOutと周波数を一致させる必要があります"
-
 #: shared-bindings/bitbangio/I2C.c shared-bindings/bitbangio/SPI.c
 #: shared-bindings/busio/I2C.c shared-bindings/busio/SPI.c
 msgid "Function requires lock"
@@ -1142,13 +1070,6 @@ msgstr ""
 msgid "Group already used"
 msgstr "グループはすでに使われています"
 
-#: ports/atmel-samd/common-hal/busio/SPI.c ports/cxd56/common-hal/busio/SPI.c
-#: ports/espressif/common-hal/busio/SPI.c
-#: ports/mimxrt10xx/common-hal/busio/SPI.c ports/nrf/common-hal/busio/SPI.c
-#: ports/raspberrypi/common-hal/busio/SPI.c
-msgid "Half duplex SPI is not implemented"
-msgstr ""
-
 #: supervisor/shared/safe_mode.c
 msgid "Hard fault: memory access or instruction error."
 msgstr ""
@@ -1162,11 +1083,6 @@ msgstr "ハードウェア使用中。代わりのピンを試してください
 
 #: supervisor/shared/safe_mode.c
 msgid "Heap allocation when VM not running."
-msgstr ""
-
-#: supervisor/shared/safe_mode.c
-msgid ""
-"Heap was corrupted because the stack was too small. Increase stack size."
 msgstr ""
 
 #: extmod/vfs_posix_file.c py/objstringio.c
@@ -1211,7 +1127,7 @@ msgstr ""
 msgid "Input taking too long"
 msgstr ""
 
-#: ports/espressif/common-hal/neopixel_write/__init__.c py/moderrno.c
+#: py/moderrno.c
 msgid "Input/output error"
 msgstr "入力/出力エラー"
 
@@ -1222,6 +1138,14 @@ msgstr "認証が不十分"
 #: ports/nrf/common-hal/_bleio/__init__.c
 msgid "Insufficient encryption"
 msgstr "暗号化が不十分"
+
+#: shared-module/jpegio/JpegDecoder.c
+msgid "Insufficient memory pool for the image"
+msgstr ""
+
+#: shared-module/jpegio/JpegDecoder.c
+msgid "Insufficient stream input buffer"
+msgstr ""
 
 #: ports/espressif/common-hal/wifi/Radio.c
 msgid "Interface must be started"
@@ -1235,8 +1159,7 @@ msgstr ""
 msgid "Internal define error"
 msgstr "内部定義エラー"
 
-#: ports/espressif/common-hal/paralleldisplaybus/ParallelBus.c
-#: shared-module/os/getenv.c
+#: shared-bindings/pwmio/PWMOut.c shared-module/os/getenv.c
 msgid "Internal error"
 msgstr ""
 
@@ -1244,6 +1167,16 @@ msgstr ""
 #, c-format
 msgid "Internal error #%d"
 msgstr "内部エラー #%d"
+
+#: ports/atmel-samd/common-hal/alarm/pin/PinAlarm.c
+#: ports/atmel-samd/common-hal/countio/Counter.c
+#: ports/atmel-samd/common-hal/frequencyio/FrequencyIn.c
+#: ports/atmel-samd/common-hal/ps2io/Ps2.c
+#: ports/atmel-samd/common-hal/pulseio/PulseIn.c
+#: ports/atmel-samd/common-hal/rotaryio/IncrementalEncoder.c
+#: ports/cxd56/common-hal/pulseio/PulseIn.c shared-bindings/pwmio/PWMOut.c
+msgid "Internal resource(s) in use"
+msgstr ""
 
 #: supervisor/shared/safe_mode.c
 msgid "Internal watchdog timer expired."
@@ -1253,12 +1186,16 @@ msgstr ""
 msgid "Interrupt error."
 msgstr ""
 
+#: shared-module/jpegio/JpegDecoder.c
+msgid "Interrupted by output function"
+msgstr ""
+
 #: ports/mimxrt10xx/common-hal/audiobusio/__init__.c
 #: ports/mimxrt10xx/common-hal/pwmio/PWMOut.c
 #: ports/raspberrypi/bindings/picodvi/Framebuffer.c
 #: ports/raspberrypi/common-hal/picodvi/Framebuffer.c py/argcheck.c
 #: shared-bindings/digitalio/DigitalInOut.c
-#: shared-bindings/epaperdisplay/EPaperDisplay.c
+#: shared-bindings/epaperdisplay/EPaperDisplay.c shared-bindings/pwmio/PWMOut.c
 msgid "Invalid %q"
 msgstr "不正な %q"
 
@@ -1281,10 +1218,6 @@ msgstr ""
 #: shared-bindings/wifi/Radio.c
 msgid "Invalid BSSID"
 msgstr "不正なBSSID"
-
-#: main.c
-msgid "Invalid CIRCUITPY_PYSTACK_SIZE\n"
-msgstr ""
 
 #: shared-bindings/wifi/Radio.c
 msgid "Invalid MAC address"
@@ -1328,8 +1261,7 @@ msgstr ""
 msgid "Invalid size"
 msgstr ""
 
-#: ports/espressif/common-hal/ssl/SSLContext.c
-#: ports/raspberrypi/common-hal/ssl/SSLSocket.c
+#: shared-module/ssl/SSLSocket.c
 msgid "Invalid socket for TLS"
 msgstr ""
 
@@ -1373,10 +1305,6 @@ msgstr ""
 msgid "Mapping must be a tuple"
 msgstr ""
 
-#: shared-bindings/audiobusio/PDMIn.c
-msgid "Microphone startup delay must be in range 0.0 to 1.0"
-msgstr "マイクのスタートアップディレイは 0.0 から 1.0 の間でなければなりません"
-
 #: ports/raspberrypi/bindings/rp2pio/StateMachine.c
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 msgid "Mismatched data size"
@@ -1412,6 +1340,10 @@ msgstr ""
 
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 msgid "Missing jmp_pin. %q[%u] jumps on pin"
+msgstr ""
+
+#: shared-module/storage/__init__.c
+msgid "Mount point directory missing"
 msgstr ""
 
 #: shared-bindings/busio/UART.c shared-bindings/displayio/Group.c
@@ -1498,12 +1430,10 @@ msgstr ""
 msgid "No IP"
 msgstr ""
 
-#: ports/atmel-samd/common-hal/frequencyio/FrequencyIn.c
-msgid "No available clocks"
-msgstr "利用できるクロックがありません"
-
-#: ports/espressif/common-hal/imagecapture/ParallelImageCapture.c
-msgid "No capture in progress"
+#: ports/atmel-samd/common-hal/microcontroller/__init__.c
+#: ports/cxd56/common-hal/microcontroller/__init__.c
+#: ports/mimxrt10xx/common-hal/microcontroller/__init__.c
+msgid "No bootloader present"
 msgstr ""
 
 #: shared-module/usb/core/Device.c
@@ -1518,6 +1448,8 @@ msgstr "接続なし: 長さが決定できません"
 msgid "No default %q bus"
 msgstr "デフォルトの %q バスがありません"
 
+#: ports/atmel-samd/common-hal/audiobusio/I2SOut.c
+#: ports/atmel-samd/common-hal/audiobusio/PDMIn.c
 #: ports/atmel-samd/common-hal/touchio/TouchIn.c
 msgid "No free GCLKs"
 msgstr "使われていないGCLKがありません"
@@ -1596,6 +1528,10 @@ msgstr "接続されていません"
 msgid "Not playing"
 msgstr "再生していません"
 
+#: shared-module/jpegio/JpegDecoder.c
+msgid "Not supported JPEG standard"
+msgstr ""
+
 #: ports/espressif/common-hal/paralleldisplaybus/ParallelBus.c
 #, c-format
 msgid "Number of data_pins must be 8 or 16, not %d"
@@ -1622,8 +1558,9 @@ msgstr ""
 
 #: ports/atmel-samd/common-hal/audiobusio/PDMIn.c
 #: ports/raspberrypi/common-hal/audiobusio/PDMIn.c
-msgid "Only 8 or 16 bit mono with "
-msgstr "8または16ビットの "
+#, c-format
+msgid "Only 8 or 16 bit mono with %dx oversampling supported."
+msgstr ""
 
 #: ports/espressif/common-hal/wifi/__init__.c
 #: ports/raspberrypi/common-hal/wifi/__init__.c
@@ -1717,15 +1654,6 @@ msgstr ""
 msgid "Out-buffer elements must be <= 4 bytes long"
 msgstr ""
 
-#: shared-bindings/audiobusio/PDMIn.c
-msgid "Oversample must be multiple of 8."
-msgstr "オーバーサンプルは8の倍数でなければなりません"
-
-#: shared-bindings/pwmio/PWMOut.c
-msgid ""
-"PWM frequency not writable when variable_frequency is False on construction."
-msgstr "PWM周波数は生成時のvariable_frequencyがFalseのとき書き換え不可"
-
 #: ports/stm/common-hal/pwmio/PWMOut.c
 msgid "PWM restart"
 msgstr ""
@@ -1736,6 +1664,10 @@ msgstr ""
 
 #: ports/raspberrypi/common-hal/countio/Counter.c
 msgid "PWM slice channel A already in use"
+msgstr ""
+
+#: shared-module/jpegio/JpegDecoder.c
+msgid "Parameter error"
 msgstr ""
 
 #: ports/espressif/common-hal/audiobusio/__init__.c
@@ -1766,10 +1698,6 @@ msgstr "ピンは入力専用"
 #: ports/raspberrypi/common-hal/countio/Counter.c
 msgid "Pin must be on PWM Channel B"
 msgstr ""
-
-#: ports/atmel-samd/common-hal/countio/Counter.c
-msgid "Pin must support hardware interrupts"
-msgstr "ピンはハードウェア割り込みに対応していなければなりません"
 
 #: shared-bindings/rgbmatrix/RGBMatrix.c
 #, c-format
@@ -1819,6 +1747,8 @@ msgstr ""
 #: main.c
 msgid "Pretending to deep sleep until alarm, CTRL-C or file write.\n"
 msgstr ""
+"アラームや CTRL-C 、またはファイルの書き込みが発生するまで、仮のディープス"
+"リープ状態になります。\n"
 
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 msgid "Program does IN without loading ISR"
@@ -1842,6 +1772,10 @@ msgstr "方向がoutputのときpullは使われません"
 
 #: ports/raspberrypi/common-hal/countio/Counter.c
 msgid "RISE_AND_FALL not available on this chip"
+msgstr ""
+
+#: shared-module/displayio/OnDiskBitmap.c
+msgid "RLE-compressed BMP not supported"
 msgstr ""
 
 #: ports/stm/common-hal/os/__init__.c
@@ -1873,7 +1807,7 @@ msgstr "乱数生成エラー"
 #: shared-bindings/_bleio/__init__.c
 #: shared-bindings/memorymonitor/AllocationSize.c
 #: shared-bindings/pulseio/PulseIn.c shared-module/bitmaptools/__init__.c
-#: shared-module/displayio/Bitmap.c
+#: shared-module/displayio/Bitmap.c shared-module/displayio/Group.c
 msgid "Read-only"
 msgstr "読み込み専用"
 
@@ -1908,6 +1842,10 @@ msgstr ""
 #: ports/atmel-samd/common-hal/audioio/AudioOut.c
 msgid "Right channel unsupported"
 msgstr "右チャネルは非対応"
+
+#: shared-module/jpegio/JpegDecoder.c
+msgid "Right format but not supported"
+msgstr ""
 
 #: main.c
 msgid "Running in safe mode! Not running saved code.\n"
@@ -1994,12 +1932,8 @@ msgstr "バッファ (元/先) は同じ長さでなければなりません"
 msgid "Specify exactly one of data0 or data_pins"
 msgstr ""
 
-#: ports/raspberrypi/common-hal/audiopwmio/PWMAudioOut.c
-msgid "Stereo left must be on PWM channel A"
-msgstr ""
-
-#: ports/raspberrypi/common-hal/audiopwmio/PWMAudioOut.c
-msgid "Stereo right must be on PWM channel B"
+#: supervisor/shared/safe_mode.c
+msgid "Stack overflow. Increase stack size."
 msgstr ""
 
 #: shared-bindings/alarm/time/TimeAlarm.c
@@ -2099,7 +2033,6 @@ msgstr ""
 msgid "Total data to write is larger than %q"
 msgstr ""
 
-#: ports/atmel-samd/common-hal/alarm/touch/TouchAlarm.c
 #: ports/raspberrypi/common-hal/alarm/touch/TouchAlarm.c
 #: ports/stm/common-hal/alarm/touch/TouchAlarm.c
 msgid "Touch alarms not available"
@@ -2108,10 +2041,6 @@ msgstr ""
 #: py/obj.c
 msgid "Traceback (most recent call last):\n"
 msgstr "トレースバック（最新の呼び出しが末尾）:\n"
-
-#: shared-bindings/time/__init__.c
-msgid "Tuple or struct_time argument required"
-msgstr ""
 
 #: ports/stm/common-hal/busio/UART.c
 msgid "UART de-init"
@@ -2179,7 +2108,7 @@ msgid "Unable to allocate buffers for signed conversion"
 msgstr ""
 
 #: supervisor/shared/safe_mode.c
-msgid "Unable to allocate the heap."
+msgid "Unable to allocate to the heap."
 msgstr ""
 
 #: ports/espressif/common-hal/busio/I2C.c
@@ -2191,11 +2120,6 @@ msgstr ""
 #, c-format
 msgid "Unable to find I2C Display at %x"
 msgstr "I2Cディスプレイを %x に見つけられません"
-
-#: ports/atmel-samd/common-hal/audiobusio/I2SOut.c
-#: ports/atmel-samd/common-hal/audiobusio/PDMIn.c
-msgid "Unable to find free GCLK"
-msgstr ""
 
 #: py/parse.c
 msgid "Unable to init parser"
@@ -2225,11 +2149,6 @@ msgstr ""
 #: ports/nrf/common-hal/_bleio/UUID.c
 msgid "Unexpected nrfx uuid type"
 msgstr "想定されていないnrfx UUID型"
-
-#: ports/espressif/common-hal/ssl/SSLSocket.c
-#, c-format
-msgid "Unhandled ESP TLS error %d %d %x %d"
-msgstr ""
 
 #: ports/espressif/common-hal/_bleio/__init__.c
 #, c-format
@@ -2392,6 +2311,11 @@ msgstr ""
 msgid "You pressed the BOOT button at start up"
 msgstr ""
 
+#: ports/espressif/boards/adafruit_feather_esp32c6_4mbflash_nopsram/mpconfigboard.h
+#: ports/espressif/boards/adafruit_itsybitsy_esp32/mpconfigboard.h
+msgid "You pressed the BOOT button at start up."
+msgstr ""
+
 #: ports/espressif/boards/adafruit_huzzah32_breakout/mpconfigboard.h
 msgid "You pressed the GPIO0 button at start up."
 msgstr ""
@@ -2472,10 +2396,6 @@ msgstr "argsortの引数はndarrayでなければなりません"
 msgid "argsort is not implemented for flattened arrays"
 msgstr ""
 
-#: py/runtime.c shared-bindings/supervisor/__init__.c
-msgid "argument has wrong type"
-msgstr ""
-
 #: py/compile.c
 msgid "argument name reused"
 msgstr ""
@@ -2484,10 +2404,6 @@ msgstr ""
 #: shared-bindings/digitalio/DigitalInOut.c
 msgid "argument num/types mismatch"
 msgstr ""
-
-#: py/runtime.c
-msgid "argument should be a '%q' not a '%q'"
-msgstr "引数には '%q' が必要（'%q' ではなく）"
 
 #: extmod/ulab/code/numpy/numerical.c extmod/ulab/code/numpy/transform.c
 msgid "arguments must be ndarrays"
@@ -2564,6 +2480,10 @@ msgstr "不正なtypecode"
 
 #: py/emitnative.c
 msgid "binary op %q not implemented"
+msgstr ""
+
+#: shared-module/bitmapfilter/__init__.c
+msgid "bitmap size and depth must match"
 msgstr ""
 
 #: shared-bindings/bitmaptools/__init__.c
@@ -2669,7 +2589,7 @@ msgstr ""
 msgid "can't convert %s to float"
 msgstr ""
 
-#: py/runtime.c
+#: py/objint.c py/runtime.c
 #, c-format
 msgid "can't convert %s to int"
 msgstr ""
@@ -2678,16 +2598,8 @@ msgstr ""
 msgid "can't convert '%q' object to %q implicitly"
 msgstr "オブジェクト '%q' を %q に暗黙に変換できません"
 
-#: py/objint.c
-msgid "can't convert NaN to int"
-msgstr ""
-
 #: extmod/ulab/code/numpy/vector.c
 msgid "can't convert complex to float"
-msgstr ""
-
-#: py/objint.c
-msgid "can't convert inf to int"
 msgstr ""
 
 #: py/obj.c
@@ -2750,7 +2662,7 @@ msgstr ""
 msgid "can't set attribute"
 msgstr ""
 
-#: py/runtime.c shared-bindings/supervisor/Runtime.c
+#: py/runtime.c
 msgid "can't set attribute '%q'"
 msgstr ""
 
@@ -3023,12 +2935,6 @@ msgstr ""
 msgid "error = 0x%08lX"
 msgstr "error = 0x1%08lX"
 
-#: ports/espressif/common-hal/espcamera/Camera.c
-msgid ""
-"espcamera.Camera requires reserved PSRAM to be configured. See the "
-"documentation for instructions."
-msgstr ""
-
 #: py/runtime.c
 msgid "exceptions must derive from BaseException"
 msgstr "例外はBaseExceptionから派生していなければなりません"
@@ -3186,10 +3092,6 @@ msgstr ""
 #, c-format
 msgid "function takes %d positional arguments but %d were given"
 msgstr ""
-
-#: shared-bindings/time/__init__.c
-msgid "function takes exactly 9 arguments"
-msgstr "関数はちょうど9個の引数をとります"
 
 #: py/objgenerator.c
 msgid "generator already executing"
@@ -3381,7 +3283,7 @@ msgstr ""
 msgid "invalid bits_per_pixel %d, must be, 1, 2, 4, 8, 16, 24, or 32"
 msgstr ""
 
-#: ports/raspberrypi/common-hal/ssl/SSLSocket.c
+#: shared-module/ssl/SSLSocket.c
 msgid "invalid cert"
 msgstr "不正な証明書"
 
@@ -3407,7 +3309,7 @@ msgstr ""
 msgid "invalid hostname"
 msgstr "不正なホスト名"
 
-#: ports/raspberrypi/common-hal/ssl/SSLSocket.c
+#: shared-module/ssl/SSLSocket.c
 msgid "invalid key"
 msgstr "不正な鍵"
 
@@ -3917,10 +3819,6 @@ msgstr ""
 msgid "parameters must be registers in sequence r0 to r3"
 msgstr ""
 
-#: shared-bindings/bitmaptools/__init__.c
-msgid "pixel coordinates out of bounds"
-msgstr ""
-
 #: extmod/vfs_posix_file.c
 msgid "poll on file not available on win32"
 msgstr ""
@@ -4045,10 +3943,6 @@ msgstr "整数フォーマット指定子'c'で符号は使えません"
 #: extmod/ulab/code/ulab_tools.c
 msgid "size is defined for ndarrays only"
 msgstr ""
-
-#: shared-bindings/time/__init__.c
-msgid "sleep length must be non-negative"
-msgstr "sleepの長さは非負数でなければなりません"
 
 #: py/nativeglue.c
 msgid "slice unsupported"
@@ -4315,6 +4209,10 @@ msgstr ""
 msgid "unsupported Xtensa instruction '%s' with %d arguments"
 msgstr ""
 
+#: shared-module/bitmapfilter/__init__.c
+msgid "unsupported bitmap depth"
+msgstr ""
+
 #: shared-module/gifio/GifWriter.c
 msgid "unsupported colorspace for GifWriter"
 msgstr ""
@@ -4359,6 +4257,16 @@ msgstr ""
 
 #: extmod/moddeflate.c
 msgid "wbits"
+msgstr ""
+
+#: shared-bindings/bitmapfilter/__init__.c
+msgid ""
+"weights must be a sequence with an odd square number of elements (usually 9 "
+"or 25)"
+msgstr ""
+
+#: shared-bindings/bitmapfilter/__init__.c
+msgid "weights must be an object of type %q, %q, %q, or %q, not %q "
 msgstr ""
 
 #: shared-bindings/is31fl3741/FrameBuffer.c
@@ -4432,137 +4340,66 @@ msgstr "ziはfloat値でなければなりません"
 msgid "zi must be of shape (n_section, 2)"
 msgstr ""
 
-#~ msgid "'await', 'async for' or 'async with' outside async function"
-#~ msgstr "async関数外での await, async for, async with"
+#~ msgid "Cannot vary frequency on a timer that is already in use"
+#~ msgstr "使用中のタイマー上では周波数を変えられません"
 
-#~ msgid "'break' outside loop"
-#~ msgstr "ループ外でのbreak"
+#~ msgid "Could not start PWM"
+#~ msgstr "PWMをスタートできません"
 
-#~ msgid "'continue' outside loop"
-#~ msgstr "ループ外でのcontinue"
+#~ msgid "EXTINT channel already in use"
+#~ msgstr "EXTINTチャネルはすでに使用されています"
 
-#~ msgid "unsupported type for %q: '%q'"
-#~ msgstr "%q が対応していない型: '%q'"
+#~ msgid "Frequency must match existing PWMOut using this timer"
+#~ msgstr "このタイマーを使う既存のPWMOutと周波数を一致させる必要があります"
 
-#~ msgid "attributes not supported yet"
-#~ msgstr "属性は未対応です"
-
-#~ msgid "can't do truncated division of a complex number"
-#~ msgstr "複素数の切り捨て除算はできません"
-
-#~ msgid "keyword argument(s) not yet implemented - use normal args instead"
-#~ msgstr "キーワード引数は未実装。通常の引数を使ってください"
-
-#~ msgid "slice step can't be zero"
-#~ msgstr "スライスのステップは0にできません"
-
-#~ msgid "string not supported; use bytes or bytearray"
-#~ msgstr "文字列ではなくbytesまたはbytesarrayが必要"
-
-#~ msgid "WatchDogTimer is not currently running"
-#~ msgstr "WatchDogTimerは現在動作していません"
-
-#~ msgid "WatchDogTimer.mode cannot be changed once set to WatchDogMode.RESET"
-#~ msgstr "WatchDogTimer.modeはいったんWatchDogMode.RESETに設定すると変更不可"
-
-#~ msgid "queue overflow"
-#~ msgstr "キューがオーバーフローしました"
-
-#~ msgid "'coroutine' object is not an iterator"
-#~ msgstr "'coroutine' オブジェクトはイテレータではありません"
-
-#~ msgid "Buffer is too small"
-#~ msgstr "バッファが小さすぎます"
-
-#~ msgid "pixel_shader must be displayio.Palette or displayio.ColorConverter"
-#~ msgstr ""
-#~ "pixel_shaderはdisplayio.Paletteかdisplayio.ColorConverterのどちらかでなけ"
-#~ "ればなりません"
-
-#~ msgid "Corrupt .mpy file"
-#~ msgstr "破損した .mpy ファイル"
+#~ msgid "No available clocks"
+#~ msgstr "利用できるクロックがありません"
 
 #~ msgid ""
-#~ "Incompatible .mpy file. Please update all .mpy files. See http://adafru."
-#~ "it/mpy-update for more info."
+#~ "PWM frequency not writable when variable_frequency is False on "
+#~ "construction."
+#~ msgstr "PWM周波数は生成時のvariable_frequencyがFalseのとき書き換え不可"
+
+#~ msgid "Pin must support hardware interrupts"
+#~ msgstr "ピンはハードウェア割り込みに対応していなければなりません"
+
+#~ msgid "argument should be a '%q' not a '%q'"
+#~ msgstr "引数には '%q' が必要（'%q' ではなく）"
+
+#~ msgid "function takes exactly 9 arguments"
+#~ msgstr "関数はちょうど9個の引数をとります"
+
+#~ msgid "sleep length must be non-negative"
+#~ msgstr "sleepの長さは非負数でなければなりません"
+
+#~ msgid "A hardware interrupt channel is already in use"
+#~ msgstr "ハードウェア割り込みチャネルは使用中"
+
+#~ msgid "Bit clock and word select must share a clock unit"
+#~ msgstr "bit clockとword selectはクロックユニットを共有しなければなりません"
+
+#~ msgid "Bit depth must be multiple of 8."
+#~ msgstr "ビット深度は8の倍数でなければなりません"
+
+#~ msgid "Both pins must support hardware interrupts"
+#~ msgstr "両方のピンにハードウェア割り込み対応が必要"
+
+#~ msgid "Clock stretch too long"
+#~ msgstr "クロックのストレッチが長すぎ"
+
+#~ msgid "Microphone startup delay must be in range 0.0 to 1.0"
 #~ msgstr ""
-#~ "非互換の.mpyファイル。全.mpyファイルを更新してください。詳細は http://"
-#~ "adafru.it/mpy-update を参照"
+#~ "マイクのスタートアップディレイは 0.0 から 1.0 の間でなければなりません"
 
-#~ msgid "can't convert to %q"
-#~ msgstr "%q に変換できません"
+#~ msgid "Oversample must be multiple of 8."
+#~ msgstr "オーバーサンプルは8の倍数でなければなりません"
 
-#~ msgid "can't have multiple **x"
-#~ msgstr "複数の **x は持てません"
-
-#~ msgid "can't have multiple *x"
-#~ msgstr "複数の *x は持てません"
-
-#~ msgid "constant must be an integer"
-#~ msgstr "定数は整数でなければなりません"
-
-#~ msgid "keywords must be strings"
-#~ msgstr "キーワードは文字列でなければなりません"
-
-#~ msgid "non-keyword arg after */**"
-#~ msgstr "*/** の後に非キーワード引数は置けません"
-
-#~ msgid "non-keyword arg after keyword arg"
-#~ msgstr "キーワード引数の後に非キーワード引数は置けません"
-
-#~ msgid "Hardware busy, try alternative pins"
-#~ msgstr "ハードウェアビジー。代替のピンを試してください"
-
-#~ msgid "Missing MISO or MOSI Pin"
-#~ msgstr "MISOまたはMOSIピンがありません"
-
-#~ msgid "No MISO Pin"
-#~ msgstr "MISOピンなし"
-
-#~ msgid "No MOSI Pin"
-#~ msgstr "MOSIピンがありません"
-
-#~ msgid "No RX pin"
-#~ msgstr "RXピンがありません"
-
-#~ msgid "No TX pin"
-#~ msgstr "TXピンがありません"
-
-#~ msgid "no reset pin available"
-#~ msgstr "利用可能なリセットピンがありません"
-
-#~ msgid "Brightness must be 0-1.0"
-#~ msgstr "brightnessは0から1.0まででなければなりません"
-
-#~ msgid "x value out of bounds"
-#~ msgstr "xが範囲外"
-
-#~ msgid "y value out of bounds"
-#~ msgstr "yが範囲外"
-
-#~ msgid "I2SOut not available"
-#~ msgstr "I2SOutが利用できません"
-
-#~ msgid "out of range of source"
-#~ msgstr "ソースが範囲外"
-
-#~ msgid "value_count must be > 0"
-#~ msgstr "value_countは0より大きくなければなりません"
-
-#~ msgid "No key was specified"
-#~ msgstr "キーが指定されていません"
-
-#~ msgid "Scan already in progess. Stop with stop_scan."
-#~ msgstr "既にスキャン進行中。stop_scanで停止してください"
-
-#~ msgid "too many arguments provided with the given format"
-#~ msgstr "指定された書式に対して引数が多すぎます"
-
-#~ msgid "Supply at least one UART pin"
-#~ msgstr "少なくとも1つのUARTピンが必要"
-
-#~ msgid "%q pin invalid"
-#~ msgstr "%q ピンは無効"
+#~ msgid ""
+#~ "\n"
+#~ "Code done running. Waiting for reload.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "コードの実行が完了しました。リロードを待っています。\n"
 
 #~ msgid ""
 #~ "\n"
@@ -4573,75 +4410,26 @@ msgstr ""
 #~ "CIRCUITPYドライブの内容を添えて問題を以下で報告してください：\n"
 #~ "https://github.com/adafruit/circuitpython/issues\n"
 
-#~ msgid "CircuitPython was unable to allocate the heap."
-#~ msgstr "CircuitPythonはヒープを確保できませんでした"
+#~ msgid ""
+#~ "\n"
+#~ "To exit, please reset the board without "
+#~ msgstr ""
+#~ "\n"
+#~ "終了するには、次の操作をせずにリセットしてください: "
 
-#~ msgid "Crash into the HardFault_Handler."
-#~ msgstr "クラッシュしてHardFault_Handlerに入りました"
+#, fuzzy, c-format
+#~ msgid "%02X"
+#~ msgstr "%02X"
 
-#~ msgid "Invalid memory access."
-#~ msgstr "不正なメモリアクセス"
+#, fuzzy
+#~ msgid "%q"
+#~ msgstr "%q"
 
-#~ msgid "Expected a %q"
-#~ msgstr "%qが必要"
+#~ msgid "%q indices must be integers, not %q"
+#~ msgstr "%q インデクスは %q でなく整数でなければなりません"
 
-#, c-format
-#~ msgid "IV must be %d bytes long"
-#~ msgstr "IVは%dバイト長でなければなりません"
-
-#~ msgid "Read-only object"
-#~ msgstr "読み込み専用のオブジェクト"
-
-#~ msgid "At most %d %q may be specified (not %d)"
-#~ msgstr "最大で %d個の %q が指定できます（%d個でなく）"
-
-#~ msgid "Invalid pins"
-#~ msgstr "ピンが不正"
-
-#~ msgid "byteorder is not a string"
-#~ msgstr "byteorderが文字列ではありません"
-
-#~ msgid "complex division by zero"
-#~ msgstr "複素数ゼロ除算"
-
-#~ msgid "int() arg 2 must be >= 2 and <= 36"
-#~ msgstr "int()の第2引数は2以上36以下でなければなりません"
-
-#~ msgid "long int not supported in this build"
-#~ msgstr "このビルドはlong intに非対応"
-
-#~ msgid "step must be non-zero"
-#~ msgstr "stepは非ゼロ値でなければなりません"
-
-#~ msgid "string indices must be integers, not %q"
-#~ msgstr "文字列のインデクスは整数でなければなりません (%qでなく)"
-
-#~ msgid "time.struct_time() takes a 9-sequence"
-#~ msgstr "time.struct_time()は9要素のシーケンスを受け取ります"
-
-#~ msgid "zero step"
-#~ msgstr "ステップが0"
-
-#~ msgid "WatchDogTimer.timeout must be greater than 0"
-#~ msgstr "WatchDogTimer.timeoutは0以上でなければなりません"
-
-#~ msgid "single '}' encountered in format string"
-#~ msgstr "文字列フォーマット中に孤立した '}' があります"
-
-#~ msgid "threshold must be in the range 0-65536"
-#~ msgstr "threshouldは0から65536まで"
-
-#~ msgid "timeout must be 0.0-100.0 seconds"
-#~ msgstr "timeoutは0.0〜100.0秒でなければなりません"
-
-#~ msgid "unmatched '{' in format"
-#~ msgstr "書式中にマッチしない '{' があります"
-
-#~ msgid "watchdog timeout must be greater than 0"
-#~ msgstr "watchdogのtimeoutは0以上でなければなりません"
-
-#~ msgid "Stream missing readinto() or write() method."
-#~ msgstr "ストリームにreadinto()またはwrite()メソッドがありません"
+#~ msgid "%q list must be a list"
+#~ msgstr "%q リストはリストでなければなりません"
 
 #~ msgid "%q must be >= 0"
 #~ msgstr "%qは0以上でなければなりません"
@@ -4649,32 +4437,41 @@ msgstr ""
 #~ msgid "%q must be >= 1"
 #~ msgstr "%qは1以上でなければなりません"
 
-#~ msgid "address out of bounds"
-#~ msgstr "アドレスが範囲外"
-
-#~ msgid "destination_length must be an int >= 0"
-#~ msgstr "desitination_lengthは正の整数でなければなりません"
-
-#~ msgid "end_x should be an int"
-#~ msgstr "end_xは整数でなければなりません"
-
-#~ msgid "palette_index should be an int"
-#~ msgstr "palette_indexには整数が必要"
-
-#~ msgid "y should be an int"
-#~ msgstr "yは整数でなければなりません"
-
-#~ msgid ""
-#~ "sample_source buffer must be a bytearray or array of type 'h', 'H', 'b' "
-#~ "or 'B'"
-#~ msgstr ""
-#~ "sample_source バッファには bytearray または 'h','H','b','B'型のarrayが必要"
-
 #~ msgid "%q must be a tuple of length 2"
 #~ msgstr "%qは長さ2のタプルでなければなりません"
 
+#~ msgid "%q pin invalid"
+#~ msgstr "%q ピンは無効"
+
 #~ msgid "%q should be an int"
 #~ msgstr "%qはint型でなければなりません"
+
+#~ msgid "'%q' object cannot assign attribute '%q'"
+#~ msgstr "オブジェクト'%q'に属性'%q'を割り当てられません"
+
+#~ msgid "'%q' object does not support item assignment"
+#~ msgstr "'%q' オブジェクトは要素の代入に対応していません"
+
+#~ msgid "'%q' object does not support item deletion"
+#~ msgstr "'%q' オブジェクトは要素の削除に対応していません"
+
+#~ msgid "'%q' object has no attribute '%q'"
+#~ msgstr "オブジェクト'%q'に属性'%q'はありません"
+
+#~ msgid "'%q' object is not subscriptable"
+#~ msgstr "オブジェクト'%q'は要素の取得ができません"
+
+#~ msgid "'await', 'async for' or 'async with' outside async function"
+#~ msgstr "async関数外での await, async for, async with"
+
+#~ msgid "'break' outside loop"
+#~ msgstr "ループ外でのbreak"
+
+#~ msgid "'continue' outside loop"
+#~ msgstr "ループ外でのcontinue"
+
+#~ msgid "'coroutine' object is not an iterator"
+#~ msgstr "'coroutine' オブジェクトはイテレータではありません"
 
 #~ msgid "Address type out of range"
 #~ msgstr "address_typeが範囲外"
@@ -4691,12 +4488,30 @@ msgstr ""
 #~ msgid "AnalogOut not supported on given pin"
 #~ msgstr "指定のピンはAnalogOutに対応していません"
 
+#~ msgid "At most %d %q may be specified (not %d)"
+#~ msgstr "最大で %d個の %q が指定できます（%d個でなく）"
+
+#~ msgid "Attempted heap allocation when MicroPython VM not running."
+#~ msgstr "MicroPython VMの非実行時にヒープ確保を試みました"
+
+#~ msgid "Brightness must be 0-1.0"
+#~ msgstr "brightnessは0から1.0まででなければなりません"
+
+#~ msgid "Brightness must be between 0 and 255"
+#~ msgstr "Brightnessは0から255の間でなければなりません"
+
 #, c-format
 #~ msgid "Buffer incorrect size. Should be %d bytes."
 #~ msgstr "バッファサイズが不正です。%dバイトでなければなりません"
 
+#~ msgid "Buffer is too small"
+#~ msgstr "バッファが小さすぎます"
+
 #~ msgid "Buffer must be at least length 1"
 #~ msgstr "バッファ長は少なくとも1以上でなければなりません"
+
+#~ msgid "Buffer too large and unable to allocate"
+#~ msgstr "バッファが大きすぎて確保できません"
 
 #~ msgid "Bytes must be between 0 and 255."
 #~ msgstr "バイト値は0から255の間でなければなりません"
@@ -4707,20 +4522,45 @@ msgstr ""
 #~ msgid "Cannot read without MISO pin."
 #~ msgstr "MISOピンなしで読み込めません"
 
+#~ msgid "Cannot remount '/' when USB is active."
+#~ msgstr "USBがアクティブの時に'/'を再マウントできません"
+
 #~ msgid "Cannot reset into bootloader because no bootloader is present."
 #~ msgstr "ブートローダが存在しないためブートローダへとリセットできません"
 
 #~ msgid "Cannot transfer without MOSI and MISO pins."
 #~ msgstr "MOSIピンとMISOピンなしに転送できません"
 
+#~ msgid "Cannot unambiguously get sizeof scalar"
+#~ msgstr "スカラのサイズを曖昧さなしに取得できません"
+
 #~ msgid "Cannot write without MOSI pin."
 #~ msgstr "MOSIピンなしで書き込みできません"
+
+#~ msgid ""
+#~ "CircuitPython is in safe mode because you pressed the reset button during "
+#~ "boot. Press again to exit safe mode.\n"
+#~ msgstr ""
+#~ "起動中にリセットボタンを押したためCircuitPythonはセーフモードにいます。も"
+#~ "う一度押すとセーフモードを終了します。\n"
+
+#~ msgid "CircuitPython was unable to allocate the heap."
+#~ msgstr "CircuitPythonはヒープを確保できませんでした"
 
 #~ msgid "Clock pin init failed."
 #~ msgstr "クロックピン初期化に失敗"
 
+#~ msgid "Column entry must be digitalio.DigitalInOut"
+#~ msgstr "Columnの要素は digitalio.DigitalInOut でなければなりません"
+
 #~ msgid "Command must be an int between 0 and 255"
 #~ msgstr "commandは0から255の間の整数でなければなりません"
+
+#~ msgid "Corrupt .mpy file"
+#~ msgstr "破損した .mpy ファイル"
+
+#~ msgid "Corrupt raw code"
+#~ msgstr "破損したraw code"
 
 #~ msgid "Could not initialize Camera"
 #~ msgstr "カメラを初期化できません"
@@ -4733,6 +4573,12 @@ msgstr ""
 
 #~ msgid "Could not initialize UART"
 #~ msgstr "UARTを初期化できません"
+
+#~ msgid "Could not initialize channel"
+#~ msgstr "チャネルを初期化できません"
+
+#~ msgid "Could not initialize timer"
+#~ msgstr "タイマーを初期化できません"
 
 #~ msgid "Could not re-init channel"
 #~ msgstr "チャネルを再初期化できません"
@@ -4752,8 +4598,32 @@ msgstr ""
 #~ msgid "Couldn't allocate second buffer"
 #~ msgstr "2つ目のバッファを確保できません"
 
+#~ msgid "Crash into the HardFault_Handler."
+#~ msgstr "クラッシュしてHardFault_Handlerに入りました"
+
 #~ msgid "DigitalInOut not supported on given pin"
 #~ msgstr "指定されたピンはDigitalInOutに対応していません"
+
+#~ msgid "Expected a %q"
+#~ msgstr "%qが必要"
+
+#~ msgid "Expected a Characteristic"
+#~ msgstr "Characteristicが必要"
+
+#~ msgid "Expected a DigitalInOut"
+#~ msgstr "DigitalInOutが必要"
+
+#~ msgid "Expected a Service"
+#~ msgstr "Serviceが必要"
+
+#~ msgid "Expected a UART"
+#~ msgstr "UARTが必要"
+
+#~ msgid "Expected a UUID"
+#~ msgstr "UUIDが必要"
+
+#~ msgid "Expected an Address"
+#~ msgstr "Addressが必要"
 
 #~ msgid "Failed to allocate RX buffer"
 #~ msgstr "RXバッファの確保に失敗"
@@ -4762,8 +4632,31 @@ msgstr ""
 #~ msgid "Failed to allocate RX buffer of %d bytes"
 #~ msgstr "%dバイトのRXバッファの確保に失敗"
 
+#~ msgid "Frequency captured is above capability. Capture Paused."
+#~ msgstr "キャプチャした周波数は能力を超えています。キャプチャ停止"
+
+#~ msgid "Group full"
+#~ msgstr "グループが一杯"
+
+#~ msgid "Hardware busy, try alternative pins"
+#~ msgstr "ハードウェアビジー。代替のピンを試してください"
+
 #~ msgid "I2C Init Error"
 #~ msgstr "I2C初期化エラー"
+
+#~ msgid "I2SOut not available"
+#~ msgstr "I2SOutが利用できません"
+
+#, c-format
+#~ msgid "IV must be %d bytes long"
+#~ msgstr "IVは%dバイト長でなければなりません"
+
+#~ msgid ""
+#~ "Incompatible .mpy file. Please update all .mpy files. See http://adafru."
+#~ "it/mpy-update for more info."
+#~ msgstr ""
+#~ "非互換の.mpyファイル。全.mpyファイルを更新してください。詳細は http://"
+#~ "adafru.it/mpy-update を参照"
 
 #~ msgid "Invalid %q pin selection"
 #~ msgstr "不正な%qピン選択"
@@ -4774,8 +4667,17 @@ msgstr ""
 #~ msgid "Invalid DAC pin supplied"
 #~ msgstr "不正なDACピンが与えられました"
 
+#~ msgid "Invalid I2C pin selection"
+#~ msgstr "I2Cピンの選択が不正です"
+
 #~ msgid "Invalid PWM frequency"
 #~ msgstr "無効なPWM周波数"
+
+#~ msgid "Invalid SPI pin selection"
+#~ msgstr "SPIピンの選択が不正です"
+
+#~ msgid "Invalid UART pin selection"
+#~ msgstr "UARTピンの選択が不正です"
 
 #~ msgid "Invalid buffer size"
 #~ msgstr "不正なバッファサイズ"
@@ -4795,6 +4697,15 @@ msgstr ""
 #~ msgid "Invalid file"
 #~ msgstr "不正なファイル"
 
+#~ msgid "Invalid frequency"
+#~ msgstr "不正な周波数"
+
+#~ msgid "Invalid frequency supplied"
+#~ msgstr "不正な周波数が与えられました"
+
+#~ msgid "Invalid memory access."
+#~ msgstr "不正なメモリアクセス"
+
 #~ msgid "Invalid number of bits"
 #~ msgstr "不正なビット数"
 
@@ -4809,6 +4720,12 @@ msgstr ""
 
 #~ msgid "Invalid pin for right channel"
 #~ msgstr "右チャネルのピンが不正"
+
+#~ msgid "Invalid pins"
+#~ msgstr "ピンが不正"
+
+#~ msgid "Invalid pins for PWMOut"
+#~ msgstr "PWMOutのピンが不正"
 
 #~ msgid "Invalid polarity"
 #~ msgstr "不正な極性"
@@ -4840,11 +4757,41 @@ msgstr ""
 #~ msgid "Layer must be a Group or TileGrid subclass."
 #~ msgstr "レイヤはGroupかTileGridのサブクラスでなければなりません"
 
+#~ msgid "Length must be an int"
+#~ msgstr "長さには整数が必要"
+
+#~ msgid "Length must be non-negative"
+#~ msgstr "Lengthは非負数でなければなりません"
+
 #~ msgid "MISO pin init failed."
 #~ msgstr "MISOピン初期化に失敗"
 
 #~ msgid "MOSI pin init failed."
 #~ msgstr "MOSIピン初期化に失敗"
+
+#~ msgid "MicroPython NLR jump failed. Likely memory corruption."
+#~ msgstr "MicroPython NLRジャンプ失敗。メモリ破壊の可能性あり"
+
+#~ msgid "MicroPython fatal error."
+#~ msgstr "MicroPython致命的エラー"
+
+#~ msgid "Missing MISO or MOSI Pin"
+#~ msgstr "MISOまたはMOSIピンがありません"
+
+#~ msgid "Must provide SCK pin"
+#~ msgstr "SCKピンが必要"
+
+#~ msgid "No MISO Pin"
+#~ msgstr "MISOピンなし"
+
+#~ msgid "No MOSI Pin"
+#~ msgstr "MOSIピンがありません"
+
+#~ msgid "No RX pin"
+#~ msgstr "RXピンがありません"
+
+#~ msgid "No TX pin"
+#~ msgstr "TXピンがありません"
 
 #~ msgid "No hardware support on clk pin"
 #~ msgstr "clkピンにハードウェア対応がありません"
@@ -4852,19 +4799,58 @@ msgstr ""
 #~ msgid "No hardware support on pin"
 #~ msgstr "ピンにハードウェア対応がありません"
 
+#~ msgid "No key was specified"
+#~ msgstr "キーが指定されていません"
+
+#~ msgid "No more channels available"
+#~ msgstr "使えるチャネルがもうありません"
+
+#~ msgid "No more timers available"
+#~ msgstr "使えるタイマーがもうありません"
+
+#~ msgid "No more timers available on this pin."
+#~ msgstr "このピンには使えるタイマーがもうありません"
+
+#~ msgid "Not running saved code.\n"
+#~ msgstr "保存されたコードは実行していません。\n"
+
+#~ msgid "Only 8 or 16 bit mono with "
+#~ msgstr "8または16ビットの "
+
 #~ msgid ""
 #~ "PWM duty_cycle must be between 0 and 65535 inclusive (16 bit resolution)"
 #~ msgstr ""
 #~ "PWMのduty_cycle値は0から65535の間でなければなりません（16ビット解像度）"
 
+#~ msgid "ParallelBus not yet supported"
+#~ msgstr "ParallelBusにはまだ対応していません"
+
 #~ msgid "Pin does not have ADC capabilities"
 #~ msgstr "ピンにADCの能力がありません"
+
+#~ msgid "Pin number already reserved by EXTI"
+#~ msgstr "ピン番号はすでにEXTIによって予約されています"
+
+#~ msgid "Press any key to enter the REPL. Use CTRL-D to reload."
+#~ msgstr "何らかのキーを押すとREPLに入ります。CTRL-Dでリロード。"
+
+#~ msgid "PulseOut not supported on this chip"
+#~ msgstr "PulseOutはこのチップでサポートされていません"
 
 #~ msgid "RTC calibration is not supported on this board"
 #~ msgstr "このボードはRTCのキャリブレーションに非対応"
 
 #~ msgid "RTS/CTS/RS485 Not yet supported on this device"
 #~ msgstr "RTS/CTS/RS485はこのデバイスでは未対応"
+
+#~ msgid "Read-only object"
+#~ msgstr "読み込み専用のオブジェクト"
+
+#~ msgid "Row entry must be digitalio.DigitalInOut"
+#~ msgstr "Rowの各要素は digitalio.DigitalInOut でなければなりません"
+
+#~ msgid "SDA or SCL needs a pull up"
+#~ msgstr "SDAとSCLにプルアップが必要"
 
 #~ msgid "SPI Init Error"
 #~ msgstr "SPI初期化エラー"
@@ -4879,132 +4865,23 @@ msgstr ""
 #~ msgid "Sample rate too high. It must be less than %d"
 #~ msgstr "サンプルレートは%d以下でなければなりません"
 
+#~ msgid "Scan already in progess. Stop with stop_scan."
+#~ msgstr "既にスキャン進行中。stop_scanで停止してください"
+
+#~ msgid "Selected CTS pin not valid"
+#~ msgstr "選択されたCTSピンが不正"
+
+#~ msgid "Selected RTS pin not valid"
+#~ msgstr "選択されたRTSピンが正しくありません"
+
 #~ msgid "Stack size must be at least 256"
 #~ msgstr "スタックサイズは少なくとも256以上でなければなりません"
 
-#~ msgid "Tile value out of bounds"
-#~ msgstr "タイル値が範囲外"
+#~ msgid "Stream missing readinto() or write() method."
+#~ msgstr "ストリームにreadinto()またはwrite()メソッドがありません"
 
-#~ msgid "UART Buffer allocation error"
-#~ msgstr "UARTバッファの確保エラー"
-
-#~ msgid "UART De-init error"
-#~ msgstr "UART解放エラー"
-
-#~ msgid "UART Init Error"
-#~ msgstr "UARTの初期化エラー"
-
-#~ msgid "UART Re-init error"
-#~ msgstr "UARTの再初期化エラー"
-
-#~ msgid "UART write error"
-#~ msgstr "UART書き込みエラー"
-
-#~ msgid "Unsupported baudrate"
-#~ msgstr "非対応のbaudrate"
-
-#~ msgid "WiFi password must be between 8 and 63 characters"
-#~ msgstr "WiFiパスワードは8〜63文字でなければなりません"
-
-#~ msgid "stop must be 1 or 2"
-#~ msgstr "stopは1または2のいずれか"
-
-#~ msgid "timeout must be >= 0.0"
-#~ msgstr "timeoutは0.0以上でなければなりません"
-
-#~ msgid "Unsupported operation"
-#~ msgstr "非対応の操作"
-
-#~ msgid "Brightness must be between 0 and 255"
-#~ msgstr "Brightnessは0から255の間でなければなりません"
-
-#~ msgid "cannot perform relative import"
-#~ msgstr "相対インポートはできません"
-
-#~ msgid "Unsupported pull value."
-#~ msgstr "非対応のpull値"
-
-#~ msgid "integer required"
-#~ msgstr "整数が必要"
-
-#~ msgid "abort() called"
-#~ msgstr "abort()が呼ばれました"
-
-#~ msgid "f-string expression part cannot include a '#'"
-#~ msgstr "f-文字列の表現部は '#' を持てません"
-
-#~ msgid "f-string expression part cannot include a backslash"
-#~ msgstr "f-文字列の表現部はバックスラッシュを持てません"
-
-#~ msgid "f-string: empty expression not allowed"
-#~ msgstr "f-文字列: 空の表現は許されません"
-
-#~ msgid "f-string: expecting '}'"
-#~ msgstr "f-string: '}'が必要"
-
-#~ msgid "f-string: single '}' is not allowed"
-#~ msgstr "f-string: 1つだけの'}'は許されません"
-
-#~ msgid "invalid arguments"
-#~ msgstr "不正な引数"
-
-#~ msgid "raw f-strings are not implemented"
-#~ msgstr "raw f-文字列は実装されていません"
-
-#~ msgid "unindent does not match any outer indentation level"
-#~ msgstr "インデントの解除が、外側のどのインデントにも一致していません"
-
-#~ msgid "%q list must be a list"
-#~ msgstr "%q リストはリストでなければなりません"
-
-#~ msgid "Column entry must be digitalio.DigitalInOut"
-#~ msgstr "Columnの要素は digitalio.DigitalInOut でなければなりません"
-
-#~ msgid "Expected a Characteristic"
-#~ msgstr "Characteristicが必要"
-
-#~ msgid "Expected a DigitalInOut"
-#~ msgstr "DigitalInOutが必要"
-
-#~ msgid "Expected a Service"
-#~ msgstr "Serviceが必要"
-
-#~ msgid "Expected a UART"
-#~ msgstr "UARTが必要"
-
-#~ msgid "Expected a UUID"
-#~ msgstr "UUIDが必要"
-
-#~ msgid "Expected an Address"
-#~ msgstr "Addressが必要"
-
-#~ msgid "Row entry must be digitalio.DigitalInOut"
-#~ msgstr "Rowの各要素は digitalio.DigitalInOut でなければなりません"
-
-#~ msgid "buttons must be digitalio.DigitalInOut"
-#~ msgstr "buttonsはdigitalio.DigitalInOutでなければなりません"
-
-#~ msgid "Invalid frequency"
-#~ msgstr "不正な周波数"
-
-#~ msgid "ParallelBus not yet supported"
-#~ msgstr "ParallelBusにはまだ対応していません"
-
-#~ msgid "no available NIC"
-#~ msgstr "利用可能なNICがありません"
-
-#~ msgid "Buffer too large and unable to allocate"
-#~ msgstr "バッファが大きすぎて確保できません"
-
-#~ msgid ""
-#~ "CircuitPython is in safe mode because you pressed the reset button during "
-#~ "boot. Press again to exit safe mode.\n"
-#~ msgstr ""
-#~ "起動中にリセットボタンを押したためCircuitPythonはセーフモードにいます。も"
-#~ "う一度押すとセーフモードを終了します。\n"
-
-#~ msgid "Not running saved code.\n"
-#~ msgstr "保存されたコードは実行していません。\n"
+#~ msgid "Supply at least one UART pin"
+#~ msgstr "少なくとも1つのUARTピンが必要"
 
 #~ msgid ""
 #~ "The CircuitPython heap was corrupted because the stack was too small.\n"
@@ -5028,8 +4905,23 @@ msgstr ""
 #~ "マイコンの電力が降下しました。使っている電源が十分な電力を回路に供給するこ"
 #~ "とを確認し (CIRCUITPYを取り出してから) リセットを押してください。\n"
 
-#~ msgid "Pin number already reserved by EXTI"
-#~ msgstr "ピン番号はすでにEXTIによって予約されています"
+#~ msgid "Tile value out of bounds"
+#~ msgstr "タイル値が範囲外"
+
+#~ msgid "UART Buffer allocation error"
+#~ msgstr "UARTバッファの確保エラー"
+
+#~ msgid "UART De-init error"
+#~ msgstr "UART解放エラー"
+
+#~ msgid "UART Init Error"
+#~ msgstr "UARTの初期化エラー"
+
+#~ msgid "UART Re-init error"
+#~ msgstr "UARTの再初期化エラー"
+
+#~ msgid "UART write error"
+#~ msgstr "UART書き込みエラー"
 
 #~ msgid "USB Busy"
 #~ msgstr "USBビジー"
@@ -5037,35 +4929,164 @@ msgstr ""
 #~ msgid "USB Error"
 #~ msgstr "USBエラー"
 
-#~ msgid "%q indices must be integers, not %q"
-#~ msgstr "%q インデクスは %q でなく整数でなければなりません"
+#~ msgid "Unknown soft device error: %04x"
+#~ msgstr "不明なソフトデバイスエラー: %04x"
 
-#~ msgid "'%q' object cannot assign attribute '%q'"
-#~ msgstr "オブジェクト'%q'に属性'%q'を割り当てられません"
+#~ msgid "Unsupported baudrate"
+#~ msgstr "非対応のbaudrate"
 
-#~ msgid "'%q' object does not support item assignment"
-#~ msgstr "'%q' オブジェクトは要素の代入に対応していません"
+#~ msgid "Unsupported operation"
+#~ msgstr "非対応の操作"
 
-#~ msgid "'%q' object does not support item deletion"
-#~ msgstr "'%q' オブジェクトは要素の削除に対応していません"
+#~ msgid "Unsupported pull value."
+#~ msgstr "非対応のpull値"
 
-#~ msgid "'%q' object has no attribute '%q'"
-#~ msgstr "オブジェクト'%q'に属性'%q'はありません"
+#~ msgid "WatchDogTimer is not currently running"
+#~ msgstr "WatchDogTimerは現在動作していません"
 
-#~ msgid "'%q' object is not subscriptable"
-#~ msgstr "オブジェクト'%q'は要素の取得ができません"
+#~ msgid "WatchDogTimer.mode cannot be changed once set to WatchDogMode.RESET"
+#~ msgstr "WatchDogTimer.modeはいったんWatchDogMode.RESETに設定すると変更不可"
 
-#~ msgid "Cannot unambiguously get sizeof scalar"
-#~ msgstr "スカラのサイズを曖昧さなしに取得できません"
+#~ msgid "WatchDogTimer.timeout must be greater than 0"
+#~ msgstr "WatchDogTimer.timeoutは0以上でなければなりません"
 
-#~ msgid "Length must be an int"
-#~ msgstr "長さには整数が必要"
+#~ msgid "WiFi password must be between 8 and 63 characters"
+#~ msgstr "WiFiパスワードは8〜63文字でなければなりません"
 
-#~ msgid "Length must be non-negative"
-#~ msgstr "Lengthは非負数でなければなりません"
+#~ msgid "abort() called"
+#~ msgstr "abort()が呼ばれました"
+
+#~ msgid "address out of bounds"
+#~ msgstr "アドレスが範囲外"
+
+#~ msgid "argument must be ndarray"
+#~ msgstr "引数はndarrayでなければなりません"
+
+#~ msgid "attributes not supported yet"
+#~ msgstr "属性は未対応です"
+
+#~ msgid "axis must be -1, 0, None, or 1"
+#~ msgstr "axisは -1, 0, 1, None のいずれかでなければなりません"
+
+#~ msgid "axis must be -1, 0, or 1"
+#~ msgstr "axisは -1, 0, 1 のいずれかでなければなりません"
+
+#~ msgid "axis must be None, 0, or 1"
+#~ msgstr "axisは None, 0, 1 のいずれか"
+
+#~ msgid "bits must be 7, 8 or 9"
+#~ msgstr "bitsは7, 8, 9のいずれかでなければなりません"
+
+#~ msgid "buffer must be a bytes-like object"
+#~ msgstr "バッファはbytes-likeオブジェクトでなければなりません"
+
+#~ msgid "buttons must be digitalio.DigitalInOut"
+#~ msgstr "buttonsはdigitalio.DigitalInOutでなければなりません"
+
+#~ msgid "byteorder is not a string"
+#~ msgstr "byteorderが文字列ではありません"
+
+#~ msgid "can't convert to %q"
+#~ msgstr "%q に変換できません"
+
+#~ msgid "can't do truncated division of a complex number"
+#~ msgstr "複素数の切り捨て除算はできません"
+
+#~ msgid "can't have multiple **x"
+#~ msgstr "複数の **x は持てません"
+
+#~ msgid "can't have multiple *x"
+#~ msgstr "複数の *x は持てません"
+
+#~ msgid "cannot perform relative import"
+#~ msgstr "相対インポートはできません"
+
+#~ msgid "cannot reshape array (incompatible input/output shape)"
+#~ msgstr "入力/出力シェイプが互換でなくreshapeできません"
+
+#~ msgid "complex division by zero"
+#~ msgstr "複素数ゼロ除算"
+
+#~ msgid "constant must be an integer"
+#~ msgstr "定数は整数でなければなりません"
+
+#~ msgid "destination_length must be an int >= 0"
+#~ msgstr "desitination_lengthは正の整数でなければなりません"
+
+#~ msgid "end_x should be an int"
+#~ msgstr "end_xは整数でなければなりません"
+
+#~ msgid "f-string expression part cannot include a '#'"
+#~ msgstr "f-文字列の表現部は '#' を持てません"
+
+#~ msgid "f-string expression part cannot include a backslash"
+#~ msgstr "f-文字列の表現部はバックスラッシュを持てません"
+
+#~ msgid "f-string: empty expression not allowed"
+#~ msgstr "f-文字列: 空の表現は許されません"
+
+#~ msgid "f-string: expecting '}'"
+#~ msgstr "f-string: '}'が必要"
+
+#~ msgid "f-string: single '}' is not allowed"
+#~ msgstr "f-string: 1つだけの'}'は許されません"
+
+#~ msgid "first argument must be an iterable"
+#~ msgstr "1つ目の引数はイテレート可能でなければなりません"
+
+#~ msgid "function is implemented for scalars and ndarrays only"
+#~ msgstr "スカラ値およびndarrayのみを受け取ります"
+
+#~ msgid "int() arg 2 must be >= 2 and <= 36"
+#~ msgstr "int()の第2引数は2以上36以下でなければなりません"
+
+#~ msgid "integer required"
+#~ msgstr "整数が必要"
+
+#~ msgid "invalid arguments"
+#~ msgstr "不正な引数"
+
+#~ msgid "invalid dupterm index"
+#~ msgstr "不正なduptermインデクス"
+
+#~ msgid "iterables are not of the same length"
+#~ msgstr "iterableが同じ長さではありません"
+
+#~ msgid "keyword argument(s) not yet implemented - use normal args instead"
+#~ msgstr "キーワード引数は未実装。通常の引数を使ってください"
+
+#~ msgid "keywords must be strings"
+#~ msgstr "キーワードは文字列でなければなりません"
+
+#~ msgid "long int not supported in this build"
+#~ msgstr "このビルドはlong intに非対応"
+
+#~ msgid "matrix dimensions do not match"
+#~ msgstr "行列の次元が一致しません"
+
+#~ msgid "max_length must be > 0"
+#~ msgstr "max_lengthは0より大きくなければなりません"
+
+#~ msgid "n must be between 0, and 9"
+#~ msgstr "nは0から9まで"
 
 #~ msgid "name reused for argument"
 #~ msgstr "引数で名前が再利用されています"
+
+#~ msgid "no available NIC"
+#~ msgstr "利用可能なNICがありません"
+
+#~ msgid "no reset pin available"
+#~ msgstr "利用可能なリセットピンがありません"
+
+#~ msgid "non-keyword arg after */**"
+#~ msgstr "*/** の後に非キーワード引数は置けません"
+
+#~ msgid "non-keyword arg after keyword arg"
+#~ msgstr "キーワード引数の後に非キーワード引数は置けません"
+
+#~ msgid "number of arguments must be 2, or 3"
+#~ msgstr "引数は2個または3個でなければなりません"
 
 #~ msgid "object '%q' is not a tuple or list"
 #~ msgstr "オブジェクト'%q'がタプルやリストでありません"
@@ -5082,148 +5103,100 @@ msgstr ""
 #~ msgid "object of type '%q' has no len()"
 #~ msgstr "オブジェクト（型 '%q'）はlen()を持ちません"
 
-#~ msgid "Cannot remount '/' when USB is active."
-#~ msgstr "USBがアクティブの時に'/'を再マウントできません"
+#~ msgid "out of range of source"
+#~ msgstr "ソースが範囲外"
 
-#~ msgid "invalid dupterm index"
-#~ msgstr "不正なduptermインデクス"
-
-#~ msgid "schedule stack full"
-#~ msgstr "スケジュールスタックが一杯"
-
-#~ msgid "Corrupt raw code"
-#~ msgstr "破損したraw code"
+#~ msgid "palette_index should be an int"
+#~ msgstr "palette_indexには整数が必要"
 
 #~ msgid "parameter annotation must be an identifier"
 #~ msgstr "引数アノテーションは識別子でなければなりません"
 
-#~ msgid "buffer must be a bytes-like object"
-#~ msgstr "バッファはbytes-likeオブジェクトでなければなりません"
-
-#~ msgid "Attempted heap allocation when MicroPython VM not running."
-#~ msgstr "MicroPython VMの非実行時にヒープ確保を試みました"
-
-#~ msgid "MicroPython NLR jump failed. Likely memory corruption."
-#~ msgstr "MicroPython NLRジャンプ失敗。メモリ破壊の可能性あり"
-
-#~ msgid "MicroPython fatal error."
-#~ msgstr "MicroPython致命的エラー"
-
-#~ msgid "argument must be ndarray"
-#~ msgstr "引数はndarrayでなければなりません"
-
-#~ msgid "matrix dimensions do not match"
-#~ msgstr "行列の次元が一致しません"
-
-#~ msgid "Unknown soft device error: %04x"
-#~ msgstr "不明なソフトデバイスエラー: %04x"
-
-#~ msgid "first argument must be an iterable"
-#~ msgstr "1つ目の引数はイテレート可能でなければなりません"
-
-#~ msgid "iterables are not of the same length"
-#~ msgstr "iterableが同じ長さではありません"
-
-#~ msgid "Selected CTS pin not valid"
-#~ msgstr "選択されたCTSピンが不正"
-
-#~ msgid "Selected RTS pin not valid"
-#~ msgstr "選択されたRTSピンが正しくありません"
-
-#~ msgid "Could not initialize channel"
-#~ msgstr "チャネルを初期化できません"
-
-#~ msgid "Could not initialize timer"
-#~ msgstr "タイマーを初期化できません"
-
-#~ msgid "Invalid frequency supplied"
-#~ msgstr "不正な周波数が与えられました"
-
-#~ msgid "Invalid pins for PWMOut"
-#~ msgstr "PWMOutのピンが不正"
-
-#~ msgid "No more channels available"
-#~ msgstr "使えるチャネルがもうありません"
-
-#~ msgid "No more timers available"
-#~ msgstr "使えるタイマーがもうありません"
-
-#~ msgid "No more timers available on this pin."
-#~ msgstr "このピンには使えるタイマーがもうありません"
-
-#~ msgid "Group full"
-#~ msgstr "グループが一杯"
-
-#~ msgid "bits must be 7, 8 or 9"
-#~ msgstr "bitsは7, 8, 9のいずれかでなければなりません"
-
-#~ msgid "SDA or SCL needs a pull up"
-#~ msgstr "SDAとSCLにプルアップが必要"
-
-#~ msgid ""
-#~ "\n"
-#~ "Code done running. Waiting for reload.\n"
+#~ msgid "pixel_shader must be displayio.Palette or displayio.ColorConverter"
 #~ msgstr ""
-#~ "\n"
-#~ "コードの実行が完了しました。リロードを待っています。\n"
+#~ "pixel_shaderはdisplayio.Paletteかdisplayio.ColorConverterのどちらかでなけ"
+#~ "ればなりません"
 
-#~ msgid "Frequency captured is above capability. Capture Paused."
-#~ msgstr "キャプチャした周波数は能力を超えています。キャプチャ停止"
+#~ msgid "queue overflow"
+#~ msgstr "キューがオーバーフローしました"
 
-#~ msgid "max_length must be > 0"
-#~ msgstr "max_lengthは0より大きくなければなりません"
-
-#~ msgid "Press any key to enter the REPL. Use CTRL-D to reload."
-#~ msgstr "何らかのキーを押すとREPLに入ります。CTRL-Dでリロード。"
-
-#~ msgid "axis must be -1, 0, None, or 1"
-#~ msgstr "axisは -1, 0, 1, None のいずれかでなければなりません"
-
-#~ msgid "axis must be -1, 0, or 1"
-#~ msgstr "axisは -1, 0, 1 のいずれかでなければなりません"
-
-#~ msgid "axis must be None, 0, or 1"
-#~ msgstr "axisは None, 0, 1 のいずれか"
-
-#~ msgid "cannot reshape array (incompatible input/output shape)"
-#~ msgstr "入力/出力シェイプが互換でなくreshapeできません"
-
-#~ msgid "function is implemented for scalars and ndarrays only"
-#~ msgstr "スカラ値およびndarrayのみを受け取ります"
-
-#~ msgid "n must be between 0, and 9"
-#~ msgstr "nは0から9まで"
-
-#~ msgid "number of arguments must be 2, or 3"
-#~ msgstr "引数は2個または3個でなければなりません"
+#~ msgid "raw f-strings are not implemented"
+#~ msgstr "raw f-文字列は実装されていません"
 
 #~ msgid "right hand side must be an ndarray, or a scalar"
 #~ msgstr "右辺は ndarray またはスカラ値でなければなりません"
 
+#~ msgid ""
+#~ "sample_source buffer must be a bytearray or array of type 'h', 'H', 'b' "
+#~ "or 'B'"
+#~ msgstr ""
+#~ "sample_source バッファには bytearray または 'h','H','b','B'型のarrayが必要"
+
+#~ msgid "schedule stack full"
+#~ msgstr "スケジュールスタックが一杯"
+
 #~ msgid "shape must be a 2-tuple"
 #~ msgstr "shapeは2値のタプルでなければなりません"
+
+#~ msgid "single '}' encountered in format string"
+#~ msgstr "文字列フォーマット中に孤立した '}' があります"
+
+#~ msgid "slice step can't be zero"
+#~ msgstr "スライスのステップは0にできません"
+
+#~ msgid "step must be non-zero"
+#~ msgstr "stepは非ゼロ値でなければなりません"
+
+#~ msgid "stop must be 1 or 2"
+#~ msgstr "stopは1または2のいずれか"
+
+#~ msgid "string indices must be integers, not %q"
+#~ msgstr "文字列のインデクスは整数でなければなりません (%qでなく)"
+
+#~ msgid "string not supported; use bytes or bytearray"
+#~ msgstr "文字列ではなくbytesまたはbytesarrayが必要"
+
+#~ msgid "threshold must be in the range 0-65536"
+#~ msgstr "threshouldは0から65536まで"
+
+#~ msgid "time.struct_time() takes a 9-sequence"
+#~ msgstr "time.struct_time()は9要素のシーケンスを受け取ります"
+
+#~ msgid "timeout must be 0.0-100.0 seconds"
+#~ msgstr "timeoutは0.0〜100.0秒でなければなりません"
+
+#~ msgid "timeout must be >= 0.0"
+#~ msgstr "timeoutは0.0以上でなければなりません"
+
+#~ msgid "too many arguments provided with the given format"
+#~ msgstr "指定された書式に対して引数が多すぎます"
+
+#~ msgid "unindent does not match any outer indentation level"
+#~ msgstr "インデントの解除が、外側のどのインデントにも一致していません"
+
+#~ msgid "unmatched '{' in format"
+#~ msgstr "書式中にマッチしない '{' があります"
+
+#~ msgid "unsupported type for %q: '%q'"
+#~ msgstr "%q が対応していない型: '%q'"
+
+#~ msgid "value_count must be > 0"
+#~ msgstr "value_countは0より大きくなければなりません"
+
+#~ msgid "watchdog timeout must be greater than 0"
+#~ msgstr "watchdogのtimeoutは0以上でなければなりません"
 
 #~ msgid "wrong argument type"
 #~ msgstr "引数の型が不正"
 
-#~ msgid "Must provide SCK pin"
-#~ msgstr "SCKピンが必要"
+#~ msgid "x value out of bounds"
+#~ msgstr "xが範囲外"
 
-#~ msgid ""
-#~ "\n"
-#~ "To exit, please reset the board without "
-#~ msgstr ""
-#~ "\n"
-#~ "終了するには、次の操作をせずにリセットしてください: "
+#~ msgid "y should be an int"
+#~ msgstr "yは整数でなければなりません"
 
-#~ msgid "PulseOut not supported on this chip"
-#~ msgstr "PulseOutはこのチップでサポートされていません"
+#~ msgid "y value out of bounds"
+#~ msgstr "yが範囲外"
 
-#~ msgid "Invalid I2C pin selection"
-#~ msgstr "I2Cピンの選択が不正です"
-
-#~ msgid "Invalid SPI pin selection"
-#~ msgstr "SPIピンの選択が不正です"
-
-#~ msgid "Invalid UART pin selection"
-#~ msgstr "UARTピンの選択が不正です"
+#~ msgid "zero step"
+#~ msgstr "ステップが0"

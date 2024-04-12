@@ -25,7 +25,6 @@
  */
 
 #include "py/binary.h"
-#include "py/objproperty.h"
 #include "py/runtime.h"
 #include "py/runtime0.h"
 #include "shared-bindings/memorymap/AddressRange.h"
@@ -73,6 +72,7 @@
 //|        # print GPIO16 pad drive strength
 //|        print(rp2040_get_pad_drive(16))
 //|     """
+//|
 
 //|     def __init__(self, *, start, length) -> None:
 //|         """Constructs an address range starting at ``start`` and ending at
@@ -145,6 +145,7 @@ STATIC MP_DEFINE_CONST_DICT(memorymap_addressrange_locals_dict, memorymap_addres
 //|         when possible.
 //|         All others may use multiple transactions."""
 //|         ...
+//|
 //|     @overload
 //|     def __setitem__(self, index: slice, value: ReadableBuffer) -> None: ...
 //|     @overload

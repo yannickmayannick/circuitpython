@@ -106,9 +106,9 @@ STATIC mp_obj_t socketpool_socket_bind(mp_obj_t self_in, mp_obj_t addr_in) {
         mp_raise_ValueError(MP_ERROR_TEXT("port must be >= 0"));
     }
 
-    bool ok = common_hal_socketpool_socket_bind(self, host, hostlen, (uint32_t)port);
-    if (!ok) {
-        mp_raise_ValueError(MP_ERROR_TEXT("Error: Failure to bind"));
+    size_t error = common_hal_socketpool_socket_bind(self, host, hostlen, (uint32_t)port);
+    if (error != 0) {
+        mp_raise_OSError(error);
     }
 
     return mp_const_none;
@@ -423,6 +423,26 @@ STATIC const mp_rom_map_elem_t socketpool_socket_locals_dict_table[] = {
 
 STATIC MP_DEFINE_CONST_DICT(socketpool_socket_locals_dict, socketpool_socket_locals_dict_table);
 
+STATIC mp_uint_t socket_read(mp_obj_t self_in, void *buf, mp_uint_t size, int *errorcode) {
+    socketpool_socket_obj_t *self = MP_OBJ_TO_PTR(self_in);
+    mp_int_t ret = socketpool_socket_recv_into(self, buf, size);
+    if (ret < 0) {
+        *errorcode = -ret;
+        return MP_STREAM_ERROR;
+    }
+    return ret;
+}
+
+STATIC mp_uint_t socket_write(mp_obj_t self_in, const void *buf, mp_uint_t size, int *errorcode) {
+    socketpool_socket_obj_t *self = MP_OBJ_TO_PTR(self_in);
+    mp_int_t ret = socketpool_socket_send(self, buf, size);
+    if (ret < 0) {
+        *errorcode = -ret;
+        return MP_STREAM_ERROR;
+    }
+    return ret;
+}
+
 STATIC mp_uint_t socket_ioctl(mp_obj_t self_in, mp_uint_t request, mp_uint_t arg, int *errcode) {
     socketpool_socket_obj_t *self = MP_OBJ_TO_PTR(self_in);
     mp_uint_t ret;
@@ -443,7 +463,8 @@ STATIC mp_uint_t socket_ioctl(mp_obj_t self_in, mp_uint_t request, mp_uint_t arg
 }
 
 STATIC const mp_stream_p_t socket_stream_p = {
-    MP_PROTO_IMPLEMENT(MP_QSTR_protocol_stream)
+    .read = socket_read,
+    .write = socket_write,
     .ioctl = socket_ioctl,
     .is_text = false,
 };

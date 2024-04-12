@@ -88,7 +88,7 @@ void common_hal_busio_spi_construct(busio_spi_obj_t *self,
     };
 
     if (half_duplex) {
-        mp_raise_NotImplementedError(MP_ERROR_TEXT("Half duplex SPI is not implemented"));
+        mp_raise_NotImplementedError_varg(MP_ERROR_TEXT("%q"), MP_QSTR_half_duplex);
     }
     if (slave_mode) {
         mp_raise_NotImplementedError(MP_ERROR_TEXT("Slave mode SPI is not implemented"));
