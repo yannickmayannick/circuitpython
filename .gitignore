@@ -36,6 +36,7 @@ bin/
 circuitpython-stubs/
 test-stubs/
 build-*/
+build-*
 
 # Test failure outputs
 ######################
