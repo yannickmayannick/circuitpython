@@ -218,6 +218,7 @@ void common_hal_busio_spi_construct(busio_spi_obj_t *self,
     gpio_set_pin_pull_mode(clock->number, GPIO_PULL_OFF);
     gpio_set_pin_function(clock->number, clock_pinmux);
     claim_pin(clock);
+    hri_port_set_PINCFG_DRVSTR_bit(PORT, (enum gpio_port)GPIO_PORT(clock->number), GPIO_PIN(clock->number));
     self->clock_pin = clock->number;
 
     if (mosi_none) {
@@ -228,6 +229,7 @@ void common_hal_busio_spi_construct(busio_spi_obj_t *self,
         gpio_set_pin_function(mosi->number, mosi_pinmux);
         self->MOSI_pin = mosi->number;
         claim_pin(mosi);
+        hri_port_set_PINCFG_DRVSTR_bit(PORT, (enum gpio_port)GPIO_PORT(mosi->number), GPIO_PIN(mosi->number));
     }
 
     if (miso_none) {
@@ -238,6 +240,7 @@ void common_hal_busio_spi_construct(busio_spi_obj_t *self,
         gpio_set_pin_function(miso->number, miso_pinmux);
         self->MISO_pin = miso->number;
         claim_pin(miso);
+        hri_port_set_PINCFG_DRVSTR_bit(PORT, (enum gpio_port)GPIO_PORT(miso->number), GPIO_PIN(miso->number));
     }
 
     if (slave_mode) {
@@ -246,6 +249,7 @@ void common_hal_busio_spi_construct(busio_spi_obj_t *self,
         gpio_set_pin_function(ss->number, ss_pinmux);
         self->SS_pin = ss->number;
         claim_pin(ss);
+        hri_port_set_PINCFG_DRVSTR_bit(PORT, (enum gpio_port)GPIO_PORT(ss->number), GPIO_PIN(ss->number));
     }
 
     self->running_dma.failure = 1; // not started
