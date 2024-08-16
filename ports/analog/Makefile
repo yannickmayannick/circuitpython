@@ -75,10 +75,11 @@ INC += \
 	-I$(CMSIS_ROOT)/Device/Maxim/$(MCU_VARIANT_UPPER)/Include \
 	-I$(ADI_PERIPH)/Include/$(MCU_VARIANT_UPPER) \
 	-I$(PERIPH_SRC)/SYS \
-	-I$(PERIPH_SRC)/GPIO \
 	-I$(PERIPH_SRC)/CTB \
-	-I$(PERIPH_SRC)/ICC \
 	-I$(PERIPH_SRC)/FLC \
+	-I$(PERIPH_SRC)/GPIO \
+	-I$(PERIPH_SRC)/ICC \
+	-I$(PERIPH_SRC)/RTC \
 	-I$(PERIPH_SRC)/UART \
 
 INC += -I$(CMSIS_ROOT)/Device/Maxim/$(MCU_VARIANT_UPPER)/Source/GCC
@@ -103,6 +104,8 @@ SRC_MAX32 += \
 	$(PERIPH_SRC)/GPIO/gpio_reva.c \
 	$(PERIPH_SRC)/ICC/icc_$(DIE_TYPE).c \
 	$(PERIPH_SRC)/ICC/icc_reva.c \
+	$(PERIPH_SRC)/RTC/rtc_$(DIE_TYPE).c \
+	$(PERIPH_SRC)/RTC/rtc_reva.c \
 	$(PERIPH_SRC)/UART/uart_common.c \
 	$(PERIPH_SRC)/UART/uart_$(DIE_TYPE).c \
 	$(PERIPH_SRC)/UART/uart_revb.c \

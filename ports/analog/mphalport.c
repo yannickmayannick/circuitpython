@@ -1,10 +1,15 @@
 
 #include "mphalport.h"
-#include "cmsis_gcc.h"
+#include "py/mphal.h"
 
+// includes __enable/__disable interrupts
+#include "mxc_sys.h"
 
-// TODO: Define tick & other port functions
+#include "shared-bindings/microcontroller/__init__.h"
 
+void mp_hal_delay_us(mp_uint_t delay) {
+    common_hal_mcu_delay_us(delay);
+}
 
 void mp_hal_disable_all_interrupts(void) {
     __disable_irq();

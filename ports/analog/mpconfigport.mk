@@ -11,6 +11,13 @@ USB_NUM_ENDPOINT_PAIRS ?= 0
 LONGINT_IMPL ?= MPZ
 INTERNAL_LIBM ?= 1
 
+INTERNAL_FLASH_FILESYSTEM = 1
+SPI_FLASH_FILESYSTEM = 0
+QSPI_FLASH_FILESYSTEM = 0
+
+# TODO: Review flash filesystem funcs before flashing
+DISABLE_FILESYSTEM = 0
+
 ####################################################################################
 # Suggested config for first-time porting
 ####################################################################################
@@ -31,6 +38,7 @@ CIRCUITPY_NVM = 0
 CIRCUITPY_AUDIOBUSIO = 0
 CIRCUITPY_AUDIOIO = 0
 CIRCUITPY_ROTARYIO = 0
+#todo: implement time/date based on RTC sec/subsec
 CIRCUITPY_RTC = 0
 CIRCUITPY_SDCARDIO = 0
 CIRCUITPY_FRAMEBUFFERIO = 0
@@ -60,8 +68,9 @@ CIRCUITPY_USB_HID = 0
 CIRCUITPY_USB_MIDI = 0
 # Does nothing without I2C
 CIRCUITPY_REQUIRE_I2C_PULLUPS = 0
+
 # No requirements, but takes extra flash
-CIRCUITPY_ULAB = 0
+CIRCUITPY_ULAB = 1
 ####################################################################################
 # Required for clean building (additional CircuittPython Defaults)
 ####################################################################################
@@ -76,10 +85,3 @@ CIRCUITPY_BUSDEVICE = 0
 # TinyUSB will be added later.
 CIRCUITPY_TINYUSB = 0
 CIRCUITPY_PYUSB = 0
-
-INTERNAL_FLASH_FILESYSTEM = 1
-SPI_FLASH_FILESYSTEM = 0
-QSPI_FLASH_FILESYSTEM = 0
-
-# TODO: Review flash filesystem funcs before flashing
-DISABLE_FILESYSTEM = 0

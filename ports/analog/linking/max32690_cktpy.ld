@@ -1,9 +1,9 @@
 MEMORY {
     ROM             (rx) : ORIGIN = 0x00000000,    LENGTH = 128K
     FLASH           (rx) : ORIGIN = 0x10000000,    LENGTH = 3M
-    FLASH_ISR       (rx) : ORIGIN = 0x10000000,    LENGTH = 200K
-    FLASH_FS        (rw) : ORIGIN = 0x10032000,    LENGTH = 64K
-    FLASH_FIRMWARE  (rx) : ORIGIN = 0x10042000,    LENGTH = 0x002BE000
+    FLASH_ISR       (rx) : ORIGIN = 0x10000000,    LENGTH = 16K
+    FLASH_FS        (rw) : ORIGIN = 0x10004000,    LENGTH = 64K
+    FLASH_FIRMWARE  (rx) : ORIGIN = 0x10014000,    LENGTH = 0x10030000 - 80K
     RAM            (rwx): ORIGIN = 0x20000000,    LENGTH = 1M
 }
 /* FLASH FIRMWARE: 0x10300000 (end) - 0x10042000 = 0x002BE000 */
@@ -21,14 +21,18 @@ SECTIONS {
     .isr_vector :
     {
         . = ALIGN(4);
-        KEEP(*(.isr_vector)) /* Startup code */
-        EXCLUDE_FILE (*riscv.o) *(.text*)    /* program code, exclude RISCV code */
+        /* Startup code */
+        KEEP(*(.isr_vector*))
     } >FLASH_ISR
 
     .text :
     {
         . = ALIGN(4);
         _text = .;
+
+        /* program code, exclude RISCV code */
+        EXCLUDE_FILE (*riscv.o) *(.text*)
+
         *(.rodata*)  /* read-only data: "const" */
 
         KEEP(*(.init))
@@ -142,16 +146,19 @@ SECTIONS {
      * size of stack_dummy section */
     __StackTop = ORIGIN(RAM) + LENGTH(RAM);
     __StackLimit = __StackTop - SIZEOF(.stack_dummy);
-    __estack = __StackLimit; /* Provide _estack for CktPython */
+    _estack = __StackLimit; /* Provide _estack for CktPython */
 
     .heap (COPY):
     {
         . = ALIGN(4);
+        __heap = .;
         PROVIDE ( end = . );
         PROVIDE ( _end = . );
         *(.heap*)
         __HeapLimit = ABSOLUTE(__StackLimit);
     } > RAM
+
+    __eheap = __HeapLimit;
 
     PROVIDE(__stack = __StackTop);
 

@@ -9,20 +9,41 @@
 #include "supervisor/usb.h"
 #include "supervisor/shared/stack.h"
 
-//TODO: IMPLEMENT
+#include "supervisor/max32_port.h"
 
-void port_background_task(void) {
-    return;
-}
+/** NOTE: ALL "ticks" refer to a 1/1024 s period */
+static int status_led_ticks=0;
 
+extern mxc_gpio_cfg_t led_pin[];
+extern const unsigned int num_leds;
+
+extern mxc_gpio_cfg_t pb_pin[];
+extern const unsigned int num_pbs;
+
+// This function is where port-specific background
+// tasks should be performed
+// Execute port specific actions during background tick. Only if ticks are enabled.
 void port_background_tick(void) {
-    return;
+    status_led_ticks++;
+
+    // Set an LED approx. 1/s
+    if (status_led_ticks > 1024)
+    {
+        MXC_GPIO_OutToggle(led_pin[0].port, led_pin[0].mask);
+        status_led_ticks = 0;
+    }
 }
 
+// Execute port specific actions during background tasks. This is before the
+// background callback system and happens *very* often. Use
+// port_background_tick() when possible.
+void port_background_task(void) {
+}
+
+// Take port specific actions at the beginning and end of background ticks.
+// This is used e.g., to set a monitoring pin for debug purposes.  "Actual
+// work" should be done in port_background_tick() instead.
 void port_start_background_tick(void) {
-    return;
 }
-
 void port_finish_background_tick(void) {
-    return;
 }

@@ -29,139 +29,297 @@
  */
 
 #include <stdint.h>
+#include <stdio.h>
+#include "supervisor/background_callback.h"
 #include "supervisor/board.h"
 #include "supervisor/port.h"
 
-#include <stdio.h>
-// #include "gpio.h"
-#include "mxc_assert.h"
-#include "mxc_delay.h"
-#include "mxc_device.h"
-#include "mxc_pins.h"
-#include "mxc_sys.h"
-#include "uart.h"
+#include "common-hal/microcontroller/Pin.h"
+#include "shared-bindings/microcontroller/__init__.h"
 
-/** Linker variables defined....
- *  _estack:    end of the stack
- * _ebss:       end of BSS section
- * _ezero:      same as ebss (acc. to main.c)
- */
-extern uint32_t _ezero;
-extern uint32_t _estack;
-extern uint32_t _ebss; // Stored at the end of the bss section (which includes the heap).
-extern uint32_t _ld_heap_start, _ld_heap_end, _ld_stack_top, _ld_stack_bottom;
+//todo: pack the below definitions into their own module
+//todo: under peripherals/gpio, peripherals/clocks, etc.
+
+// Sys includes
+#include "max32_port.h"
+
+// Timers
+#include "mxc_delay.h"
+#include "rtc.h"
+
+//todo: define an LED HAL
+// #include "peripherals/led.h"
+
+#ifdef MAX32690
+// Board-level setup for MAX32690
+// clang-format off
+const mxc_gpio_cfg_t pb_pin[] = {
+    { MXC_GPIO1, MXC_GPIO_PIN_27, MXC_GPIO_FUNC_IN, MXC_GPIO_PAD_NONE, MXC_GPIO_VSSEL_VDDIOH, MXC_GPIO_DRVSTR_0},
+};
+const unsigned int num_pbs = (sizeof(pb_pin) / sizeof(mxc_gpio_cfg_t));
+
+const mxc_gpio_cfg_t led_pin[] = {
+    { MXC_GPIO2, MXC_GPIO_PIN_1, MXC_GPIO_FUNC_OUT, MXC_GPIO_PAD_NONE, MXC_GPIO_VSSEL_VDDIO, MXC_GPIO_DRVSTR_0 },
+    { MXC_GPIO0, MXC_GPIO_PIN_11, MXC_GPIO_FUNC_OUT, MXC_GPIO_PAD_NONE, MXC_GPIO_VSSEL_VDDIO, MXC_GPIO_DRVSTR_0 },
+    { MXC_GPIO0, MXC_GPIO_PIN_12, MXC_GPIO_FUNC_OUT, MXC_GPIO_PAD_NONE, MXC_GPIO_VSSEL_VDDIO, MXC_GPIO_DRVSTR_0 },
+};
+const unsigned int num_leds = (sizeof(led_pin) / sizeof(mxc_gpio_cfg_t));
+// clang-format on
+#endif
+
+// For caching rtc data for ticks
+static uint32_t subsec, sec = 0;
 
 // defined by cmsis core files
-void NVIC_SystemReset(void) NORETURN;
+extern void NVIC_SystemReset(void) NORETURN;
 
 safe_mode_t port_init(void) {
+    int err = E_NO_ERROR;
+
+    // Enable GPIO (enables clocks + common init for ports)
+    for (int i = 0; i < MXC_CFG_GPIO_INSTANCES; i++){
+        err = MXC_GPIO_Init(0x1 << i);
+        if (err) {
+            return SAFE_MODE_PROGRAMMATIC;
+        }
+    }
+
+    // Init Board LEDs
+    /* setup GPIO for the LED */
+    for (int i = 0; i < num_leds; i++) {
+        // Set the output value
+        MXC_GPIO_OutClr(led_pin[i].port, led_pin[i].mask);
+
+        if (MXC_GPIO_Config(&led_pin[i]) != E_NO_ERROR) {
+            return SAFE_MODE_PROGRAMMATIC;
+        }
+    }
+
+    // Turn on one LED to indicate Sign of Life
+    MXC_GPIO_OutSet(led_pin[0].port, led_pin[0].mask);
+
+    // Init RTC w/ 0sec, 0subsec
+    // Driven by 32.768 kHz ERTCO, with ssec= 1/4096 s
+    err = MXC_RTC_Init(0, 0);
+    if (err) {
+        return SAFE_MODE_SDK_FATAL_ERROR;
+    }
+    NVIC_EnableIRQ(RTC_IRQn);
+
+    // todo: init periph clocks / console here when ready
+
+    MXC_RTC_Start();
     return SAFE_MODE_NONE;
 }
 
-void HAL_Delay(uint32_t delay_ms) {
+// Reset the MCU completely
+void reset_cpu(void) {
+    // includes MCU reset request + awaits on memory bus
+    NVIC_SystemReset();
 }
 
-uint32_t HAL_GetTick(void) {
-    return 1000;
+// Reset MCU state
+void reset_port(void) {
+    int err;
+    // Reset GPIO Ports
+    // Enable GPIO (enables clocks + common init for ports)
+    for (int i = 0; i < MXC_CFG_GPIO_INSTANCES; i++){
+        err = MXC_GPIO_Reset(0x1 << i);
+        if (err) {
+            // todo: indicate some gpio error
+            continue;
+        }
+    }
+
+    // TODO: Reset peripheral clocks
+
+    // Reset 1/1024 tick timer
+    MXC_RTC_Stop();
+    MXC_RTC_ClearFlags(0xFFFFFFFF);
+    MXC_RTC_Init(0,0);
 }
 
-void SysTick_Handler(void) {
-}
-
+// Reset to the bootloader
+// note: not implemented since max32 requires external stim ignals to
+//       activate bootloaders
+// todo: check if there's a method to jump to it
 void reset_to_bootloader(void) {
     NVIC_SystemReset();
+    while (true) {
+        asm ("nop;");
+    }
 }
 
-
-void reset_cpu(void) {
-    NVIC_SystemReset();
-}
-
-void reset_port(void) {
-    // MXC_GPIO_Reset(MXC_GPIO0);
-    // MXC_GPIO_Reset(MXC_GPIO1);
-}
-
-uint32_t *port_heap_get_bottom(void) {
-    return (uint32_t *)0xAAAAAAAA;
-}
-
-uint32_t *port_heap_get_top(void) {
-    return (uint32_t *)0xAAAAAAAF;
-}
-
+/** Acquire values of stack & heap starts & limits
+ *  Return variables defined by linkerscript.
+ */
 uint32_t *port_stack_get_limit(void) {
+    // ignore array bounds GCC warnings for stack here
     #pragma GCC diagnostic push
-
     #pragma GCC diagnostic ignored "-Warray-bounds"
-    // return port_stack_get_top() - (CIRCUITPY_DEFAULT_STACK_SIZE + CIRCUITPY_EXCEPTION_STACK_SIZE) / sizeof(uint32_t);
-    return port_stack_get_top() - (0 + 0) / sizeof(uint32_t);
+
+    // NOTE: Only return how much stack we have alloted for CircuitPython
+    return (uint32_t *)(port_stack_get_top() - (CIRCUITPY_DEFAULT_STACK_SIZE + CIRCUITPY_EXCEPTION_STACK_SIZE) / sizeof(uint32_t));
+    // return _estack;
+
+    // end GCC diagnostic disable
     #pragma GCC diagnostic pop
 }
-
 uint32_t *port_stack_get_top(void) {
-    return (uint32_t *)0xB000000;
+    return (uint32_t *)__stack;
+}
+uint32_t *port_heap_get_bottom(void) {
+    return (uint32_t *)__heap;
+}
+uint32_t *port_heap_get_top(void) {
+    return port_stack_get_limit();
 }
 
-
-// Place the word to save just after our BSS section that gets blanked.
+/** Save & retrieve a word from memory over a reset cycle.
+ *  Used for safe mode
+ */
 void port_set_saved_word(uint32_t value) {
     _ebss = value;
 }
-
 uint32_t port_get_saved_word(void) {
     return _ebss;
 }
 
-// __attribute__((used)) void MemManage_Handler(void) {
-//     reset_into_safe_mode(SAFE_MODE_HARD_FAULT);
-//     while (true) {
-//         asm ("nop;");
-//     }
-// }
-
-// __attribute__((used)) void BusFault_Handler(void) {
-//     reset_into_safe_mode(SAFE_MODE_HARD_FAULT);
-//     while (true) {
-//         asm ("nop;");
-//     }
-// }
-
-// __attribute__((used)) void UsageFault_Handler(void) {
-//     reset_into_safe_mode(SAFE_MODE_HARD_FAULT);
-//     while (true) {
-//         asm ("nop;");
-//     }
-// }
-
-// __attribute__((used)) void HardFault_Handler(void) {
-//     reset_into_safe_mode(SAFE_MODE_HARD_FAULT);
-//     while (true) {
-//         asm ("nop;");
-//     }
-// }
-
+// Raw monotonic tick count since startup.
+// NOTE (rollover):
+// seconds reg is 32 bits, can hold up to 2^32-1
+// theref. rolls over after ~136 years
 uint64_t port_get_raw_ticks(uint8_t *subticks) {
-    return 1000;
+    // Ensure we can read from ssec register as soon as we can
+    // MXC function does cross-tick / busy checking of RTC controller
+    __disable_irq();
+    MXC_RTC_GetTime(&sec, &subsec);
+    __enable_irq();
+
+    // Return ticks given total subseconds
+    // ticks = TICKS/s * s + subsec/ subs/tick
+    uint64_t raw_ticks = ((uint64_t)TICKS_PER_SEC) * sec + (subsec / SUBSEC_PER_TICK);
+
+    if (subticks) {
+        // subticks may only be filled to a resn of 1/4096 in some cases
+        // e.g. multiply by 32 / 8 = 4 to get true 1/32768 subticks
+        *subticks = (32 / (SUBSEC_PER_TICK)) * (subsec - (subsec / SUBSEC_PER_TICK));
+    }
+
+    return raw_ticks;
 }
 
 // Enable 1/1024 second tick.
 void port_enable_tick(void) {
+    MXC_RTC_Start();
 }
 
 // Disable 1/1024 second tick.
 void port_disable_tick(void) {
+    MXC_RTC_Stop();
 }
 
+// Wake the CPU after a given # of ticks or sooner
 void port_interrupt_after_ticks(uint32_t ticks) {
-    // todo: implement isr after rtc ticks
+    // Stop RTC & store current time & ticks
+    port_disable_tick();
+    port_get_raw_ticks(NULL);
+
+    uint32_t target_sec = (ticks / TICKS_PER_SEC);
+    uint32_t target_ssec = (ticks - (target_sec * TICKS_PER_SEC)) * SUBSEC_PER_TICK;
+
+    // Set up alarm configuration
+    // if alarm is greater than 1 s,
+    //     use the ToD alarm --> resol. to closest second
+    // else
+    //     use Ssec alarm --> resn. to 1/1024 s. (down to a full tick)
+    if (target_sec > 0) {
+        if (MXC_RTC_DisableInt(MXC_F_RTC_CTRL_SSEC_ALARM_IE |
+                                MXC_F_RTC_CTRL_TOD_ALARM_IE) == E_BUSY) {
+            // todo: signal some RTC error!
+        }
+
+        if (MXC_RTC_SetTimeofdayAlarm(target_sec) != E_NO_ERROR) {
+            // todo: signal some RTC error!
+        }
+        if (MXC_RTC_EnableInt(MXC_F_RTC_CTRL_TOD_ALARM_IE) == E_BUSY) {
+            // todo: signal some RTC error!
+        }
+    }
+    else {
+        if (MXC_RTC_DisableInt(MXC_F_RTC_CTRL_SSEC_ALARM_IE |
+                                MXC_F_RTC_CTRL_TOD_ALARM_IE) == E_BUSY) {
+            // todo: signal some RTC error!
+        }
+
+        if (MXC_RTC_SetSubsecondAlarm(target_ssec) != E_NO_ERROR) {
+            // todo: signal some RTC error!
+        }
+
+        if (MXC_RTC_EnableInt(MXC_F_RTC_CTRL_SSEC_ALARM_IE) == E_BUSY) {
+            // todo: signal some RTC error!
+        }
+    }
+    port_enable_tick();
+}
+
+void RTC_IRQHandler(void) {
+    // Read flags to clear
+    int flags = MXC_RTC_GetFlags();
+
+    if (flags & MXC_F_RTC_CTRL_TOD_ALARM) {
+        MXC_RTC_ClearFlags(MXC_F_RTC_CTRL_TOD_ALARM);
+        while (MXC_RTC_DisableInt(MXC_F_RTC_CTRL_TOD_ALARM_IE) == E_BUSY) {}
+    }
+
+    if (flags & MXC_F_RTC_CTRL_SSEC_ALARM) {
+        MXC_RTC_ClearFlags(MXC_F_RTC_CTRL_SSEC_ALARM);
+        while (MXC_RTC_DisableInt(MXC_F_RTC_CTRL_SSEC_ALARM_IE) == E_BUSY) {}
+    }
 }
 
 void port_idle_until_interrupt(void) {
-    __WFI();
+    // Check if alarm triggers before we even got here
+    if (MXC_RTC_GetFlags() == (MXC_F_RTC_CTRL_TOD_ALARM | MXC_F_RTC_CTRL_SSEC_ALARM)) {
+        return;
+    }
+
+    common_hal_mcu_disable_interrupts();
+    if (!background_callback_pending()) {
+        __WFI();
+    }
+    common_hal_mcu_enable_interrupts();
 }
 
-// Required by __libc_init_array in startup code if we are compiling using
-// -nostdlib/-nostartfiles.
+__attribute__((used)) void MemManage_Handler(void) {
+    reset_into_safe_mode(SAFE_MODE_HARD_FAULT);
+    while (true) {
+        asm ("nop;");
+    }
+}
+
+__attribute__((used)) void BusFault_Handler(void) {
+    reset_into_safe_mode(SAFE_MODE_HARD_FAULT);
+    while (true) {
+        asm ("nop;");
+    }
+}
+
+__attribute__((used)) void UsageFault_Handler(void) {
+    reset_into_safe_mode(SAFE_MODE_HARD_FAULT);
+    while (true) {
+        asm ("nop;");
+    }
+}
+
+__attribute__((used)) void HardFault_Handler(void) {
+    reset_into_safe_mode(SAFE_MODE_HARD_FAULT);
+    while (true) {
+        asm ("nop;");
+    }
+}
+
+// Required by libc _init_array loops in startup code
+// if we are compiling using "-nostdlib/-nostartfiles"
 void _init(void) {
 }
