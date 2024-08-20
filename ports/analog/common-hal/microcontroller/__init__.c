@@ -22,24 +22,20 @@
 
 
 #include "max32690.h"
+#include "mxc_delay.h"
+
 /** NOTE: It is not advised to directly include the below!
  * These are includes taken care of by the core cmsis file.
  * e.g. "max32690.h". Since CMSIS is compiled as lib, these are
  * included there as <core_cm4.h> for example.
 */
-// #include "core_cmFunc.h"    // For enable/disable interrupts
-// #include "core_cm4.h"       // For NVIC_SystemReset
-// #include "core_cmInstr.h"   // For __DMB Data Memory Barrier
+// #include <core_cmFunc.h>    // For enable/disable interrupts
+// #include <core_cm4.h>       // For NVIC_SystemReset
+// #include <core_cmInstr.h>   // For __DMB Data Memory Barrier (flush DBUS activity)
 
 void common_hal_mcu_delay_us(uint32_t delay) {
-    // uint32_t ticks_per_us = HAL_RCC_GetSysClockFreq() / 1000000UL;
-    // delay *= ticks_per_us;
-    // SysTick->VAL = 0UL;
-    // SysTick->LOAD = delay;
-    // SysTick->CTRL = SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk;
-    // while ((SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk) == 0) {
-    // }
-    // SysTick->CTRL = 0UL;
+
+    MXC_Delay(MXC_DELAY_USEC(delay));
 }
 
 volatile uint32_t nesting_count = 0;
@@ -59,7 +55,7 @@ void common_hal_mcu_enable_interrupts(void) {
     if (nesting_count > 0) {
         return;
     }
-    __DMB();
+    __DMB(); // flush internal DBUS before proceeding
     __enable_irq();
 }
 
@@ -75,7 +71,6 @@ void common_hal_mcu_on_next_reset(mcu_runmode_t runmode) {
 }
 
 void common_hal_mcu_reset(void) {
-
     if (next_reset_to_bootloader) {
         reset_to_bootloader();
     } else {
@@ -398,6 +393,8 @@ static const mp_rom_map_elem_t mcu_pin_global_dict_table[] = {
 };
 MP_DEFINE_CONST_DICT(mcu_pin_globals, mcu_pin_global_dict_table);
 
+
+/** NOTE: Not implemented yet */
 // #if CIRCUITPY_INTERNAL_NVM_SIZE > 0
 // // The singleton nvm.ByteArray object.
 // const nvm_bytearray_obj_t common_hal_mcu_nvm_obj = {

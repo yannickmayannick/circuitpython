@@ -5,6 +5,24 @@
 // SPDX-License-Identifier: MIT
 
 #include "supervisor/board.h"
+#include "supervisor/port.h"
+#include "mpconfigboard.h"
+#include "max32_port.h"
+
+// Board-level setup for MAX32690
+// clang-format off
+const mxc_gpio_cfg_t pb_pin[] = {
+    { MXC_GPIO1, MXC_GPIO_PIN_27, MXC_GPIO_FUNC_IN, MXC_GPIO_PAD_NONE, MXC_GPIO_VSSEL_VDDIOH, MXC_GPIO_DRVSTR_0},
+};
+const int num_pbs = (sizeof(pb_pin) / sizeof(mxc_gpio_cfg_t));
+
+const mxc_gpio_cfg_t led_pin[] = {
+    { MXC_GPIO2, MXC_GPIO_PIN_1, MXC_GPIO_FUNC_OUT, MXC_GPIO_PAD_NONE, MXC_GPIO_VSSEL_VDDIO, MXC_GPIO_DRVSTR_0 },
+    { MXC_GPIO0, MXC_GPIO_PIN_11, MXC_GPIO_FUNC_OUT, MXC_GPIO_PAD_NONE, MXC_GPIO_VSSEL_VDDIO, MXC_GPIO_DRVSTR_0 },
+    { MXC_GPIO0, MXC_GPIO_PIN_12, MXC_GPIO_FUNC_OUT, MXC_GPIO_PAD_NONE, MXC_GPIO_VSSEL_VDDIO, MXC_GPIO_DRVSTR_0 },
+};
+const int num_leds = (sizeof(led_pin) / sizeof(mxc_gpio_cfg_t));
+// clang-format on
 
 // DEFAULT:  Using the weak-defined supervisor/shared/board.c functions
 
@@ -15,7 +33,23 @@
 // bool board_requests_safe_mode(void);
 
 // Initializes board related state once on start up.
-// void board_init(void);
+void board_init(void) {
+    // Enable GPIO (enables clocks + common init for ports)
+    for (int i = 0; i < MXC_CFG_GPIO_INSTANCES; i++){
+        MXC_GPIO_Init(0x1 << i);
+    }
+
+    // Init Board LEDs
+    /* setup GPIO for the LED */
+    for (int i = 0; i < num_leds; i++) {
+        // Set the output value
+        MXC_GPIO_OutClr(led_pin[i].port, led_pin[i].mask);
+        MXC_GPIO_Config(&led_pin[i]);
+    }
+
+    // Turn on one LED to indicate Sign of Life
+    MXC_GPIO_OutSet(led_pin[2].port, led_pin[2].mask);
+}
 
 // Reset the state of off MCU components such as neopixels.
 // void reset_board(void);
@@ -24,4 +58,5 @@
 // state. It should not prevent the user access method from working (such as
 // disabling USB, BLE or flash) because CircuitPython may continue to run.
 // void board_deinit(void);
+
 /*******************************************************************/

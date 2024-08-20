@@ -47,25 +47,18 @@
 #include "mxc_delay.h"
 #include "rtc.h"
 
+// Externs defined by linker .ld file
+extern uint32_t _stack, _heap, _estack, _eheap;
+extern uint32_t _ebss;
+
+// From boards/$(BOARD)/board.c
+extern const mxc_gpio_cfg_t pb_pin[];
+extern const int num_pbs;
+extern const mxc_gpio_cfg_t led_pin[];
+extern const int num_leds;
+
 //todo: define an LED HAL
 // #include "peripherals/led.h"
-
-#ifdef MAX32690
-// Board-level setup for MAX32690
-// clang-format off
-const mxc_gpio_cfg_t pb_pin[] = {
-    { MXC_GPIO1, MXC_GPIO_PIN_27, MXC_GPIO_FUNC_IN, MXC_GPIO_PAD_NONE, MXC_GPIO_VSSEL_VDDIOH, MXC_GPIO_DRVSTR_0},
-};
-const unsigned int num_pbs = (sizeof(pb_pin) / sizeof(mxc_gpio_cfg_t));
-
-const mxc_gpio_cfg_t led_pin[] = {
-    { MXC_GPIO2, MXC_GPIO_PIN_1, MXC_GPIO_FUNC_OUT, MXC_GPIO_PAD_NONE, MXC_GPIO_VSSEL_VDDIO, MXC_GPIO_DRVSTR_0 },
-    { MXC_GPIO0, MXC_GPIO_PIN_11, MXC_GPIO_FUNC_OUT, MXC_GPIO_PAD_NONE, MXC_GPIO_VSSEL_VDDIO, MXC_GPIO_DRVSTR_0 },
-    { MXC_GPIO0, MXC_GPIO_PIN_12, MXC_GPIO_FUNC_OUT, MXC_GPIO_PAD_NONE, MXC_GPIO_VSSEL_VDDIO, MXC_GPIO_DRVSTR_0 },
-};
-const unsigned int num_leds = (sizeof(led_pin) / sizeof(mxc_gpio_cfg_t));
-// clang-format on
-#endif
 
 // For caching rtc data for ticks
 static uint32_t subsec, sec = 0;
@@ -96,7 +89,7 @@ safe_mode_t port_init(void) {
     }
 
     // Turn on one LED to indicate Sign of Life
-    MXC_GPIO_OutSet(led_pin[0].port, led_pin[0].mask);
+    MXC_GPIO_OutSet(led_pin[2].port, led_pin[2].mask);
 
     // Init RTC w/ 0sec, 0subsec
     // Driven by 32.768 kHz ERTCO, with ssec= 1/4096 s
@@ -120,23 +113,9 @@ void reset_cpu(void) {
 
 // Reset MCU state
 void reset_port(void) {
-    int err;
-    // Reset GPIO Ports
-    // Enable GPIO (enables clocks + common init for ports)
-    for (int i = 0; i < MXC_CFG_GPIO_INSTANCES; i++){
-        err = MXC_GPIO_Reset(0x1 << i);
-        if (err) {
-            // todo: indicate some gpio error
-            continue;
-        }
-    }
+    reset_all_pins();
 
-    // TODO: Reset peripheral clocks
-
-    // Reset 1/1024 tick timer
-    MXC_RTC_Stop();
-    MXC_RTC_ClearFlags(0xFFFFFFFF);
-    MXC_RTC_Init(0,0);
+    // todo: may need rtc-related resets here later
 }
 
 // Reset to the bootloader
@@ -154,22 +133,19 @@ void reset_to_bootloader(void) {
  *  Return variables defined by linkerscript.
  */
 uint32_t *port_stack_get_limit(void) {
-    // ignore array bounds GCC warnings for stack here
+    // ignore array bounds GCC warnings
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Warray-bounds"
 
     // NOTE: Only return how much stack we have alloted for CircuitPython
-    return (uint32_t *)(port_stack_get_top() - (CIRCUITPY_DEFAULT_STACK_SIZE + CIRCUITPY_EXCEPTION_STACK_SIZE) / sizeof(uint32_t));
-    // return _estack;
-
-    // end GCC diagnostic disable
+    return port_stack_get_top() - (CIRCUITPY_DEFAULT_STACK_SIZE + CIRCUITPY_EXCEPTION_STACK_SIZE) / sizeof(uint32_t);
     #pragma GCC diagnostic pop
 }
 uint32_t *port_stack_get_top(void) {
-    return (uint32_t *)__stack;
+    return &_stack;
 }
 uint32_t *port_heap_get_bottom(void) {
-    return (uint32_t *)__heap;
+    return &_heap;
 }
 uint32_t *port_heap_get_top(void) {
     return port_stack_get_limit();

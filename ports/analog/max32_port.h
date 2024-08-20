@@ -4,10 +4,18 @@
 
 #include <stdint.h>
 
-#include "mxc_sys.h"
-#include "mxc_pins.h"
-#include "gpio.h"
 #include "mxc_assert.h"
+#include "mxc_delay.h"
+#include "mxc_device.h"
+#include "mxc_pins.h"
+#include "mxc_sys.h"
+
+#include "gpio.h"
+
+#ifdef MQAX32690
+#include "system_max32690.h"
+#include "max32690.h"
+#endif
 
 /** Linker variables defined....
  *  _estack:    end of the stack
