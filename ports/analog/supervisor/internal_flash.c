@@ -26,11 +26,11 @@
 #include "mxc_device.h"
 
 /** TODO:
- *      - Verify all necessary Filesystem MACROs are defined in mpconfigport.h
+ *      Test!
  *
  *  NOTE:
  *      ANY function which modifies flash contents must execute from a crit section.
- *      This is because FLC functions are loc'd in RAM, and any ISR executing
+ *      This is because FLC functions are loc'd in RAM, and an ISR executing
  *      from Flash will trigger a HardFault.
  *
  *      An alternative would be to initialize with NVIC_SetRAM(),
@@ -54,10 +54,14 @@ typedef struct {
 } flash_layout_t;
 
 #ifdef MAX32690
+// struct layout is the actual layout of flash
+// FS Code will use INTERNAL_FLASH_FILESYSTEM_START_ADDR
+// and won't conflict with ISR vector in first 16 KiB of flash
 static const flash_layout_t flash_layout[] = {
-    { 0x1000000, 0x4000, 192},
-    { 0x1030000, 0x2000, 32 },
+    { 0x10000000, 0x4000, 192},
+    // { 0x10300000, 0x2000, 32 }, // RISC-V flash
 };
+// Cache a full 16K sector
 static uint8_t _flash_cache[0x4000] __attribute__((aligned(4)));
 #endif
 
@@ -65,12 +69,13 @@ static uint8_t _flash_cache[0x4000] __attribute__((aligned(4)));
 static uint32_t _cache_addr_in_flash = NO_CACHE;
 
 static inline int32_t block2addr(uint32_t block) {
-    if (block > 0 && block < INTERNAL_FLASH_FILESYSTEM_NUM_BLOCKS) {
+    if (block >= 0 && block < INTERNAL_FLASH_FILESYSTEM_NUM_BLOCKS) {
         return CIRCUITPY_INTERNAL_FLASH_FILESYSTEM_START_ADDR + block * FILESYSTEM_BLOCK_SIZE;
     }
     else return -1;
 }
 
+// Get index, start addr, & size of the flash sector where addr lies
 int flash_get_sector_info(uint32_t addr, uint32_t *start_addr, uint32_t *size) {
     // This function should return -1 in the event of errors.
     if (addr >= flash_layout[0].base_addr) {
@@ -78,17 +83,24 @@ int flash_get_sector_info(uint32_t addr, uint32_t *start_addr, uint32_t *size) {
         if (MP_ARRAY_SIZE(flash_layout) == 1) {
             sector_index = (addr - flash_layout[0].base_addr) / flash_layout[0].sector_size;
             if (sector_index >= flash_layout[0].num_sectors) {
-                return -1;
+                return -1; // addr is not in flash
             }
             if (start_addr) {
                 *start_addr = flash_layout[0].base_addr + (sector_index * flash_layout[0].sector_size);
             }
+            else {
+                return -1; // start_addr is NULL
+            }
             if (size) {
                 *size = flash_layout[0].sector_size;
+            }
+            else {
+                return -1; //size is NULL
             }
             return sector_index;
         }
 
+        // algorithm for multiple flash sections
         for (uint8_t i = 0; i < MP_ARRAY_SIZE(flash_layout); ++i) {
             for (uint8_t j = 0; j < flash_layout[i].num_sectors; ++j) {
                 uint32_t sector_start_next = flash_layout[i].base_addr
@@ -123,7 +135,7 @@ uint32_t supervisor_flash_get_block_count(void) {
     return INTERNAL_FLASH_FILESYSTEM_NUM_BLOCKS;
 }
 
-// Flush the flash page that is currently cached
+// Write back to Flash the page that is currently cached
 void port_internal_flash_flush(void) {
     // Flash has not been cached
     if (_cache_addr_in_flash == NO_CACHE) {
@@ -186,10 +198,11 @@ void port_internal_flash_flush(void) {
 
         // Lock flash & exit
         MXC_FLC0->ctrl = (MXC_FLC0->ctrl & ~MXC_F_FLC_REVA_CTRL_UNLOCK) | MXC_S_FLC_REVA_CTRL_UNLOCK_LOCKED;
-    }
-
+    } // finished flushing cache
+    // todo: verify no other flash operation (e.g. flushing HW cache) is needed to complete this
 }
 
+// Read flash blocks, using cache if it contains the right data
 mp_uint_t supervisor_flash_read_blocks(uint8_t *dest, uint32_t block, uint32_t num_blocks) {
     // Find the address of the block we want to read
     int src_addr = block2addr(block);
@@ -208,9 +221,10 @@ mp_uint_t supervisor_flash_read_blocks(uint8_t *dest, uint32_t block, uint32_t n
     uint32_t blocks_in_sector = (sector_size - (src_addr - sector_start)) / FILESYSTEM_BLOCK_SIZE;
 
     // If the whole read is inside the cache, then read cache
-    if (num_blocks <= blocks_in_sector && _cache_addr_in_flash == sector_start) {
+    if ( (num_blocks <= blocks_in_sector) && (_cache_addr_in_flash == sector_start) ) {
         memcpy(dest, (_flash_cache + (src_addr - sector_start)), FILESYSTEM_BLOCK_SIZE * num_blocks);
     } else {
+        // flush the cache & read the flash data directly
         supervisor_flash_flush();
         /** NOTE:   The MXC_FLC_Read function executes from SRAM and does some more error checking
         *          than memcpy does. Will use it for now.
@@ -220,6 +234,9 @@ mp_uint_t supervisor_flash_read_blocks(uint8_t *dest, uint32_t block, uint32_t n
     return 0; // success
 }
 
+// Write to flash blocks, using cache if it is targeting the right page (and large enough)
+// todo: most of this fn is taken from the ST driver.
+// todo: look at other ports and see if I can adapt it at all
 mp_uint_t supervisor_flash_write_blocks(const uint8_t *src, uint32_t block_num, uint32_t num_blocks) {
     uint32_t count=0;
     uint32_t sector_size=0;
@@ -251,7 +268,7 @@ mp_uint_t supervisor_flash_write_blocks(const uint8_t *src, uint32_t block_num, 
 
         // if we're not at the start of a sector, copy the whole sector to cache
         if (_cache_addr_in_flash != sector_start) {
-            // Flush cache first
+            // Flush cache first before we overwrite it
             supervisor_flash_flush();
 
             _cache_addr_in_flash = sector_start;
@@ -270,10 +287,13 @@ mp_uint_t supervisor_flash_write_blocks(const uint8_t *src, uint32_t block_num, 
     return 0; // success
 }
 
+// Empty the fs cache
 void supervisor_flash_release_cache(void) {
-    // Flush the cache for ARM M4
+    // Invalidate the current FS cache
+    _cache_addr_in_flash = NO_CACHE;
+
+    // Flush the hardware cache for ARM M4
     MXC_ICC_Flush(MXC_ICC0);
-    MXC_ICC_Flush(MXC_ICC1);
 
     // Clear the line fill buffer by reading 2 pages from flash
     volatile uint32_t *line_addr;
@@ -283,7 +303,4 @@ void supervisor_flash_release_cache(void) {
     line_addr = (uint32_t *)(MXC_FLASH_MEM_BASE + MXC_FLASH_PAGE_SIZE);
     line = *line_addr;
     (void)line; // Silence build warnings that this variable is not used.
-
-    // Invalidate the current cache
-    _cache_addr_in_flash = NO_CACHE;
 }

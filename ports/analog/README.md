@@ -45,8 +45,6 @@ This requires the following:
 - The PICO board is connected to the target board via a 10-pin SWD ribbon cable.
   - If SWD connectors are not keyed, the P1 indicator (red line) on the SWD ribbon cable should match the P1 indicator on the board silkscreen near the 10-pin SWD connector.
 
-[**Section in Progress.**]
-
 ### Using the REPL
 
-[**Section in Progress. Review & Testing are needed.**]
+[**Section in Progress. USB support needs implementation & test.**]

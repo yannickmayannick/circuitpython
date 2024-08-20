@@ -12,11 +12,8 @@
 #define MICROPY_PY_FUNCTION_ATTRS                (1)
 #define MICROPY_PY_REVERSE_SPECIAL_METHODS       (1)
 
-
-// 24kiB stack
+// 24KiB stack
 #define CIRCUITPY_DEFAULT_STACK_SIZE            0x6000
-// uint8_t _ld_default_stack_size;
-// #define CIRCUITPY_DEFAULT_STACK_SIZE            ((uint32_t)&_ld_default_stack_size)
 
 // Also includes mpconfigboard.h
 #include "py/circuitpy_mpconfig.h"

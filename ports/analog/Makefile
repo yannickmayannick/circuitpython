@@ -76,9 +76,11 @@ INC += \
 	-I$(ADI_PERIPH)/Include/$(MCU_VARIANT_UPPER) \
 	-I$(PERIPH_SRC)/SYS \
 	-I$(PERIPH_SRC)/CTB \
+	-I$(PERIPH_SRC)/DMA \
 	-I$(PERIPH_SRC)/FLC \
 	-I$(PERIPH_SRC)/GPIO \
 	-I$(PERIPH_SRC)/ICC \
+	-I$(PERIPH_SRC)/TMR \
 	-I$(PERIPH_SRC)/RTC \
 	-I$(PERIPH_SRC)/UART \
 
@@ -96,6 +98,9 @@ SRC_MAX32 += \
 	$(PERIPH_SRC)/CTB/ctb_$(DIE_TYPE).c \
 	$(PERIPH_SRC)/CTB/ctb_reva.c \
 	$(PERIPH_SRC)/CTB/ctb_common.c \
+	$(PERIPH_SRC)/DMA/dma_reva.c \
+	$(PERIPH_SRC)/DMA/dma_revb.c \
+	$(PERIPH_SRC)/DMA/dma_$(DIE_TYPE).c \
 	$(PERIPH_SRC)/FLC/flc_common.c \
 	$(PERIPH_SRC)/FLC/flc_$(DIE_TYPE).c \
 	$(PERIPH_SRC)/FLC/flc_reva.c \
@@ -106,6 +111,9 @@ SRC_MAX32 += \
 	$(PERIPH_SRC)/ICC/icc_reva.c \
 	$(PERIPH_SRC)/RTC/rtc_$(DIE_TYPE).c \
 	$(PERIPH_SRC)/RTC/rtc_reva.c \
+	$(PERIPH_SRC)/TMR/tmr_common.c \
+	$(PERIPH_SRC)/TMR/tmr_revb.c \
+	$(PERIPH_SRC)/TMR/tmr_$(DIE_TYPE).c \
 	$(PERIPH_SRC)/UART/uart_common.c \
 	$(PERIPH_SRC)/UART/uart_$(DIE_TYPE).c \
 	$(PERIPH_SRC)/UART/uart_revb.c \
@@ -126,7 +134,7 @@ STARTUPFILE = $(CMSIS_ROOT)/Device/Maxim/$(MCU_VARIANT_UPPER)/Source/GCC/startup
 
 # CircuitPython custom linkerfile (necessary for build steps & filesystems)
 LINKERFILE = linking/$(MCU_VARIANT_LOWER)_cktpy.ld
-LDFLAGS += -nostartfiles -specs=nosys.specs -specs=nano.specs
+LDFLAGS += -nostartfiles -specs=nano.specs
 endif
 
 SRC_S += supervisor/cpu.s \
@@ -137,13 +145,14 @@ CFLAGS += -D$(MCU_VARIANT_UPPER) \
 			-DTARGET_REV=0x4131 \
 			-DTARGET=$(MCU_VARIANT_UPPER) \
 			-DIAR_PRAGMAS=0 \
+			-DRISCV_LOAD=0 \
 			# -DFLASH_ORIGIN=0x10000000 \
 			# -DFLASH_SIZE=0x340000 \
 			# -DSRAM_ORIGIN=0x20000000 \
 			# -DSRAM_SIZE=0x100000 \
 
 CPU_CORE=cortex-m4
-CFLAGS += -mthumb -mcpu=$(CPU_CORE) -mfloat-abi=hard -mfpu=fpv4-sp-d16
+CFLAGS += -mthumb -mcpu=$(CPU_CORE) -mfloat-abi=softfp -mfpu=fpv4-sp-d16
 
 # NOTE: Start with DEBUG ONLY settings for now
 ifeq ($(DEBUG),)
@@ -154,7 +163,7 @@ ifeq ($(DEBUG),1)
 CFLAGS += -ggdb3
 COPT = -Og
 else
-COPT += -O2
+COPT += -O0 #opt completely off to start
 endif
 
 
@@ -165,9 +174,9 @@ CFLAGS += \
 
 # TODO: Add for TinyUSB once our PR goes through for MAX32 devices
 # Add TinyUSB
-# INC += -I../../lib/tinyusb/src
-# INC += -I../../supervisor/shared/usb
-# SRC_C += lib/tinyusb/src/portable/mentor/musb/dcd_musb.c
+INC += -I../../lib/tinyusb/src
+INC += -I../../supervisor/shared/usb
+SRC_C += lib/tinyusb/src/portable/mentor/musb/dcd_musb.c
 
 SRC_C += \
 	boards/$(BOARD)/board.c \
@@ -182,13 +191,14 @@ CFLAGS += -Wno-error=unused-parameter \
 			-Wno-error=sign-compare \
 			-Wno-error=strict-prototypes \
 			-Wno-error=cast-qual \
-			-Wno-unused-variable \
-			-Wno-lto-type-mismatch \
-			-Wno-cast-align \
-			-Wno-nested-externs \
-			-Wno-sign-compare
+			-Wno-error=unused-variable \
+			-Wno-error=lto-type-mismatch \
+			-Wno-error=cast-align \
+			-Wno-error=nested-externs \
+			-Wno-error=sign-compare \
 
-LDFLAGS += $(CFLAGS) -Wl,-nostdlib -Wl,-T,$(LINKERFILE) -Wl,-Map=$@.map -Wl,-cref -Wl,-gc-sections
+ENTRY = Reset_Handler
+LDFLAGS += $(CFLAGS) --entry $(ENTRY) -Wl,-nostdlib -Wl,-T,$(LINKERFILE) -Wl,-Map=$@.map -Wl,-cref -Wl,-gc-sections
 LIBS := -lgcc -lc
 
 # If not using CKTPY mathlib, use toolchain mathlib
@@ -234,7 +244,7 @@ SRC_QSTR += $(SRC_C) $(SRC_SUPERVISOR) $(SRC_CIRCUITPY_COMMON) \
 SRC_QSTR_PREPROCESSOR +=
 
 # Default build target
-all: $(BUILD)/firmware.elf
+all: $(BUILD)/firmware.elf $(BUILD)/firmware.hex $(BUILD)/firmware.bin
 
 clean-max32:
 	rm -rf build-*
@@ -247,17 +257,31 @@ MAXIM_PATH := $(subst \,/,$(MAXIM_PATH))
 flash-msdk:
 	$(MAXIM_PATH)/Tools/OpenOCD/openocd -s $(MAXIM_PATH)/Tools/OpenOCD/scripts \
 		-f interface/cmsis-dap.cfg -f target/$(MCU_VARIANT_LOWER).cfg \
-		-c "program $(BUILD)/$(PROJECT).elf verify; init; reset; exit"
+		-c "program $(BUILD)/firmware.elf verify; init; reset; exit"
 
 # flash target using JLink
 JLINK_DEVICE = $(MCU_VARIANT_LOWER)
-flash: flash-jlink
 
-$(BUILD)/firmware.elf: $(OBJ) $(LINKERFILE)
+JLINKEXE 		?= JLink.exe
+JLINKEXE     	+= -if SWD -device ${JLINK_DEVICE} -speed 10000
+COMMAND_FILE 	:= tools/flash_max32.jlink
+
+flash-jlink: $(BUILD)/firmware.bin
+	@$(JLINKEXE) -device $(MCU_VARIANT_UPPER) -NoGui 1 -CommandFile ${COMMAND_FILE}
+
+$(BUILD)/firmware.elf: $(OBJ)
 	$(STEPECHO) "LINK $@"
-	$(Q)echo $(OBJ) > $(BUILD)/firmware.objs
+	$(Q)echo $^ > $(BUILD)/firmware.objs
 	$(Q)$(CC) -o $@ $(LDFLAGS) @$(BUILD)/firmware.objs -Wl,--print-memory-usage -Wl,--start-group $(LIBS) -Wl,--end-group
 	$(Q)$(SIZE) $@ | $(PYTHON) $(TOP)/tools/build_memory_info.py $(LINKERFILE) $(BUILD)
+
+$(BUILD)/firmware.hex: $(BUILD)/firmware.elf
+	$(STEPECHO) "Create $@"
+	$(Q)$(OBJCOPY) -O ihex $^ $@
+
+$(BUILD)/firmware.bin: $(BUILD)/firmware.elf
+	$(STEPECHO) "Create $@"
+	$(Q)$(OBJCOPY) -O binary $^ $@
 
 # *******************************************************************************
 ### CKTPY BUILD RULES ###

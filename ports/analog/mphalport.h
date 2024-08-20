@@ -10,8 +10,7 @@
 #include "lib/oofatfs/ff.h"
 #include "supervisor/shared/tick.h"
 
-// TODO: Define tick & other port functions
-// Global millisecond tick count (driven by SysTick interrupt).
+// Global millisecond tick count
 static inline mp_uint_t mp_hal_ticks_ms(void) {
     return supervisor_ticks_ms32();
 }
