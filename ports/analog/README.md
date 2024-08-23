@@ -9,7 +9,8 @@ This port brings CircuitPython to ADI's "MAX32" series of microcontrollers. Thes
 - **`linking/:`** Linkerfiles customized for CircuitPython. These are distinct from the linkerfiles used in MSDK as they adopt the structure required by CircuitPython. They may also omit unused features and memory sections, e.g. Mailboxes, RISC-V Flash, & Hyperbus RAM for MAX32690.
 - **`msdk:/`** SDK for MAX32 devices. More info on our GitHub: [Analog Devices MSDK GitHub](https://github.com/analogdevicesinc/msdk)
 - **`peripherals:/`** Helper files for peripherals such as clocks, gpio, etc. These files tend to be specific to vendor SDKs and provide some useful functions for the common-hal interfaces.
-- **`supervisor/:`** Implementation files for the CircuitPython supervisor. This includes port setup, usb, and a filesystem on a storage medium such as SD Card/eMMC, QSPI Flash, or internal flash memory. Currently the internal flash is used.
+- **`supervisor/:`** Implementation files for the CircuitPython supervisor. This includes port setup, usb, and a filesystem on a storage medium such as SD Card/eMMC, QSPI Flash, or internal flash memory. Currently the internal flash is used. This folder is the most important part of a port's core functionality for CircuitPython.
+- **`supervisor/port.c:`** Port-specific startup code including clock initialization, console startup, etc.
 
 - `. :` Build system and high-level interface to the CircuitPython core for the ADI port.
 

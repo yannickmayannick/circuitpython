@@ -15,22 +15,27 @@ INTERNAL_FLASH_FILESYSTEM = 1
 SPI_FLASH_FILESYSTEM = 0
 QSPI_FLASH_FILESYSTEM = 0
 
-# TODO: TEST filesystem & general bringup!
+# TODO: Test/Debug fs & general bringup
 DISABLE_FILESYSTEM = 0
+
+# TODO: Test/Debug TinyUSB!
+# Builds clean; need to test
+CIRCUITPY_TINYUSB = 1
+CIRCUITPY_USB_DEVICE ?= 1
+CIRCUITPY_USB_CDC ?= 1
+CIRCUITPY_USB_HID ?= 0
+CIRCUITPY_USB_MIDI ?= 0
 
 ####################################################################################
 # Suggested config for first-time porting
 ####################################################################################
 # These modules are implemented in ports/<port>/common-hal:
 
-# Typically the first module to create
-CIRCUITPY_MICROCONTROLLER ?= 1
 # Typically the second module to create
 CIRCUITPY_DIGITALIO ?= 0
 
 # Plan to implement
 CIRCUITPY_BUSIO ?= 0
-CIRCUITPY_OS ?= 1
 CIRCUITPY_RTC ?= 0
 
 # Other modules (may or may not implement):
@@ -58,17 +63,10 @@ CIRCUITPY_BITBANGIO ?= 0
 CIRCUITPY_PIXELBUF ?= 0
 # Requires OS
 CIRCUITPY_RANDOM ?= 0
-# Requires OS, filesystem
-CIRCUITPY_STORAGE ?= 0
 # Requires Microcontroller
 CIRCUITPY_TOUCHIO ?= 0
 # Requires UART
 CIRCUITPY_CONSOLE_UART ?= 0
-# Requires USB
-CIRCUITPY_USB_DEVICE ?= 0
-CIRCUITPY_USB_CDC ?= 0
-CIRCUITPY_USB_HID ?= 0
-CIRCUITPY_USB_MIDI ?= 0
 # Does nothing without I2C
 CIRCUITPY_REQUIRE_I2C_PULLUPS = 0
 
@@ -83,7 +81,3 @@ CIRCUITPY_ULAB = 1
 CIRCUITPY_BLEIO_HCI = 0
 CIRCUITPY_KEYPAD = 0
 CIRCUITPY_BUSDEVICE = 0
-
-# TinyUSB will be added later.
-CIRCUITPY_TINYUSB = 0
-CIRCUITPY_PYUSB = 0

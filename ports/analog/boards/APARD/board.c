@@ -32,8 +32,21 @@ const int num_leds = (sizeof(led_pin) / sizeof(mxc_gpio_cfg_t));
 // way.
 // bool board_requests_safe_mode(void);
 
+volatile uint32_t system_ticks = 0;
+
+void SysTick_Handler(void) {
+  system_ticks++;
+}
+
+uint32_t board_millis(void) {
+  return system_ticks;
+}
+
 // Initializes board related state once on start up.
 void board_init(void) {
+    // 1ms tick timer
+    SysTick_Config(SystemCoreClock / 1000);\
+
     // Enable GPIO (enables clocks + common init for ports)
     for (int i = 0; i < MXC_CFG_GPIO_INSTANCES; i++){
         MXC_GPIO_Init(0x1 << i);
