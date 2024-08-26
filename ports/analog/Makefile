@@ -82,7 +82,7 @@ INC += \
 	-I$(PERIPH_SRC)/ICC \
 	-I$(PERIPH_SRC)/TMR \
 	-I$(PERIPH_SRC)/RTC \
-	-I$(PERIPH_SRC)/UART \
+	-I$(PERIPH_SRC)/UART
 
 INC += -I$(CMSIS_ROOT)/Device/Maxim/$(MCU_VARIANT_UPPER)/Source/GCC
 
@@ -116,12 +116,12 @@ SRC_MAX32 += \
 	$(PERIPH_SRC)/TMR/tmr_$(DIE_TYPE).c \
 	$(PERIPH_SRC)/UART/uart_common.c \
 	$(PERIPH_SRC)/UART/uart_$(DIE_TYPE).c \
-	$(PERIPH_SRC)/UART/uart_revb.c \
+	$(PERIPH_SRC)/UART/uart_revb.c
 
 SRC_C += $(SRC_MAX32) \
 			boards/$(BOARD)/board.c \
 			boards/$(BOARD)/pins.c \
-			peripherals/$(MCU_VARIANT_LOWER)/pins.c \
+			peripherals/$(MCU_VARIANT_LOWER)/pins.c
 
 # *******************************************************************************
 ### Compiler & Linker Flags ###
@@ -145,11 +145,11 @@ CFLAGS += -D$(MCU_VARIANT_UPPER) \
 			-DTARGET_REV=0x4131 \
 			-DTARGET=$(MCU_VARIANT_UPPER) \
 			-DIAR_PRAGMAS=0 \
-			-DRISCV_LOAD=0 \
-			# -DFLASH_ORIGIN=0x10000000 \
-			# -DFLASH_SIZE=0x340000 \
-			# -DSRAM_ORIGIN=0x20000000 \
-			# -DSRAM_SIZE=0x100000 \
+			-DRISCV_LOAD=0
+# -DFLASH_ORIGIN=0x10000000 \
+# -DFLASH_SIZE=0x340000 \
+# -DSRAM_ORIGIN=0x20000000 \
+# -DSRAM_SIZE=0x100000
 
 CPU_CORE=cortex-m4
 CFLAGS += -mthumb -mcpu=$(CPU_CORE) -mfloat-abi=softfp -mfpu=fpv4-sp-d16
@@ -171,8 +171,9 @@ ifeq ($(CIRCUITPY_TINYUSB),1)
 CFLAGS += \
 	-DCFG_TUSB_MCU=OPT_MCU_$(MCU_VARIANT_UPPER) \
 	-DBOARD_TUD_MAX_SPEED=OPT_MODE_HIGH_SPEED \
-	-DCFG_TUSB_OS=OPT_OS_NONE \
-	-DCFG_TUD_TASK_QUEUE_SZ=32
+	-DCFG_TUSB_OS=OPT_OS_NONE
+
+# -DCFG_TUD_TASK_QUEUE_SZ=32
 
 # Add TinyUSB sources
 INC += -I../../lib/tinyusb/src
@@ -182,14 +183,19 @@ endif
 
 ifeq ($(CIRCUITPY_USB_DEVICE),1)
 CFLAGS += \
-	-DCFG_TUD_CDC_RX_BUFSIZE=1024 \
 	-DCFG_TUD_CDC_TX_BUFSIZE=1024 \
-	-DCFG_TUD_MSC_BUFSIZE=4096 \
-	-DCFG_TUD_MIDI_RX_BUFSIZE=128 \
-	-DCFG_TUD_MIDI_TX_BUFSIZE=128 \
-	-DCFG_TUD_VENDOR_RX_BUFSIZE=128 \
-	-DCFG_TUD_VENDOR_TX_BUFSIZE=128
+	-DCFG_TUD_CDC_RX_BUFSIZE=1024 \
+	-DCFG_TUD_MSC_BUFSIZE=4096
 endif
+
+ifdef CIRCUITPY_USB_VENDOR
+CFLASGS += \
+	-DCFG_TUD_VENDOR_RX_BUFSIZE=1024 \
+	-DCFG_TUD_VENDOR_TX_BUFSIZE=1024
+endif
+
+# -DCFG_TUD_MIDI_RX_BUFSIZE=128
+# -DCFG_TUD_MIDI_TX_BUFSIZE=128
 
 SRC_C += \
 	boards/$(BOARD)/board.c \
@@ -208,7 +214,7 @@ CFLAGS += -Wno-error=unused-parameter \
 			-Wno-error=lto-type-mismatch \
 			-Wno-error=cast-align \
 			-Wno-error=nested-externs \
-			-Wno-error=sign-compare \
+			-Wno-error=sign-compare
 
 ENTRY = Reset_Handler
 LDFLAGS += $(CFLAGS) --entry $(ENTRY) -Wl,-nostdlib -Wl,-T,$(LINKERFILE) -Wl,-Map=$@.map -Wl,-cref -Wl,-gc-sections

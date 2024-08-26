@@ -7,7 +7,6 @@
 CHIP_FAMILY ?= max32
 
 # Necessary to build CircuitPython
-USB_NUM_ENDPOINT_PAIRS ?= 0
 LONGINT_IMPL ?= MPZ
 INTERNAL_LIBM ?= 1
 
