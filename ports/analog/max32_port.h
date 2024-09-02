@@ -12,7 +12,7 @@
 
 #include "gpio.h"
 
-#ifdef MQAX32690
+#ifdef MAX32690
 #include "system_max32690.h"
 #include "max32690.h"
 #endif
@@ -33,7 +33,8 @@ extern uint32_t SystemCoreClock;
 #define TICKS_PER_SEC   1024
 
 #ifdef MAX32690
-#define SUBSEC_PER_TICK 8 // 12-bit ssec register, ticks @ 4096 Hz
+// 12-bit ssec register, ticks @ 4096 Hz
+#define SUBSEC_PER_TICK 4
 #endif
 
 #endif //MAX32_PORT_H
