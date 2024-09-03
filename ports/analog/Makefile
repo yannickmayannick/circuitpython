@@ -167,36 +167,24 @@ COPT += -O0 #opt completely off to start
 endif
 
 # TinyUSB CFLAGS
-ifeq ($(CIRCUITPY_TINYUSB),1)
 CFLAGS += \
 	-DCFG_TUSB_MCU=OPT_MCU_$(MCU_VARIANT_UPPER) \
 	-DBOARD_TUD_MAX_SPEED=OPT_MODE_HIGH_SPEED \
-	-DCFG_TUSB_OS=OPT_OS_NONE
-
-# -DCFG_TUD_TASK_QUEUE_SZ=32
+	-DCFG_TUSB_OS=OPT_OS_NONE \
+	-DCFG_TUD_CDC_TX_BUFSIZE=1024 \
+	-DCFG_TUD_CDC_RX_BUFSIZE=1024 \
+	-DCFG_TUD_MSC_BUFSIZE=4096 \
+	-DCFG_TUD_MIDI_RX_BUFSIZE=128 \
+	-DCFG_TUD_MIDI_TX_BUFSIZE=128 \
+	-DCFG_TUD_VENDOR_RX_BUFSIZE=1024 \
+	-DCFG_TUD_VENDOR_TX_BUFSIZE=1024
 
 # Add TinyUSB sources
 INC += -I../../lib/tinyusb/src
 INC += -I../../supervisor/shared/usb
 SRC_C += lib/tinyusb/src/portable/mentor/musb/dcd_musb.c
-endif
 
-ifeq ($(CIRCUITPY_USB_DEVICE),1)
-CFLAGS += \
-	-DCFG_TUD_CDC_TX_BUFSIZE=1024 \
-	-DCFG_TUD_CDC_RX_BUFSIZE=1024 \
-	-DCFG_TUD_MSC_BUFSIZE=4096
-endif
-
-ifdef CIRCUITPY_USB_VENDOR
-CFLASGS += \
-	-DCFG_TUD_VENDOR_RX_BUFSIZE=1024 \
-	-DCFG_TUD_VENDOR_TX_BUFSIZE=1024
-endif
-
-# -DCFG_TUD_MIDI_RX_BUFSIZE=128
-# -DCFG_TUD_MIDI_TX_BUFSIZE=128
-
+# Add port sources incl. any board functions
 SRC_C += \
 	boards/$(BOARD)/board.c \
 	background.c \

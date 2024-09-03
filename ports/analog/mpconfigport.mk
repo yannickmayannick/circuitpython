@@ -17,15 +17,16 @@ INTERNAL_FLASH_FILESYSTEM = 1
 SPI_FLASH_FILESYSTEM = 0
 QSPI_FLASH_FILESYSTEM = 0
 
-# TODO: Test/Debug fs & general bringup
+# TODO: Test/Debug fs once USB-MSC is ready
 DISABLE_FILESYSTEM = 0
 
 # TODO: Test/Debug TinyUSB!
-CIRCUITPY_TINYUSB = 1
-CIRCUITPY_USB_DEVICE ?= 1
-CIRCUITPY_USB_CDC ?= 1
-CIRCUITPY_USB_HID ?= 0
-CIRCUITPY_USB_MIDI ?= 0
+# CIRCUITPY_TINYUSB = 1
+# CIRCUITPY_USB_DEVICE ?= 1
+# CIRCUITPY_USB_CDC ?= 1
+# CIRCUITPY_USB_VENDOR ?=1
+# CIRCUITPY_USB_HID ?= 0
+# CIRCUITPY_USB_MIDI ?= 0
 
 ####################################################################################
 # Suggested config for first-time porting

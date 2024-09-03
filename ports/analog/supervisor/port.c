@@ -163,7 +163,7 @@ uint32_t *port_stack_get_limit(void) {
     #pragma GCC diagnostic push
     #pragma GCC diagnostic ignored "-Warray-bounds"
 
-    // NOTE: Only return how much stack we have alloted for CircuitPython
+    // NOTE: Only return how much stack we have allotted for CircuitPython
     return port_stack_get_top() - (CIRCUITPY_DEFAULT_STACK_SIZE + CIRCUITPY_EXCEPTION_STACK_SIZE) / sizeof(uint32_t);
     #pragma GCC diagnostic pop
 }
@@ -268,7 +268,7 @@ void port_idle_until_interrupt(void) {
     if (!background_callback_pending()) {
         __DSB();
         /** DEBUG: may comment out WFI for debugging port functions */
-        __WFI();
+        // __WFI();
     }
     common_hal_mcu_enable_interrupts();
 }
