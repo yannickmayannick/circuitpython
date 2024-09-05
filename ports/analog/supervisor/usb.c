@@ -1,3 +1,9 @@
+// This file is part of the CircuitPython project: https://circuitpython.org
+//
+// SPDX-FileCopyrightText: Copyright (c) 2018 hathach for Adafruit Industries
+// SPDX-FileCopyrightText: Copyright (c) 2024 Brandon Hurst, Analog Devices, Inc
+//
+// SPDX-License-Identifier: MIT
 
 #include "supervisor/usb.h"
 #include "common-hal/microcontroller/Pin.h"
@@ -16,7 +22,6 @@ void init_usb_hardware(void) {
     // No need to add them to the never_reset list for mcu/Pin API.
 
     // 1 ms SysTick initialized in board.c
-    // todo: consider moving SysTick initialization here?
 
     // Enable requisite clocks & power for USB
     MXC_SYS_ClockSourceEnable(MXC_SYS_CLOCK_IPO);
@@ -26,10 +31,9 @@ void init_usb_hardware(void) {
 
     // Supervisor calls TinyUSB's dcd_init,
     // which initializes the USB PHY.
-    // Dep. on CIRCUITPY_TINYUSB and CIRCUITPY_USB_DEVICE
+    // Depending on CIRCUITPY_TINYUSB and CIRCUITPY_USB_DEVICE
 
     // Interrupt enables are left to TUSB depending on the device class
-    // todo: confirm with testing!
 }
 
 void USB_IRQHandler(void)

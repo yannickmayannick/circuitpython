@@ -2,6 +2,7 @@
 //
 // SPDX-FileCopyrightText: Copyright (c) 2016 Scott Shawcroft for Adafruit Industries
 // SPDX-FileCopyrightText: Copyright (c) 2019 Lucian Copeland for Adafruit Industries
+// SPDX-FileCopyrightText: Copyright (c) 2024 Brandon Hurst, Analog Devices, Inc
 //
 // SPDX-License-Identifier: MIT
 

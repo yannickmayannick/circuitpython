@@ -1,9 +1,15 @@
+/** This file is part of the CircuitPython project: https://circuitpython.org
+*
+* SPDX-FileCopyrightText: Copyright (c) 2024 Brandon Hurst, Analog Devices Inc.
+*
+* SPDX-License-Identifier: MIT
+*/
+
 MEMORY {
     ROM             (rx) : ORIGIN = 0x00000000,    LENGTH = 128K
     FLASH           (rx) : ORIGIN = 0x10000000,    LENGTH = 3M
     FLASH_FIRMWARE  (rx) : ORIGIN = 0x10000000,    LENGTH = 2992K
-    FLASH_ISR       (rx) : ORIGIN = 0x102EC000,    LENGTH = 16K
-    FLASH_FS        (rx) : ORIGIN = 0x102FC000,    LENGTH = 64K
+    FLASH_FS        (rx) : ORIGIN = 0x102E0000,    LENGTH = 128K
     RAM            (rwx) : ORIGIN = 0x20000000,    LENGTH = 1M
 }
 /* Minimum flash page is 16K */

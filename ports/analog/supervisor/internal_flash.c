@@ -1,8 +1,16 @@
+// This file is part of the CircuitPython project: https://circuitpython.org
+//
+// SPDX-FileCopyrightText: Copyright (c) 2013, 2014 Damien P. George
+// SPDX-FileCopyrightText: Copyright (c) 2020 Lucian Copeland for Adafruit Industries
+// SPDX-FileCopyrightText: Copyright (c) 2024 Brandon Hurst, Analog Devices, Inc.
+//
+// SPDX-License-Identifier: MIT
 
 #include "supervisor/internal_flash.h"
 
 #include <stdint.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "extmod/vfs.h"
 #include "extmod/vfs_fat.h"
@@ -14,10 +22,11 @@
 #include "supervisor/filesystem.h"
 #include "supervisor/flash.h"
 #include "supervisor/shared/safe_mode.h"
-
 #if CIRCUITPY_USB_DEVICE
 #include "supervisor/usb.h"
 #endif
+
+#include "mpconfigboard.h"
 
 // MAX32 HAL Includes
 #include "flc.h"
@@ -25,9 +34,7 @@
 #include "icc.h" // includes icc_<dietype>.c for MSDK die type
 #include "mxc_device.h"
 
-/** TODO:
- *      Test!
- *
+/**
  *  NOTE:
  *      ANY function which modifies flash contents must execute from a crit section.
  *      This is because FLC functions are loc'd in RAM, and an ISR executing
@@ -44,13 +51,10 @@
  *      Therefore only ICC0 need be used for the purpose of these functions.
  */
 
-#define NO_CACHE        0xffffffff
-#define MAX_CACHE       0x4000
-
 typedef struct {
-    uint32_t base_addr;
-    uint32_t sector_size;
-    uint32_t num_sectors;
+    const uint32_t base_addr;
+    const uint32_t sector_size;
+    const uint32_t num_sectors;
 } flash_layout_t;
 
 #ifdef MAX32690
@@ -58,15 +62,15 @@ typedef struct {
 // FS Code will use INTERNAL_FLASH_FILESYSTEM_START_ADDR
 // and won't conflict with ISR vector in first 16 KiB of flash
 static const flash_layout_t flash_layout[] = {
-    { 0x10000000, 0x4000, 192},
+    { 0x10000000, FLASH_PAGE_SIZE, 192},
     // { 0x10300000, 0x2000, 32 }, // RISC-V flash
 };
-// Cache a full 16K sector
-static uint8_t _flash_cache[0x4000] __attribute__((aligned(4)));
-#endif
+// must be able to hold a full page (for re-writing upon erase)
+static uint32_t page_buffer[FLASH_PAGE_SIZE / 4] = {0x0};
 
-// Address of the flash sector currently being cached
-static uint32_t _cache_addr_in_flash = NO_CACHE;
+#else
+#error "Invalid BOARD. Please set BOARD equal to any board under 'boards/'."
+#endif
 
 static inline int32_t block2addr(uint32_t block) {
     if (block >= 0 && block < INTERNAL_FLASH_FILESYSTEM_NUM_BLOCKS) {
@@ -135,150 +139,100 @@ uint32_t supervisor_flash_get_block_count(void) {
     return INTERNAL_FLASH_FILESYSTEM_NUM_BLOCKS;
 }
 
-// Write back to Flash the page that is currently cached
 void port_internal_flash_flush(void) {
-    // Flash has not been cached
-    if (_cache_addr_in_flash == NO_CACHE) {
-        return;
-    }
-    uint32_t sector_start, sector_size = 0xffffffff;
 
-    // Clear & enable flash interrupt flags
-    MXC_FLC_EnableInt(MXC_F_FLC_INTR_DONEIE | MXC_F_FLC_INTR_AFIE);
+    // Flush all instruction cache
+    // ME18 has bug where top-level sysctrl flush bit only works one.
+    // Have to use low-level flush bits for each ICC instance.
+    MXC_ICC_Flush(MXC_ICC0);
+    MXC_ICC_Flush(MXC_ICC1);
 
-    // Figure out the sector of flash we're targeting
-    if (flash_get_sector_info(_cache_addr_in_flash, &sector_start, &sector_size) == -1) {
-        // If not in valid sector, just release the cache and return
-        supervisor_flash_release_cache();
-        return;
-    }
-
-    // if invalid sector or sector size > the size of our cache, reset with flash fail
-    if (sector_size > sizeof(_flash_cache) || sector_start == 0xffffffff) {
-        reset_into_safe_mode(SAFE_MODE_FLASH_WRITE_FAIL);
-    }
-
-    // skip if the data in cache is the same as what's already there
-    if (memcmp(_flash_cache, (void *)_cache_addr_in_flash, FLASH_PAGE_SIZE) != 0) {
-        uint32_t error;
-
-        // buffer for the page of flash
-        uint32_t page_buffer[FLASH_PAGE_SIZE >> 2] = {
-            0xFFFFFFFF
-        }; // bytes per page / 4 bytes = # of uint32_t
-
-        // Unlock Flash
-        MXC_FLC0->ctrl = (MXC_FLC0->ctrl & ~MXC_F_FLC_REVA_CTRL_UNLOCK) | MXC_S_FLC_REVA_CTRL_UNLOCK_UNLOCKED;
-
-        /*** ERASE FLASH PAGE ***/
-        MXC_CRITICAL(
-            // buffer the page
-            MXC_FLC_Read(sector_start, page_buffer, sector_size);
-            // Erase page & error check
-            error = MXC_FLC_PageErase(sector_start);
-        );
-        if (error != E_NO_ERROR) {
-            // lock flash & reset
-            MXC_FLC0->ctrl = (MXC_FLC0->ctrl & ~MXC_F_FLC_REVA_CTRL_UNLOCK) | MXC_S_FLC_REVA_CTRL_UNLOCK_LOCKED;
-            reset_into_safe_mode(SAFE_MODE_FLASH_WRITE_FAIL);
-        }
-
-        /*** RE-WRITE FLASH PAGE w/ CACHE DATA ***/
-        MXC_CRITICAL(
-            // ret = program the flash page with cache data (for loop)
-            for (uint32_t i = 0; i < (sector_size >> 2); i++) {
-                error = MXC_FLC_Write32(_cache_addr_in_flash + 4 * i, _flash_cache[i]);
-            }
-        );
-        if (error != E_NO_ERROR) {
-            // lock flash & reset
-            MXC_FLC0->ctrl = (MXC_FLC0->ctrl & ~MXC_F_FLC_REVA_CTRL_UNLOCK) | MXC_S_FLC_REVA_CTRL_UNLOCK_LOCKED;
-            reset_into_safe_mode(SAFE_MODE_FLASH_WRITE_FAIL);
-        }
-
-        // Lock flash & exit
-        MXC_FLC0->ctrl = (MXC_FLC0->ctrl & ~MXC_F_FLC_REVA_CTRL_UNLOCK) | MXC_S_FLC_REVA_CTRL_UNLOCK_LOCKED;
-    } // finished flushing cache
-    // todo: verify no other flash operation (e.g. flushing HW cache) is needed to complete this
+    // Clear the line fill buffer by reading 2 pages from flash
+    volatile uint32_t *line_addr;
+    volatile uint32_t line;
+    line_addr = (uint32_t *)(MXC_FLASH_MEM_BASE);
+    line = *line_addr;
+    line_addr = (uint32_t *)(MXC_FLASH_MEM_BASE + MXC_FLASH_PAGE_SIZE);
+    line = *line_addr;
+    (void)line; // Silence build warnings that this variable is not used.
 }
 
 // Read flash blocks, using cache if it contains the right data
+// return 0 on success, non-zero on error
 mp_uint_t supervisor_flash_read_blocks(uint8_t *dest, uint32_t block, uint32_t num_blocks) {
     // Find the address of the block we want to read
     int src_addr = block2addr(block);
     if (src_addr == -1) {
         // bad block num
-        return false;
+        return 1;
     }
 
     uint32_t sector_size, sector_start;
     if (flash_get_sector_info(src_addr, &sector_start, &sector_size) == -1) {
         // bad sector idx
-        return false;
+        return 2;
     }
 
-    // Find how many blocks left in sector
-    uint32_t blocks_in_sector = (sector_size - (src_addr - sector_start)) / FILESYSTEM_BLOCK_SIZE;
+    /** NOTE:   The MXC_FLC_Read function executes from SRAM and does some more error checking
+    *          than memcpy does. Will use it for now.
+    */
+    MXC_FLC_Read( src_addr, dest, FILESYSTEM_BLOCK_SIZE * num_blocks );
 
-    // If the whole read is inside the cache, then read cache
-    if ( (num_blocks <= blocks_in_sector) && (_cache_addr_in_flash == sector_start) ) {
-        memcpy(dest, (_flash_cache + (src_addr - sector_start)), FILESYSTEM_BLOCK_SIZE * num_blocks);
-    } else {
-        // flush the cache & read the flash data directly
-        supervisor_flash_flush();
-        /** NOTE:   The MXC_FLC_Read function executes from SRAM and does some more error checking
-        *          than memcpy does. Will use it for now.
-        */
-        MXC_FLC_Read((int)dest, (int *)src_addr, FILESYSTEM_BLOCK_SIZE * num_blocks);
-    }
     return 0; // success
 }
 
-// Write to flash blocks, using cache if it is targeting the right page (and large enough)
-// todo: most of this fn is taken from the ST driver.
-// todo: look at other ports and see if I can adapt it at all
+// Write to flash blocks
+// return 0 on success, non-zero on error
 mp_uint_t supervisor_flash_write_blocks(const uint8_t *src, uint32_t block_num, uint32_t num_blocks) {
-    uint32_t count=0;
-    uint32_t sector_size=0;
-    uint32_t sector_start=0;
+    uint32_t error, blocks_left, count, page_start, page_size = 0;
 
     while (num_blocks > 0) {
-        const int32_t dest_addr = block2addr(block_num);
+        uint32_t dest_addr = block2addr(block_num);
         // bad block number passed in
         if (dest_addr == -1) {
-            return false;
+            return 1;
         }
 
-        // Implementation is from STM port
-        // NOTE:    May replace later, but this port had a method
-        //          that seemed to make sense across multiple devices.
-        if (flash_get_sector_info(dest_addr, &sector_start, &sector_size) == -1) {
-            reset_into_safe_mode(SAFE_MODE_FLASH_WRITE_FAIL);
-        }
-
-        // fail if sector size is greater than cache size
-        if (sector_size > sizeof(_flash_cache)) {
+        if (flash_get_sector_info(dest_addr, &page_start, &page_size) == -1) {
             reset_into_safe_mode(SAFE_MODE_FLASH_WRITE_FAIL);
         }
 
         // Find the number of blocks left within this sector
-        // BLOCK_NUM = (SECTOR SIZE - BLOCK OFFSET within sector)) / BLOCK_SIZE
-        count = (sector_size - (dest_addr - sector_start)) / FILESYSTEM_BLOCK_SIZE;
-        count = MIN(num_blocks, count);
+        // BLOCKS_LEFT = (SECTOR_SIZE - BLOCK_OFFSET within sector)) / BLOCK_SIZE
+        blocks_left = (page_size - (dest_addr - page_start)) / FILESYSTEM_BLOCK_SIZE;
+        count = MIN(num_blocks, blocks_left);
 
-        // if we're not at the start of a sector, copy the whole sector to cache
-        if (_cache_addr_in_flash != sector_start) {
-            // Flush cache first before we overwrite it
-            supervisor_flash_flush();
+        MXC_ICC_Disable(MXC_ICC0);
 
-            _cache_addr_in_flash = sector_start;
+        // Buffer the page of flash to erase
+        MXC_FLC_Read(page_start , page_buffer, page_size);
 
-            // Copy the whole sector into cache
-            memcpy(_flash_cache, (void *)sector_start, sector_size);
+        // Erase flash page
+        MXC_CRITICAL(
+            error = MXC_FLC_PageErase(dest_addr);
+        );
+        if (error != E_NO_ERROR) {
+            // lock flash & reset
+            MXC_FLC0->ctrl = (MXC_FLC0->ctrl & ~MXC_F_FLC_REVA_CTRL_UNLOCK) | MXC_S_FLC_REVA_CTRL_UNLOCK_LOCKED;
+            reset_into_safe_mode(SAFE_MODE_FLASH_WRITE_FAIL);
         }
 
-        // Overwrite the cache with source data passed in
-        memcpy(_flash_cache + (dest_addr - sector_start), src, count * FILESYSTEM_BLOCK_SIZE);
+        // Copy new src data into the page buffer
+        // fill the new data in at the offset dest_addr - page_start
+        // account for uint32_t page_buffer vs uint8_t src
+        memcpy( (page_buffer + (dest_addr - page_start) / 4), src, count * FILESYSTEM_BLOCK_SIZE);
+
+        // Write new page buffer back into flash
+        MXC_CRITICAL(
+            error = MXC_FLC_Write(page_start, page_size, page_buffer);
+        );
+        if (error != E_NO_ERROR) {
+            // lock flash & reset
+            MXC_FLC0->ctrl = (MXC_FLC0->ctrl & ~MXC_F_FLC_REVA_CTRL_UNLOCK) | MXC_S_FLC_REVA_CTRL_UNLOCK_LOCKED;
+            reset_into_safe_mode(SAFE_MODE_FLASH_WRITE_FAIL);
+        }
+
+        MXC_ICC_Enable(MXC_ICC0);
 
         block_num += count;
         src += count * FILESYSTEM_BLOCK_SIZE;
@@ -289,18 +243,5 @@ mp_uint_t supervisor_flash_write_blocks(const uint8_t *src, uint32_t block_num, 
 
 // Empty the fs cache
 void supervisor_flash_release_cache(void) {
-    // Invalidate the current FS cache
-    _cache_addr_in_flash = NO_CACHE;
-
-    // Flush the hardware cache for ARM M4
-    MXC_ICC_Flush(MXC_ICC0);
-
-    // Clear the line fill buffer by reading 2 pages from flash
-    volatile uint32_t *line_addr;
-    volatile uint32_t line;
-    line_addr = (uint32_t *)(MXC_FLASH_MEM_BASE);
-    line = *line_addr;
-    line_addr = (uint32_t *)(MXC_FLASH_MEM_BASE + MXC_FLASH_PAGE_SIZE);
-    line = *line_addr;
-    (void)line; // Silence build warnings that this variable is not used.
+    supervisor_flash_flush();
 }

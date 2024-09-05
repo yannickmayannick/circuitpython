@@ -38,7 +38,9 @@ Universal instructions on flashing MAX32 devices this project can be found in th
 
 In addition, a user may flash the device by calling `make` with the `flash-msdk` target from within the `ports/analog` directory, as below:
 
-    $ make BOARD=<target board> flash-msdk
+```
+$ make BOARD=<target board> flash-msdk
+```
 
 This requires the following:
 - A MAX32625PICO is connected to the PC via USB
@@ -48,4 +50,10 @@ This requires the following:
 
 ### Using the REPL
 
-[**Section in Progress. USB support needs implementation & test.**]
+Once the device is plugged in, it will enumerate via USB as both a USB Serial Device (CDC) and a Mass Storage Device (MSC). You can connect to the Python REPL with your favorite Serial Monitor program e.g. TeraTerm, VS Code, Putty, etc. Use any buadrate with 8-bit, No Parity, 1 Stop Bit (8N1) settings. From this point forward, you can run Python code on the MCU! If you want help with learning CircuitPython-specific code or learning Python in general, a good place to start is Adafruit's ["Welcome to CircuitPython"](https://learn.adafruit.com/welcome-to-circuitpython/) guide.
+
+### Editing code.py
+
+Python code may be executed from `code.py` the `CIRCUITPY:` drive. When editing this file, please be aware that some text editors will work better than others. A list of suggested text editors can be found at Adafruit's guide here: https://learn.adafruit.com/welcome-to-circuitpython/recommended-editors
+
+Once you save `code.py`, it gets written back to the device you are running Circuitpython on, and will automatically run and output it's result to the REPL. You can also automatically reload and run code.py any time from the REPL by pressing CTRL+D.

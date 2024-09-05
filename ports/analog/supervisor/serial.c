@@ -2,6 +2,7 @@
 //
 // SPDX-FileCopyrightText: Copyright (c) 2017, 2018 Scott Shawcroft for Adafruit Industries
 // SPDX-FileCopyrightText: Copyright (c) 2019 Lucian Copeland for Adafruit Industries
+// SPDX-FileCopyrightText: Copyright (c) Brandon Hurst, Analog Devices, Inc.
 //
 // SPDX-License-Identifier: MIT
 
@@ -9,25 +10,24 @@
 #include <string.h>
 #include "supervisor/shared/serial.h"
 
+#include "uart.h"
+#include "uart_regs.h"
+
+#ifndef MAX32_SERIAL
 #define MAX32_SERIAL 0
+#endif
 
 #if MAX32_SERIAL
-// TODO: Switch this to using DEBUG_UART.
+#ifdef MAX32690
+#define CONSOLE_UART MXC_UART0
+#endif
 #endif
 
 void port_serial_init(void) {
     #if MAX32_SERIAL
-    // huart2.Instance = USART2;
-    // huart2.Init.BaudRate = 115200;
-    // huart2.Init.WordLength = UART_WORDLENGTH_8B;
-    // huart2.Init.StopBits = UART_STOPBITS_1;
-    // huart2.Init.Parity = UART_PARITY_NONE;
-    // huart2.Init.Mode = UART_MODE_TX_RX;
-    // huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-    // huart2.Init.OverSampling = UART_OVERSAMPLING_16;
-    // if (HAL_UART_Init(&huart2) == HAL_OK) {
-    //     stm32f4_peripherals_status_led(1, 1);
-    // }
+    MXC_GCR->clkctrl |= MXC_F_GCR_CLKCTRL_IBRO_EN;
+    while( !(MXC_GCR->clkctrl & MXC_F_GCR_CLKCTRL_IBRO_RDY) );
+    MXC_UART_Init(CONSOLE_UART, 115200, MXC_UART_IBRO_CLK);
     #endif
 }
 
@@ -40,15 +40,27 @@ char port_serial_read(void) {
     // uint8_t data;
     // HAL_UART_Receive(&huart2, &data, 1, 500);
     // return data;
+    uint8_t rData;
+
+    mxc_uart_req_t uart_req = {
+        .uart = CONSOLE_UART,
+        .rxCnt = 0,
+        .txCnt = 0,
+        .txData = NULL,
+        .rxData = &rData,
+        .txLen = 0,
+        .rxLen = 1
+    };
+    MXC_UART_Transaction(&uart_req);
+    return rData;
     #else
     return -1;
     #endif
 }
 
-// There is no easy way to find the number of pending characters, so just say there's 1.
 uint32_t port_serial_bytes_available(void) {
     #if MAX32_SERIAL
-    // return __HAL_UART_GET_FLAG(&huart2, UART_FLAG_RXNE) ? 1 : 0;
+    return MXC_UART_GetRXFIFOAvailable(CONSOLE_UART);
     #else
     return 0;
     #endif
@@ -56,6 +68,15 @@ uint32_t port_serial_bytes_available(void) {
 
 void port_serial_write_substring(const char *text, uint32_t len) {
     #if MAX32_SERIAL
-    // HAL_UART_Transmit(&huart2, (uint8_t *)text, len, 5000);
+    mxc_uart_req_t uart_req = {
+        .uart = CONSOLE_UART,
+        .rxCnt = 0,
+        .txCnt = 0,
+        .txData = (const unsigned char *)text,
+        .rxData = NULL,
+        .txLen = len,
+        .rxLen = 0
+     };
+    MXC_UART_Transaction(&uart_req);
     #endif
 }

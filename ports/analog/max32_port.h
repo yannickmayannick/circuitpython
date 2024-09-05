@@ -1,3 +1,8 @@
+// This file is part of the CircuitPython project: https://circuitpython.org
+//
+// SPDX-FileCopyrightText: Copyright (c) 2024 Brandon Hurst, Analog Devices, Inc.
+//
+// SPDX-License-Identifier: MIT
 
 #ifndef MAX32_PORT_H
 #define MAX32_PORT_H

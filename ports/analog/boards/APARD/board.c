@@ -1,6 +1,6 @@
 // This file is part of the CircuitPython project: https://circuitpython.org
 //
-// SPDX-FileCopyrightText: Copyright (c) 2017 Scott Shawcroft for Adafruit Industries
+// SPDX-FileCopyrightText: Copyright (c) 2024 Brandon Hurst, Analog Devices, Inc
 //
 // SPDX-License-Identifier: MIT
 
@@ -26,7 +26,7 @@ const int num_leds = (sizeof(led_pin) / sizeof(mxc_gpio_cfg_t));
 
 // DEFAULT:  Using the weak-defined supervisor/shared/board.c functions
 
-/***** OPTIONAL BOARD-SPECIFIC FUNTIONS from supervisor/board.h *****/
+/***** OPTIONAL BOARD-SPECIFIC FUNCTIONS from supervisor/board.h *****/
 // Returns true if the user initiates safe mode in a board specific way.
 // Also add BOARD_USER_SAFE_MODE in mpconfigboard.h to explain the board specific
 // way.

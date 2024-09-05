@@ -1,6 +1,7 @@
 # This file is part of the CircuitPython project: https://circuitpython.org
 #
 # SPDX-FileCopyrightText: Copyright (c) 2020 Scott Shawcroft for Adafruit Industries
+# SPDX-FileCopyrightText: Copyright (c) 2024 Brandon Hurst, Analog Devices, Inc.
 #
 # SPDX-License-Identifier: MIT
 
@@ -14,11 +15,6 @@ INTERNAL_LIBM ?= 1
 CFLAGS += -DHAS_TRNG=1
 
 INTERNAL_FLASH_FILESYSTEM = 1
-SPI_FLASH_FILESYSTEM = 0
-QSPI_FLASH_FILESYSTEM = 0
-
-# TODO: Test/Debug FS
-DISABLE_FILESYSTEM = 0
 
 ####################################################################################
 # Suggested config for first-time porting

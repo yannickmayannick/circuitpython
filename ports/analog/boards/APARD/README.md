@@ -12,3 +12,25 @@ For more info about AD-APARD32690-SL, visit our product webpages for datasheets,
 
 [AD-APARD32690-SL Product Webpage](https://www.analog.com/en/resources/evaluation-hardware-and-software/evaluation-boards-kits/ad-apard32690-sl.html)
 [AD-APARD32690-SL User Guide](https://wiki.analog.com/resources/eval/user-guides/ad-apard32690-sl)
+
+#### Building for this board
+
+To build for this board, ensure you are in the `ports/analog` directory and run the following command. Note that passing in the `-jN` flag, where N is the # of cores on your machine, can speed up compile times.
+
+```
+make BOARD=APARD
+```
+
+#### Flashing this board
+
+To flash the board, run the following command if using the MAX32625PICO:
+
+```
+make BOARD=APARD flash-msdk
+```
+
+If using Segger JLink, please run the following command instead:
+
+```
+make BOARD=APARD flash-jlink
+```
