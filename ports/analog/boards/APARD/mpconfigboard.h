@@ -22,7 +22,7 @@
 #define FLASH_PAGE_SIZE             (0x4000)   // 16384 byte pages (16 KiB)
 
 #define BOARD_HAS_CRYSTAL           1
-#define NUM_GPIO_PORTS              4
+#define NUM_GPIO_PORTS              5
 #define CONSOLE_UART                MXC_UART0
 
 // #if INTERNAL_FLASH_FILESYSTEM

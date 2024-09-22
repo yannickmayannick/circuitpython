@@ -14,25 +14,23 @@
 #include "py/obj.h"
 
 // HAL includes
-// #include "gpio.h"
+#include "gpio.h"
+#include "gpio_regs.h"
 
 typedef struct {
     mp_obj_base_t base;
-    const uint8_t port;
-    const uint8_t pad;
-    // const uint8_t level : 4; // FIXME: Find how to include the VDDIO/VDDIOH level
+    uint8_t port;
+    uint32_t mask; // the pad # target e.g. P0.01 is Port=0, Mask=1
+    mxc_gpio_vssel_t level;
 } mcu_pin_obj_t;
 
 extern const mp_obj_type_t mcu_pin_type;
 
-#define NO_PIN (0xFF) // for non-connected pins
+#define PIN(pin_port, pin_mask) { {&mcu_pin_type}, .port = pin_port, .mask = 1UL<<pin_mask, .level = MXC_GPIO_VSSEL_VDDIO }
 
-#define PIN(pin_port, pin_pad) \
-    { \
-        { &mcu_pin_type }, \
-        .port = pin_port, \
-        .pad = pin_pad, \
-    }
+// for non-connected pins
+#define NO_PIN 0xFF
 
-// TODO: Create macros for detecting MCU VARIANT
+#ifdef MAX32690
 #include "max32690/pins.h"
+#endif

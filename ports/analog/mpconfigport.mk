@@ -22,7 +22,7 @@ INTERNAL_FLASH_FILESYSTEM = 1
 # These modules are implemented in ports/<port>/common-hal:
 
 # Typically the second module to create
-CIRCUITPY_DIGITALIO ?= 0
+CIRCUITPY_DIGITALIO ?= 1
 
 # Plan to implement
 CIRCUITPY_BUSIO ?= 0
