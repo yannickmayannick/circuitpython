@@ -21,9 +21,6 @@ INTERNAL_FLASH_FILESYSTEM = 1
 ####################################################################################
 # These modules are implemented in ports/<port>/common-hal:
 
-# Typically the second module to create
-CIRCUITPY_DIGITALIO ?= 1
-
 # Plan to implement
 CIRCUITPY_BUSIO ?= 0
 CIRCUITPY_RTC ?= 0
@@ -47,21 +44,20 @@ CIRCUITPY_DISPLAYIO ?= 0
 
 # These modules are implemented in shared-module/ - they can be included in
 # any port once their prerequisites in common-hal are complete.
+# No requirements, but takes extra flash
+CIRCUITPY_ULAB = 1
 # Requires DigitalIO:
-CIRCUITPY_BITBANGIO ?= 0
-# Requires neopixel_write or SPI (dotstar)
-CIRCUITPY_PIXELBUF ?= 0
+CIRCUITPY_BITBANGIO ?= 1
+# Requires Microcontroller
+CIRCUITPY_TOUCHIO ?= 1
 # Requires OS
 CIRCUITPY_RANDOM ?= 0
-# Requires Microcontroller
-CIRCUITPY_TOUCHIO ?= 0
-# Requires UART
+# Requires busio.UART
 CIRCUITPY_CONSOLE_UART ?= 0
 # Does nothing without I2C
 CIRCUITPY_REQUIRE_I2C_PULLUPS = 0
-
-# No requirements, but takes extra flash
-CIRCUITPY_ULAB = 1
+# Requires neopixel_write or SPI (dotstar)
+CIRCUITPY_PIXELBUF ?= 0
 
 ####################################################################################
 # Required for clean building (additional CircuittPython Defaults)

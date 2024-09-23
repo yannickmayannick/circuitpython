@@ -10,9 +10,7 @@
 #include "mpconfigboard.h"
 #include "pins.h"
 
-#include "mxc_sys.h"
-#include "gpio.h"
-#include "gpio_regs.h"
+#include "max32_port.h"
 
 #include "common-hal/microcontroller/Pin.h"
 
@@ -79,7 +77,7 @@ uint8_t common_hal_mcu_pin_number(const mcu_pin_obj_t *pin) {
     }
 
     // most max32 gpio ports have 32 pins
-    // todo: create a struct to encode # of pins for each port, since some GPIO ports differ
+    // todo (low prior.): encode # of pins for each port, since some GPIO ports differ
     return pin->port * 32 + pin->mask;
 }
 

@@ -4,6 +4,7 @@
 //
 // SPDX-License-Identifier: MIT
 
+#define CIRCUITPY_DIGITALIO_HAVE_INVALID_DRIVE_MODE 1
 #include "shared-bindings/digitalio/DigitalInOut.h"
 #include "shared-bindings/microcontroller/Pin.h"
 
@@ -70,9 +71,9 @@ digitalinout_result_t common_hal_digitalio_digitalinout_switch_to_output(
 
     // todo (low): MSDK Hardware does not support open-drain configuration except
     // todo (low): when directly managed by a peripheral such as I2C.
-    // todo (low): find a way to signal this perhaps to any upstream code
+    // todo (low): find a way to signal this to any upstream code
     if (drive_mode != DRIVE_MODE_PUSH_PULL) {
-        return DIGITALINOUT_OK;
+        return DIGITALINOUT_INVALID_DRIVE_MODE;
     }
     return DIGITALINOUT_OK;
 }

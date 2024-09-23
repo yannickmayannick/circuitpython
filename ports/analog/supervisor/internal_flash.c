@@ -187,7 +187,7 @@ mp_uint_t supervisor_flash_write_blocks(const uint8_t *src, uint32_t block_num, 
     uint32_t error, blocks_left, count, page_start, page_size = 0;
 
     while (num_blocks > 0) {
-        uint32_t dest_addr = block2addr(block_num);
+        int dest_addr = block2addr(block_num);
         // bad block number passed in
         if (dest_addr == -1) {
             return 1;

@@ -37,9 +37,6 @@
 #include "common-hal/microcontroller/Pin.h"
 #include "shared-bindings/microcontroller/__init__.h"
 
-//todo: pack the below definitions into their own module
-//todo: under peripherals/gpio, peripherals/clocks, etc.
-
 // Sys includes
 #include "max32_port.h"
 
@@ -61,9 +58,6 @@ extern const mxc_gpio_cfg_t pb_pin[];
 extern const int num_pbs;
 extern const mxc_gpio_cfg_t led_pin[];
 extern const int num_leds;
-
-//todo: define an LED HAL
-// #include "peripherals/led.h"
 
 // For saving rtc data for ticks
 static uint32_t subsec, sec = 0;
