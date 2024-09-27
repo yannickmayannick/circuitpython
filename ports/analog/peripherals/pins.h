@@ -26,7 +26,7 @@ typedef struct {
 
 extern const mp_obj_type_t mcu_pin_type;
 
-#define PIN(pin_port, pin_mask) { {&mcu_pin_type}, .port = pin_port, .mask = 1UL<<pin_mask, .level = MXC_GPIO_VSSEL_VDDIO }
+#define PIN(pin_port, pin_mask) { {&mcu_pin_type}, .port = pin_port, .mask = 1UL << pin_mask, .level = MXC_GPIO_VSSEL_VDDIO }
 
 // for non-connected pins
 #define NO_PIN 0xFF
