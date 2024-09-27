@@ -45,9 +45,8 @@
 #include "rtc.h"
 
 // msec to RTC subsec ticks (4 kHz)
-#define MSEC_TO_SS_ALARM(x) \
-        (0 - ((x * 4096) /  \
-    1000))       /* Converts a time in milleseconds to the equivalent RSSA register value. */
+/* Converts a time in milleseconds to equivalent RSSA register value */
+#define MSEC_TO_SS_ALARM(x) (0 - ((x * 4096) / 1000))
 
 // Externs defined by linker .ld file
 extern uint32_t _stack, _heap, _estack, _eheap;
