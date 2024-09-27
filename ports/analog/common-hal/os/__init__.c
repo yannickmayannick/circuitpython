@@ -43,7 +43,7 @@ mp_obj_t common_hal_os_uname(void) {
 
 bool common_hal_os_urandom(uint8_t *buffer, uint32_t length) {
     #if (HAS_TRNG)
-        //todo: implement
+        //todo (low prior): implement
     #else
     #endif
         return false;

@@ -10,6 +10,9 @@
 #include "max32_port.h"
 
 // Board-level setup for MAX32690
+mxc_gpio_regs_t* gpio_ports[NUM_GPIO_PORTS] =
+    {MXC_GPIO0, MXC_GPIO1, MXC_GPIO2, MXC_GPIO3, MXC_GPIO4};
+
 // clang-format off
 const mxc_gpio_cfg_t pb_pin[] = {
     { MXC_GPIO1, MXC_GPIO_PIN_27, MXC_GPIO_FUNC_IN, MXC_GPIO_PAD_NONE, MXC_GPIO_VSSEL_VDDIOH, MXC_GPIO_DRVSTR_0},

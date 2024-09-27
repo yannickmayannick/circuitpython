@@ -16,12 +16,8 @@
 
 static uint32_t claimed_pins[NUM_GPIO_PORTS];
 
-// todo (low): try moving this to an extern in the board support
-#ifdef MAX32690
-#include "max32690.h"
-mxc_gpio_regs_t* gpio_ports[NUM_GPIO_PORTS] =
-    {MXC_GPIO0, MXC_GPIO1, MXC_GPIO2, MXC_GPIO3, MXC_GPIO4};
-#endif
+// defined in board.c
+extern mxc_gpio_regs_t* gpio_ports[NUM_GPIO_PORTS];
 
 static uint32_t never_reset_pins[NUM_GPIO_PORTS];
 
