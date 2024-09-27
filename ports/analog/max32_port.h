@@ -42,4 +42,4 @@ extern uint32_t SystemCoreClock;
 #define SUBSEC_PER_TICK 4
 #endif
 
-#endif //MAX32_PORT_H
+#endif // MAX32_PORT_H

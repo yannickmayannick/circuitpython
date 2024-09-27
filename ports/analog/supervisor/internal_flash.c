@@ -75,8 +75,9 @@ static uint32_t page_buffer[FLASH_PAGE_SIZE / 4] = {0x0};
 static inline int32_t block2addr(uint32_t block) {
     if (block >= 0 && block < INTERNAL_FLASH_FILESYSTEM_NUM_BLOCKS) {
         return CIRCUITPY_INTERNAL_FLASH_FILESYSTEM_START_ADDR + block * FILESYSTEM_BLOCK_SIZE;
+    } else {
+        return -1;
     }
-    else return -1;
 }
 
 // Get index, start addr, & size of the flash sector where addr lies
@@ -91,15 +92,13 @@ int flash_get_sector_info(uint32_t addr, uint32_t *start_addr, uint32_t *size) {
             }
             if (start_addr) {
                 *start_addr = flash_layout[0].base_addr + (sector_index * flash_layout[0].sector_size);
-            }
-            else {
+            } else {
                 return -1; // start_addr is NULL
             }
             if (size) {
                 *size = flash_layout[0].sector_size;
-            }
-            else {
-                return -1; //size is NULL
+            } else {
+                return -1; // size is NULL
             }
             return sector_index;
         }
@@ -176,7 +175,7 @@ mp_uint_t supervisor_flash_read_blocks(uint8_t *dest, uint32_t block, uint32_t n
     /** NOTE:   The MXC_FLC_Read function executes from SRAM and does some more error checking
     *          than memcpy does. Will use it for now.
     */
-    MXC_FLC_Read( src_addr, dest, FILESYSTEM_BLOCK_SIZE * num_blocks );
+    MXC_FLC_Read(src_addr, dest, FILESYSTEM_BLOCK_SIZE * num_blocks);
 
     return 0; // success
 }
@@ -205,12 +204,12 @@ mp_uint_t supervisor_flash_write_blocks(const uint8_t *src, uint32_t block_num, 
         MXC_ICC_Disable(MXC_ICC0);
 
         // Buffer the page of flash to erase
-        MXC_FLC_Read(page_start , page_buffer, page_size);
+        MXC_FLC_Read(page_start, page_buffer, page_size);
 
         // Erase flash page
         MXC_CRITICAL(
             error = MXC_FLC_PageErase(dest_addr);
-        );
+            );
         if (error != E_NO_ERROR) {
             // lock flash & reset
             MXC_FLC0->ctrl = (MXC_FLC0->ctrl & ~MXC_F_FLC_REVA_CTRL_UNLOCK) | MXC_S_FLC_REVA_CTRL_UNLOCK_LOCKED;
@@ -220,12 +219,12 @@ mp_uint_t supervisor_flash_write_blocks(const uint8_t *src, uint32_t block_num, 
         // Copy new src data into the page buffer
         // fill the new data in at the offset dest_addr - page_start
         // account for uint32_t page_buffer vs uint8_t src
-        memcpy( (page_buffer + (dest_addr - page_start) / 4), src, count * FILESYSTEM_BLOCK_SIZE);
+        memcpy((page_buffer + (dest_addr - page_start) / 4), src, count * FILESYSTEM_BLOCK_SIZE);
 
         // Write new page buffer back into flash
         MXC_CRITICAL(
             error = MXC_FLC_Write(page_start, page_size, page_buffer);
-        );
+            );
         if (error != E_NO_ERROR) {
             // lock flash & reset
             MXC_FLC0->ctrl = (MXC_FLC0->ctrl & ~MXC_F_FLC_REVA_CTRL_UNLOCK) | MXC_S_FLC_REVA_CTRL_UNLOCK_LOCKED;

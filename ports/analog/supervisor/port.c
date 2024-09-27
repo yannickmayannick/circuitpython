@@ -46,8 +46,8 @@
 
 // msec to RTC subsec ticks (4 kHz)
 #define MSEC_TO_SS_ALARM(x) \
-    (0 - ((x * 4096) /  \
-          1000)) /* Converts a time in milleseconds to the equivalent RSSA register value. */
+        (0 - ((x * 4096) /  \
+    1000))       /* Converts a time in milleseconds to the equivalent RSSA register value. */
 
 // Externs defined by linker .ld file
 extern uint32_t _stack, _heap, _estack, _eheap;
@@ -70,7 +70,7 @@ safe_mode_t port_init(void) {
     int err = E_NO_ERROR;
 
     // Enable GPIO (enables clocks + common init for ports)
-    for (int i = 0; i < MXC_CFG_GPIO_INSTANCES; i++){
+    for (int i = 0; i < MXC_CFG_GPIO_INSTANCES; i++) {
         err = MXC_GPIO_Init(0x1 << i);
         if (err) {
             return SAFE_MODE_PROGRAMMATIC;
@@ -93,14 +93,18 @@ safe_mode_t port_init(void) {
 
     // Enable clock to RTC peripheral
     MXC_GCR->clkctrl |= MXC_F_GCR_CLKCTRL_ERTCO_EN;
-    while(!(MXC_GCR->clkctrl & MXC_F_GCR_CLKCTRL_ERTCO_RDY));
+    while (!(MXC_GCR->clkctrl & MXC_F_GCR_CLKCTRL_ERTCO_RDY)) {
+        ;
+    }
 
     NVIC_EnableIRQ(RTC_IRQn);
     NVIC_EnableIRQ(USB_IRQn);
 
     // Init RTC w/ 0sec, 0subsec
     // Driven by 32.768 kHz ERTCO, with ssec= 1/4096 s
-    while( MXC_RTC_Init(0,0) != E_SUCCESS ) {};
+    while (MXC_RTC_Init(0, 0) != E_SUCCESS) {
+    }
+    ;
 
     // enable 1 sec RTC SSEC alarm
     MXC_RTC_DisableInt(MXC_F_RTC_CTRL_SSEC_ALARM_IE);
@@ -108,7 +112,9 @@ safe_mode_t port_init(void) {
     MXC_RTC_EnableInt(MXC_F_RTC_CTRL_SSEC_ALARM_IE);
 
     // Enable RTC
-    while ( MXC_RTC_Start() != E_SUCCESS ) {};
+    while (MXC_RTC_Start() != E_SUCCESS) {
+    }
+    ;
 
     return SAFE_MODE_NONE;
 }
@@ -191,9 +197,10 @@ uint64_t port_get_raw_ticks(uint8_t *subticks) {
     __disable_irq();
     if (MXC_RTC->ctrl & MXC_F_RTC_CTRL_EN) {
         // NOTE: RTC_GetTime always returns BUSY if RTC is not running
-        while( (MXC_RTC_GetTime(&sec, &subsec)) != E_NO_ERROR );
-    }
-    else {
+        while ((MXC_RTC_GetTime(&sec, &subsec)) != E_NO_ERROR) {
+            ;
+        }
+    } else {
         sec = MXC_RTC->sec;
         subsec = MXC_RTC->ssec;
     }
@@ -232,15 +239,19 @@ void port_interrupt_after_ticks(uint32_t ticks) {
     ticks_msec = 1000 * ticks / TICKS_PER_SEC;
 
     while (MXC_RTC_DisableInt(MXC_F_RTC_CTRL_SSEC_ALARM_IE |
-                                MXC_F_RTC_CTRL_TOD_ALARM_IE) == E_BUSY) {};
+        MXC_F_RTC_CTRL_TOD_ALARM_IE) == E_BUSY) {
+    }
+    ;
 
     // Clear the flag to be set by the RTC Handler
     tick_flag = 0;
 
     // Subsec alarm is the starting/reload value of the SSEC counter.
     // ISR triggered when SSEC rolls over from 0xFFFF_FFFF to 0x0
-    while ( MXC_RTC_SetSubsecondAlarm(MSEC_TO_SS_ALARM(ticks_msec) ) == E_BUSY) {}
-    while (MXC_RTC_EnableInt(MXC_F_RTC_CTRL_SSEC_ALARM_IE) == E_BUSY) {}
+    while (MXC_RTC_SetSubsecondAlarm(MSEC_TO_SS_ALARM(ticks_msec)) == E_BUSY) {
+    }
+    while (MXC_RTC_EnableInt(MXC_F_RTC_CTRL_SSEC_ALARM_IE) == E_BUSY) {
+    }
 
     NVIC_EnableIRQ(RTC_IRQn);
 
@@ -249,10 +260,10 @@ void port_interrupt_after_ticks(uint32_t ticks) {
 
 void port_idle_until_interrupt(void) {
     #if CIRCUITPY_RTC
-        // Check if alarm triggers before we even got here
-        if (MXC_RTC_GetFlags() == (MXC_F_RTC_CTRL_TOD_ALARM | MXC_F_RTC_CTRL_SSEC_ALARM)) {
-            return;
-        }
+    // Check if alarm triggers before we even got here
+    if (MXC_RTC_GetFlags() == (MXC_F_RTC_CTRL_TOD_ALARM | MXC_F_RTC_CTRL_SSEC_ALARM)) {
+        return;
+    }
     #endif
 
     // Interrupts should be disabled to ensure the ISR queue is flushed

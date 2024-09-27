@@ -9,7 +9,7 @@
 
 static const mp_rom_map_elem_t board_module_globals_table[] = {
     CIRCUITPYTHON_BOARD_DICT_STANDARD_ITEMS
-    //P0
+    // P0
     { MP_ROM_QSTR(MP_QSTR_P0_00), MP_ROM_PTR(&pin_P0_00) },
     { MP_ROM_QSTR(MP_QSTR_P0_01), MP_ROM_PTR(&pin_P0_01) },
     { MP_ROM_QSTR(MP_QSTR_P0_02), MP_ROM_PTR(&pin_P0_02) },
@@ -42,7 +42,7 @@ static const mp_rom_map_elem_t board_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR_P0_29), MP_ROM_PTR(&pin_P0_29) },
     { MP_ROM_QSTR(MP_QSTR_P0_30), MP_ROM_PTR(&pin_P0_30) },
     { MP_ROM_QSTR(MP_QSTR_P0_31), MP_ROM_PTR(&pin_P0_31) },
-    //P1
+    // P1
     { MP_ROM_QSTR(MP_QSTR_P1_00), MP_ROM_PTR(&pin_P1_00) },
     { MP_ROM_QSTR(MP_QSTR_P1_01), MP_ROM_PTR(&pin_P1_01) },
     { MP_ROM_QSTR(MP_QSTR_P1_02), MP_ROM_PTR(&pin_P1_02) },
@@ -75,7 +75,7 @@ static const mp_rom_map_elem_t board_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR_P1_29), MP_ROM_PTR(&pin_P1_29) },
     { MP_ROM_QSTR(MP_QSTR_P1_30), MP_ROM_PTR(&pin_P1_30) },
     { MP_ROM_QSTR(MP_QSTR_P1_31), MP_ROM_PTR(&pin_P1_31) },
-    //P2
+    // P2
     { MP_ROM_QSTR(MP_QSTR_P2_00), MP_ROM_PTR(&pin_P2_00) },
     { MP_ROM_QSTR(MP_QSTR_P2_01), MP_ROM_PTR(&pin_P2_01) },
     { MP_ROM_QSTR(MP_QSTR_P2_02), MP_ROM_PTR(&pin_P2_02) },
@@ -108,7 +108,7 @@ static const mp_rom_map_elem_t board_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR_P2_29), MP_ROM_PTR(&pin_P2_29) },
     { MP_ROM_QSTR(MP_QSTR_P2_30), MP_ROM_PTR(&pin_P2_30) },
     { MP_ROM_QSTR(MP_QSTR_P2_31), MP_ROM_PTR(&pin_P2_31) },
-    //P3
+    // P3
     { MP_ROM_QSTR(MP_QSTR_P3_00), MP_ROM_PTR(&pin_P3_00) },
     { MP_ROM_QSTR(MP_QSTR_P3_01), MP_ROM_PTR(&pin_P3_01) },
     { MP_ROM_QSTR(MP_QSTR_P3_02), MP_ROM_PTR(&pin_P3_02) },
@@ -119,7 +119,7 @@ static const mp_rom_map_elem_t board_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR_P3_07), MP_ROM_PTR(&pin_P3_07) },
     { MP_ROM_QSTR(MP_QSTR_P3_08), MP_ROM_PTR(&pin_P3_08) },
     { MP_ROM_QSTR(MP_QSTR_P3_09), MP_ROM_PTR(&pin_P3_09) },
-    //P4
+    // P4
     { MP_ROM_QSTR(MP_QSTR_P4_00), MP_ROM_PTR(&pin_P4_00) },
     { MP_ROM_QSTR(MP_QSTR_P4_01), MP_ROM_PTR(&pin_P4_01) },
 };
