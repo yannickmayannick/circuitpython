@@ -36,8 +36,7 @@ void init_usb_hardware(void) {
     // Interrupt enables are left to TUSB depending on the device class
 }
 
-void USB_IRQHandler(void)
-{
+void USB_IRQHandler(void) {
     // Schedules USB background callback
     // appropriate to a given device class via TinyUSB lib
     usb_irq_handler(0);

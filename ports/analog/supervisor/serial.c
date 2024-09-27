@@ -26,7 +26,9 @@
 void port_serial_init(void) {
     #if MAX32_SERIAL
     MXC_GCR->clkctrl |= MXC_F_GCR_CLKCTRL_IBRO_EN;
-    while( !(MXC_GCR->clkctrl & MXC_F_GCR_CLKCTRL_IBRO_RDY) );
+    while (!(MXC_GCR->clkctrl & MXC_F_GCR_CLKCTRL_IBRO_RDY)) {
+        ;
+    }
     MXC_UART_Init(CONSOLE_UART, 115200, MXC_UART_IBRO_CLK);
     #endif
 }
@@ -76,7 +78,7 @@ void port_serial_write_substring(const char *text, uint32_t len) {
         .rxData = NULL,
         .txLen = len,
         .rxLen = 0
-     };
+    };
     MXC_UART_Transaction(&uart_req);
     #endif
 }

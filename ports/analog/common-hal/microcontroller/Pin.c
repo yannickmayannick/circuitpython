@@ -17,7 +17,7 @@
 static uint32_t claimed_pins[NUM_GPIO_PORTS];
 
 // defined in board.c
-extern mxc_gpio_regs_t* gpio_ports[NUM_GPIO_PORTS];
+extern mxc_gpio_regs_t *gpio_ports[NUM_GPIO_PORTS];
 
 static uint32_t never_reset_pins[NUM_GPIO_PORTS];
 
@@ -31,8 +31,8 @@ void reset_all_pins(void) {
                 reset_pin_number(i, j);
             }
         }
-    // set claimed pins to never_reset pins
-    claimed_pins[i] = never_reset_pins[i];
+        // set claimed pins to never_reset pins
+        claimed_pins[i] = never_reset_pins[i];
     }
 }
 

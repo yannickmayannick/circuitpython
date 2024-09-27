@@ -10,7 +10,7 @@
 
 #include "gpio_reva.h"
 
-extern mxc_gpio_regs_t* gpio_ports[NUM_GPIO_PORTS];
+extern mxc_gpio_regs_t *gpio_ports[NUM_GPIO_PORTS];
 
 void common_hal_digitalio_digitalinout_never_reset(
     digitalio_digitalinout_obj_t *self) {
@@ -50,9 +50,8 @@ void common_hal_digitalio_digitalinout_deinit(digitalio_digitalinout_obj_t *self
 }
 
 digitalinout_result_t common_hal_digitalio_digitalinout_switch_to_input(
-    digitalio_digitalinout_obj_t *self, digitalio_pull_t pull)
-{
-    mxc_gpio_regs_t* port = gpio_ports[self->pin->port];
+    digitalio_digitalinout_obj_t *self, digitalio_pull_t pull) {
+    mxc_gpio_regs_t *port = gpio_ports[self->pin->port];
     uint32_t mask = self->pin->mask;
 
     MXC_GPIO_RevA_SetAF((mxc_gpio_reva_regs_t *)port, MXC_GPIO_FUNC_IN, mask);
@@ -61,9 +60,8 @@ digitalinout_result_t common_hal_digitalio_digitalinout_switch_to_input(
 
 digitalinout_result_t common_hal_digitalio_digitalinout_switch_to_output(
     digitalio_digitalinout_obj_t *self, bool value,
-        digitalio_drive_mode_t drive_mode)
-{
-    mxc_gpio_regs_t* port = gpio_ports[self->pin->port];
+    digitalio_drive_mode_t drive_mode) {
+    mxc_gpio_regs_t *port = gpio_ports[self->pin->port];
     uint32_t mask = self->pin->mask;
 
     MXC_GPIO_RevA_SetAF((mxc_gpio_reva_regs_t *)port, MXC_GPIO_FUNC_OUT, mask);
@@ -85,24 +83,21 @@ digitalio_direction_t common_hal_digitalio_digitalinout_get_direction(
     uint32_t mask = self->pin->mask;
 
     // Check that I/O mode is enabled and we don't have in AND out on at the same time
-    MP_STATIC_ASSERT(!( (port->en0 & mask) && (port->inen & mask) && (port->outen & mask) ));
+    MP_STATIC_ASSERT(!((port->en0 & mask) && (port->inen & mask) && (port->outen & mask)));
 
-    if ( (port->en0 & mask) && (port->outen & mask) )
-    {
+    if ((port->en0 & mask) && (port->outen & mask)) {
         return DIRECTION_OUTPUT;
-    }
-    else if ( (port->en0 & mask) && (port->inen & mask) )
-    {
+    } else if ((port->en0 & mask) && (port->inen & mask)) {
         return DIRECTION_INPUT;
     }
-
     // do not try to drive a pin which has an odd configuration here
-    else return DIRECTION_INPUT;
+    else {
+        return DIRECTION_INPUT;
+    }
 }
 
 void common_hal_digitalio_digitalinout_set_value(
-    digitalio_digitalinout_obj_t *self, bool value)
-{
+    digitalio_digitalinout_obj_t *self, bool value) {
     digitalio_direction_t dir =
         common_hal_digitalio_digitalinout_get_direction(self);
 
@@ -112,15 +107,13 @@ void common_hal_digitalio_digitalinout_set_value(
     if (dir == DIRECTION_OUTPUT) {
         if (value == true) {
             MXC_GPIO_OutSet(port, mask);
-        }
-        else {
+        } else {
             MXC_GPIO_OutClr(port, mask);
         }
     }
 }
 
-bool common_hal_digitalio_digitalinout_get_value(digitalio_digitalinout_obj_t *self)
-{
+bool common_hal_digitalio_digitalinout_get_value(digitalio_digitalinout_obj_t *self) {
     digitalio_direction_t dir =
         common_hal_digitalio_digitalinout_get_direction(self);
 
@@ -128,10 +121,9 @@ bool common_hal_digitalio_digitalinout_get_value(digitalio_digitalinout_obj_t *s
     uint32_t mask = self->pin->mask;
 
     if (dir == DIRECTION_INPUT) {
-        return (MXC_GPIO_InGet(port, mask));
-    }
-    else {
-        return ( (port->out & mask) == true);
+        return MXC_GPIO_InGet(port, mask);
+    } else {
+        return (port->out & mask) == true;
     }
 }
 
@@ -154,7 +146,7 @@ digitalinout_result_t common_hal_digitalio_digitalinout_set_pull(
     mxc_gpio_regs_t *port = gpio_ports[self->pin->port];
     uint32_t mask = self->pin->mask;
 
-    if ( (port->en0 & mask) && (port->inen & mask) ) {
+    if ((port->en0 & mask) && (port->inen & mask)) {
         // PULL_NONE, PULL_UP, or PULL_DOWN
         switch (pull) {
             case PULL_NONE:
@@ -162,7 +154,7 @@ digitalinout_result_t common_hal_digitalio_digitalinout_set_pull(
                 port->padctrl1 &= ~(mask);
                 break;
             case PULL_UP:
-                port->padctrl0 |=  mask;
+                port->padctrl0 |= mask;
                 port->padctrl1 &= ~(mask);
                 break;
             case PULL_DOWN:
@@ -173,8 +165,7 @@ digitalinout_result_t common_hal_digitalio_digitalinout_set_pull(
                 break;
         }
         return DIGITALINOUT_OK;
-    }
-    else {
+    } else {
         return DIGITALINOUT_PIN_BUSY;
     }
 }
@@ -182,19 +173,16 @@ digitalinout_result_t common_hal_digitalio_digitalinout_set_pull(
 digitalio_pull_t common_hal_digitalio_digitalinout_get_pull(
     digitalio_digitalinout_obj_t *self) {
 
-    bool pin_padctrl0 = (gpio_ports[self->pin->port]->padctrl0) & ( self->pin->mask);
-    bool pin_padctrl1 = (gpio_ports[self->pin->port]->padctrl1) & ( self->pin->mask);
+    bool pin_padctrl0 = (gpio_ports[self->pin->port]->padctrl0) & (self->pin->mask);
+    bool pin_padctrl1 = (gpio_ports[self->pin->port]->padctrl1) & (self->pin->mask);
 
-    if ( (pin_padctrl0) && !(pin_padctrl1) ) {
+    if ((pin_padctrl0) && !(pin_padctrl1)) {
         return PULL_UP;
-    }
-    else if ( !(pin_padctrl0) && pin_padctrl1 ) {
+    } else if (!(pin_padctrl0) && pin_padctrl1) {
         return PULL_DOWN;
-    }
-    else if ( !(pin_padctrl0) && !(pin_padctrl1) ) {
+    } else if (!(pin_padctrl0) && !(pin_padctrl1)) {
         return PULL_NONE;
     }
-
     // Shouldn't happen, (value 0b11 is reserved)
     else {
         return PULL_NONE;

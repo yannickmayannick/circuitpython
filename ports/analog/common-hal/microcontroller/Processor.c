@@ -40,7 +40,7 @@ void common_hal_mcu_processor_get_uid(uint8_t raw_id[]) {
 
 mcu_reset_reason_t common_hal_mcu_processor_get_reset_reason(void) {
     #if CIRCUITPY_ALARM
-        // TODO: (low prior.) add reset reason in alarm / deepsleep cases (should require alarm peripheral API in "peripherals")
+    // TODO: (low prior.) add reset reason in alarm / deepsleep cases (should require alarm peripheral API in "peripherals")
     #endif
     return RESET_REASON_UNKNOWN;
 }
