@@ -68,6 +68,9 @@ extern void NVIC_SystemReset(void) NORETURN;
 safe_mode_t port_init(void) {
     int err = E_NO_ERROR;
 
+    // 1ms tick timer
+    SysTick_Config(SystemCoreClock / 1000);
+
     // Enable GPIO (enables clocks + common init for ports)
     for (int i = 0; i < MXC_CFG_GPIO_INSTANCES; i++) {
         err = MXC_GPIO_Init(0x1 << i);
@@ -122,12 +125,18 @@ void RTC_IRQHandler(void) {
     // Read flags to clear
     int flags = MXC_RTC_GetFlags();
 
-    if (flags & MXC_F_RTC_CTRL_SSEC_ALARM) {
-        MXC_RTC_ClearFlags(MXC_F_RTC_CTRL_SSEC_ALARM);
-    }
-
-    if (flags & MXC_F_RTC_CTRL_TOD_ALARM) {
-        MXC_RTC_ClearFlags(MXC_F_RTC_CTRL_TOD_ALARM);
+    switch (flags) {
+        case MXC_F_RTC_CTRL_SSEC_ALARM:
+            MXC_RTC_ClearFlags(MXC_F_RTC_CTRL_SSEC_ALARM);
+            break;
+        case MXC_F_RTC_CTRL_TOD_ALARM:
+            MXC_RTC_ClearFlags(MXC_F_RTC_CTRL_TOD_ALARM);
+            break;
+        case MXC_F_RTC_CTRL_RDY:
+            MXC_RTC_ClearFlags(MXC_F_RTC_CTRL_RDY);
+            break;
+        default:
+            break;
     }
 
     tick_flag = 1;
@@ -145,7 +154,7 @@ void reset_port(void) {
 }
 
 // Reset to the bootloader
-// note: not implemented since max32 requires external stim ignals to
+// note: not implemented since max32 requires external signals to
 //       activate bootloaders
 void reset_to_bootloader(void) {
     NVIC_SystemReset();
@@ -193,7 +202,6 @@ uint32_t port_get_saved_word(void) {
 uint64_t port_get_raw_ticks(uint8_t *subticks) {
     // Ensure we can read from ssec register as soon as we can
     // MXC function does cross-tick / busy checking of RTC controller
-    __disable_irq();
     if (MXC_RTC->ctrl & MXC_F_RTC_CTRL_EN) {
         // NOTE: RTC_GetTime always returns BUSY if RTC is not running
         while ((MXC_RTC_GetTime(&sec, &subsec)) != E_NO_ERROR) {
@@ -203,7 +211,6 @@ uint64_t port_get_raw_ticks(uint8_t *subticks) {
         sec = MXC_RTC->sec;
         subsec = MXC_RTC->ssec;
     }
-    __enable_irq();
 
     // Return ticks given total subseconds
     // ticks = TICKS/s * s + subsec/ subs/tick
@@ -220,41 +227,36 @@ uint64_t port_get_raw_ticks(uint8_t *subticks) {
 
 // Enable 1/1024 second tick.
 void port_enable_tick(void) {
-    MXC_RTC_Start();
+    while ( MXC_RTC_Start() == E_BUSY );
 }
 
 // Disable 1/1024 second tick.
 void port_disable_tick(void) {
-    MXC_RTC_Stop();
+    while( MXC_RTC_Stop() == E_BUSY );
 }
 
 // Wake the CPU after a given # of ticks or sooner
 void port_interrupt_after_ticks(uint32_t ticks) {
     uint32_t ticks_msec = 0;
+
+    ticks_msec = (ticks / TICKS_PER_SEC) * 1000;
+
+    // Disable RTC interrupts
+    MXC_RTC_DisableInt(MXC_F_RTC_CTRL_SSEC_ALARM_IE |
+        MXC_F_RTC_CTRL_TOD_ALARM_IE | MXC_F_RTC_CTRL_RDY_IE);
+
     // Stop RTC & store current time & ticks
-    port_disable_tick();
     port_get_raw_ticks(NULL);
-
-    ticks_msec = 1000 * ticks / TICKS_PER_SEC;
-
-    while (MXC_RTC_DisableInt(MXC_F_RTC_CTRL_SSEC_ALARM_IE |
-        MXC_F_RTC_CTRL_TOD_ALARM_IE) == E_BUSY) {
-    }
-    ;
 
     // Clear the flag to be set by the RTC Handler
     tick_flag = 0;
 
     // Subsec alarm is the starting/reload value of the SSEC counter.
     // ISR triggered when SSEC rolls over from 0xFFFF_FFFF to 0x0
-    while (MXC_RTC_SetSubsecondAlarm(MSEC_TO_SS_ALARM(ticks_msec)) == E_BUSY) {
-    }
-    while (MXC_RTC_EnableInt(MXC_F_RTC_CTRL_SSEC_ALARM_IE) == E_BUSY) {
-    }
+    while (MXC_RTC_SetSubsecondAlarm(MSEC_TO_SS_ALARM(ticks_msec)) != E_SUCCESS) {}
 
-    NVIC_EnableIRQ(RTC_IRQn);
+    MXC_RTC_EnableInt(MXC_F_RTC_CTRL_SSEC_ALARM_IE);
 
-    port_enable_tick();
 }
 
 void port_idle_until_interrupt(void) {

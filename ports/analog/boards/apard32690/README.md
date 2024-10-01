@@ -18,7 +18,7 @@ For more info about AD-APARD32690-SL, visit our product webpages for datasheets,
 To build for this board, ensure you are in the `ports/analog` directory and run the following command. Note that passing in the `-jN` flag, where N is the # of cores on your machine, can speed up compile times.
 
 ```
-make BOARD=APARD
+make BOARD=apard32690
 ```
 
 #### Flashing this board

@@ -47,24 +47,6 @@ uint32_t board_millis(void) {
 
 // Initializes board related state once on start up.
 void board_init(void) {
-    // 1ms tick timer
-    SysTick_Config(SystemCoreClock / 1000); \
-
-    // Enable GPIO (enables clocks + common init for ports)
-    for (int i = 0; i < MXC_CFG_GPIO_INSTANCES; i++) {
-        MXC_GPIO_Init(0x1 << i);
-    }
-
-    // Init Board LEDs
-    /* setup GPIO for the LED */
-    for (int i = 0; i < num_leds; i++) {
-        // Set the output value
-        MXC_GPIO_OutClr(led_pin[i].port, led_pin[i].mask);
-        MXC_GPIO_Config(&led_pin[i]);
-    }
-
-    // Turn on one LED to indicate Sign of Life
-    MXC_GPIO_OutSet(led_pin[2].port, led_pin[2].mask);
 }
 
 // Reset the state of off MCU components such as neopixels.

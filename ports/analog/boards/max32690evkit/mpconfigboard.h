@@ -36,3 +36,6 @@
 // #else
 // #define CIRCUITPY_INTERNAL_FLASH_FILESYSTEM_SIZE (0)
 // #endif
+
+#define MICROPY_HW_LED_STATUS           (&pin_P2_12)
+#define MICROPY_HW_LED_STATUS_INVERTED  1

@@ -259,7 +259,7 @@ SRC_QSTR_PREPROCESSOR +=
 # Default build target
 all: $(BUILD)/firmware.elf $(BUILD)/firmware.hex $(BUILD)/firmware.bin
 
-clean-max32:
+clean-all:
 	rm -rf build-*
 
 # Optional flash option when running within an installed MSDK to use OpenOCD
