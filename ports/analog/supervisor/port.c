@@ -227,12 +227,16 @@ uint64_t port_get_raw_ticks(uint8_t *subticks) {
 
 // Enable 1/1024 second tick.
 void port_enable_tick(void) {
-    while ( MXC_RTC_Start() == E_BUSY );
+    while (MXC_RTC_Start() == E_BUSY) {
+        ;
+    }
 }
 
 // Disable 1/1024 second tick.
 void port_disable_tick(void) {
-    while( MXC_RTC_Stop() == E_BUSY );
+    while (MXC_RTC_Stop() == E_BUSY) {
+        ;
+    }
 }
 
 // Wake the CPU after a given # of ticks or sooner
@@ -253,7 +257,8 @@ void port_interrupt_after_ticks(uint32_t ticks) {
 
     // Subsec alarm is the starting/reload value of the SSEC counter.
     // ISR triggered when SSEC rolls over from 0xFFFF_FFFF to 0x0
-    while (MXC_RTC_SetSubsecondAlarm(MSEC_TO_SS_ALARM(ticks_msec)) != E_SUCCESS) {}
+    while (MXC_RTC_SetSubsecondAlarm(MSEC_TO_SS_ALARM(ticks_msec)) != E_SUCCESS) {
+    }
 
     MXC_RTC_EnableInt(MXC_F_RTC_CTRL_SSEC_ALARM_IE);
 

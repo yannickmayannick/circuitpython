@@ -55,14 +55,13 @@ digitalinout_result_t common_hal_digitalio_digitalinout_switch_to_input(
     digitalio_digitalinout_obj_t *self, digitalio_pull_t pull) {
     mxc_gpio_regs_t *port = gpio_ports[self->pin->port];
     uint32_t mask = self->pin->mask;
-    int err=E_NO_ERROR;
+    int err = E_NO_ERROR;
 
     if (self->pin->port == 4) {
         // Set GPIO(s) to input mode
         MXC_MCR->gpio4_ctrl &= ~GPIO4_OUTEN_MASK(mask);
         MXC_MCR->outen &= ~GPIO4_AFEN_MASK(mask);
-    }
-    else {
+    } else {
         err = MXC_GPIO_RevA_SetAF((mxc_gpio_reva_regs_t *)port, MXC_GPIO_FUNC_IN, mask);
     }
     if (err != E_NO_ERROR) {
@@ -81,8 +80,7 @@ digitalinout_result_t common_hal_digitalio_digitalinout_switch_to_output(
         // Set GPIO(s) to output mode
         MXC_MCR->gpio4_ctrl |= GPIO4_OUTEN_MASK(mask);
         MXC_MCR->outen &= ~GPIO4_AFEN_MASK(mask);
-    }
-    else {
+    } else {
         MXC_GPIO_RevA_SetAF((mxc_gpio_reva_regs_t *)port, MXC_GPIO_FUNC_OUT, mask);
     }
     common_hal_digitalio_digitalinout_set_value(self, value);
@@ -110,17 +108,14 @@ digitalio_direction_t common_hal_digitalio_digitalinout_get_direction(
             return DIRECTION_OUTPUT;
         } else if ((port->en0 & mask) && (port->inen & mask)) {
             return DIRECTION_INPUT;
-        }
-        // do not try to drive a pin which has an odd configuration here
-        else {
+            // do not try to drive a pin which has an odd configuration here
+        } else {
             return DIRECTION_INPUT;
         }
-    }
-    else {
+    } else {
         if (MXC_MCR->gpio4_ctrl & GPIO4_OUTEN_MASK(mask)) {
             return DIRECTION_OUTPUT;
-        }
-        else {
+        } else {
             return DIRECTION_INPUT;
         }
     }
@@ -154,9 +149,9 @@ bool common_hal_digitalio_digitalinout_get_value(digitalio_digitalinout_obj_t *s
         if (self->pin->port == 4) {
             return (bool)(MXC_MCR->gpio4_ctrl & GPIO4_DATAIN_MASK(mask));
         }
-        return (MXC_GPIO_InGet(port, mask) && mask);
+        return MXC_GPIO_InGet(port, mask) && mask;
     } else {
-        return (MXC_GPIO_OutGet(port, mask) && mask);
+        return MXC_GPIO_OutGet(port, mask) && mask;
     }
 }
 
@@ -187,8 +182,7 @@ digitalinout_result_t common_hal_digitalio_digitalinout_set_pull(
     if (self->pin->port == 4) {
         MXC_MCR->gpio4_ctrl &= ~(GPIO4_PULLDIS_MASK(mask));
         return DIGITALINOUT_OK;
-    }
-    else {
+    } else {
         if ((mask & port->en0) & (mask & ~(port->outen))) {
             // PULL_NONE, PULL_UP, or PULL_DOWN
             switch (pull) {
@@ -208,8 +202,7 @@ digitalinout_result_t common_hal_digitalio_digitalinout_set_pull(
                     break;
             }
             return DIGITALINOUT_OK;
-        }
-        else {
+        } else {
             return DIGITALINOUT_PIN_BUSY;
         }
     }
@@ -228,9 +221,7 @@ digitalio_pull_t common_hal_digitalio_digitalinout_get_pull(
         return PULL_DOWN;
     } else if (!(pin_padctrl0) && !(pin_padctrl1)) {
         return PULL_NONE;
-    }
-    // Shouldn't happen, (value 0b11 is reserved)
-    else {
+    } else {
         return PULL_NONE;
     }
 }
