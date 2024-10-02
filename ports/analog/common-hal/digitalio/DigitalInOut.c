@@ -8,7 +8,9 @@
 #include "shared-bindings/digitalio/DigitalInOut.h"
 #include "shared-bindings/microcontroller/Pin.h"
 
+#include "max32_port.h"
 #include "gpio_reva.h"
+#include "mxc_errors.h"
 
 extern mxc_gpio_regs_t *gpio_ports[NUM_GPIO_PORTS];
 
@@ -53,8 +55,19 @@ digitalinout_result_t common_hal_digitalio_digitalinout_switch_to_input(
     digitalio_digitalinout_obj_t *self, digitalio_pull_t pull) {
     mxc_gpio_regs_t *port = gpio_ports[self->pin->port];
     uint32_t mask = self->pin->mask;
+    int err=E_NO_ERROR;
 
-    MXC_GPIO_RevA_SetAF((mxc_gpio_reva_regs_t *)port, MXC_GPIO_FUNC_IN, mask);
+    if (self->pin->port == 4) {
+        // Set GPIO(s) to input mode
+        MXC_MCR->gpio4_ctrl &= ~GPIO4_OUTEN_MASK(mask);
+        MXC_MCR->outen &= ~GPIO4_AFEN_MASK(mask);
+    }
+    else {
+        err = MXC_GPIO_RevA_SetAF((mxc_gpio_reva_regs_t *)port, MXC_GPIO_FUNC_IN, mask);
+    }
+    if (err != E_NO_ERROR) {
+        return DIGITALINOUT_PIN_BUSY;
+    }
     return common_hal_digitalio_digitalinout_set_pull(self, pull);
 }
 
@@ -64,7 +77,14 @@ digitalinout_result_t common_hal_digitalio_digitalinout_switch_to_output(
     mxc_gpio_regs_t *port = gpio_ports[self->pin->port];
     uint32_t mask = self->pin->mask;
 
-    MXC_GPIO_RevA_SetAF((mxc_gpio_reva_regs_t *)port, MXC_GPIO_FUNC_OUT, mask);
+    if (self->pin->port == 4) {
+        // Set GPIO(s) to output mode
+        MXC_MCR->gpio4_ctrl |= GPIO4_OUTEN_MASK(mask);
+        MXC_MCR->outen &= ~GPIO4_AFEN_MASK(mask);
+    }
+    else {
+        MXC_GPIO_RevA_SetAF((mxc_gpio_reva_regs_t *)port, MXC_GPIO_FUNC_OUT, mask);
+    }
     common_hal_digitalio_digitalinout_set_value(self, value);
 
     // todo (low): MSDK Hardware does not support open-drain configuration except
@@ -82,17 +102,27 @@ digitalio_direction_t common_hal_digitalio_digitalinout_get_direction(
     mxc_gpio_regs_t *port = gpio_ports[self->pin->port];
     uint32_t mask = self->pin->mask;
 
-    // Check that I/O mode is enabled and we don't have in AND out on at the same time
-    MP_STATIC_ASSERT(!((port->en0 & mask) && (port->inen & mask) && (port->outen & mask)));
+    if (self->pin->port < 4) {
+        // Check that I/O mode is enabled and we don't have in AND out on at the same time
+        MP_STATIC_ASSERT(!((port->en0 & mask) && (port->inen & mask) && (port->outen & mask)));
 
-    if ((port->en0 & mask) && (port->outen & mask)) {
-        return DIRECTION_OUTPUT;
-    } else if ((port->en0 & mask) && (port->inen & mask)) {
-        return DIRECTION_INPUT;
+        if ((port->en0 & mask) && (port->outen & mask)) {
+            return DIRECTION_OUTPUT;
+        } else if ((port->en0 & mask) && (port->inen & mask)) {
+            return DIRECTION_INPUT;
+        }
+        // do not try to drive a pin which has an odd configuration here
+        else {
+            return DIRECTION_INPUT;
+        }
     }
-    // do not try to drive a pin which has an odd configuration here
     else {
-        return DIRECTION_INPUT;
+        if (MXC_MCR->gpio4_ctrl & GPIO4_OUTEN_MASK(mask)) {
+            return DIRECTION_OUTPUT;
+        }
+        else {
+            return DIRECTION_INPUT;
+        }
     }
 }
 
@@ -121,15 +151,22 @@ bool common_hal_digitalio_digitalinout_get_value(digitalio_digitalinout_obj_t *s
     uint32_t mask = self->pin->mask;
 
     if (dir == DIRECTION_INPUT) {
-        return MXC_GPIO_InGet(port, mask);
+        if (self->pin->port == 4) {
+            return (bool)(MXC_MCR->gpio4_ctrl & GPIO4_DATAIN_MASK(mask));
+        }
+        return (MXC_GPIO_InGet(port, mask) && mask);
     } else {
-        return (port->out & mask) == true;
+        return (MXC_GPIO_OutGet(port, mask) && mask);
     }
 }
 
+/** FIXME: Implement open-drain by switching to input WITHOUT re-labeling the pin */
 digitalinout_result_t common_hal_digitalio_digitalinout_set_drive_mode(
     digitalio_digitalinout_obj_t *self, digitalio_drive_mode_t drive_mode) {
 
+    if (drive_mode == DRIVE_MODE_OPEN_DRAIN) {
+        common_hal_digitalio_digitalinout_switch_to_input(self, PULL_NONE);
+    }
     // On MAX32, drive mode is not configurable
     // and should always be push-pull unless managed by a peripheral like I2C
     return DIGITALINOUT_OK;
@@ -146,30 +183,39 @@ digitalinout_result_t common_hal_digitalio_digitalinout_set_pull(
     mxc_gpio_regs_t *port = gpio_ports[self->pin->port];
     uint32_t mask = self->pin->mask;
 
-    if ((port->en0 & mask) && (port->inen & mask)) {
-        // PULL_NONE, PULL_UP, or PULL_DOWN
-        switch (pull) {
-            case PULL_NONE:
-                port->padctrl0 &= ~(mask);
-                port->padctrl1 &= ~(mask);
-                break;
-            case PULL_UP:
-                port->padctrl0 |= mask;
-                port->padctrl1 &= ~(mask);
-                break;
-            case PULL_DOWN:
-                port->padctrl0 &= ~(mask);
-                port->padctrl1 |= mask;
-                break;
-            default:
-                break;
-        }
+    // padctrl registers only work in input mode
+    if (self->pin->port == 4) {
+        MXC_MCR->gpio4_ctrl &= ~(GPIO4_PULLDIS_MASK(mask));
         return DIGITALINOUT_OK;
-    } else {
-        return DIGITALINOUT_PIN_BUSY;
+    }
+    else {
+        if ((mask & port->en0) & (mask & ~(port->outen))) {
+            // PULL_NONE, PULL_UP, or PULL_DOWN
+            switch (pull) {
+                case PULL_NONE:
+                    port->padctrl0 &= ~(mask);
+                    port->padctrl1 &= ~(mask);
+                    break;
+                case PULL_UP:
+                    port->padctrl0 |= mask;
+                    port->padctrl1 &= ~(mask);
+                    break;
+                case PULL_DOWN:
+                    port->padctrl0 &= ~(mask);
+                    port->padctrl1 |= mask;
+                    break;
+                default:
+                    break;
+            }
+            return DIGITALINOUT_OK;
+        }
+        else {
+            return DIGITALINOUT_PIN_BUSY;
+        }
     }
 }
 
+/** FIXME: Account for GPIO4 handling here */
 digitalio_pull_t common_hal_digitalio_digitalinout_get_pull(
     digitalio_digitalinout_obj_t *self) {
 
