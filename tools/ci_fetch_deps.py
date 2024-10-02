@@ -48,7 +48,7 @@ def matching_submodules(s):
 PORT_DEPS = {
     "analog": [
         "extmod/ulab/",
-        "/lib/tlsf/",
+        "lib/tlsf/",
         "lib/tinyusb/",
         "lib/protomatter",
     ],

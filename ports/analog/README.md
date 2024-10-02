@@ -2,7 +2,7 @@
 
 This port brings CircuitPython to ADI's "MAX32" series of microcontrollers. These devices are mostly ARM Cortex-M4-based and focus on delivering performance at low-power levels. Currently this port only supports MAX32690.
 
-### Structure of this port
+## Structure of this port
 
 - **`boards/:`** Board-specific definitions including pins, board initialization, etc.
 - **`common-hal/:`** Port-specific implementations of CircuitPython common-hal APIs. When a new module is enabled, this is often where the implementation is found. Expected functions for modules in `common-hal` are usually found in `shared-bindings/` or `shared-module/` in the CircuitPy root directory.
@@ -14,7 +14,7 @@ This port brings CircuitPython to ADI's "MAX32" series of microcontrollers. Thes
 
 - `. :` Build system and high-level interface to the CircuitPython core for the ADI port.
 
-### Building for MAX32 devices
+## Building for MAX32 devices
 
 Ensure CircuitPython dependencies are up-to-date by following the CircuitPython introduction on Adafruit's Website: [Building CircuitPython - Introduction](https://learn.adafruit.com/building-circuitpython/introduction). In particular, it is necessary to fetch all submodules (including the ARM Toolchain inside MSDK) and build the `mpy-cross` compiler.
 
@@ -32,7 +32,7 @@ Once you have built `mpy-cross` and set up your build system for CircuitPython, 
 
 Be aware the build may take a long time without parallelizing via the `-jN` flag, where N is the # of cores on your machine.
 
-### Flashing the board
+## Flashing the board
 
 Universal instructions on flashing MAX32 devices this project can be found in the **[MSDK User Guide](https://analogdevicesinc.github.io/msdk/USERGUIDE/)**.
 
@@ -48,11 +48,11 @@ This requires the following:
 - The PICO board is connected to the target board via a 10-pin SWD ribbon cable.
   - If SWD connectors are not keyed, the P1 indicator (red line) on the SWD ribbon cable should match the P1 indicator on the board silkscreen near the 10-pin SWD connector.
 
-### Using the REPL
+## Using the REPL
 
 Once the device is plugged in, it will enumerate via USB as both a USB Serial Device (CDC) and a Mass Storage Device (MSC). You can connect to the Python REPL with your favorite Serial Monitor program e.g. TeraTerm, VS Code, Putty, etc. Use any buadrate with 8-bit, No Parity, 1 Stop Bit (8N1) settings. From this point forward, you can run Python code on the MCU! If you want help with learning CircuitPython-specific code or learning Python in general, a good place to start is Adafruit's ["Welcome to CircuitPython"](https://learn.adafruit.com/welcome-to-circuitpython/) guide.
 
-### Editing code.py
+## Editing code.py
 
 Python code may be executed from `code.py` the `CIRCUITPY:` drive. When editing this file, please be aware that some text editors will work better than others. A list of suggested text editors can be found at Adafruit's guide here: https://learn.adafruit.com/welcome-to-circuitpython/recommended-editors
 
