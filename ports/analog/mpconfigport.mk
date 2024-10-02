@@ -60,10 +60,13 @@ CIRCUITPY_REQUIRE_I2C_PULLUPS = 0
 CIRCUITPY_PIXELBUF ?= 0
 
 ####################################################################################
-# Required for clean building (additional CircuittPython Defaults)
+# Required for clean building (additional CircuitPython Defaults)
 ####################################################################################
 
 # Depends on BUSIO
 CIRCUITPY_BLEIO_HCI = 0
 CIRCUITPY_KEYPAD = 0
 CIRCUITPY_BUSDEVICE = 0
+
+# For CircuitPython CI
+CIRCUITPY_BUILD_EXTENSIONS ?= elf
