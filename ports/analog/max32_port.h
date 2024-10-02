@@ -40,7 +40,7 @@
     (MXC_F_MCR_GPIO4_CTRL_P41_DO_POS - 1))) &                                                 \
     mask)
 #define GPIO4_DATAIN_MASK(mask)                                                                  \
-        ((((MXC_MCR->gpio4_ctrl & MXC_F_MCR_GPIO4_CTRL_P40_IN) >> MXC_F_MCR_GPIO4_CTRL_P40_IN_POS) | \
+    ((((MXC_MCR->gpio4_ctrl & MXC_F_MCR_GPIO4_CTRL_P40_IN) >> MXC_F_MCR_GPIO4_CTRL_P40_IN_POS) | \
     ((MXC_MCR->gpio4_ctrl & MXC_F_MCR_GPIO4_CTRL_P41_IN) >>                                    \
     (MXC_F_MCR_GPIO4_CTRL_P41_IN_POS - 1))) &                                                 \
     mask)
