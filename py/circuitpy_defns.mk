@@ -570,6 +570,7 @@ $(filter $(SRC_PATTERNS), \
 	_bleio/ScanEntry.c \
 	_eve/__init__.c \
 	__future__/__init__.c \
+	audiofilters/DistortionMode.c \
 	camera/ImageFormat.c \
 	canio/Match.c \
 	codeop/__init__.c \
@@ -626,6 +627,7 @@ SRC_SHARED_MODULE_ALL = \
 	audiodelays/Echo.c \
 	audiodelays/__init__.c \
 	audiofilters/Filter.c \
+	audiofilters/Distortion.c \
 	audiofilters/__init__.c \
 	audioio/__init__.c \
 	audiomixer/Mixer.c \
