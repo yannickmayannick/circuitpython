@@ -50,8 +50,9 @@ static synthio_filter_e validate_synthio_filter(mp_obj_t obj, qstr arg_name) {
 //|     ) -> None:
 //|         """Construct a biquad filter object with dynamic center frequency & q factor
 //|
-//|         Since ``frequency`` and ``q_factor`` are `BlockInput`s, they can be varied dynamically.
-//|         Internally, this is evaluated as "direct form 1" biquad filter.
+//|         Since ``frequency`` and ``q_factor`` are `BlockInput` objects, they can
+//|         be varied dynamically. Internally, this is evaluated as "direct form 1"
+//|         biquad filter.
 //|
 //|         The internal filter state x[] and y[] is not updated when the filter
 //|         coefficients change, and there is no theoretical justification for why
