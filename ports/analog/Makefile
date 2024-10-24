@@ -145,7 +145,8 @@ CFLAGS += -D$(MCU_VARIANT_UPPER) \
 			-DTARGET_REV=0x4131 \
 			-DTARGET=$(MCU_VARIANT_UPPER) \
 			-DIAR_PRAGMAS=0 \
-			-DRISCV_LOAD=0
+			-DRISCV_LOAD=0 \
+			-DCONFIG_TRUSTED_EXECUTION_SECURE=0
 
 # todo: add these for linkerfiles later on so that it's easier to add new boards
 # -DFLASH_ORIGIN=0x10000000 \
