@@ -35,7 +35,7 @@ static MP_DEFINE_CONST_DICT(synthio_filter_locals_dict, synthio_filter_locals_ta
 
 MAKE_PRINTER(synthio, synthio_filter);
 
-MAKE_ENUM_TYPE(synthio, FilterKind, synthio_filter);
+MAKE_ENUM_TYPE(synthio, FilterType, synthio_filter);
 
 static synthio_filter_e validate_synthio_filter(mp_obj_t obj, qstr arg_name) {
     return cp_enum_value(&synthio_filter_type, obj, arg_name);
@@ -43,8 +43,11 @@ static synthio_filter_e validate_synthio_filter(mp_obj_t obj, qstr arg_name) {
 
 //| class BlockBiquad:
 //|     def __init__(
-//|         kind: FilterKind, frequency: BlockInput, q_factor: BlockInput = 0.7071067811865475
-//|     ):
+//|         self,
+//|         kind: FilterType,
+//|         frequency: BlockInput,
+//|         q_factor: BlockInput = 0.7071067811865475,
+//|     ) -> None:
 //|         """Construct a biquad filter object with dynamic center frequency & q factor
 //|
 //|         Since ``frequency`` and ``q_factor`` are `BlockInput`s, they can be varied dynamically.
@@ -77,7 +80,7 @@ static mp_obj_t synthio_block_biquad_make_new(const mp_obj_type_t *type_in, size
 }
 
 //|
-//|     kind: BiquadKind
+//|     kind: FilterType
 //|     """The kind of filter (read-only)"""
 static mp_obj_t synthio_block_biquad_get_kind(mp_obj_t self_in) {
     synthio_block_biquad_t *self = MP_OBJ_TO_PTR(self_in);
