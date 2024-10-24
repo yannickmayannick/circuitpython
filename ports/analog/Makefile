@@ -100,7 +100,6 @@ SRC_MAX32 += \
 	$(PERIPH_SRC)/CTB/ctb_reva.c \
 	$(PERIPH_SRC)/CTB/ctb_common.c \
 	$(PERIPH_SRC)/DMA/dma_reva.c \
-	$(PERIPH_SRC)/DMA/dma_revb.c \
 	$(PERIPH_SRC)/DMA/dma_$(DIE_TYPE).c \
 	$(PERIPH_SRC)/FLC/flc_common.c \
 	$(PERIPH_SRC)/FLC/flc_$(DIE_TYPE).c \
