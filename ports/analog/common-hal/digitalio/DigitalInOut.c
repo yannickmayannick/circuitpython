@@ -142,8 +142,7 @@ void common_hal_digitalio_digitalinout_set_value(
         if (value) {
             // set to input, no pull
             common_hal_digitalio_digitalinout_switch_to_input(self, PULL_NONE);
-        }
-        else {
+        } else {
             // can't use common_hal_switch_to_output b/c it calls this function
             // set the GPIO to output, low
             if (self->pin->port == 4) {
@@ -154,9 +153,7 @@ void common_hal_digitalio_digitalinout_set_value(
             }
             MXC_GPIO_OutClr(port, mask);
         }
-    }
-
-    else if (dir == DIRECTION_OUTPUT) {
+    } else if (dir == DIRECTION_OUTPUT) {
         if (value) {
             MXC_GPIO_OutSet(port, mask);
         } else {
@@ -219,7 +216,7 @@ digitalinout_result_t common_hal_digitalio_digitalinout_set_pull(
 
     // GPIO4 handling
     if (self->pin->port == 4) {
-        switch(pull) {
+        switch (pull) {
             case PULL_NONE:
                 // disable pullup/pulldown
                 MXC_MCR->gpio4_ctrl |= GPIO4_PULLDIS_MASK(mask);
@@ -281,17 +278,14 @@ digitalio_pull_t common_hal_digitalio_digitalinout_get_pull(
     if (self->pin->port == 4) {
         if (MXC_MCR->gpio4_ctrl & GPIO4_PULLDIS_MASK(mask)) {
             return PULL_NONE;
-        }
-        else {
+        } else {
             if (MXC_MCR->gpio4_ctrl & GPIO4_DATAOUT_MASK(mask)) {
                 return PULL_UP;
-            }
-            else {
+            } else {
                 return PULL_DOWN;
             }
         }
-    }
-    else {
+    } else {
         if ((pin_padctrl0) && !(pin_padctrl1)) {
             return PULL_UP;
         } else if (!(pin_padctrl0) && pin_padctrl1) {
