@@ -95,6 +95,12 @@ void common_hal_synthio_block_biquad_tick(mp_obj_t self_in, biquad_filter_state 
             b0 = alpha;
             b1 = 0;
             b2 = -b0;
+            break;
+
+        case SYNTHIO_NOTCH:
+            b0 = 1;
+            b1 = -2 * sc.c;
+            b2 = 1;
     }
 
     mp_float_t recip_a0 = 1 / a0;

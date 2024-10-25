@@ -13,7 +13,7 @@ extern const mp_obj_type_t synthio_filter_mode_type;
 typedef struct synthio_block_biquad synthio_block_biquad_t;
 
 typedef enum {
-    SYNTHIO_LOW_PASS, SYNTHIO_HIGH_PASS, SYNTHIO_BAND_PASS
+    SYNTHIO_LOW_PASS, SYNTHIO_HIGH_PASS, SYNTHIO_BAND_PASS, SYNTHIO_NOTCH
 } synthio_filter_mode;
 
 

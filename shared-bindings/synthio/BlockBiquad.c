@@ -24,11 +24,13 @@
 MAKE_ENUM_VALUE(synthio_filter_mode_type, mode, LOW_PASS, SYNTHIO_LOW_PASS);
 MAKE_ENUM_VALUE(synthio_filter_mode_type, mode, HIGH_PASS, SYNTHIO_HIGH_PASS);
 MAKE_ENUM_VALUE(synthio_filter_mode_type, mode, BAND_PASS, SYNTHIO_BAND_PASS);
+MAKE_ENUM_VALUE(synthio_filter_mode_type, mode, NOTCH, SYNTHIO_NOTCH);
 
 MAKE_ENUM_MAP(synthio_filter_mode) {
     MAKE_ENUM_MAP_ENTRY(mode, LOW_PASS),
     MAKE_ENUM_MAP_ENTRY(mode, HIGH_PASS),
     MAKE_ENUM_MAP_ENTRY(mode, BAND_PASS),
+    MAKE_ENUM_MAP_ENTRY(mode, NOTCH),
 };
 
 static MP_DEFINE_CONST_DICT(synthio_filter_mode_locals_dict, synthio_filter_mode_locals_table);

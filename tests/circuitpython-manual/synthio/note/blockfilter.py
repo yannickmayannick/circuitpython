@@ -39,6 +39,7 @@ def synthesize(synth):
         synthio.BlockBiquad(synthio.FilterMode.LOW_PASS, freq_sweep),
         synthio.BlockBiquad(synthio.FilterMode.HIGH_PASS, freq_sweep),
         synthio.BlockBiquad(synthio.FilterMode.BAND_PASS, freq_sweep, Q=8),
+        synthio.BlockBiquad(synthio.FilterMode.NOTCH, freq_sweep, Q=8),
     ):
         n = synthio.Note(
             frequency=synthio.midi_to_hz(72),
