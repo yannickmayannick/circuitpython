@@ -309,7 +309,7 @@ static const mp_rom_map_elem_t synthio_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR___name__), MP_ROM_QSTR(MP_QSTR_synthio) },
     { MP_ROM_QSTR(MP_QSTR_Biquad), MP_ROM_PTR(&synthio_biquad_type_obj) },
     { MP_ROM_QSTR(MP_QSTR_BlockBiquad), MP_ROM_PTR(&synthio_block_biquad_type_obj) },
-    { MP_ROM_QSTR(MP_QSTR_FilterType), MP_ROM_PTR(&synthio_filter_type) },
+    { MP_ROM_QSTR(MP_QSTR_FilterMode), MP_ROM_PTR(&synthio_filter_mode_type) },
     { MP_ROM_QSTR(MP_QSTR_Math), MP_ROM_PTR(&synthio_math_type) },
     { MP_ROM_QSTR(MP_QSTR_MathOperation), MP_ROM_PTR(&synthio_math_operation_type) },
     { MP_ROM_QSTR(MP_QSTR_MidiTrack), MP_ROM_PTR(&synthio_miditrack_type) },

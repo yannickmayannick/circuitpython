@@ -13,7 +13,7 @@
 
 typedef struct synthio_block_biquad {
     mp_obj_base_t base;
-    synthio_filter_e kind;
+    synthio_filter_mode mode;
     synthio_block_slot_t f0, Q;
 } synthio_block_biquad_t;
 

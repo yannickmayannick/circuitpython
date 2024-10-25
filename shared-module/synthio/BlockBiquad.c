@@ -30,16 +30,16 @@ static void fast_sincos(mp_float_t theta, sincos_result_t *result) {
     result->s = evens - odds;
 }
 
-mp_obj_t common_hal_synthio_block_biquad_new(synthio_filter_e kind, mp_obj_t f0, mp_obj_t Q) {
+mp_obj_t common_hal_synthio_block_biquad_new(synthio_filter_mode mode, mp_obj_t f0, mp_obj_t Q) {
     synthio_block_biquad_t *self = mp_obj_malloc(synthio_block_biquad_t, &synthio_block_biquad_type_obj);
-    self->kind = kind;
+    self->mode = mode;
     synthio_block_assign_slot(f0, &self->f0, MP_QSTR_frequency);
     synthio_block_assign_slot(Q, &self->Q, MP_QSTR_q_factor);
     return MP_OBJ_FROM_PTR(self);
 }
 
-synthio_filter_e common_hal_synthio_block_biquad_get_kind(synthio_block_biquad_t *self) {
-    return self->kind;
+synthio_filter_mode common_hal_synthio_block_biquad_get_mode(synthio_block_biquad_t *self) {
+    return self->mode;
 }
 
 mp_obj_t common_hal_synthio_block_biquad_get_q_factor(synthio_block_biquad_t *self) {
@@ -79,7 +79,7 @@ void common_hal_synthio_block_biquad_tick(mp_obj_t self_in, biquad_filter_state 
     a1 = -2 * sc.c;
     a2 = 1 - alpha;
 
-    switch (self->kind) {
+    switch (self->mode) {
         default:
         case SYNTHIO_LOW_PASS:
             b2 = b0 = (1 - sc.c) * .5;
