@@ -202,8 +202,7 @@ digitalio_drive_mode_t common_hal_digitalio_digitalinout_get_drive_mode(
     digitalio_digitalinout_obj_t *self) {
     if (self->open_drain) {
         return DRIVE_MODE_OPEN_DRAIN;
-    }
-    else {
+    } else {
         return DRIVE_MODE_PUSH_PULL;
     }
 }
