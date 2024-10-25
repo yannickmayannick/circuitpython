@@ -209,6 +209,7 @@ CFLAGS += -Wno-error=unused-parameter \
 			-Wno-error=nested-externs \
 			-Wno-error=sign-compare \
 			-Wno-cast-align \
+			-Wno-sign-compare \
 
 ENTRY = Reset_Handler
 LDFLAGS += $(CFLAGS) --entry $(ENTRY) -Wl,-nostdlib -Wl,-T,$(LINKERFILE) -Wl,-Map=$@.map -Wl,-cref -Wl,-gc-sections
