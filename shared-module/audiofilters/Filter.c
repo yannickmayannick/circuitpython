@@ -9,7 +9,7 @@
 #include "py/runtime.h"
 
 void common_hal_audiofilters_filter_construct(audiofilters_filter_obj_t *self,
-    mp_obj_t filter, mp_obj_t mix,
+    mp_obj_t filters, mp_obj_t mix,
     uint32_t buffer_size, uint8_t bits_per_sample,
     bool samples_signed, uint8_t channel_count, uint32_t sample_rate) {
 
@@ -60,12 +60,12 @@ void common_hal_audiofilters_filter_construct(audiofilters_filter_obj_t *self,
 
     // The below section sets up the effect's starting values.
 
-    if (filter == MP_OBJ_NULL) {
-        filter = mp_const_none;
+    if (filters == MP_OBJ_NULL) {
+        filters = mp_obj_new_list(0, NULL);
     }
-    synthio_biquad_filter_assign(&self->filter_state, filter);
-    self->filter_obj = filter;
-
+    self->filters = filters;
+    reset_filter_states(self);
+    
     // If we did not receive a BlockInput we need to create a default float value
     if (mix == MP_OBJ_NULL) {
         mix = mp_obj_new_float(1.0);
@@ -87,15 +87,37 @@ void common_hal_audiofilters_filter_deinit(audiofilters_filter_obj_t *self) {
     self->buffer[0] = NULL;
     self->buffer[1] = NULL;
     self->filter_buffer = NULL;
+    self->filter_states = NULL;
 }
 
-mp_obj_t common_hal_audiofilters_filter_get_filter(audiofilters_filter_obj_t *self) {
-    return self->filter_obj;
+void reset_filter_states(audiofilters_filter_obj_t *self) {
+    self->filter_states_len = self->filters->len;
+    self->filter_states = NULL;
+
+    if (self->filter_states_len) {
+        self->filter_states = m_malloc(self->filter_states_len * sizeof(biquad_filter_state));
+        if (self->filter_states == NULL) {
+            common_hal_audiofilters_filter_deinit(self);
+            m_malloc_fail(self->filter_states_len * sizeof(biquad_filter_state));
+        }
+
+        mp_obj_iter_buf_t iter_buf;
+        mp_obj_t iterable = mp_getiter(self->filters, &iter_buf);
+        mp_obj_t item;
+        uint8_t i = 0;
+        while ((item = mp_iternext(iterable)) != MP_OBJ_STOP_ITERATION) {
+            synthio_biquad_filter_assign(&self->filter_states[i++], item);
+        }
+    }
 }
 
-void common_hal_audiofilters_filter_set_filter(audiofilters_filter_obj_t *self, mp_obj_t arg) {
-    synthio_biquad_filter_assign(&self->filter_state, arg);
-    self->filter_obj = arg;
+mp_obj_t common_hal_audiofilters_filter_get_filters(audiofilters_filter_obj_t *self) {
+    return self->filters;
+}
+
+void common_hal_audiofilters_filter_set_filters(audiofilters_filter_obj_t *self, mp_obj_t arg) {
+    self->filters = arg;
+    reset_filter_states(self);
 }
 
 mp_obj_t common_hal_audiofilters_filter_get_mix(audiofilters_filter_obj_t *self) {
@@ -126,7 +148,9 @@ void audiofilters_filter_reset_buffer(audiofilters_filter_obj_t *self,
     memset(self->buffer[1], 0, self->buffer_len);
     memset(self->filter_buffer, 0, SYNTHIO_MAX_DUR * sizeof(int32_t));
 
-    synthio_biquad_filter_reset(&self->filter_state);
+    for (uint8_t i = 0; i < self->filter_states_len; i++) {
+        synthio_biquad_filter_reset(&self->filter_states[i]);
+    }
 }
 
 bool common_hal_audiofilters_filter_get_playing(audiofilters_filter_obj_t *self) {
@@ -209,6 +233,11 @@ audioio_get_buffer_result_t audiofilters_filter_get_buffer(audiofilters_filter_o
         channel = 0;
     }
 
+    // Update filter_states if filters list has been appended or removed
+    if (self->filters->len != self->filter_states_len) {
+        reset_filter_states(self);
+    }
+
     // get the effect values we need from the BlockInput. These may change at run time so you need to do bounds checking if required
     mp_float_t mix = MIN(1.0, MAX(synthio_block_slot_get(&self->mix), 0.0));
 
@@ -248,7 +277,7 @@ audioio_get_buffer_result_t audiofilters_filter_get_buffer(audiofilters_filter_o
             int16_t *sample_src = (int16_t *)self->sample_remaining_buffer; // for 16-bit samples
             int8_t *sample_hsrc = (int8_t *)self->sample_remaining_buffer; // for 8-bit samples
 
-            if (mix <= 0.01 || self->filter_obj == mp_const_none) { // if mix is zero pure sample only or no biquad filter object is provided
+            if (mix <= 0.01 || !self->filter_states_len) { // if mix is zero pure sample only or no biquad filter objects are provided
                 for (uint32_t i = 0; i < n; i++) {
                     if (MP_LIKELY(self->bits_per_sample == 16)) {
                         word_buffer[i] = sample_src[i];
@@ -275,8 +304,10 @@ audioio_get_buffer_result_t audiofilters_filter_get_buffer(audiofilters_filter_o
                         }
                     }
 
-                    // Process biquad filter
-                    synthio_biquad_filter_samples(&self->filter_state, self->filter_buffer, n_samples);
+                    // Process biquad filters
+                    for (uint8_t j = 0; j < self->filter_states_len; j++) {
+                        synthio_biquad_filter_samples(&self->filter_states[j], self->filter_buffer, n_samples);
+                    }
 
                     // Mix processed signal with original sample and transfer to output buffer
                     for (uint32_t j = 0; j < n_samples; j++) {
