@@ -134,7 +134,7 @@ static mp_obj_t audiofilters_distortion_make_new(const mp_obj_type_t *type, size
     if (bits_per_sample != 8 && bits_per_sample != 16) {
         mp_raise_ValueError(MP_ERROR_TEXT("bits_per_sample must be 8 or 16"));
     }
-    
+
     audiofilters_distortion_mode mode = DISTORTION_MODE_CLIP;
     if (args[ARG_mode].u_obj != MP_OBJ_NULL) {
         mode = validate_distortion_mode(args[ARG_mode].u_obj, MP_QSTR_mode);

@@ -212,7 +212,7 @@ void common_hal_audiofilters_distortion_stop(audiofilters_distortion_obj_t *self
 }
 
 static mp_float_t db_to_linear(mp_float_t value) {
-	return expf(value * MICROPY_FLOAT_CONST(0.11512925464970228420089957273422));
+    return expf(value * MICROPY_FLOAT_CONST(0.11512925464970228420089957273422));
 }
 
 audioio_get_buffer_result_t audiofilters_distortion_get_buffer(audiofilters_distortion_obj_t *self, bool single_channel_output, uint8_t channel,
@@ -274,15 +274,7 @@ audioio_get_buffer_result_t audiofilters_distortion_get_buffer(audiofilters_dist
                 }
             } else {
 
-                // Pre-calculate drive-based constants if needed by effect mode
-                mp_float_t word_mult = 0;
-                switch (self->mode) {
-                    case DISTORTION_MODE_LOFI:
-                        word_mult = powf(2.0, 2.0 + (1.0 - drive) * 14); // goes from 16 to 2 bits
-                        break;
-                    default:
-                        break;
-                }
+                uint32_t word_mask = 0xFFFFFFFF ^ ((1 << (uint32_t)roundf(drive * 14.0)) - 1); // LOFI mode bit mask
 
                 for (uint32_t i = 0; i < n; i++) {
                     int32_t sample_word = 0;
@@ -305,7 +297,7 @@ audioio_get_buffer_result_t audiofilters_distortion_get_buffer(audiofilters_dist
                             word = MIN(MAX(word, -32767), 32768); // Hard clip
                         } break;
                         case DISTORTION_MODE_LOFI: {
-                            word = floorf(word / 32768.0 * word_mult + 0.5) / word_mult * 32767.0;
+                            word = word & word_mask;
                         } break;
                         case DISTORTION_MODE_OVERDRIVE: {
                             mp_float_t x = word / 32768.0 * 0.686306;
@@ -319,7 +311,7 @@ audioio_get_buffer_result_t audiofilters_distortion_get_buffer(audiofilters_dist
                         } break;
                     }
                     word = word * post_gain;
-                    
+
                     if (MP_LIKELY(self->bits_per_sample == 16)) {
                         word_buffer[i] = (sample_word * (1.0 - mix)) + (word * mix);
                         if (!self->samples_signed) {
