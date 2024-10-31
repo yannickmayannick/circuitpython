@@ -7,14 +7,57 @@
 #include <stdint.h>
 
 #include "shared-bindings/audiofilters/Distortion.h"
-#include "shared-module/audiofilters/Distortion.h"
 
 #include "shared/runtime/context_manager_helpers.h"
 #include "py/binary.h"
+#include "py/enum.h"
 #include "py/objproperty.h"
 #include "py/runtime.h"
 #include "shared-bindings/util.h"
 #include "shared-module/synthio/block.h"
+
+//| class DistortionMode:
+//|     """The method of distortion used by the `audiofilters.Distortion` effect."""
+//|
+//|     CLIP: DistortionMode
+//|     """Digital distortion effect which cuts off peaks at the top and bottom of the waveform."""
+//|
+//|     ATAN: DistortionMode
+//|     """"""
+//|
+//|     LOFI: DistortionMode
+//|     """Low-resolution digital distortion effect (bit depth reduction). You can use it to emulate the sound of early digital audio devices."""
+//|
+//|     OVERDRIVE: DistortionMode
+//|     """Emulates the warm distortion produced by a field effect transistor, which is commonly used in solid-state musical instrument amplifiers. The `audiofilters.Distortion.drive` property has no effect in this mode."""
+//|
+//|     WAVESHAPE: DistortionMode
+//|     """Waveshaper distortions are used mainly by electronic musicians to achieve an extra-abrasive sound."""
+//|
+
+MAKE_ENUM_VALUE(audiofilters_distortion_mode_type, distortion_mode, CLIP, DISTORTION_MODE_CLIP);
+MAKE_ENUM_VALUE(audiofilters_distortion_mode_type, distortion_mode, ATAN, DISTORTION_MODE_ATAN);
+MAKE_ENUM_VALUE(audiofilters_distortion_mode_type, distortion_mode, LOFI, DISTORTION_MODE_LOFI);
+MAKE_ENUM_VALUE(audiofilters_distortion_mode_type, distortion_mode, OVERDRIVE, DISTORTION_MODE_OVERDRIVE);
+MAKE_ENUM_VALUE(audiofilters_distortion_mode_type, distortion_mode, WAVESHAPE, DISTORTION_MODE_WAVESHAPE);
+
+MAKE_ENUM_MAP(audiofilters_distortion_mode) {
+    MAKE_ENUM_MAP_ENTRY(distortion_mode, CLIP),
+    MAKE_ENUM_MAP_ENTRY(distortion_mode, ATAN),
+    MAKE_ENUM_MAP_ENTRY(distortion_mode, LOFI),
+    MAKE_ENUM_MAP_ENTRY(distortion_mode, OVERDRIVE),
+    MAKE_ENUM_MAP_ENTRY(distortion_mode, WAVESHAPE),
+};
+
+static MP_DEFINE_CONST_DICT(audiofilters_distortion_mode_locals_dict, audiofilters_distortion_mode_locals_table);
+
+MAKE_PRINTER(audiofilters, audiofilters_distortion_mode);
+
+MAKE_ENUM_TYPE(audiofilters, DistortionMode, audiofilters_distortion_mode);
+
+static audiofilters_distortion_mode validate_distortion_mode(mp_obj_t obj, qstr arg_name) {
+    return cp_enum_value(&audiofilters_distortion_mode_type, obj, arg_name);
+}
 
 //| class Distortion:
 //|     """A Distortion effect"""
@@ -71,13 +114,14 @@
 //|               synth.release(note)
 //|               time.sleep(5)"""
 //|         ...
+
 static mp_obj_t audiofilters_distortion_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *all_args) {
     enum { ARG_drive, ARG_pre_gain, ARG_post_gain, ARG_mode, ARG_mix, ARG_buffer_size, ARG_sample_rate, ARG_bits_per_sample, ARG_samples_signed, ARG_channel_count, };
     static const mp_arg_t allowed_args[] = {
         { MP_QSTR_drive, MP_ARG_OBJ | MP_ARG_KW_ONLY,  {.u_obj = MP_OBJ_NULL} },
         { MP_QSTR_pre_gain, MP_ARG_OBJ | MP_ARG_KW_ONLY,  {.u_obj = MP_OBJ_NULL} },
         { MP_QSTR_post_gain, MP_ARG_OBJ | MP_ARG_KW_ONLY,  {.u_obj = MP_OBJ_NULL} },
-        { MP_QSTR_mode, MP_ARG_OBJ | MP_ARG_KW_ONLY,  {.u_obj = MP_ROM_PTR((void *)&distortion_mode_CLIP_obj)} },
+        { MP_QSTR_mode, MP_ARG_OBJ | MP_ARG_KW_ONLY,  {.u_obj = MP_OBJ_NULL} },
         { MP_QSTR_mix, MP_ARG_OBJ | MP_ARG_KW_ONLY,  {.u_obj = MP_OBJ_NULL} },
         { MP_QSTR_buffer_size, MP_ARG_INT | MP_ARG_KW_ONLY, {.u_int = 512} },
         { MP_QSTR_sample_rate, MP_ARG_INT | MP_ARG_KW_ONLY, {.u_int = 8000} },
@@ -96,11 +140,13 @@ static mp_obj_t audiofilters_distortion_make_new(const mp_obj_type_t *type, size
         mp_raise_ValueError(MP_ERROR_TEXT("bits_per_sample must be 8 or 16"));
     }
     
-    audiofilters_distortion_mode_t mode = validate_distortion_mode(args[ARG_mode].u_obj, MP_QSTR_mode);
+    audiofilters_distortion_mode mode = DISTORTION_MODE_CLIP;
+    if (args[ARG_mode].u_obj != MP_OBJ_NULL) {
+        mode = validate_distortion_mode(args[ARG_mode].u_obj, MP_QSTR_mode);
+    }
 
     audiofilters_distortion_obj_t *self = mp_obj_malloc(audiofilters_distortion_obj_t, &audiofilters_distortion_type);
     common_hal_audiofilters_distortion_construct(self, args[ARG_drive].u_obj, args[ARG_pre_gain].u_obj, args[ARG_post_gain].u_obj, mode, args[ARG_mix].u_obj, args[ARG_buffer_size].u_int, bits_per_sample, args[ARG_samples_signed].u_bool, channel_count, sample_rate);
-
     return MP_OBJ_FROM_PTR(self);
 }
 
@@ -236,7 +282,7 @@ static mp_obj_t audiofilters_distortion_obj_set_mode(size_t n_args, const mp_obj
     mp_arg_val_t args[MP_ARRAY_SIZE(allowed_args)];
     mp_arg_parse_all(n_args - 1, pos_args + 1, kw_args, MP_ARRAY_SIZE(allowed_args), allowed_args, args);
 
-    audiofilters_distortion_mode_t mode = validate_distortion_mode(args[ARG_mode].u_obj, MP_QSTR_mode);
+    audiofilters_distortion_mode mode = validate_distortion_mode(args[ARG_mode].u_obj, MP_QSTR_mode);
     common_hal_audiofilters_distortion_set_mode(self, mode);
 
     return mp_const_none;

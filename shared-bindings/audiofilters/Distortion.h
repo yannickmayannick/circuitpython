@@ -6,14 +6,14 @@
 
 #pragma once
 
-#include "shared-bindings/audiofilters/DistortionMode.h"
 #include "shared-module/audiofilters/Distortion.h"
 
 extern const mp_obj_type_t audiofilters_distortion_type;
+extern const mp_obj_type_t audiofilters_distortion_mode_type;
 
 void common_hal_audiofilters_distortion_construct(audiofilters_distortion_obj_t *self,
     mp_obj_t drive, mp_obj_t pre_gain, mp_obj_t post_gain,
-    audiofilters_distortion_mode_t mode, mp_obj_t mix,
+    audiofilters_distortion_mode mode, mp_obj_t mix,
     uint32_t buffer_size, uint8_t bits_per_sample, bool samples_signed,
     uint8_t channel_count, uint32_t sample_rate);
 
@@ -33,8 +33,8 @@ void common_hal_audiofilters_distortion_set_pre_gain(audiofilters_distortion_obj
 mp_obj_t common_hal_audiofilters_distortion_get_post_gain(audiofilters_distortion_obj_t *self);
 void common_hal_audiofilters_distortion_set_post_gain(audiofilters_distortion_obj_t *self, mp_obj_t arg);
 
-audiofilters_distortion_mode_t common_hal_audiofilters_distortion_get_mode(audiofilters_distortion_obj_t *self);
-void common_hal_audiofilters_distortion_set_mode(audiofilters_distortion_obj_t *self, audiofilters_distortion_mode_t mode);
+audiofilters_distortion_mode common_hal_audiofilters_distortion_get_mode(audiofilters_distortion_obj_t *self);
+void common_hal_audiofilters_distortion_set_mode(audiofilters_distortion_obj_t *self, audiofilters_distortion_mode mode);
 
 mp_obj_t common_hal_audiofilters_distortion_get_mix(audiofilters_distortion_obj_t *self);
 void common_hal_audiofilters_distortion_set_mix(audiofilters_distortion_obj_t *self, mp_obj_t arg);

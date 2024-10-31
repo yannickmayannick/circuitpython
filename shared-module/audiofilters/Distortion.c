@@ -3,11 +3,13 @@
 // SPDX-FileCopyrightText: Copyright (c) 2024 Cooper Dalrymple
 //
 // SPDX-License-Identifier: MIT
-#include "shared-bindings/audiofilters/Distortion.h"
 
 #include <stdint.h>
+#include "py/obj.h"
 #include "py/runtime.h"
 #include <math.h>
+#include "shared-bindings/audiofilters/Distortion.h"
+#include "shared-module/audiofilters/Distortion.h"
 
 /**
  * Based on Godot's AudioEffectDistortion
@@ -16,9 +18,10 @@
  */
 
 void common_hal_audiofilters_distortion_construct(audiofilters_distortion_obj_t *self,
-    mp_obj_t drive, mp_obj_t pre_gain, mp_obj_t post_gain, audiofilters_distortion_mode_t mode, mp_obj_t mix,
-    uint32_t buffer_size, uint8_t bits_per_sample,
-    bool samples_signed, uint8_t channel_count, uint32_t sample_rate) {
+    mp_obj_t drive, mp_obj_t pre_gain, mp_obj_t post_gain,
+    audiofilters_distortion_mode mode, mp_obj_t mix,
+    uint32_t buffer_size, uint8_t bits_per_sample, bool samples_signed,
+    uint8_t channel_count, uint32_t sample_rate) {
 
     // Basic settings every effect and audio sample has
     // These are the effects values, not the source sample(s)
@@ -125,11 +128,11 @@ void common_hal_audiofilters_distortion_set_post_gain(audiofilters_distortion_ob
     synthio_block_assign_slot(arg, &self->post_gain, MP_QSTR_post_gain);
 }
 
-audiofilters_distortion_mode_t common_hal_audiofilters_distortion_get_mode(audiofilters_distortion_obj_t *self) {
+audiofilters_distortion_mode common_hal_audiofilters_distortion_get_mode(audiofilters_distortion_obj_t *self) {
     return self->mode;
 }
 
-void common_hal_audiofilters_distortion_set_mode(audiofilters_distortion_obj_t *self, audiofilters_distortion_mode_t arg) {
+void common_hal_audiofilters_distortion_set_mode(audiofilters_distortion_obj_t *self, audiofilters_distortion_mode arg) {
     self->mode = arg;
 }
 

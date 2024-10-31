@@ -10,7 +10,6 @@
 #include "py/runtime.h"
 
 #include "shared-bindings/audiofilters/__init__.h"
-#include "shared-bindings/audiofilters/DistortionMode.h"
 #include "shared-bindings/audiofilters/Distortion.h"
 #include "shared-bindings/audiofilters/Filter.h"
 
