@@ -276,12 +276,7 @@ audioio_get_buffer_result_t audiofilters_distortion_get_buffer(audiofilters_dist
 
                 // Pre-calculate drive-based constants if needed by effect mode
                 mp_float_t word_mult = 0;
-                mp_float_t word_div = 0;
                 switch (self->mode) {
-                    case DISTORTION_MODE_ATAN:
-                        word_mult = powf(10.0, drive * drive * 3.0) - 1.0 + 0.001;
-                        word_div = 1.0 / (atanf(word_mult) * (1.0 + drive * 8));
-                        break;
                     case DISTORTION_MODE_LOFI:
                         word_mult = powf(2.0, 2.0 + (1.0 - drive) * 14); // goes from 16 to 2 bits
                         break;
@@ -308,9 +303,6 @@ audioio_get_buffer_result_t audiofilters_distortion_get_buffer(audiofilters_dist
                             mp_float_t word_sign = word < 0 ? -1.0f : 1.0f;
                             word = powf(fabs(word / 32768.0), 1.0001 - drive) * word_sign * 32767.0;
                             word = MIN(MAX(word, -32767), 32768); // Hard clip
-                        } break;
-                        case DISTORTION_MODE_ATAN: {
-                            word = atanf(word / 32768.0 * word_mult) * word_div * 32767.0;
                         } break;
                         case DISTORTION_MODE_LOFI: {
                             word = floorf(word / 32768.0 * word_mult + 0.5) / word_mult * 32767.0;

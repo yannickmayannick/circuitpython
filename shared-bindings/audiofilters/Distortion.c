@@ -22,9 +22,6 @@
 //|     CLIP: DistortionMode
 //|     """Digital distortion effect which cuts off peaks at the top and bottom of the waveform."""
 //|
-//|     ATAN: DistortionMode
-//|     """"""
-//|
 //|     LOFI: DistortionMode
 //|     """Low-resolution digital distortion effect (bit depth reduction). You can use it to emulate the sound of early digital audio devices."""
 //|
@@ -36,14 +33,12 @@
 //|
 
 MAKE_ENUM_VALUE(audiofilters_distortion_mode_type, distortion_mode, CLIP, DISTORTION_MODE_CLIP);
-MAKE_ENUM_VALUE(audiofilters_distortion_mode_type, distortion_mode, ATAN, DISTORTION_MODE_ATAN);
 MAKE_ENUM_VALUE(audiofilters_distortion_mode_type, distortion_mode, LOFI, DISTORTION_MODE_LOFI);
 MAKE_ENUM_VALUE(audiofilters_distortion_mode_type, distortion_mode, OVERDRIVE, DISTORTION_MODE_OVERDRIVE);
 MAKE_ENUM_VALUE(audiofilters_distortion_mode_type, distortion_mode, WAVESHAPE, DISTORTION_MODE_WAVESHAPE);
 
 MAKE_ENUM_MAP(audiofilters_distortion_mode) {
     MAKE_ENUM_MAP_ENTRY(distortion_mode, CLIP),
-    MAKE_ENUM_MAP_ENTRY(distortion_mode, ATAN),
     MAKE_ENUM_MAP_ENTRY(distortion_mode, LOFI),
     MAKE_ENUM_MAP_ENTRY(distortion_mode, OVERDRIVE),
     MAKE_ENUM_MAP_ENTRY(distortion_mode, WAVESHAPE),
