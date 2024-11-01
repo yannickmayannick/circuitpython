@@ -1,257 +1,223 @@
-// /*
-//  * This file is part of the MicroPython project, http://micropython.org/
-//  *
-//  * The MIT License (MIT)
-//  *
-//  * Copyright (c) 2018 Noralf Trønnes
-//  *
-//  * Permission is hereby granted, free of charge, to any person obtaining a copy
-//  * of this software and associated documentation files (the "Software"), to deal
-//  * in the Software without restriction, including without limitation the rights
-//  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-//  * copies of the Software, and to permit persons to whom the Software is
-//  * furnished to do so, subject to the following conditions:
-//  *
-//  * The above copyright notice and this permission notice shall be included in
-//  * all copies or substantial portions of the Software.
-//  *
-//  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-//  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-//  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-//  * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-//  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-//  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-//  * THE SOFTWARE.
-//  */
+#include "common-hal/spitarget/SPITarget.h"
 
-// #include "shared-bindings/i2ctarget/I2CTarget.h"
-// #include "shared-bindings/microcontroller/Pin.h"
-// #include "common-hal/busio/I2C.h"
+#include "hpl_sercom_config.h"
+#include "samd/sercom.h"
 
-// #include "shared/runtime/interrupt_char.h"
-// #include "py/mperrno.h"
-// #include "py/mphal.h"
-// #include "py/runtime.h"
+void common_hal_spitarget_spi_target_construct(busio_spi_obj_t *self,
+    const mcu_pin_obj_t *sck, const mcu_pin_obj_t *mosi,
+    const mcu_pin_obj_t *miso, const mcu_pin_obj_t *ss) {
+    Sercom *sercom = NULL;
+    uint8_t sercom_index;
+    uint32_t clock_pinmux = 0;
+    uint32_t mosi_pinmux = 0;
+    uint32_t miso_pinmux = 0;
+    uint32_t ss_pinmux = 0;
+    uint8_t clock_pad = 0;
+    uint8_t mosi_pad = 0;
+    uint8_t miso_pad = 0;
+    uint8_t dopo = 255;
 
-// #include "hal/include/hal_gpio.h"
-// #include "peripherals/samd/sercom.h"
+    // Ensure the object starts in its deinit state.
+    self->clock_pin = NO_PIN;
 
-// void common_hal_i2ctarget_i2c_target_construct(i2ctarget_i2c_target_obj_t *self,
-//     const mcu_pin_obj_t *scl, const mcu_pin_obj_t *sda,
-//     uint8_t *addresses, unsigned int num_addresses, bool smbus) {
-//     uint8_t sercom_index;
-//     uint32_t sda_pinmux, scl_pinmux;
-//     Sercom *sercom = samd_i2c_get_sercom(scl, sda, &sercom_index, &sda_pinmux, &scl_pinmux);
-//     if (sercom == NULL) {
-//         raise_ValueError_invalid_pins();
-//     }
-//     self->sercom = sercom;
+    // Special case for SAMR21 boards. (feather_radiofruit_zigbee)
+    #if defined(PIN_PC19F_SERCOM4_PAD0)
+    if (miso == &pin_PC19) {
+        if (mosi == &pin_PB30 && clock == &pin_PC18) {
+            sercom = SERCOM4;
+            sercom_index = 4;
+            clock_pinmux = MUX_F;
+            mosi_pinmux = MUX_F;
+            miso_pinmux = MUX_F;
+            clock_pad = 3;
+            mosi_pad = 2;
+            miso_pad = 0;
+            dopo = samd_peripherals_get_spi_dopo(clock_pad, mosi_pad);
+        }
+        // Error, leave SERCOM unset to throw an exception later.
+    } else
+    #endif
+    {
+        for (int i = 0; i < NUM_SERCOMS_PER_PIN; i++) {
+            sercom_index = sck->sercom[i].index; // 2 for SERCOM2, etc.
+            if (sercom_index >= SERCOM_INST_NUM) {
+                continue;
+            }
+            Sercom *potential_sercom = sercom_insts[sercom_index];
+            if (potential_sercom->SPI.CTRLA.bit.ENABLE != 0) {
+                continue;
+            }
+            clock_pinmux = PINMUX(clock->number, (i == 0) ? MUX_C : MUX_D);
+            clock_pad = clock->sercom[i].pad;
+            if (!samd_peripherals_valid_spi_clock_pad(clock_pad)) {
+                continue;
+            }
+            // find miso_pad first, since it corresponds to dopo which takes limited values
+            for (int j = 0; j < NUM_SERCOMS_PER_PIN; j++) {
+                if (sercom_index == miso->sercom[j].index) {
+                    miso_pinmux = PINMUX(miso->number, (j == 0) ? MUX_C : MUX_D);
+                    miso_pad = miso->sercom[j].pad;
+                    dopo = samd_peripherals_get_spi_dopo(clock_pad, miso_pad);
+                    if (dopo > 0x3) {
+                        continue;  // pad combination not possible
+                    }
+                } else {
+                    continue;
+                }
+                for (int k = 0; k < NUM_SERCOMS_PER_PIN; k++) {
+                    if (sercom_index == mosi->sercom[k].index) {
+                        mosi_pinmux = PINMUX(mosi->number, (k == 0) ? MUX_C : MUX_D);
+                        mosi_pad = mosi->sercom[k].pad;
+                        for (int m = 0; m < NUM_SERCOMS_PER_PIN; m++) {
+                            if (sercom_index == ss->sercom[m].index) {
+                                ss_pinmux = PINMUX(ss->number, (m == 0) ? MUX_C : MUX_D);
+                                sercom = potential_sercom;
+                                break;
+                            }
+                        }
+                        if (sercom != NULL) {
+                            break;
+                        }
+                    }
+                }
+                if (sercom != NULL) {
+                    break;
+                }
+            }
+            if (sercom != NULL) {
+                break;
+            }
+        }
+    }
+    if (sercom == NULL) {
+        raise_ValueError_invalid_pins();
+    }
 
-//     gpio_set_pin_function(sda->number, GPIO_PIN_FUNCTION_OFF);
-//     gpio_set_pin_function(scl->number, GPIO_PIN_FUNCTION_OFF);
-//     gpio_set_pin_function(sda->number, sda_pinmux);
-//     gpio_set_pin_function(scl->number, scl_pinmux);
+    // Set up SPI clocks on SERCOM.
+    samd_peripherals_sercom_clock_init(sercom, sercom_index);
 
-//     self->sda_pin = sda->number;
-//     self->scl_pin = scl->number;
-//     claim_pin(sda);
-//     claim_pin(scl);
+    if (spi_m_sync_init(&self->spi_desc, sercom) != ERR_NONE) {
+        mp_raise_OSError(MP_EIO);
+    }
 
-//     samd_peripherals_sercom_clock_init(sercom, sercom_index);
+    // Pads must be set after spi_m_sync_init(), which uses default values from
+    // the prototypical SERCOM.
 
-//     #ifdef SAM_D5X_E5X
-//     sercom->I2CS.CTRLC.bit.SDASETUP = 0x08;
-//     #endif
+    hri_sercomspi_write_CTRLA_MODE_bf(sercom, 2);
+    hri_sercomspi_write_CTRLA_DOPO_bf(sercom, dopo);
+    hri_sercomspi_write_CTRLA_DIPO_bf(sercom, mosi_pad);
+    hri_sercomspi_write_CTRLB_PLOADEN_bit(sercom, 1);
 
-//     sercom->I2CS.CTRLA.bit.SWRST = 1;
-//     while (sercom->I2CS.CTRLA.bit.SWRST || sercom->I2CS.SYNCBUSY.bit.SWRST) {
-//     }
+    // Always start at 250khz which is what SD cards need. They are sensitive to
+    // SPI bus noise before they are put into SPI mode.
+    uint8_t baud_value = samd_peripherals_spi_baudrate_to_baud_reg_value(250000);
+    if (spi_m_sync_set_baudrate(&self->spi_desc, baud_value) != ERR_NONE) {
+        // spi_m_sync_set_baudrate does not check for validity, just whether the device is
+        // busy or not
+        mp_raise_OSError(MP_EIO);
+    }
 
-//     sercom->I2CS.CTRLB.bit.AACKEN = 0; //  Automatic acknowledge is disabled.
+    gpio_set_pin_direction(clock->number, GPIO_DIRECTION_IN);
+    gpio_set_pin_pull_mode(clock->number, GPIO_PULL_OFF);
+    gpio_set_pin_function(clock->number, clock_pinmux);
+    claim_pin(clock);
+    self->clock_pin = clock->number;
 
-//     if (num_addresses == 1) {
-//         sercom->I2CS.CTRLB.bit.AMODE = 0x0; // MASK
-//         sercom->I2CS.ADDR.bit.ADDR = addresses[0];
-//         sercom->I2CS.ADDR.bit.ADDRMASK = 0x00; // Match exact address
-//     } else if (num_addresses == 2) {
-//         sercom->I2CS.CTRLB.bit.AMODE = 0x1; // 2_ADDRS
-//         sercom->I2CS.ADDR.bit.ADDR = addresses[0];
-//         sercom->I2CS.ADDR.bit.ADDRMASK = addresses[1];
-//     } else {
-//         uint32_t combined = 0; // all addresses OR'ed
-//         uint32_t differ = 0; // bits that differ between addresses
-//         for (unsigned int i = 0; i < num_addresses; i++) {
-//             combined |= addresses[i];
-//             differ |= addresses[0] ^ addresses[i];
-//         }
-//         sercom->I2CS.CTRLB.bit.AMODE = 0x0; // MASK
-//         sercom->I2CS.ADDR.bit.ADDR = combined;
-//         sercom->I2CS.ADDR.bit.ADDRMASK = differ;
-//     }
-//     self->addresses = addresses;
-//     self->num_addresses = num_addresses;
+    gpio_set_pin_direction(mosi->number, GPIO_DIRECTION_IN);
+    gpio_set_pin_pull_mode(mosi->number, GPIO_PULL_OFF);
+    gpio_set_pin_function(mosi->number, mosi_pinmux);
+    self->MOSI_pin = mosi->number;
+    claim_pin(mosi);
 
-//     if (smbus) {
-//         sercom->I2CS.CTRLA.bit.LOWTOUTEN = 1; // Errata 12003
-//         sercom->I2CS.CTRLA.bit.SEXTTOEN = 1; // SCL Low Extend/Cumulative Time-Out 25ms
-//     }
-//     sercom->I2CS.CTRLA.bit.SCLSM = 0; // Clock stretch before ack
-//     sercom->I2CS.CTRLA.bit.MODE = 0x04; // Device mode
-//     sercom->I2CS.CTRLA.bit.ENABLE = 1;
-// }
+    gpio_set_pin_direction(miso->number, GPIO_DIRECTION_OUT);
+    gpio_set_pin_pull_mode(miso->number, GPIO_PULL_OFF);
+    gpio_set_pin_function(miso->number, miso_pinmux);
+    self->MISO_pin = miso->number;
+    claim_pin(miso);
 
-// bool common_hal_i2ctarget_i2c_target_deinited(i2ctarget_i2c_target_obj_t *self) {
-//     return self->sda_pin == NO_PIN;
-// }
+    gpio_set_pin_direction(ss->number, GPIO_DIRECTION_IN);
+    gpio_set_pin_pull_mode(ss->number, GPIO_PULL_OFF);
+    gpio_set_pin_function(ss->number, ss_pinmux);
+    self->SS_pin = ss->number;
+    claim_pin(ss);
 
-// void common_hal_i2ctarget_i2c_target_deinit(i2ctarget_i2c_target_obj_t *self) {
-//     if (common_hal_i2ctarget_i2c_target_deinited(self)) {
-//         return;
-//     }
+    self->running_dma.failure = 1; // not started
 
-//     self->sercom->I2CS.CTRLA.bit.ENABLE = 0;
+    spi_m_sync_enable(&self->spi_desc);
+}
 
-//     reset_pin_number(self->sda_pin);
-//     reset_pin_number(self->scl_pin);
-//     self->sda_pin = NO_PIN;
-//     self->scl_pin = NO_PIN;
-// }
+void common_hal_spitarget_spi_target_deinit(busio_spi_obj_t *self) {
+    if (common_hal_busio_spi_deinited(self)) {
+        return;
+    }
+    allow_reset_sercom(self->spi_desc.dev.prvt);
 
-// static int i2c_target_check_error(i2ctarget_i2c_target_obj_t *self, bool raise) {
-//     if (!self->sercom->I2CS.INTFLAG.bit.ERROR) {
-//         return 0;
-//     }
+    spi_m_sync_disable(&self->spi_desc);
+    spi_m_sync_deinit(&self->spi_desc);
+    reset_pin_number(self->clock_pin);
+    reset_pin_number(self->MOSI_pin);
+    reset_pin_number(self->MISO_pin);
+    reset_pin_number(self->SS_pin);
+    self->clock_pin = NO_PIN;
+}
 
-//     int err = MP_EIO;
+void common_hal_spitarget_spi_target_deinited(busio_spi_obj_t *self) {
+    return self->clock_pin == NO_PIN;
+}
 
-//     if (self->sercom->I2CS.STATUS.bit.LOWTOUT || self->sercom->I2CS.STATUS.bit.SEXTTOUT) {
-//         err = MP_ETIMEDOUT;
-//     }
+void common_hal_spitarget_spi_target_transfer_start(busio_spi_obj_t *self,
+    uint8_t *miso_packet, uint8_t *mosi_packet, size_t len) {
+        if (len == 0) {
+        return;
+    }
+    if (self->running_dma.failure != 1) {
+        mp_raise_RuntimeError(MP_ERROR_TEXT("Async SPI transfer in progress on this bus, keep awaiting."));
+    }
+    Sercom* sercom = self->spi_desc.dev.prvt;
+    self->running_dma = shared_dma_transfer_start(sercom, miso_packet, &sercom->SPI.DATA.reg, &sercom->SPI.DATA.reg, mosi_packet, len, 0);
 
-//     self->sercom->I2CS.INTFLAG.reg = SERCOM_I2CS_INTFLAG_ERROR; // Clear flag
+    // There is an issue where if an unexpected SPI transfer is received before the user calls "end" for the in-progress, expected
+    // transfer, the SERCOM has an error and gets confused. This can be detected from INTFLAG.ERROR. I think the code in
+    // ports/atmel-samd/peripherals/samd/dma.c at line 277 (as of this commit; it's the part that reads s->SPI.INTFLAG.bit.RXC and
+    // s->SPI.DATA.reg) is supposed to fix this, but experimentation seems to show that it does not in fact fix anything. Anyways, if
+    // the ERROR bit is set, let's just reset the peripheral and then setup the transfer again -- that seems to work.
+    if (hri_sercomspi_get_INTFLAG_ERROR_bit(sercom)) {
+        shared_dma_transfer_close(self->running_dma);
 
-//     if (raise) {
-//         mp_raise_OSError(err);
-//     }
-//     return -err;
-// }
+        // disable the sercom
+        spi_m_sync_disable(&self->spi_desc);
+        hri_sercomspi_wait_for_sync(sercom, SERCOM_SPI_SYNCBUSY_MASK);
 
-// int common_hal_i2ctarget_i2c_target_is_addressed(i2ctarget_i2c_target_obj_t *self, uint8_t *address, bool *is_read, bool *is_restart) {
-//     int err = i2c_target_check_error(self, false);
-//     if (err) {
-//         return err;
-//     }
+        // save configurations
+        hri_sercomspi_ctrla_reg_t ctrla_saved_val = hri_sercomspi_get_CTRLA_reg(sercom, -1); // -1 mask is all ones: save all bits
+        hri_sercomspi_ctrlb_reg_t ctrlb_saved_val = hri_sercomspi_get_CTRLB_reg(sercom, -1); // -1 mask is all ones: save all bits
+        hri_sercomspi_baud_reg_t  baud_saved_val  = hri_sercomspi_get_BAUD_reg(sercom, -1);  // -1 mask is all ones: save all bits
+        // reset
+        hri_sercomspi_set_CTRLA_SWRST_bit(sercom);
+        hri_sercomspi_wait_for_sync(sercom, SERCOM_SPI_SYNCBUSY_MASK);
+        // re-write configurations
+        hri_sercomspi_write_CTRLA_reg(sercom, ctrla_saved_val);
+        hri_sercomspi_write_CTRLB_reg(sercom, ctrlb_saved_val);
+        hri_sercomspi_write_BAUD_reg (sercom, baud_saved_val);
+        hri_sercomspi_wait_for_sync(sercom, SERCOM_SPI_SYNCBUSY_MASK);
 
-//     if (!self->sercom->I2CS.INTFLAG.bit.AMATCH) {
-//         return 0;
-//     }
+        // re-enable the sercom
+        spi_m_sync_enable(&self->spi_desc);
+        hri_sercomspi_wait_for_sync(sercom, SERCOM_SPI_SYNCBUSY_MASK);
 
-//     self->writing = false;
+        self->running_dma = shared_dma_transfer_start(sercom, miso_packet, &sercom->SPI.DATA.reg, &sercom->SPI.DATA.reg, mosi_packet, len, 0);
+    }
+}
 
-//     *address = self->sercom->I2CS.DATA.reg >> 1;
-//     *is_read = self->sercom->I2CS.STATUS.bit.DIR;
-//     *is_restart = self->sercom->I2CS.STATUS.bit.SR;
+bool common_hal_spitarget_spi_target_transfer_is_finished(busio_spi_obj_t *self) {
+    return self->running_dma.failure == 1 || shared_dma_transfer_finished(self->running_dma);
+}
 
-//     for (unsigned int i = 0; i < self->num_addresses; i++) {
-//         if (*address == self->addresses[i]) {
-//             common_hal_i2ctarget_i2c_target_ack(self, true);
-//             return 1;
-//         }
-//     }
-
-//     // This should clear AMATCH, but it doesn't...
-//     common_hal_i2ctarget_i2c_target_ack(self, false);
-//     return 0;
-// }
-
-// int common_hal_i2ctarget_i2c_target_read_byte(i2ctarget_i2c_target_obj_t *self, uint8_t *data) {
-//     for (int t = 0; t < 100 && !self->sercom->I2CS.INTFLAG.reg; t++) {
-//         mp_hal_delay_us(10);
-//     }
-
-//     i2c_target_check_error(self, true);
-
-//     if (!self->sercom->I2CS.INTFLAG.bit.DRDY ||
-//         self->sercom->I2CS.INTFLAG.bit.PREC ||
-//         self->sercom->I2CS.INTFLAG.bit.AMATCH) {
-//         return 0;
-//     }
-
-//     *data = self->sercom->I2CS.DATA.reg;
-//     return 1;
-// }
-
-// int common_hal_i2ctarget_i2c_target_write_byte(i2ctarget_i2c_target_obj_t *self, uint8_t data) {
-//     for (int t = 0; !self->sercom->I2CS.INTFLAG.reg && t < 100; t++) {
-//         mp_hal_delay_us(10);
-//     }
-
-//     i2c_target_check_error(self, true);
-
-//     if (self->sercom->I2CS.INTFLAG.bit.PREC) {
-//         return 0;
-//     }
-
-//     // RXNACK can carry over from the previous transfer
-//     if (self->writing && self->sercom->I2CS.STATUS.bit.RXNACK) {
-//         return 0;
-//     }
-
-//     self->writing = true;
-
-//     if (!self->sercom->I2CS.INTFLAG.bit.DRDY) {
-//         return 0;
-//     }
-
-//     self->sercom->I2CS.DATA.bit.DATA = data; // Send data
-
-//     return 1;
-// }
-
-// void common_hal_i2ctarget_i2c_target_ack(i2ctarget_i2c_target_obj_t *self, bool ack) {
-//     self->sercom->I2CS.CTRLB.bit.ACKACT = !ack;
-//     self->sercom->I2CS.CTRLB.bit.CMD = 0x03;
-// }
-
-// void common_hal_i2ctarget_i2c_target_close(i2ctarget_i2c_target_obj_t *self) {
-//     for (int t = 0; !self->sercom->I2CS.INTFLAG.reg && t < 100; t++) {
-//         mp_hal_delay_us(10);
-//     }
-
-//     if (self->sercom->I2CS.INTFLAG.bit.AMATCH || !self->sercom->I2CS.STATUS.bit.CLKHOLD) {
-//         return;
-//     }
-
-//     if (!self->sercom->I2CS.STATUS.bit.DIR) {
-//         common_hal_i2ctarget_i2c_target_ack(self, false);
-//     } else {
-//         int i = 0;
-//         while (self->sercom->I2CS.INTFLAG.reg == SERCOM_I2CS_INTFLAG_DRDY) {
-//             if (mp_hal_is_interrupted()) {
-//                 return;
-//             }
-
-//             self->sercom->I2CS.DATA.bit.DATA = 0xff;  // Send dummy byte
-
-//             // Wait for a result (if any).
-//             // test_byte_word.py::TestWord::test_write_seq leaves us with no INTFLAGs set in some of the tests
-//             for (int t = 0; !self->sercom->I2CS.INTFLAG.reg && t < 100; t++) {
-//                 mp_hal_delay_us(10);
-//             }
-
-//             if (++i > 1000) { // Avoid getting stuck "forever"
-//                 mp_raise_OSError(MP_EIO);
-//             }
-//         }
-//     }
-
-//     if (self->sercom->I2CS.INTFLAG.bit.AMATCH) {
-//         return;
-//     }
-
-//     if (self->sercom->I2CS.STATUS.bit.CLKHOLD) {
-//         // Unable to release the clock.
-//         // The device might have to be re-initialized to get unstuck.
-//         mp_raise_OSError(MP_EIO);
-//     }
-// }
+void common_hal_spitarget_spi_target_transfer_close(busio_spi_obj_t *self) {
+    if (self->running_dma.failure == 1) {
+        return 0;
+    }
+    int res = shared_dma_transfer_close(self->running_dma);
+    self->running_dma.failure = 1;
+    return res;
+}
