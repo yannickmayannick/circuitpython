@@ -1,4 +1,5 @@
 #include "common-hal/spitarget/SPITarget.h"
+#include "common-hal/busio/__init__.h"
 
 #include "shared-bindings/spitarget/SPITarget.h"
 #include "shared-bindings/microcontroller/Pin.h"
@@ -157,6 +158,10 @@ void common_hal_spitarget_spi_target_construct(spitarget_spi_target_obj_t *self,
     spi_m_sync_enable(&self->spi_desc);
 }
 
+bool common_hal_spitarget_spi_target_deinited(spitarget_spi_target_obj_t *self) {
+    return self->clock_pin == NO_PIN;
+}
+
 void common_hal_spitarget_spi_target_deinit(spitarget_spi_target_obj_t *self) {
     if (common_hal_busio_spi_deinited(self)) {
         return;
@@ -170,10 +175,6 @@ void common_hal_spitarget_spi_target_deinit(spitarget_spi_target_obj_t *self) {
     reset_pin_number(self->MISO_pin);
     reset_pin_number(self->SS_pin);
     self->clock_pin = NO_PIN;
-}
-
-bool common_hal_spitarget_spi_target_deinited(spitarget_spi_target_obj_t *self) {
-    return self->clock_pin == NO_PIN;
 }
 
 void common_hal_spitarget_spi_target_transfer_start(spitarget_spi_target_obj_t *self,
