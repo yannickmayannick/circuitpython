@@ -137,6 +137,7 @@ STATIC mp_obj_t spitarget_spi_target_load_packet(size_t n_args, const mp_obj_t *
     }
 
     common_hal_spitarget_spi_target_transfer_start(self, ((uint8_t *)miso_bufinfo.buf), ((uint8_t *)mosi_bufinfo.buf), miso_bufinfo.len);
+    return mp_const_none;
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_KW(spitarget_spi_target_load_packet_obj, 1, spitarget_spi_target_load_packet);
 
