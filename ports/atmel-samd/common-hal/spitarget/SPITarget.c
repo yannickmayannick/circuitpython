@@ -3,7 +3,7 @@
 #include "hpl_sercom_config.h"
 #include "samd/sercom.h"
 
-void common_hal_spitarget_spi_target_construct(busio_spi_obj_t *self,
+void common_hal_spitarget_spi_target_construct(spitarget_spi_target_obj_t *self,
     const mcu_pin_obj_t *sck, const mcu_pin_obj_t *mosi,
     const mcu_pin_obj_t *miso, const mcu_pin_obj_t *ss) {
     Sercom *sercom = NULL;
@@ -146,7 +146,7 @@ void common_hal_spitarget_spi_target_construct(busio_spi_obj_t *self,
     spi_m_sync_enable(&self->spi_desc);
 }
 
-void common_hal_spitarget_spi_target_deinit(busio_spi_obj_t *self) {
+void common_hal_spitarget_spi_target_deinit(spitarget_spi_target_obj_t *self) {
     if (common_hal_busio_spi_deinited(self)) {
         return;
     }
@@ -161,11 +161,11 @@ void common_hal_spitarget_spi_target_deinit(busio_spi_obj_t *self) {
     self->clock_pin = NO_PIN;
 }
 
-void common_hal_spitarget_spi_target_deinited(busio_spi_obj_t *self) {
+void common_hal_spitarget_spi_target_deinited(spitarget_spi_target_obj_t *self) {
     return self->clock_pin == NO_PIN;
 }
 
-void common_hal_spitarget_spi_target_transfer_start(busio_spi_obj_t *self,
+void common_hal_spitarget_spi_target_transfer_start(spitarget_spi_target_obj_t *self,
     uint8_t *miso_packet, uint8_t *mosi_packet, size_t len) {
         if (len == 0) {
         return;
@@ -209,11 +209,11 @@ void common_hal_spitarget_spi_target_transfer_start(busio_spi_obj_t *self,
     }
 }
 
-bool common_hal_spitarget_spi_target_transfer_is_finished(busio_spi_obj_t *self) {
+bool common_hal_spitarget_spi_target_transfer_is_finished(spitarget_spi_target_obj_t *self) {
     return self->running_dma.failure == 1 || shared_dma_transfer_finished(self->running_dma);
 }
 
-void common_hal_spitarget_spi_target_transfer_close(busio_spi_obj_t *self) {
+void common_hal_spitarget_spi_target_transfer_close(spitarget_spi_target_obj_t *self) {
     if (self->running_dma.failure == 1) {
         return 0;
     }
