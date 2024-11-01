@@ -163,7 +163,7 @@ bool common_hal_spitarget_spi_target_deinited(spitarget_spi_target_obj_t *self) 
 }
 
 void common_hal_spitarget_spi_target_deinit(spitarget_spi_target_obj_t *self) {
-    if (common_hal_busio_spi_deinited(self)) {
+    if (common_hal_spitarget_spi_target_deinited(self)) {
         return;
     }
     allow_reset_sercom(self->spi_desc.dev.prvt);
