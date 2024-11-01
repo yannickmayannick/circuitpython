@@ -34,7 +34,7 @@ void common_hal_spitarget_spi_target_construct(spitarget_spi_target_obj_t *self,
     // Special case for SAMR21 boards. (feather_radiofruit_zigbee)
     #if defined(PIN_PC19F_SERCOM4_PAD0)
     if (miso == &pin_PC19) {
-        if (mosi == &pin_PB30 && clock == &pin_PC18) {
+        if (mosi == &pin_PB30 && sck == &pin_PC18) {
             sercom = SERCOM4;
             sercom_index = 4;
             clock_pinmux = MUX_F;
@@ -59,7 +59,7 @@ void common_hal_spitarget_spi_target_construct(spitarget_spi_target_obj_t *self,
                 continue;
             }
             clock_pinmux = PINMUX(sck->number, (i == 0) ? MUX_C : MUX_D);
-            clock_pad = clock->sercom[i].pad;
+            clock_pad = sck->sercom[i].pad;
             if (!samd_peripherals_valid_spi_clock_pad(clock_pad)) {
                 continue;
             }
@@ -128,11 +128,11 @@ void common_hal_spitarget_spi_target_construct(spitarget_spi_target_obj_t *self,
         mp_raise_OSError(MP_EIO);
     }
 
-    gpio_set_pin_direction(clock->number, GPIO_DIRECTION_IN);
-    gpio_set_pin_pull_mode(clock->number, GPIO_PULL_OFF);
-    gpio_set_pin_function(clock->number, clock_pinmux);
+    gpio_set_pin_direction(sck->number, GPIO_DIRECTION_IN);
+    gpio_set_pin_pull_mode(sck->number, GPIO_PULL_OFF);
+    gpio_set_pin_function(sck->number, clock_pinmux);
     claim_pin(sck);
-    self->clock_pin = clock->number;
+    self->clock_pin = sck->number;
 
     gpio_set_pin_direction(mosi->number, GPIO_DIRECTION_IN);
     gpio_set_pin_pull_mode(mosi->number, GPIO_PULL_OFF);
@@ -172,12 +172,12 @@ void common_hal_spitarget_spi_target_deinit(spitarget_spi_target_obj_t *self) {
     self->clock_pin = NO_PIN;
 }
 
-void common_hal_spitarget_spi_target_deinited(spitarget_spi_target_obj_t *self) {
+bool common_hal_spitarget_spi_target_deinited(spitarget_spi_target_obj_t *self) {
     return self->clock_pin == NO_PIN;
 }
 
 void common_hal_spitarget_spi_target_transfer_start(spitarget_spi_target_obj_t *self,
-    uint8_t *miso_packet, uint8_t *mosi_packet, size_t len) {
+    uint8_t *mosi_packet, const uint8_t *miso_packet, size_t len) {
         if (len == 0) {
         return;
     }

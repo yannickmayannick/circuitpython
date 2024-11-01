@@ -40,7 +40,7 @@ extern void common_hal_spitarget_spi_target_deinit(spitarget_spi_target_obj_t *s
 extern bool common_hal_spitarget_spi_target_deinited(spitarget_spi_target_obj_t *self);
 
 extern void common_hal_spitarget_spi_target_transfer_start(spitarget_spi_target_obj_t *self,
-    const uint8_t *mosi_packet, uint8_t *miso_packet, size_t len);
+    uint8_t *mosi_packet, const uint8_t *miso_packet, size_t len);
 extern bool common_hal_spitarget_spi_target_transfer_is_finished(spitarget_spi_target_obj_t *self);
 extern int common_hal_spitarget_spi_target_transfer_close(spitarget_spi_target_obj_t *self);
 
