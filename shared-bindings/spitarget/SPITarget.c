@@ -177,7 +177,7 @@ STATIC mp_obj_t spitarget_spi_target_try_transfer(size_t n_args, const mp_obj_t 
 
     do {
         if (common_hal_spitarget_spi_target_transfer_is_finished(self)) {
-            common_hal_spitarget_spi_target_transfer_close(self);
+            common_hal_spitarget_spi_target_transfer_close(self); // implicitly discards error indicator code
             return mp_const_true;
         }
         mp_hal_delay_us(10);

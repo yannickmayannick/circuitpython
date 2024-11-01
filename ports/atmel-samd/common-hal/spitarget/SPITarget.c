@@ -1,5 +1,16 @@
 #include "common-hal/spitarget/SPITarget.h"
 
+#include "shared-bindings/spitarget/SPITarget.h"
+#include "shared-bindings/microcontroller/Pin.h"
+#include "py/mperrno.h"
+#include "py/runtime.h"
+
+#include "hpl_sercom_config.h"
+#include "peripheral_clk_config.h"
+
+#include "hal/include/hal_gpio.h"
+#include "hal/include/hal_spi_m_sync.h"
+
 #include "hpl_sercom_config.h"
 #include "samd/sercom.h"
 
@@ -47,7 +58,7 @@ void common_hal_spitarget_spi_target_construct(spitarget_spi_target_obj_t *self,
             if (potential_sercom->SPI.CTRLA.bit.ENABLE != 0) {
                 continue;
             }
-            clock_pinmux = PINMUX(clock->number, (i == 0) ? MUX_C : MUX_D);
+            clock_pinmux = PINMUX(sck->number, (i == 0) ? MUX_C : MUX_D);
             clock_pad = clock->sercom[i].pad;
             if (!samd_peripherals_valid_spi_clock_pad(clock_pad)) {
                 continue;
@@ -120,7 +131,7 @@ void common_hal_spitarget_spi_target_construct(spitarget_spi_target_obj_t *self,
     gpio_set_pin_direction(clock->number, GPIO_DIRECTION_IN);
     gpio_set_pin_pull_mode(clock->number, GPIO_PULL_OFF);
     gpio_set_pin_function(clock->number, clock_pinmux);
-    claim_pin(clock);
+    claim_pin(sck);
     self->clock_pin = clock->number;
 
     gpio_set_pin_direction(mosi->number, GPIO_DIRECTION_IN);
@@ -213,7 +224,7 @@ bool common_hal_spitarget_spi_target_transfer_is_finished(spitarget_spi_target_o
     return self->running_dma.failure == 1 || shared_dma_transfer_finished(self->running_dma);
 }
 
-void common_hal_spitarget_spi_target_transfer_close(spitarget_spi_target_obj_t *self) {
+int common_hal_spitarget_spi_target_transfer_close(spitarget_spi_target_obj_t *self) {
     if (self->running_dma.failure == 1) {
         return 0;
     }
