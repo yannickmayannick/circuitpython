@@ -65,14 +65,12 @@ static uint32_t tick_flag = 0;
 // defined by cmsis core files
 extern void NVIC_SystemReset(void) NORETURN;
 
-// FIXME:   Currently have an issue with time.sleep b/c MXC_Delay uses SysTick,
-//          and SysTick ISR isn't happening. Seems that MXC_Delay results in inf. loop
 safe_mode_t port_init(void) {
     int err = E_NO_ERROR;
 
     // 1ms tick timer
     SysTick_Config(SystemCoreClock / 1000);
-    NVIC_EnableIRQ(SysTick_IRQn); // FIXME: Test with NVIC Enable here before committing
+    NVIC_EnableIRQ(SysTick_IRQn);
 
     // Enable GPIO (enables clocks + common init for ports)
     for (int i = 0; i < MXC_CFG_GPIO_INSTANCES; i++) {
