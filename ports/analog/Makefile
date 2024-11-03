@@ -163,10 +163,9 @@ DEBUG ?= 1
 endif
 
 ifeq ($(DEBUG),1)
-CFLAGS += -ggdb3
-COPT = -Og
+COPT = -Og -ggdb3 -Os
 else
-COPT += -O0 #opt completely off to start
+COPT += -Os #opt completely off to start
 endif
 
 # TinyUSB CFLAGS
