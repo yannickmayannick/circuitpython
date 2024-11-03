@@ -141,7 +141,7 @@ SRC_S += supervisor/cpu.s \
 			$(STARTUPFILE)
 
 # Needed to compile some MAX32 headers
-CFLAGS += -D$(MCU_VARIANT_UPPER) \
+CFLAGS += 	-D$(MCU_VARIANT_UPPER) \
 			-DTARGET_REV=0x4131 \
 			-DTARGET=$(MCU_VARIANT_UPPER) \
 			-DIAR_PRAGMAS=0 \
@@ -149,23 +149,23 @@ CFLAGS += -D$(MCU_VARIANT_UPPER) \
 			-DCONFIG_TRUSTED_EXECUTION_SECURE=0
 
 # todo: add these for linkerfiles later on so that it's easier to add new boards
-# -DFLASH_ORIGIN=0x10000000 \
-# -DFLASH_SIZE=0x340000 \
-# -DSRAM_ORIGIN=0x20000000 \
-# -DSRAM_SIZE=0x100000
+# -DFLASH_ORIGIN \
+# -DFLASH_SIZE \
+# -DSRAM_ORIGIN \
+# -DSRAM_SIZE
 
 CPU_CORE=cortex-m4
 CFLAGS += -mthumb -mcpu=$(CPU_CORE) -mfloat-abi=softfp -mfpu=fpv4-sp-d16
 
-# NOTE: Start with DEBUG ONLY settings for now
+# NOTE: Start with DEBUG=1 defaults for now
 ifeq ($(DEBUG),)
 DEBUG ?= 1
 endif
 
 ifeq ($(DEBUG),1)
-COPT = -Og -ggdb3 -Os
+COPT = -ggdb3 -Og -Os
 else
-COPT += -Os #opt completely off to start
+COPT += -Os
 endif
 
 # TinyUSB CFLAGS
