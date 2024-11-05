@@ -127,16 +127,16 @@ STATIC mp_obj_t spitarget_spi_target_load_packet(size_t n_args, const mp_obj_t *
     mp_arg_parse_all(n_args - 1, pos_args + 1, kw_args, MP_ARRAY_SIZE(allowed_args), allowed_args, args);
 
     mp_buffer_info_t mosi_bufinfo;
-    mp_get_buffer_raise(args[ARG_mosi_packet].u_obj, &mosi_bufinfo, MP_BUFFER_READ);
+    mp_get_buffer_raise(args[ARG_mosi_packet].u_obj, &mosi_bufinfo, MP_BUFFER_WRITE);
 
     mp_buffer_info_t miso_bufinfo;
-    mp_get_buffer_raise(args[ARG_mosi_packet].u_obj, &miso_bufinfo, MP_BUFFER_READ);
+    mp_get_buffer_raise(args[ARG_miso_packet].u_obj, &miso_bufinfo, MP_BUFFER_READ);
 
     if (miso_bufinfo.len != mosi_bufinfo.len) {
         mp_raise_ValueError(MP_ERROR_TEXT("Packet buffers for an SPI transfer must have the same length."));
     }
 
-    common_hal_spitarget_spi_target_transfer_start(self, ((uint8_t *)miso_bufinfo.buf), ((uint8_t *)mosi_bufinfo.buf), miso_bufinfo.len);
+    common_hal_spitarget_spi_target_transfer_start(self, ((uint8_t *)mosi_bufinfo.buf), ((uint8_t *)miso_bufinfo.buf), mosi_bufinfo.len);
     return mp_const_none;
 }
 STATIC MP_DEFINE_CONST_FUN_OBJ_KW(spitarget_spi_target_load_packet_obj, 1, spitarget_spi_target_load_packet);
