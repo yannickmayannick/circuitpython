@@ -65,7 +65,7 @@ void common_hal_audiofilters_filter_construct(audiofilters_filter_obj_t *self,
     }
     self->filters = filters;
     reset_filter_states(self);
-    
+
     // If we did not receive a BlockInput we need to create a default float value
     if (mix == MP_OBJ_NULL) {
         mix = mp_obj_new_float(1.0);
