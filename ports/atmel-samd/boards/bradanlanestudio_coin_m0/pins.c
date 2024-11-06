@@ -22,7 +22,9 @@ static const mp_rom_map_elem_t board_module_globals_table[] = {
 //    { MP_ROM_QSTR(MP_QSTR_D6), MP_ROM_PTR(&pin_PA20) },
 //    { MP_ROM_QSTR(MP_QSTR_D7), MP_ROM_PTR(&pin_PA21) },
 //    { MP_ROM_QSTR(MP_QSTR_D8), MP_ROM_PTR(&pin_PA06) },
-//    { MP_ROM_QSTR(MP_QSTR_D9), MP_ROM_PTR(&pin_PA07) },
+    { MP_ROM_QSTR(MP_QSTR_D9), MP_ROM_PTR(&pin_PA07) },
+    { MP_ROM_QSTR(MP_QSTR_NEOPIXEL), MP_ROM_PTR(&pin_PA07) },
+
     { MP_ROM_QSTR(MP_QSTR_D10), MP_ROM_PTR(&pin_PA18) },
     { MP_ROM_QSTR(MP_QSTR_D11), MP_ROM_PTR(&pin_PA16) },
     { MP_ROM_QSTR(MP_QSTR_D12), MP_ROM_PTR(&pin_PA19) },
@@ -32,7 +34,8 @@ static const mp_rom_map_elem_t board_module_globals_table[] = {
 //    { MP_ROM_QSTR(MP_QSTR_L), MP_ROM_PTR(&pin_PA17) },  // a.k.a D13
 
     { MP_ROM_QSTR(MP_QSTR_A0), MP_ROM_PTR(&pin_PA02) },
-    { MP_ROM_QSTR(MP_QSTR_BUZZER), MP_ROM_PTR(&pin_PA02) },
+    { MP_ROM_QSTR(MP_QSTR_SPEAKER), MP_ROM_PTR(&pin_PA02) },
+
     { MP_ROM_QSTR(MP_QSTR_A1), MP_ROM_PTR(&pin_PB08) },
     { MP_ROM_QSTR(MP_QSTR_TOUCH2), MP_ROM_PTR(&pin_PB08) },
     { MP_ROM_QSTR(MP_QSTR_A2), MP_ROM_PTR(&pin_PB09) },
