@@ -42,8 +42,7 @@
 #include "samd/sercom.h"
 
 void common_hal_busio_spi_construct(busio_spi_obj_t *self,
-    const mcu_pin_obj_t *clock, const mcu_pin_obj_t *mosi,
-    const mcu_pin_obj_t *miso, const mcu_pin_obj_t *ss, bool half_duplex, bool slave_mode) {
+    const mcu_pin_obj_t *clock, const mcu_pin_obj_t *mosi, const mcu_pin_obj_t *miso, bool half_duplex) {
     Sercom *sercom = NULL;
     uint8_t sercom_index;
     uint32_t clock_pinmux = 0;
@@ -51,7 +50,6 @@ void common_hal_busio_spi_construct(busio_spi_obj_t *self,
     bool miso_none = miso == NULL;
     uint32_t mosi_pinmux = 0;
     uint32_t miso_pinmux = 0;
-    uint32_t ss_pinmux = 0;
     uint8_t clock_pad = 0;
     uint8_t mosi_pad = 0;
     uint8_t miso_pad = 0;
@@ -96,87 +94,36 @@ void common_hal_busio_spi_construct(busio_spi_obj_t *self,
             if (!samd_peripherals_valid_spi_clock_pad(clock_pad)) {
                 continue;
             }
-            if (slave_mode) {
-                // find miso_pad first, since it corresponds to dopo which takes limited values
-                for (int j = 0; j < NUM_SERCOMS_PER_PIN; j++) {
-                    if (!miso_none) {
-                        if (sercom_index == miso->sercom[j].index) {
-                            miso_pinmux = PINMUX(miso->number, (j == 0) ? MUX_C : MUX_D);
-                            miso_pad = miso->sercom[j].pad;
-                            dopo = samd_peripherals_get_spi_dopo(clock_pad, miso_pad);
-                            if (dopo > 0x3) {
-                                continue;  // pad combination not possible
-                            }
-                            if (mosi_none) {
-                                for (int m = 0; m < NUM_SERCOMS_PER_PIN; m++) {
-                                    if (sercom_index == ss->sercom[m].index) {
-                                        ss_pinmux = PINMUX(ss->number, (m == 0) ? MUX_C : MUX_D);
-                                        sercom = potential_sercom;
-                                        break;
-                                    }
-                                }
-                                if (sercom != NULL) {
-                                    break;
-                                }
-                            }
-                        } else {
-                            continue;
+            // find mosi_pad first, since it corresponds to dopo which takes limited values
+            for (int j = 0; j < NUM_SERCOMS_PER_PIN; j++) {
+                if (!mosi_none) {
+                    if (sercom_index == mosi->sercom[j].index) {
+                        mosi_pinmux = PINMUX(mosi->number, (j == 0) ? MUX_C : MUX_D);
+                        mosi_pad = mosi->sercom[j].pad;
+                        dopo = samd_peripherals_get_spi_dopo(clock_pad, mosi_pad);
+                        if (dopo > 0x3) {
+                            continue;  // pad combination not possible
                         }
-                    }
-                    if (!mosi_none) {
-                        for (int k = 0; k < NUM_SERCOMS_PER_PIN; k++) {
-                            if (sercom_index == mosi->sercom[k].index) {
-                                mosi_pinmux = PINMUX(mosi->number, (k == 0) ? MUX_C : MUX_D);
-                                mosi_pad = mosi->sercom[k].pad;
-                                for (int m = 0; m < NUM_SERCOMS_PER_PIN; m++) {
-                                    if (sercom_index == ss->sercom[m].index) {
-                                        ss_pinmux = PINMUX(ss->number, (m == 0) ? MUX_C : MUX_D);
-                                        sercom = potential_sercom;
-                                        break;
-                                    }
-                                }
-                                if (sercom != NULL) {
-                                    break;
-                                }
-                            }
+                        if (miso_none) {
+                            sercom = potential_sercom;
+                            break;
                         }
-                    }
-                    if (sercom != NULL) {
-                        break;
+                    } else {
+                        continue;
                     }
                 }
-            } else {
-                // find mosi_pad first, since it corresponds to dopo which takes limited values
-                for (int j = 0; j < NUM_SERCOMS_PER_PIN; j++) {
-                    if (!mosi_none) {
-                        if (sercom_index == mosi->sercom[j].index) {
-                            mosi_pinmux = PINMUX(mosi->number, (j == 0) ? MUX_C : MUX_D);
-                            mosi_pad = mosi->sercom[j].pad;
-                            dopo = samd_peripherals_get_spi_dopo(clock_pad, mosi_pad);
-                            if (dopo > 0x3) {
-                                continue;  // pad combination not possible
-                            }
-                            if (miso_none) {
-                                sercom = potential_sercom;
-                                break;
-                            }
-                        } else {
-                            continue;
+                if (!miso_none) {
+                    for (int k = 0; k < NUM_SERCOMS_PER_PIN; k++) {
+                        if (sercom_index == miso->sercom[k].index) {
+                            miso_pinmux = PINMUX(miso->number, (k == 0) ? MUX_C : MUX_D);
+                            miso_pad = miso->sercom[k].pad;
+                            sercom = potential_sercom;
+                            break;
                         }
                     }
-                    if (!miso_none) {
-                        for (int k = 0; k < NUM_SERCOMS_PER_PIN; k++) {
-                            if (sercom_index == miso->sercom[k].index) {
-                                miso_pinmux = PINMUX(miso->number, (k == 0) ? MUX_C : MUX_D);
-                                miso_pad = miso->sercom[k].pad;
-                                sercom = potential_sercom;
-                                break;
-                            }
-                        }
-                    }
-                    if (sercom != NULL) {
-                        break;
-                    }
+                }
+                if (sercom != NULL) {
+                    break;
                 }
             }
             if (sercom != NULL) {
@@ -198,11 +145,9 @@ void common_hal_busio_spi_construct(busio_spi_obj_t *self,
     // Pads must be set after spi_m_sync_init(), which uses default values from
     // the prototypical SERCOM.
 
-    hri_sercomspi_write_CTRLA_MODE_bf(sercom, slave_mode ? 2 : 3);
-    self->slave_mode = slave_mode;
+    hri_sercomspi_write_CTRLA_MODE_bf(sercom, 3);
     hri_sercomspi_write_CTRLA_DOPO_bf(sercom, dopo);
-    hri_sercomspi_write_CTRLA_DIPO_bf(sercom, slave_mode ? mosi_pad : miso_pad);
-    hri_sercomspi_write_CTRLB_PLOADEN_bit(sercom, slave_mode);
+    hri_sercomspi_write_CTRLA_DIPO_bf(sercom, miso_pad);
 
     // Always start at 250khz which is what SD cards need. They are sensitive to
     // SPI bus noise before they are put into SPI mode.
@@ -213,7 +158,7 @@ void common_hal_busio_spi_construct(busio_spi_obj_t *self,
         mp_raise_OSError(MP_EIO);
     }
 
-    gpio_set_pin_direction(clock->number, slave_mode ? GPIO_DIRECTION_IN : GPIO_DIRECTION_OUT);
+    gpio_set_pin_direction(clock->number, GPIO_DIRECTION_OUT);
     gpio_set_pin_pull_mode(clock->number, GPIO_PULL_OFF);
     gpio_set_pin_function(clock->number, clock_pinmux);
     claim_pin(clock);
@@ -222,7 +167,7 @@ void common_hal_busio_spi_construct(busio_spi_obj_t *self,
     if (mosi_none) {
         self->MOSI_pin = NO_PIN;
     } else {
-        gpio_set_pin_direction(mosi->number, slave_mode ? GPIO_DIRECTION_IN : GPIO_DIRECTION_OUT);
+        gpio_set_pin_direction(mosi->number, GPIO_DIRECTION_OUT);
         gpio_set_pin_pull_mode(mosi->number, GPIO_PULL_OFF);
         gpio_set_pin_function(mosi->number, mosi_pinmux);
         self->MOSI_pin = mosi->number;
@@ -232,19 +177,11 @@ void common_hal_busio_spi_construct(busio_spi_obj_t *self,
     if (miso_none) {
         self->MISO_pin = NO_PIN;
     } else {
-        gpio_set_pin_direction(miso->number, slave_mode ? GPIO_DIRECTION_OUT : GPIO_DIRECTION_IN);
+        gpio_set_pin_direction(miso->number, GPIO_DIRECTION_IN);
         gpio_set_pin_pull_mode(miso->number, GPIO_PULL_OFF);
         gpio_set_pin_function(miso->number, miso_pinmux);
         self->MISO_pin = miso->number;
         claim_pin(miso);
-    }
-
-    if (slave_mode) {
-        gpio_set_pin_direction(ss->number, slave_mode ? GPIO_DIRECTION_OUT : GPIO_DIRECTION_IN);
-        gpio_set_pin_pull_mode(ss->number, GPIO_PULL_OFF);
-        gpio_set_pin_function(ss->number, ss_pinmux);
-        self->SS_pin = ss->number;
-        claim_pin(ss);
     }
 
     self->running_dma.failure = 1; // not started
