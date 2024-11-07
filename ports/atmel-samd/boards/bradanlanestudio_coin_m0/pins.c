@@ -19,6 +19,7 @@ static const mp_rom_map_elem_t board_module_globals_table[] = {
 //    { MP_ROM_QSTR(MP_QSTR_D3), MP_ROM_PTR(&pin_PA09) },
 //    { MP_ROM_QSTR(MP_QSTR_D4), MP_ROM_PTR(&pin_PA08) },
 //    { MP_ROM_QSTR(MP_QSTR_D5), MP_ROM_PTR(&pin_PA15) },
+//    move SPEAKER to PA15 aka D5 be ause it can do PWM
 //    { MP_ROM_QSTR(MP_QSTR_D6), MP_ROM_PTR(&pin_PA20) },
 //    { MP_ROM_QSTR(MP_QSTR_D7), MP_ROM_PTR(&pin_PA21) },
 //    { MP_ROM_QSTR(MP_QSTR_D8), MP_ROM_PTR(&pin_PA06) },
