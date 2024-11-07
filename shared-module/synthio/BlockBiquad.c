@@ -34,7 +34,7 @@ mp_obj_t common_hal_synthio_block_biquad_new(synthio_filter_mode mode, mp_obj_t 
     synthio_block_biquad_t *self = mp_obj_malloc(synthio_block_biquad_t, &synthio_block_biquad_type_obj);
     self->mode = mode;
     synthio_block_assign_slot(f0, &self->f0, MP_QSTR_frequency);
-    synthio_block_assign_slot(Q, &self->Q, MP_QSTR_q_factor);
+    synthio_block_assign_slot(Q, &self->Q, MP_QSTR_Q);
     return MP_OBJ_FROM_PTR(self);
 }
 
@@ -42,12 +42,12 @@ synthio_filter_mode common_hal_synthio_block_biquad_get_mode(synthio_block_biqua
     return self->mode;
 }
 
-mp_obj_t common_hal_synthio_block_biquad_get_q_factor(synthio_block_biquad_t *self) {
+mp_obj_t common_hal_synthio_block_biquad_get_Q(synthio_block_biquad_t *self) {
     return self->Q.obj;
 }
 
-void common_hal_synthio_block_biquad_set_q_factor(synthio_block_biquad_t *self, mp_obj_t q_factor) {
-    synthio_block_assign_slot(q_factor, &self->Q, MP_QSTR_q_factor);
+void common_hal_synthio_block_biquad_set_Q(synthio_block_biquad_t *self, mp_obj_t Q) {
+    synthio_block_assign_slot(Q, &self->Q, MP_QSTR_Q);
 }
 
 mp_obj_t common_hal_synthio_block_biquad_get_frequency(synthio_block_biquad_t *self) {

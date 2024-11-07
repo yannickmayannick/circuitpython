@@ -10,7 +10,7 @@ white_noise = array.array('h', [random.randint(-32000, 32000) for i in range(600
 def gen(synth):
     l = LFO(sweep, offset=1440, scale=2880, rate=.025, once=True)
     yield [l]
-    b = BlockBiquad(FilterMode.LOW_PASS, l)
+    b = BlockBiquad(FilterMode.LOW_PASS, l, Q=.5**.5)
     n = Note(100, filter=b, waveform=white_noise)
     synth.press(n)
     yield 20
