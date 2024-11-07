@@ -131,14 +131,18 @@ mp_obj_t common_hal_audiofilters_filter_get_filter(audiofilters_filter_obj_t *se
 void common_hal_audiofilters_filter_set_filter(audiofilters_filter_obj_t *self, mp_obj_t arg) {
     if (arg == mp_const_none || mp_obj_is_type(arg, (const mp_obj_type_t *)&synthio_biquad_type_obj)) {
         self->filter = arg;
-    } else if (mp_obj_is_tuple_compatible(arg)) {
-        mp_obj_tuple_t *tuple_obj = (mp_obj_tuple_t *)MP_OBJ_TO_PTR(arg);
-        self->filter = mp_obj_new_tuple(tuple_obj->len, tuple_obj->items);
-    } else if (mp_obj_is_type(arg, &mp_type_list)) {
-        size_t list_len;
-        mp_obj_t *list_items;
-        mp_obj_list_get(arg, &list_len, &list_items);
-        self->filter = mp_obj_new_tuple(list_len, list_items);
+    } else if (mp_obj_is_tuple_compatible(arg) || mp_obj_is_type(arg, &mp_type_list)) {
+        size_t tuple_len;
+        mp_obj_t *tuple_items = NULL;
+
+        mp_obj_get_array(arg, &tuple_len, &tuple_items);
+
+        mp_obj_t *biquad_objects[tuple_len];
+        for (size_t i = 0; i < tuple_len; i++) {
+            biquad_objects[i] = mp_arg_validate_type_in(tuple_items[i], (const mp_obj_type_t *)&synthio_biquad_type_obj, MP_QSTR_filter);
+        }
+
+        self->filter = mp_obj_new_tuple(tuple_len, (const mp_obj_t *)biquad_objects);
     } else {
         mp_raise_ValueError_varg(MP_ERROR_TEXT("%q must be a %q object, %q, or %q"), MP_QSTR_filter, MP_QSTR_Biquad, MP_QSTR_tuple, MP_QSTR_None);
     }
