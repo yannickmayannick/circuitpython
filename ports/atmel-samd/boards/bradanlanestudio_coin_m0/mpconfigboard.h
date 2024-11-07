@@ -6,7 +6,7 @@
 
 #pragma once
 
-#define MICROPY_HW_BOARD_NAME "Bradán Lane STUDIO M0 Coin"
+#define MICROPY_HW_BOARD_NAME "Bradán Lane STUDIO Coin M0"
 #define MICROPY_HW_MCU_NAME "samd21g18"
 
 #define MICROPY_HW_LED_STATUS   (&pin_PA17)
