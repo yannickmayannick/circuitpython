@@ -62,11 +62,28 @@ static int32_t biquad_scale_arg_float(mp_float_t arg) {
     return (int32_t)MICROPY_FLOAT_C_FUN(round)(MICROPY_FLOAT_C_FUN(ldexp)(arg, BIQUAD_SHIFT));
 }
 
+static int float_equal_or_update(
+    mp_float_t *cached,
+    mp_float_t new) {
+    // uses memcmp to avoid error about equality float comparison
+    if (memcmp(cached, &new, sizeof(mp_float_t))) {
+        *cached = new;
+        return false;
+    }
+    return true;
+}
+
 void common_hal_synthio_block_biquad_tick(mp_obj_t self_in, biquad_filter_state *filter_state) {
     synthio_block_biquad_t *self = MP_OBJ_TO_PTR(self_in);
 
     mp_float_t W0 = synthio_block_slot_get(&self->f0) * synthio_global_W_scale;
     mp_float_t Q = synthio_block_slot_get(&self->Q);
+
+    // n.b., assumes that the `mode` field is read-only
+    // n.b., use of `&` is deliberate, avoids short-circuiting behavior
+    if (float_equal_or_update(&self->cached_W0, W0) & float_equal_or_update(&self->cached_Q, Q)) {
+        return;
+    }
 
     sincos_result_t sc;
     fast_sincos(W0, &sc);
