@@ -7,6 +7,7 @@
 
 #include "py/obj.h"
 
+#include "shared-bindings/synthio/Biquad.h"
 #include "shared-module/audiocore/__init__.h"
 #include "shared-module/synthio/block.h"
 #include "shared-module/synthio/Biquad.h"
@@ -15,10 +16,10 @@ extern const mp_obj_type_t audiofilters_filter_type;
 
 typedef struct {
     mp_obj_base_t base;
-    mp_obj_list_t *filters;
+    mp_obj_t *filter;
     synthio_block_slot_t mix;
 
-    uint8_t filter_states_len;
+    size_t filter_states_len;
     biquad_filter_state *filter_states;
 
     uint8_t bits_per_sample;
