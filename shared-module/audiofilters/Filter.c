@@ -28,27 +28,15 @@ void common_hal_audiofilters_filter_construct(audiofilters_filter_obj_t *self,
     self->buffer_len = buffer_size; // in bytes
 
     self->buffer[0] = m_malloc(self->buffer_len);
-    if (self->buffer[0] == NULL) {
-        common_hal_audiofilters_filter_deinit(self);
-        m_malloc_fail(self->buffer_len);
-    }
     memset(self->buffer[0], 0, self->buffer_len);
 
     self->buffer[1] = m_malloc(self->buffer_len);
-    if (self->buffer[1] == NULL) {
-        common_hal_audiofilters_filter_deinit(self);
-        m_malloc_fail(self->buffer_len);
-    }
     memset(self->buffer[1], 0, self->buffer_len);
 
     self->last_buf_idx = 1; // Which buffer to use first, toggle between 0 and 1
 
     // This buffer will be used to process samples through the biquad filter
     self->filter_buffer = m_malloc(SYNTHIO_MAX_DUR * sizeof(int32_t));
-    if (self->filter_buffer == NULL) {
-        common_hal_audiofilters_filter_deinit(self);
-        m_malloc_fail(SYNTHIO_MAX_DUR * sizeof(int32_t));
-    }
     memset(self->filter_buffer, 0, SYNTHIO_MAX_DUR * sizeof(int32_t));
 
     // Initialize other values most effects will need.
@@ -106,10 +94,6 @@ void reset_filter_states(audiofilters_filter_obj_t *self) {
     }
 
     self->filter_states = m_malloc(self->filter_states_len * sizeof(biquad_filter_state));
-    if (self->filter_states == NULL) {
-        common_hal_audiofilters_filter_deinit(self);
-        m_malloc_fail(self->filter_states_len * sizeof(biquad_filter_state));
-    }
 
     if (mp_obj_is_type(items, (const mp_obj_type_t *)&synthio_biquad_type_obj)) {
         synthio_biquad_filter_assign(&self->filter_states[0], items);
