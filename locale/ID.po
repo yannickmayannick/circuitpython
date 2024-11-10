@@ -190,6 +190,10 @@ msgstr ""
 msgid "%q must be >= %d"
 msgstr "%q harus >= %d"
 
+#: shared-module/audiofilters/Filter.c
+msgid "%q must be a %q object, %q, or %q"
+msgstr ""
+
 #: shared-bindings/analogbufio/BufferedIn.c
 msgid "%q must be a bytearray or array of type 'H' or 'B'"
 msgstr ""
@@ -1282,6 +1286,7 @@ msgid "Invalid socket for TLS"
 msgstr ""
 
 #: ports/espressif/common-hal/espidf/__init__.c
+#: ports/nordic/common-hal/_bleio/__init__.c
 msgid "Invalid state"
 msgstr ""
 
@@ -1991,7 +1996,8 @@ msgstr ""
 msgid "The length of rgb_pins must be 6, 12, 18, 24, or 30"
 msgstr "Panjang rgb_pins harus 6, 12, 18, 24, atau 30"
 
-#: shared-module/audiodelays/Echo.c shared-module/audiomixer/MixerVoice.c
+#: shared-module/audiodelays/Echo.c shared-module/audiofilters/Filter.c
+#: shared-module/audiomixer/MixerVoice.c
 msgid "The sample's %q does not match"
 msgstr "Sampel punya %q yang tidak cocok"
 
@@ -2293,7 +2299,8 @@ msgstr "PERINGATAN: Nama file kode anda mempunyai dua ekstensi\n"
 
 #: ports/nordic/common-hal/watchdog/WatchDogTimer.c
 msgid "WatchDogTimer cannot be deinitialized once mode is set to RESET"
-msgstr "WatchDogTimer tidak dapat dideinisialisasi setelah mode diatur ke RESET"
+msgstr ""
+"WatchDogTimer tidak dapat dideinisialisasi setelah mode diatur ke RESET"
 
 #: py/builtinhelp.c
 #, c-format
@@ -2537,7 +2544,8 @@ msgstr ""
 msgid "bits must be 32 or less"
 msgstr ""
 
-#: shared-bindings/audiodelays/Echo.c shared-bindings/audiomixer/Mixer.c
+#: shared-bindings/audiodelays/Echo.c shared-bindings/audiofilters/Filter.c
+#: shared-bindings/audiomixer/Mixer.c
 msgid "bits_per_sample must be 8 or 16"
 msgstr ""
 

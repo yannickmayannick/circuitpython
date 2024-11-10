@@ -202,6 +202,10 @@ msgstr "%q debe ser <= %u"
 msgid "%q must be >= %d"
 msgstr "%q debe ser >= %d"
 
+#: shared-module/audiofilters/Filter.c
+msgid "%q must be a %q object, %q, or %q"
+msgstr ""
+
 #: shared-bindings/analogbufio/BufferedIn.c
 msgid "%q must be a bytearray or array of type 'H' or 'B'"
 msgstr "%q debe ser un bytearray o array de tipo 'H' o 'B'"
@@ -1313,6 +1317,7 @@ msgid "Invalid socket for TLS"
 msgstr "Socket invalido para TLS"
 
 #: ports/espressif/common-hal/espidf/__init__.c
+#: ports/nordic/common-hal/_bleio/__init__.c
 msgid "Invalid state"
 msgstr "Estado invalido"
 
@@ -2025,7 +2030,8 @@ msgstr "La excepción fue la causa directa de la excepción siguiente:"
 msgid "The length of rgb_pins must be 6, 12, 18, 24, or 30"
 msgstr "La longitud de rgb_pins debe ser 6, 12, 18, 24, o 30"
 
-#: shared-module/audiodelays/Echo.c shared-module/audiomixer/MixerVoice.c
+#: shared-module/audiodelays/Echo.c shared-module/audiofilters/Filter.c
+#: shared-module/audiomixer/MixerVoice.c
 msgid "The sample's %q does not match"
 msgstr ""
 
@@ -2572,7 +2578,8 @@ msgstr "los tamaños de los bitmap deben coincidir"
 msgid "bits must be 32 or less"
 msgstr "los bits deben ser 32 o menos"
 
-#: shared-bindings/audiodelays/Echo.c shared-bindings/audiomixer/Mixer.c
+#: shared-bindings/audiodelays/Echo.c shared-bindings/audiofilters/Filter.c
+#: shared-bindings/audiomixer/Mixer.c
 msgid "bits_per_sample must be 8 or 16"
 msgstr "bits_per_sample debe ser 8 ó 16"
 
