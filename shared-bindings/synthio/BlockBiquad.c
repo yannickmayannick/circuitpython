@@ -19,6 +19,8 @@
 //|     """A high-pass filter"""
 //|     BAND_PASS: FilterMode
 //|     """A band-pass filter"""
+//|     NOTCH: FilterMode
+//|     """A notch filter"""
 //|
 
 MAKE_ENUM_VALUE(synthio_filter_mode_type, mode, LOW_PASS, SYNTHIO_LOW_PASS);
