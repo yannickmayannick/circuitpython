@@ -50,9 +50,6 @@ void common_hal_audiofilters_filter_construct(audiofilters_filter_obj_t *self,
 
     // The below section sets up the effect's starting values.
 
-    if (filter == MP_OBJ_NULL) {
-        filter = mp_const_none;
-    }
     common_hal_audiofilters_filter_set_filter(self, filter);
 
     synthio_block_assign_slot(mix, &self->mix, MP_QSTR_mix);
