@@ -34,6 +34,8 @@
 //|
 //|
 
+//| AnyBiquad = Biquad | BlockBiquad
+//|
 //| class EnvelopeState:
 //|     ATTACK: EnvelopeState
 //|     """The note is in its attack phase"""
