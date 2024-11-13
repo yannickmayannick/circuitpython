@@ -33,6 +33,10 @@ SRC_BITMAP := \
 	shared-bindings/audiocore/__init__.c \
 	shared-bindings/audiocore/RawSample.c \
 	shared-bindings/audiocore/WaveFile.c \
+	shared-bindings/audiodelays/Echo.c \
+	shared-bindings/audiodelays/__init__.c \
+	shared-bindings/audiofilters/Filter.c \
+	shared-bindings/audiofilters/__init__.c \
 	shared-bindings/audiomixer/__init__.c \
 	shared-bindings/audiomixer/Mixer.c \
 	shared-bindings/audiomixer/MixerVoice.c \
@@ -56,15 +60,25 @@ SRC_BITMAP := \
 	shared-bindings/synthio/LFO.c \
 	shared-bindings/synthio/Note.c \
 	shared-bindings/synthio/Biquad.c \
+	shared-bindings/synthio/BlockBiquad.c \
 	shared-bindings/synthio/Synthesizer.c \
 	shared-bindings/traceback/__init__.c \
 	shared-bindings/util.c \
+	shared-bindings/vectorio/Circle.c \
+	shared-bindings/vectorio/__init__.c \
+	shared-bindings/vectorio/Polygon.c \
+	shared-bindings/vectorio/Rectangle.c \
+	shared-bindings/vectorio/VectorShape.c \
 	shared-bindings/zlib/__init__.c \
 	shared-module/aesio/aes.c \
 	shared-module/aesio/__init__.c \
 	shared-module/audiocore/__init__.c \
 	shared-module/audiocore/RawSample.c \
 	shared-module/audiocore/WaveFile.c \
+	shared-module/audiodelays/Echo.c \
+	shared-module/audiodelays/__init__.c \
+	shared-module/audiofilters/Filter.c \
+	shared-module/audiofilters/__init__.c \
 	shared-module/audiomixer/__init__.c \
 	shared-module/audiomp3/MP3Decoder.c \
 	shared-module/audiomixer/Mixer.c \
@@ -87,7 +101,14 @@ SRC_BITMAP := \
 	shared-module/synthio/LFO.c \
 	shared-module/synthio/Note.c \
 	shared-module/synthio/Biquad.c \
+	shared-module/synthio/BlockBiquad.c \
 	shared-module/synthio/Synthesizer.c \
+	shared-bindings/vectorio/Circle.c \
+	shared-module/vectorio/Circle.c \
+	shared-module/vectorio/__init__.c \
+	shared-module/vectorio/Polygon.c \
+	shared-module/vectorio/Rectangle.c \
+	shared-module/vectorio/VectorShape.c \
 	shared-module/traceback/__init__.c \
 	shared-module/zlib/__init__.c \
 
@@ -116,6 +137,9 @@ $(BUILD)/lib/mp3/src/buffers.o: CFLAGS += -include "shared-module/audiomp3/__ini
 CFLAGS += \
 	-DCIRCUITPY_AESIO=1 \
 	-DCIRCUITPY_AUDIOCORE=1 \
+	-DCIRCUITPY_AUDIOEFFECTS=1 \
+	-DCIRCUITPY_AUDIODELAYS=1 \
+	-DCIRCUITPY_AUDIOFILTERS=1 \
 	-DCIRCUITPY_AUDIOMIXER=1 \
 	-DCIRCUITPY_AUDIOMP3=1 \
 	-DCIRCUITPY_AUDIOMP3_USE_PORT_ALLOCATOR=0 \
@@ -134,6 +158,7 @@ CFLAGS += \
 	-DCIRCUITPY_SYNTHIO=1 \
 	-DCIRCUITPY_SYNTHIO_MAX_CHANNELS=14 \
 	-DCIRCUITPY_TRACEBACK=1 \
+	-DCIRCUITPY_VECTORIO=1 \
 	-DCIRCUITPY_ZLIB=1
 
 # CIRCUITPY-CHANGE: test native base classes.

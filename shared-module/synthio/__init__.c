@@ -8,12 +8,15 @@
 #include "shared-module/synthio/__init__.h"
 #include "shared-bindings/synthio/__init__.h"
 #include "shared-module/synthio/Biquad.h"
+#include "shared-module/synthio/BlockBiquad.h"
 #include "shared-module/synthio/Note.h"
 #include "py/runtime.h"
 #include <math.h>
 #include <stdlib.h>
 
-mp_float_t synthio_global_rate_scale;
+#define MP_PI MICROPY_FLOAT_CONST(3.14159265358979323846)
+
+mp_float_t synthio_global_rate_scale, synthio_global_W_scale;
 uint8_t synthio_global_tick;
 
 static const int16_t square_wave[] = {-32768, 32767};
@@ -184,23 +187,15 @@ static bool synth_note_into_buffer(synthio_synth_t *synth, int chan, int32_t *ou
         if (note->waveform_buf.buf) {
             waveform = note->waveform_buf.buf;
             waveform_length = note->waveform_buf.len;
-            if (note->waveform_loop_start > 0 && note->waveform_loop_start < waveform_length) {
-                waveform_start = note->waveform_loop_start;
-            }
-            if (note->waveform_loop_end > waveform_start && note->waveform_loop_end < waveform_length) {
-                waveform_length = note->waveform_loop_end;
-            }
+            waveform_start = (uint32_t)synthio_block_slot_get_limited(&note->waveform_loop_start, 0, waveform_length - 1);
+            waveform_length = (uint32_t)synthio_block_slot_get_limited(&note->waveform_loop_end, waveform_start + 1, waveform_length);
         }
         dds_rate = synthio_frequency_convert_scaled_to_dds((uint64_t)frequency_scaled * (waveform_length - waveform_start), sample_rate);
         if (note->ring_frequency_scaled != 0 && note->ring_waveform_buf.buf) {
             ring_waveform = note->ring_waveform_buf.buf;
             ring_waveform_length = note->ring_waveform_buf.len;
-            if (note->ring_waveform_loop_start > 0 && note->ring_waveform_loop_start < ring_waveform_length) {
-                ring_waveform_start = note->waveform_loop_start;
-            }
-            if (note->ring_waveform_loop_end > ring_waveform_start && note->ring_waveform_loop_end < ring_waveform_length) {
-                ring_waveform_length = note->ring_waveform_loop_end;
-            }
+            ring_waveform_start = (uint32_t)synthio_block_slot_get_limited(&note->ring_waveform_loop_start, 0, ring_waveform_length - 1);
+            ring_waveform_length = (uint32_t)synthio_block_slot_get_limited(&note->ring_waveform_loop_end, ring_waveform_start + 1, ring_waveform_length);
             ring_dds_rate = synthio_frequency_convert_scaled_to_dds((uint64_t)note->ring_frequency_bent * (ring_waveform_length - ring_waveform_start), sample_rate);
             uint32_t lim = ring_waveform_length << SYNTHIO_FREQUENCY_SHIFT;
             if (ring_dds_rate > lim / sizeof(int16_t)) {
@@ -335,6 +330,9 @@ void synthio_synth_synthesize(synthio_synth_t *synth, uint8_t **bufptr, uint32_t
         mp_obj_t filter_obj = synthio_synth_get_note_filter(note_obj);
         if (filter_obj != mp_const_none) {
             synthio_note_obj_t *note = MP_OBJ_TO_PTR(note_obj);
+            if (mp_obj_is_type(filter_obj, &synthio_block_biquad_type_obj)) {
+                common_hal_synthio_block_biquad_tick(filter_obj, &note->filter_state);
+            }
             synthio_biquad_filter_samples(&note->filter_state, tmp_buffer32, dur);
         }
 
@@ -490,7 +488,9 @@ uint32_t synthio_frequency_convert_scaled_to_dds(uint64_t frequency_scaled, int3
 }
 
 void shared_bindings_synthio_lfo_tick(uint32_t sample_rate) {
-    synthio_global_rate_scale = (mp_float_t)SYNTHIO_MAX_DUR / sample_rate;
+    mp_float_t recip_sample_rate = MICROPY_FLOAT_CONST(1.) / sample_rate;
+    synthio_global_rate_scale = SYNTHIO_MAX_DUR * recip_sample_rate;
+    synthio_global_W_scale = (2 * MP_PI) * recip_sample_rate;
     synthio_global_tick++;
 }
 
