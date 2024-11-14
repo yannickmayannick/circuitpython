@@ -49,7 +49,7 @@ static mp_obj_t mp_obj_new_i2ctarget_i2c_target_request(i2ctarget_i2c_target_obj
 //|         :param bool smbus: Use SMBUS timings if the hardware supports it"""
 //|         ...
 static mp_obj_t i2ctarget_i2c_target_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *all_args) {
-    i2ctarget_i2c_target_obj_t *self = mp_obj_malloc(i2ctarget_i2c_target_obj_t, &i2ctarget_i2c_target_type);
+    i2ctarget_i2c_target_obj_t *self = mp_obj_malloc_with_finaliser(i2ctarget_i2c_target_obj_t, &i2ctarget_i2c_target_type);
     enum { ARG_scl, ARG_sda, ARG_addresses, ARG_smbus };
     static const mp_arg_t allowed_args[] = {
         { MP_QSTR_scl, MP_ARG_REQUIRED | MP_ARG_OBJ },
@@ -186,6 +186,7 @@ static MP_DEFINE_CONST_FUN_OBJ_KW(i2ctarget_i2c_target_request_obj, 1, i2ctarget
 
 static const mp_rom_map_elem_t i2ctarget_i2c_target_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_deinit), MP_ROM_PTR(&i2ctarget_i2c_target_deinit_obj) },
+    { MP_ROM_QSTR(MP_QSTR___del__), MP_ROM_PTR(&i2ctarget_i2c_target_deinit_obj) },
     { MP_ROM_QSTR(MP_QSTR___enter__), MP_ROM_PTR(&default___enter___obj) },
     { MP_ROM_QSTR(MP_QSTR___exit__), MP_ROM_PTR(&i2ctarget_i2c_target___exit___obj) },
     { MP_ROM_QSTR(MP_QSTR_request), MP_ROM_PTR(&i2ctarget_i2c_target_request_obj) },
