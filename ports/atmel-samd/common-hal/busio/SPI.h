@@ -40,9 +40,6 @@ typedef struct {
     uint8_t clock_pin;
     uint8_t MOSI_pin;
     uint8_t MISO_pin;
-    uint8_t SS_pin;
-    bool slave_mode;
-    dma_descr_t running_dma;
 } busio_spi_obj_t;
 
 #endif // MICROPY_INCLUDED_ATMEL_SAMD_COMMON_HAL_BUSIO_SPI_H

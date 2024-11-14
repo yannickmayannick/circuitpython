@@ -38,7 +38,7 @@ extern const mp_obj_type_t busio_spi_type;
 // Construct an underlying SPI object.
 extern void common_hal_busio_spi_construct(busio_spi_obj_t *self,
     const mcu_pin_obj_t *clock, const mcu_pin_obj_t *mosi,
-    const mcu_pin_obj_t *miso, const mcu_pin_obj_t *ss, bool half_duplex, bool slave_mode);
+    const mcu_pin_obj_t *miso, bool half_duplex);
 
 extern void common_hal_busio_spi_deinit(busio_spi_obj_t *self);
 extern bool common_hal_busio_spi_deinited(busio_spi_obj_t *self);
@@ -57,19 +57,6 @@ extern bool common_hal_busio_spi_read(busio_spi_obj_t *self, uint8_t *data, size
 
 // Reads and write len bytes simultaneously.
 extern bool common_hal_busio_spi_transfer(busio_spi_obj_t *self, const uint8_t *data_out, uint8_t *data_in, size_t len);
-
-#if CIRCUITPY_SAMD
-
-// Initiates a transfer that reads and write len bytes simultaneously
-extern void common_hal_busio_spi_transfer_async_start(busio_spi_obj_t *self, const uint8_t *data_out, uint8_t *data_in, size_t len);
-
-// Reads the state of the in-progress transfer
-extern bool common_hal_busio_spi_transfer_async_check(busio_spi_obj_t *self);
-
-// Cleans up the completed transfer and returns any error code produced by the transfer
-extern int common_hal_busio_spi_transfer_async_end(busio_spi_obj_t *self);
-
-#endif // CIRCUITPY_SAMD
 
 // Return actual SPI bus frequency.
 uint32_t common_hal_busio_spi_get_frequency(busio_spi_obj_t *self);

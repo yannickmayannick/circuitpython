@@ -77,7 +77,7 @@ void reset_spi(void) {
 
 void common_hal_busio_spi_construct(busio_spi_obj_t *self,
     const mcu_pin_obj_t *clock, const mcu_pin_obj_t *mosi,
-    const mcu_pin_obj_t *miso, const mcu_pin_obj_t *ss, bool half_duplex, bool slave_mode) {
+    const mcu_pin_obj_t *miso, bool half_duplex) {
     size_t instance_index = NUM_SPI;
     BP_Function_Enum clock_alt = 0;
     BP_Function_Enum mosi_alt = 0;
@@ -85,9 +85,6 @@ void common_hal_busio_spi_construct(busio_spi_obj_t *self,
 
     if (half_duplex) {
         mp_raise_NotImplementedError(MP_ERROR_TEXT("Half duplex SPI is not implemented"));
-    }
-    if (slave_mode) {
-        mp_raise_NotImplementedError(MP_ERROR_TEXT("Slave mode SPI is not implemented"));
     }
 
     // BCM_VERSION != 2711 have 3 SPI but as listed in peripherals/gen/pins.c two are on
