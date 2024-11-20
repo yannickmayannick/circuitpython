@@ -496,6 +496,7 @@ MP_DEFINE_CONST_FUN_OBJ_KW(rp2pio_statemachine_write_obj, 2, rp2pio_statemachine
 //|         once: Optional[ReadableBuffer] = None,
 //|         *,
 //|         loop: Optional[ReadableBuffer] = None,
+//|         loop2: Optional[ReadableBuffer] = None,
 //|         swap: bool = False,
 //|     ) -> None:
 //|         """Write data to the TX fifo in the background, with optional looping.
@@ -504,8 +505,8 @@ MP_DEFINE_CONST_FUN_OBJ_KW(rp2pio_statemachine_write_obj, 2, rp2pio_statemachine
 //|         This means that any ``once`` or ``loop`` buffer will be written at least once.
 //|         Then the ``once`` and/or ``loop`` buffers are queued. and the function returns.
 //|         The ``once`` buffer (if specified) will be written just once.
-//|         Finally, the ``loop`` buffer (if specified) will continue being looped indefinitely.
-//|
+//|         Finally, the ``loop`` and/or ``loop2`` buffer (if specified) will continue being looped indefinitely.  If both ``loop`` and ``loop2`` are specified, they will alternate.
+//|         
 //|         Writes to the FIFO will match the input buffer's element size. For example, bytearray elements
 //|         will perform 8 bit writes to the PIO FIFO. The RP2040's memory bus will duplicate the value into
 //|         the other byte positions. So, pulling more data in the PIO assembly will read the duplicated values.
@@ -531,6 +532,7 @@ MP_DEFINE_CONST_FUN_OBJ_KW(rp2pio_statemachine_write_obj, 2, rp2pio_statemachine
 //|
 //|         :param ~Optional[circuitpython_typing.ReadableBuffer] once: Data to be written once
 //|         :param ~Optional[circuitpython_typing.ReadableBuffer] loop: Data to be written repeatedly
+//|         :param ~Optional[circuitpython_typing.ReadableBuffer] loop2: Data to be written repeatedly
 //|         :param bool swap: For 2- and 4-byte elements, swap (reverse) the byte order
 //|         """
 //|         ...
@@ -645,6 +647,7 @@ MP_PROPERTY_GETTER(rp2pio_statemachine_pending_write_obj,
 //|         once: Optional[WriteableBuffer] = None,
 //|         *,
 //|         loop: Optional[WriteableBuffer] = None,
+//|         loop2: Optional[WriteableBuffer] = None,
 //|         swap: bool = False,
 //|     ) -> None:
 //|         """Read data from the RX fifo in the background, with optional looping.
@@ -653,7 +656,7 @@ MP_PROPERTY_GETTER(rp2pio_statemachine_pending_write_obj,
 //|         This means that any ``once`` or ``loop`` buffer will be read at least once.
 //|         Then the ``once`` and/or ``loop`` buffers are queued. and the function returns.
 //|         The ``once`` buffer (if specified) will be read just once.
-//|         Finally, the ``loop`` buffer (if specified) will continue being read indefinitely.
+//|         Finally, the ``loop`` and/or ``loop2`` buffer (if specified) will continue being read indefinitely.  If both ``loop`` and ``loop2`` are specified, they will alternate.
 //|
 //|         Reads from the FIFO will match the input buffer's element size. For example, bytearray elements
 //|         will perform 8 bit reads from the PIO FIFO. The RP2040's memory bus will duplicate the value into
@@ -672,6 +675,7 @@ MP_PROPERTY_GETTER(rp2pio_statemachine_pending_write_obj,
 //|
 //|         :param ~Optional[circuitpython_typing.WriteableBuffer] once: Data to be read once
 //|         :param ~Optional[circuitpython_typing.WriteableBuffer] loop: Data to be read repeatedly
+//|         :param ~Optional[circuitpython_typing.WriteableBuffer] loop2: Data to be read repeatedly
 //|         :param bool swap: For 2- and 4-byte elements, swap (reverse) the byte order
 //|         """
 //|         ...
