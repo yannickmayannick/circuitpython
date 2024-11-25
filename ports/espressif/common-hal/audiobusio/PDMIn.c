@@ -9,6 +9,7 @@
 
 #include "common-hal/audiobusio/PDMIn.h"
 #include "py/mpprint.h"
+#include "py/runtime.h"
 #include "shared-bindings/audiobusio/PDMIn.h"
 
 
