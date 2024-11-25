@@ -267,8 +267,10 @@ clean-all:
 # If the MSDK is installed, flash-msdk can be run to utilize the the modified
 # openocd with the algorithms
 MAXIM_PATH := $(subst \,/,$(MAXIM_PATH))
+OPENOCD ?= $(MAXIM_PATH)/Tools/OpenOCD/openocd
+OPENOCD_SCRIPTS ?= $(MAXIM_PATH)/Tools/OpenOCD/scripts
 flash-msdk:
-	$(MAXIM_PATH)/Tools/OpenOCD/openocd -s $(MAXIM_PATH)/Tools/OpenOCD/scripts \
+	$(OPENOCD) -s $(OPENOCD_SCRIPTS) \
 		-f interface/cmsis-dap.cfg -f target/$(MCU_VARIANT_LOWER).cfg \
 		-c "program $(BUILD)/firmware.elf verify; init; reset; exit"
 

@@ -16,14 +16,14 @@ This port brings CircuitPython to ADI's "MAX32" series of microcontrollers. Thes
 
 ## Building for MAX32 devices
 
-Ensure CircuitPython dependencies are up-to-date by following the CircuitPython introduction on Adafruit's Website: [Building CircuitPython - Introduction](https://learn.adafruit.com/building-circuitpython/introduction). In particular, it is necessary to fetch all submodules (including the ARM Toolchain inside MSDK) and build the `mpy-cross` compiler.
+Ensure CircuitPython dependencies are up-to-date by following the CircuitPython introduction on Adafruit's Website: [Building CircuitPython - Introduction](https://learn.adafruit.com/building-circuitpython/introduction). You will require the [ARM GNU Toolchain](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads), with ARM GCC >=13.x. It is also necessary to fetch all submodules and build the `mpy-cross` compiler, per the "Building CircuitPython" guide.
 
-Ensure the MSDK's ARM toolchain is contained on your PATH. This can be done in MinGW or WSL by exporting a prefix to the PATH variable:
+Ensure the ARM toolchain is contained on your PATH. This can be done in MinGW or WSL by exporting a prefix to the PATH variable. The author's path is included below as an example:
 
-    $ export MSDK_GNU_PATH=<CircuitPy_Path>/ports/analog/msdk/Tools/GNUTools/10.3/bin
-    $ export PATH=$MSDK_GNU_PATH:$PATH
+    $ export ARM_GNU_PATH=C:/x-tools/arm-win/arm-none-eabi-w64-i686-13.3rel1/bin
+    $ export PATH=$ARM_GNU_PATH:$PATH
 
-This needs to be done each time you open a command environment to build CircuitPython.
+This needs to be done each time you open a command environment to build CircuitPython. It can be useful to set up a simple shell script for this.
 
 Once you have built `mpy-cross` and set up your build system for CircuitPython, you can build for MAX32 devices using the following commands:
 
