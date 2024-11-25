@@ -93,6 +93,7 @@ INC += \
 	-isystem sdk/src/$(CHIP_VARIANT_LOWER)/hardware_regs/include/ \
 	-isystem sdk/src/$(CHIP_VARIANT_LOWER)/hardware_structs/include/ \
 	-isystem sdk/src/$(CHIP_VARIANT_LOWER)/pico_platform/include/ \
+	-isystem sdk/src/rp2_common/boot_bootrom_headers/include/ \
 	-isystem sdk/src/rp2_common/cmsis/ \
 	-isystem sdk/src/rp2_common/hardware_adc/include/ \
 	-isystem sdk/src/rp2_common/hardware_base/include/ \
@@ -120,10 +121,12 @@ INC += \
 	-isystem sdk/src/rp2_common/hardware_vreg/include/ \
 	-isystem sdk/src/rp2_common/hardware_watchdog/include/ \
 	-isystem sdk/src/rp2_common/hardware_xosc/include/ \
+	-isystem sdk/src/rp2_common/hardware_xip_cache/include/ \
 	-isystem sdk/src/rp2_common/pico_aon_timer/include/ \
 	-isystem sdk/src/rp2_common/pico_atomic/include/ \
 	-isystem sdk/src/rp2_common/pico_bootrom/include/ \
 	-isystem sdk/src/rp2_common/pico_double/include/ \
+	-isystem sdk/src/rp2_common/pico_flash/include/ \
 	-isystem sdk/src/rp2_common/pico_mem_ops/include/ \
 	-isystem sdk/src/rp2_common/pico_multicore/include/ \
 	-isystem sdk/src/rp2_common/pico_fix/rp2040_usb_device_enumeration/include/ \
@@ -483,6 +486,7 @@ SRC_SDK := \
 	src/rp2_common/hardware_uart/uart.c \
 	src/rp2_common/hardware_vreg/vreg.c \
 	src/rp2_common/hardware_watchdog/watchdog.c \
+	src/rp2_common/hardware_xip_cache/xip_cache.c \
 	src/rp2_common/hardware_xosc/xosc.c \
 	src/rp2_common/pico_aon_timer/aon_timer.c \
 	src/rp2_common/pico_atomic/atomic.c \
