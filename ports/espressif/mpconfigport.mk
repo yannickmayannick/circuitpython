@@ -196,9 +196,14 @@ CIRCUITPY_SSL = 0
 CIRCUITPY_TOUCHIO = 1
 CIRCUITPY_TOUCHIO_USE_NATIVE = 0
 
-# TinyUSB doesn't have it upstreamed
-# https://github.com/hathach/tinyusb/issues/2791
-CIRCUITPY_USB_DEVICE = 0
+# Second stage bootloader doesn't work when the factory partition is empty due to
+# UF2 missing.
+UF2_BOOTLOADER = 0
+USB_HIGHSPEED = 1
+CIRCUITPY_USB_HID = 0
+CIRCUITPY_USB_MIDI = 0
+CIRCUITPY_TUSB_MEM_ALIGN = 64
+
 CIRCUITPY_MAX3421E = 0
 
 # Update this for the 40mhz processor.

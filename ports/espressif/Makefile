@@ -95,6 +95,7 @@ INC += \
 	-isystem esp-idf/components/esp_hw_support/dma/include \
 	-isystem esp-idf/components/esp_hw_support/include \
 	-isystem esp-idf/components/esp_hw_support/include/soc \
+	-isystem esp-idf/components/esp_mm/include \
 	-isystem esp-idf/components/esp_netif/include \
 	-isystem esp-idf/components/esp_partition/include \
 	-isystem esp-idf/components/esp_pm/include \
@@ -412,7 +413,9 @@ SRC_C += peripherals/touch.c
 endif
 
 ifneq ($(CIRCUITPY_USB_DEVICE),0)
-SRC_C += lib/tinyusb/src/portable/espressif/esp32sx/dcd_esp32sx.c
+SRC_C += \
+	lib/tinyusb/src/portable/synopsys/dwc2/dcd_dwc2.c \
+	lib/tinyusb/src/portable/synopsys/dwc2/dwc2_common.c
 endif
 
 ifneq ($(CIRCUITPY_AUDIOBUSIO),0)
