@@ -80,20 +80,6 @@ safe_mode_t port_init(void) {
         }
     }
 
-    // Init Board LEDs
-    /* setup GPIO for the LED */
-    for (int i = 0; i < num_leds; i++) {
-        // Set the output value
-        MXC_GPIO_OutClr(led_pin[i].port, led_pin[i].mask);
-
-        if (MXC_GPIO_Config(&led_pin[i]) != E_NO_ERROR) {
-            return SAFE_MODE_PROGRAMMATIC;
-        }
-    }
-
-    // Turn on one LED to indicate Sign of Life
-    MXC_GPIO_OutSet(led_pin[2].port, led_pin[2].mask);
-
     // Enable clock to RTC peripheral
     MXC_GCR->clkctrl |= MXC_F_GCR_CLKCTRL_ERTCO_EN;
     while (!(MXC_GCR->clkctrl & MXC_F_GCR_CLKCTRL_ERTCO_RDY)) {

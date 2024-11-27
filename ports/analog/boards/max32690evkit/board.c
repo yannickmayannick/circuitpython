@@ -40,10 +40,6 @@ void SysTick_Handler(void) {
     system_ticks++;
 }
 
-uint32_t board_millis(void) {
-    return system_ticks;
-}
-
 // Initializes board related state once on start up.
 void board_init(void) {
 }
