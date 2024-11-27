@@ -121,7 +121,8 @@ SRC_MAX32 += \
 SRC_C += $(SRC_MAX32) \
 			boards/$(BOARD)/board.c \
 			boards/$(BOARD)/pins.c \
-			peripherals/$(MCU_VARIANT_LOWER)/pins.c
+			peripherals/$(MCU_VARIANT_LOWER)/pins.c \
+			peripherals/$(MCU_VARIANT_LOWER)/gpios.c
 
 # *******************************************************************************
 ### Compiler & Linker Flags ###

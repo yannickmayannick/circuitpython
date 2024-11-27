@@ -65,6 +65,13 @@ static uint32_t tick_flag = 0;
 // defined by cmsis core files
 extern void NVIC_SystemReset(void) NORETURN;
 
+volatile uint32_t system_ticks = 0;
+
+void SysTick_Handler(void) {
+    system_ticks++;
+}
+
+
 safe_mode_t port_init(void) {
     int err = E_NO_ERROR;
 
