@@ -22,6 +22,8 @@ typedef struct sm_buf_info {
     mp_buffer_info_t info;
 } sm_buf_info;
 
+#define RP2PIO_STATEMACHINE_N_BUFS 3
+
 typedef struct {
     mp_obj_base_t base;
     uint32_t pins; // Bitmask of what pins this state machine uses.
@@ -47,10 +49,22 @@ typedef struct {
     uint8_t fifo_depth;  // Either 4 if FIFOs are not joined, or 8 if they are.
 
     // dma-related items
-    volatile int pending_buffers;
-    sm_buf_info current, once, loop;
+    volatile int pending_buffers_write;
+    volatile int pending_buffers_read;
+    int write_buf_index, read_buf_index;
+    sm_buf_info write_buf[RP2PIO_STATEMACHINE_N_BUFS];
+    sm_buf_info read_buf[RP2PIO_STATEMACHINE_N_BUFS];
+
+    sm_buf_info once_read_buf_info, loop_read_buf_info, loop2_read_buf_info;
+    sm_buf_info current_read_buf, next_read_buf_1, next_read_buf_2, next_read_buf_3;
+    sm_buf_info once_write_buf_info, loop_write_buf_info, loop2_write_buf_info;
+    sm_buf_info current_write_buf, next_write_buf_1, next_write_buf_2, next_write_buf_3;
+
+    bool switched_write_buffers, switched_read_buffers;
+
     int background_stride_in_bytes;
-    bool dma_completed, byteswap;
+    bool dma_completed_write, byteswap;
+    bool dma_completed_read;
     #if PICO_PIO_VERSION > 0
     memorymap_addressrange_obj_t rxfifo_obj;
     #endif
@@ -85,7 +99,8 @@ bool rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
 uint8_t rp2pio_statemachine_program_offset(rp2pio_statemachine_obj_t *self);
 
 void rp2pio_statemachine_deinit(rp2pio_statemachine_obj_t *self, bool leave_pins);
-void rp2pio_statemachine_dma_complete(rp2pio_statemachine_obj_t *self, int channel);
+void rp2pio_statemachine_dma_complete_write(rp2pio_statemachine_obj_t *self, int channel);
+void rp2pio_statemachine_dma_complete_read(rp2pio_statemachine_obj_t *self, int channel);
 
 void rp2pio_statemachine_reset_ok(PIO pio, int sm);
 void rp2pio_statemachine_never_reset(PIO pio, int sm);
