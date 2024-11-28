@@ -17,6 +17,7 @@
 
 
 
+#if CIRCUITPY_AUDIOBUSIO_PDMIN
 
 
 
@@ -126,3 +127,5 @@ uint8_t common_hal_audiobusio_pdmin_get_bit_depth(audiobusio_pdmin_obj_t *self) 
 uint32_t common_hal_audiobusio_pdmin_get_sample_rate(audiobusio_pdmin_obj_t *self) {
     return self->sample_rate;
 }
+
+#endif
