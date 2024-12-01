@@ -6,7 +6,7 @@
 
 #pragma once
 
-#define MICROPY_HW_BOARD_NAME "Music Thing Modular Computer"
+#define MICROPY_HW_BOARD_NAME "Music Thing Modular Workshop Computer"
 #define MICROPY_HW_MCU_NAME "rp2040"
 
 

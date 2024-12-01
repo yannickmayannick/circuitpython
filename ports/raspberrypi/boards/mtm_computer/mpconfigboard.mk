@@ -1,6 +1,6 @@
 USB_VID = 0x239A
-USB_PID = 0x80F4
-USB_PRODUCT = "MTM Computer"
+USB_PID = 0x10C1
+USB_PRODUCT = "Workshop Computer"
 USB_MANUFACTURER = "Music Thing Modular"
 
 CHIP_VARIANT = RP2040
