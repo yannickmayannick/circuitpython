@@ -252,7 +252,7 @@ bool rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
     const mcu_pin_obj_t *first_in_pin, uint8_t in_pin_count,
     uint32_t pull_pin_up, uint32_t pull_pin_down,
     const mcu_pin_obj_t *first_set_pin, uint8_t set_pin_count,
-    const mcu_pin_obj_t *first_sideset_pin, uint8_t sideset_pin_count,
+    const mcu_pin_obj_t *first_sideset_pin, uint8_t sideset_pin_count, bool sideset_pindirs,
     uint32_t initial_pin_state, uint32_t initial_pin_direction,
     const mcu_pin_obj_t *jmp_pin,
     uint32_t pins_we_use, bool tx_fifo, bool rx_fifo,
@@ -390,7 +390,7 @@ bool rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
         if (sideset_enable) {
             total_sideset_bits += 1;
         }
-        sm_config_set_sideset(&c, total_sideset_bits, sideset_enable, false /* pin direction */);
+        sm_config_set_sideset(&c, total_sideset_bits, sideset_enable, sideset_pindirs);
         sm_config_set_sideset_pins(&c, first_sideset_pin->number);
     }
     if (jmp_pin != NULL) {
@@ -593,7 +593,8 @@ void common_hal_rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
     const mcu_pin_obj_t *first_in_pin, uint8_t in_pin_count,
     uint32_t pull_pin_up, uint32_t pull_pin_down,
     const mcu_pin_obj_t *first_set_pin, uint8_t set_pin_count, uint32_t initial_set_pin_state, uint32_t initial_set_pin_direction,
-    const mcu_pin_obj_t *first_sideset_pin, uint8_t sideset_pin_count, uint32_t initial_sideset_pin_state, uint32_t initial_sideset_pin_direction,
+    const mcu_pin_obj_t *first_sideset_pin, uint8_t sideset_pin_count, bool sideset_pindirs,
+    uint32_t initial_sideset_pin_state, uint32_t initial_sideset_pin_direction,
     bool sideset_enable,
     const mcu_pin_obj_t *jmp_pin, digitalio_pull_t jmp_pull,
     uint32_t wait_gpio_mask,
@@ -687,7 +688,7 @@ void common_hal_rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
         first_in_pin, in_pin_count,
         pull_up, pull_down,
         first_set_pin, set_pin_count,
-        first_sideset_pin, sideset_pin_count,
+        first_sideset_pin, sideset_pin_count, sideset_pindirs,
         initial_pin_state, initial_pin_direction,
         jmp_pin,
         pins_we_use, state.outputs.tx_fifo, state.outputs.rx_fifo,
