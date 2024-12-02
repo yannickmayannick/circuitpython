@@ -543,10 +543,9 @@ def parse_input_headers(infiles):
         with open(infile, "rt") as f:
             for line in f:
                 line = line.strip()
-
-                match = re.match(r'^TRANSLATE\("(.*)"\)$', line)
+                match = re.match(r'^TRANSLAT(E|ION)\("(.*)"(, \d+)?\)$', line)
                 if match:
-                    i18ns.add(match.group(1))
+                    i18ns.add(match.group(2))
                     continue
 
     return i18ns
