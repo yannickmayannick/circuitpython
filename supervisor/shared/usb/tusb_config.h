@@ -90,7 +90,7 @@ extern "C" {
 #endif
 
 // Use DMA with the USB peripheral.
-#ifdef CONFIG_IDF_TARGET_ESP32P4
+#if defined(CONFIG_IDF_TARGET_ESP32P4) || defined(CONFIG_IDF_TARGET_ESP32S2) || defined(CONFIG_IDF_TARGET_ESP32S3)
 #define CFG_TUD_DWC2_DMA_ENABLE (1)
 #define CFG_TUH_DWC2_DMA_ENABLE (1)
 #endif
