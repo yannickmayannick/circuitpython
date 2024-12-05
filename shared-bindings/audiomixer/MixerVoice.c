@@ -94,6 +94,25 @@ MP_PROPERTY_GETSET(audiomixer_mixervoice_level_obj,
     (mp_obj_t)&audiomixer_mixervoice_get_level_obj,
     (mp_obj_t)&audiomixer_mixervoice_set_level_obj);
 
+//|     loop: bool
+//|     """Get or set the loop status of the currently playing sample."""
+static mp_obj_t audiomixer_mixervoice_obj_get_loop(mp_obj_t self_in) {
+    return mp_obj_new_bool(common_hal_audiomixer_mixervoice_get_loop(self_in));
+}
+MP_DEFINE_CONST_FUN_OBJ_1(audiomixer_mixervoice_get_loop_obj, audiomixer_mixervoice_obj_get_loop);
+
+static mp_obj_t audiomixer_mixervoice_obj_set_loop(mp_obj_t self_in, mp_obj_t loop_in) {
+    audiomixer_mixervoice_obj_t *self = MP_OBJ_TO_PTR(self_in);
+    bool loop = mp_obj_is_true(loop_in);
+    common_hal_audiomixer_mixervoice_set_loop(self, loop);
+    return mp_const_none;
+}
+MP_DEFINE_CONST_FUN_OBJ_2(audiomixer_mixervoice_set_loop_obj, audiomixer_mixervoice_obj_set_loop);
+
+MP_PROPERTY_GETSET(audiomixer_mixervoice_loop_obj,
+    (mp_obj_t)&audiomixer_mixervoice_get_loop_obj,
+    (mp_obj_t)&audiomixer_mixervoice_set_loop_obj);
+
 //|     playing: bool
 //|     """True when this voice is being output. (read-only)"""
 //|
@@ -117,6 +136,7 @@ static const mp_rom_map_elem_t audiomixer_mixervoice_locals_dict_table[] = {
     // Properties
     { MP_ROM_QSTR(MP_QSTR_playing), MP_ROM_PTR(&audiomixer_mixervoice_playing_obj) },
     { MP_ROM_QSTR(MP_QSTR_level), MP_ROM_PTR(&audiomixer_mixervoice_level_obj) },
+    { MP_ROM_QSTR(MP_QSTR_loop), MP_ROM_PTR(&audiomixer_mixervoice_loop_obj) },
 };
 static MP_DEFINE_CONST_DICT(audiomixer_mixervoice_locals_dict, audiomixer_mixervoice_locals_dict_table);
 
