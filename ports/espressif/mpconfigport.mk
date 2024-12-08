@@ -1,3 +1,23 @@
+ifeq ($(IDF_TARGET),esp32c2)
+IDF_TARGET_ARCH = riscv
+CROSS_COMPILE = riscv32-esp-elf-
+else ifeq ($(IDF_TARGET),esp32c3)
+IDF_TARGET_ARCH = riscv
+CROSS_COMPILE = riscv32-esp-elf-
+else ifeq ($(IDF_TARGET),esp32p4)
+IDF_TARGET_ARCH = riscv
+CROSS_COMPILE = riscv32-esp-elf-
+else ifeq ($(IDF_TARGET),esp32c6)
+IDF_TARGET_ARCH = riscv
+CROSS_COMPILE = riscv32-esp-elf-
+else ifeq ($(IDF_TARGET),esp32h2)
+IDF_TARGET_ARCH = riscv
+CROSS_COMPILE = riscv32-esp-elf-
+else
+IDF_TARGET_ARCH = xtensa
+CROSS_COMPILE = xtensa-$(IDF_TARGET)-elf-
+endif
+
 # Use internal flash for CIRCUITPY drive
 INTERNAL_FLASH_FILESYSTEM = 1
 
