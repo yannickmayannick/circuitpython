@@ -62,31 +62,12 @@ void common_hal_audiofilters_distortion_construct(audiofilters_distortion_obj_t 
 
     // The below section sets up the effect's starting values.
 
-    // If we did not receive a BlockInput we need to create a default float value
-    if (drive == MP_OBJ_NULL) {
-        drive = mp_obj_new_float(0.0);
-    }
     synthio_block_assign_slot(drive, &self->drive, MP_QSTR_drive);
-
-    // If we did not receive a BlockInput we need to create a default float value
-    if (pre_gain == MP_OBJ_NULL) {
-        pre_gain = mp_obj_new_float(0.0);
-    }
     synthio_block_assign_slot(pre_gain, &self->pre_gain, MP_QSTR_pre_gain);
-
-    // If we did not receive a BlockInput we need to create a default float value
-    if (post_gain == MP_OBJ_NULL) {
-        post_gain = mp_obj_new_float(0.0);
-    }
     synthio_block_assign_slot(post_gain, &self->post_gain, MP_QSTR_post_gain);
+    synthio_block_assign_slot(mix, &self->mix, MP_QSTR_mix);
 
     self->mode = mode;
-
-    // If we did not receive a BlockInput we need to create a default float value
-    if (mix == MP_OBJ_NULL) {
-        mix = mp_obj_new_float(1.0);
-    }
-    synthio_block_assign_slot(mix, &self->mix, MP_QSTR_mix);
 }
 
 bool common_hal_audiofilters_distortion_deinited(audiofilters_distortion_obj_t *self) {
