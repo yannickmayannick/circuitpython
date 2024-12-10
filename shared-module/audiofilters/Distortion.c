@@ -204,10 +204,10 @@ audioio_get_buffer_result_t audiofilters_distortion_get_buffer(audiofilters_dist
     }
 
     // get the effect values we need from the BlockInput. These may change at run time so you need to do bounds checking if required
-    mp_float_t drive = synthio_block_slot_get_limited(&self->drive, 0.0, 1.0);
-    mp_float_t pre_gain = db_to_linear(synthio_block_slot_get_limited(&self->pre_gain, -60.0, 60.0));
-    mp_float_t post_gain = db_to_linear(synthio_block_slot_get_limited(&self->post_gain, -80.0, 24.0));
-    mp_float_t mix = synthio_block_slot_get_limited(&self->mix, 0.0, 1.0);
+    mp_float_t drive = synthio_block_slot_get_limited(&self->drive, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
+    mp_float_t pre_gain = db_to_linear(synthio_block_slot_get_limited(&self->pre_gain, MICROPY_FLOAT_CONST(-60.0), MICROPY_FLOAT_CONST(60.0)));
+    mp_float_t post_gain = db_to_linear(synthio_block_slot_get_limited(&self->post_gain, MICROPY_FLOAT_CONST(-80.0), MICROPY_FLOAT_CONST(24.0)));
+    mp_float_t mix = synthio_block_slot_get_limited(&self->mix, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
 
     // Switch our buffers to the other buffer
     self->last_buf_idx = !self->last_buf_idx;
