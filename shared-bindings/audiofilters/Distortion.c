@@ -185,20 +185,12 @@ static mp_obj_t audiofilters_distortion_obj_get_drive(mp_obj_t self_in) {
 }
 MP_DEFINE_CONST_FUN_OBJ_1(audiofilters_distortion_get_drive_obj, audiofilters_distortion_obj_get_drive);
 
-static mp_obj_t audiofilters_distortion_obj_set_drive(size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
-    enum { ARG_drive };
-    static const mp_arg_t allowed_args[] = {
-        { MP_QSTR_drive,     MP_ARG_OBJ | MP_ARG_REQUIRED, {} },
-    };
-    audiofilters_distortion_obj_t *self = MP_OBJ_TO_PTR(pos_args[0]);
-    mp_arg_val_t args[MP_ARRAY_SIZE(allowed_args)];
-    mp_arg_parse_all(n_args - 1, pos_args + 1, kw_args, MP_ARRAY_SIZE(allowed_args), allowed_args, args);
-
-    common_hal_audiofilters_distortion_set_drive(self, args[ARG_drive].u_obj);
-
+static mp_obj_t audiofilters_distortion_obj_set_drive(mp_obj_t self_in, mp_obj_t drive_in) {
+    audiofilters_distortion_obj_t *self = MP_OBJ_TO_PTR(self_in);
+    common_hal_audiofilters_distortion_set_drive(self, drive_in);
     return mp_const_none;
 }
-MP_DEFINE_CONST_FUN_OBJ_KW(audiofilters_distortion_set_drive_obj, 1, audiofilters_distortion_obj_set_drive);
+MP_DEFINE_CONST_FUN_OBJ_2(audiofilters_distortion_set_drive_obj, audiofilters_distortion_obj_set_drive);
 
 MP_PROPERTY_GETSET(audiofilters_distortion_drive_obj,
     (mp_obj_t)&audiofilters_distortion_get_drive_obj,
@@ -212,20 +204,12 @@ static mp_obj_t audiofilters_distortion_obj_get_pre_gain(mp_obj_t self_in) {
 }
 MP_DEFINE_CONST_FUN_OBJ_1(audiofilters_distortion_get_pre_gain_obj, audiofilters_distortion_obj_get_pre_gain);
 
-static mp_obj_t audiofilters_distortion_obj_set_pre_gain(size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
-    enum { ARG_pre_gain };
-    static const mp_arg_t allowed_args[] = {
-        { MP_QSTR_pre_gain,     MP_ARG_OBJ | MP_ARG_REQUIRED, {} },
-    };
-    audiofilters_distortion_obj_t *self = MP_OBJ_TO_PTR(pos_args[0]);
-    mp_arg_val_t args[MP_ARRAY_SIZE(allowed_args)];
-    mp_arg_parse_all(n_args - 1, pos_args + 1, kw_args, MP_ARRAY_SIZE(allowed_args), allowed_args, args);
-
-    common_hal_audiofilters_distortion_set_pre_gain(self, args[ARG_pre_gain].u_obj);
-
+static mp_obj_t audiofilters_distortion_obj_set_pre_gain(mp_obj_t self_in, mp_obj_t pre_gain_in) {
+    audiofilters_distortion_obj_t *self = MP_OBJ_TO_PTR(self_in);
+    common_hal_audiofilters_distortion_set_pre_gain(self, pre_gain_in);
     return mp_const_none;
 }
-MP_DEFINE_CONST_FUN_OBJ_KW(audiofilters_distortion_set_pre_gain_obj, 1, audiofilters_distortion_obj_set_pre_gain);
+MP_DEFINE_CONST_FUN_OBJ_2(audiofilters_distortion_set_pre_gain_obj, audiofilters_distortion_obj_set_pre_gain);
 
 MP_PROPERTY_GETSET(audiofilters_distortion_pre_gain_obj,
     (mp_obj_t)&audiofilters_distortion_get_pre_gain_obj,
@@ -239,20 +223,12 @@ static mp_obj_t audiofilters_distortion_obj_get_post_gain(mp_obj_t self_in) {
 }
 MP_DEFINE_CONST_FUN_OBJ_1(audiofilters_distortion_get_post_gain_obj, audiofilters_distortion_obj_get_post_gain);
 
-static mp_obj_t audiofilters_distortion_obj_set_post_gain(size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
-    enum { ARG_post_gain };
-    static const mp_arg_t allowed_args[] = {
-        { MP_QSTR_post_gain,     MP_ARG_OBJ | MP_ARG_REQUIRED, {} },
-    };
-    audiofilters_distortion_obj_t *self = MP_OBJ_TO_PTR(pos_args[0]);
-    mp_arg_val_t args[MP_ARRAY_SIZE(allowed_args)];
-    mp_arg_parse_all(n_args - 1, pos_args + 1, kw_args, MP_ARRAY_SIZE(allowed_args), allowed_args, args);
-
-    common_hal_audiofilters_distortion_set_post_gain(self, args[ARG_post_gain].u_obj);
-
+static mp_obj_t audiofilters_distortion_obj_set_post_gain(mp_obj_t self_in, mp_obj_t post_gain_in) {
+    audiofilters_distortion_obj_t *self = MP_OBJ_TO_PTR(self_in);
+    common_hal_audiofilters_distortion_set_post_gain(self, post_gain_in);
     return mp_const_none;
 }
-MP_DEFINE_CONST_FUN_OBJ_KW(audiofilters_distortion_set_post_gain_obj, 1, audiofilters_distortion_obj_set_post_gain);
+MP_DEFINE_CONST_FUN_OBJ_2(audiofilters_distortion_set_post_gain_obj, audiofilters_distortion_obj_set_post_gain);
 
 MP_PROPERTY_GETSET(audiofilters_distortion_post_gain_obj,
     (mp_obj_t)&audiofilters_distortion_get_post_gain_obj,
@@ -268,21 +244,13 @@ static mp_obj_t audiofilters_distortion_obj_get_mode(mp_obj_t self_in) {
 }
 MP_DEFINE_CONST_FUN_OBJ_1(audiofilters_distortion_get_mode_obj, audiofilters_distortion_obj_get_mode);
 
-static mp_obj_t audiofilters_distortion_obj_set_mode(size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
-    enum { ARG_mode };
-    static const mp_arg_t allowed_args[] = {
-        { MP_QSTR_mode,     MP_ARG_OBJ | MP_ARG_REQUIRED, {} },
-    };
-    audiofilters_distortion_obj_t *self = MP_OBJ_TO_PTR(pos_args[0]);
-    mp_arg_val_t args[MP_ARRAY_SIZE(allowed_args)];
-    mp_arg_parse_all(n_args - 1, pos_args + 1, kw_args, MP_ARRAY_SIZE(allowed_args), allowed_args, args);
-
-    audiofilters_distortion_mode mode = validate_distortion_mode(args[ARG_mode].u_obj, MP_QSTR_mode);
+static mp_obj_t audiofilters_distortion_obj_set_mode(mp_obj_t self_in, mp_obj_t mode_in) {
+    audiofilters_distortion_obj_t *self = MP_OBJ_TO_PTR(self_in);
+    audiofilters_distortion_mode mode = validate_distortion_mode(mode_in, MP_QSTR_mode);
     common_hal_audiofilters_distortion_set_mode(self, mode);
-
     return mp_const_none;
 }
-MP_DEFINE_CONST_FUN_OBJ_KW(audiofilters_distortion_set_mode_obj, 1, audiofilters_distortion_obj_set_mode);
+MP_DEFINE_CONST_FUN_OBJ_2(audiofilters_distortion_set_mode_obj, audiofilters_distortion_obj_set_mode);
 
 MP_PROPERTY_GETSET(audiofilters_distortion_mode_obj,
     (mp_obj_t)&audiofilters_distortion_get_mode_obj,
@@ -296,20 +264,12 @@ static mp_obj_t audiofilters_distortion_obj_get_mix(mp_obj_t self_in) {
 }
 MP_DEFINE_CONST_FUN_OBJ_1(audiofilters_distortion_get_mix_obj, audiofilters_distortion_obj_get_mix);
 
-static mp_obj_t audiofilters_distortion_obj_set_mix(size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
-    enum { ARG_mix };
-    static const mp_arg_t allowed_args[] = {
-        { MP_QSTR_mix,     MP_ARG_OBJ | MP_ARG_REQUIRED, {} },
-    };
-    audiofilters_distortion_obj_t *self = MP_OBJ_TO_PTR(pos_args[0]);
-    mp_arg_val_t args[MP_ARRAY_SIZE(allowed_args)];
-    mp_arg_parse_all(n_args - 1, pos_args + 1, kw_args, MP_ARRAY_SIZE(allowed_args), allowed_args, args);
-
-    common_hal_audiofilters_distortion_set_mix(self, args[ARG_mix].u_obj);
-
+static mp_obj_t audiofilters_distortion_obj_set_mix(mp_obj_t self_in, mp_obj_t mix_in) {
+    audiofilters_distortion_obj_t *self = MP_OBJ_TO_PTR(self_in);
+    common_hal_audiofilters_distortion_set_mix(self, mix_in);
     return mp_const_none;
 }
-MP_DEFINE_CONST_FUN_OBJ_KW(audiofilters_distortion_set_mix_obj, 1, audiofilters_distortion_obj_set_mix);
+MP_DEFINE_CONST_FUN_OBJ_2(audiofilters_distortion_set_mix_obj, audiofilters_distortion_obj_set_mix);
 
 MP_PROPERTY_GETSET(audiofilters_distortion_mix_obj,
     (mp_obj_t)&audiofilters_distortion_get_mix_obj,
