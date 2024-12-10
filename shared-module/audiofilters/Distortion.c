@@ -193,7 +193,7 @@ void common_hal_audiofilters_distortion_stop(audiofilters_distortion_obj_t *self
 }
 
 static mp_float_t db_to_linear(mp_float_t value) {
-    return expf(value * MICROPY_FLOAT_CONST(0.11512925464970228420089957273422));
+    return MICROPY_FLOAT_C_FUN(exp)(value * MICROPY_FLOAT_CONST(0.11512925464970228420089957273422));
 }
 
 audioio_get_buffer_result_t audiofilters_distortion_get_buffer(audiofilters_distortion_obj_t *self, bool single_channel_output, uint8_t channel,
@@ -286,22 +286,23 @@ audioio_get_buffer_result_t audiofilters_distortion_get_buffer(audiofilters_dist
                     int32_t word = sample_word * pre_gain;
                     switch (self->mode) {
                         case DISTORTION_MODE_CLIP: {
-                            mp_float_t word_sign = word < 0 ? -1.0f : 1.0f;
-                            word = powf(fabs(word / 32768.0), 1.0001 - drive) * word_sign * 32767.0;
+                            mp_float_t word_sign = word < 0 ? MICROPY_FLOAT_CONST(-1.0) : MICROPY_FLOAT_CONST(1.0);
+                            word = MICROPY_FLOAT_C_FUN(pow)(MICROPY_FLOAT_C_FUN(fabs)(word / MICROPY_FLOAT_CONST(32768.0)), MICROPY_FLOAT_CONST(1.0001) - drive) * word_sign * MICROPY_FLOAT_CONST(32767.0);
                             word = MIN(MAX(word, -32767), 32768); // Hard clip
                         } break;
                         case DISTORTION_MODE_LOFI: {
                             word = word & word_mask;
                         } break;
                         case DISTORTION_MODE_OVERDRIVE: {
-                            mp_float_t x = word / 32768.0 * 0.686306;
-                            mp_float_t z = 1 + expf(sqrtf(fabs(x)) * -0.75);
-                            word = (expf(x) - expf(-x * z)) / (expf(x) + expf(-x)) * 32767.0;
+                            mp_float_t x = word / MICROPY_FLOAT_CONST(32768.0) * MICROPY_FLOAT_CONST(0.686306);
+                            mp_float_t z = MICROPY_FLOAT_CONST(1.0) + MICROPY_FLOAT_C_FUN(exp)(MICROPY_FLOAT_C_FUN(sqrt)(MICROPY_FLOAT_C_FUN(fabs)(x)) * MICROPY_FLOAT_CONST(-0.75));
+                            mp_float_t exp_x = MICROPY_FLOAT_C_FUN(exp)(x);
+                            word = (exp_x - MICROPY_FLOAT_C_FUN(exp)(-x * z)) / (exp_x + MICROPY_FLOAT_C_FUN(exp)(-x)) * MICROPY_FLOAT_CONST(32767.0);
                         } break;
                         case DISTORTION_MODE_WAVESHAPE: {
-                            mp_float_t x = word / 32768.0;
-                            mp_float_t k = 2 * drive / (1.00001 - drive);
-                            word = (1.0 + k) * x / (1.0 + k * fabsf(x)) * 32767.0;
+                            mp_float_t x = word / MICROPY_FLOAT_CONST(32768.0);
+                            mp_float_t k = MICROPY_FLOAT_CONST(2.0) * drive / (MICROPY_FLOAT_CONST(1.00001) - drive);
+                            word = (MICROPY_FLOAT_CONST(1.0) + k) * x / (MICROPY_FLOAT_CONST(1.0) + k * MICROPY_FLOAT_C_FUN(fabs)(x)) * MICROPY_FLOAT_CONST(32767.0);
                         } break;
                     }
                     word = word * post_gain;
