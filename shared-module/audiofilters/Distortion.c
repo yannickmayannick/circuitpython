@@ -208,10 +208,6 @@ static mp_float_t db_to_linear(mp_float_t value) {
 audioio_get_buffer_result_t audiofilters_distortion_get_buffer(audiofilters_distortion_obj_t *self, bool single_channel_output, uint8_t channel,
     uint8_t **buffer, uint32_t *buffer_length) {
 
-    if (!single_channel_output) {
-        channel = 0;
-    }
-
     // get the effect values we need from the BlockInput. These may change at run time so you need to do bounds checking if required
     mp_float_t drive = synthio_block_slot_get_limited(&self->drive, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
     mp_float_t pre_gain = db_to_linear(synthio_block_slot_get_limited(&self->pre_gain, MICROPY_FLOAT_CONST(-60.0), MICROPY_FLOAT_CONST(60.0)));
@@ -300,7 +296,7 @@ audioio_get_buffer_result_t audiofilters_distortion_get_buffer(audiofilters_dist
                     }
 
                     // Apply pre-gain
-                    int32_t word = sample_word * pre_gain;
+                    int32_t word = (int32_t)(sample_word * pre_gain);
 
                     // Apply bit mask before converting to float
                     if (self->mode == DISTORTION_MODE_LOFI) {
@@ -345,10 +341,10 @@ audioio_get_buffer_result_t audiofilters_distortion_get_buffer(audiofilters_dist
                         }
 
                         // Convert sample back to signed integer
-                        word = wordf * MICROPY_FLOAT_CONST(32767.0);
+                        word = (int32_t)(wordf * MICROPY_FLOAT_CONST(32767.0));
                     } else {
                         // Apply post-gain
-                        word = word * post_gain;
+                        word = (int32_t)(word * post_gain);
                     }
 
                     // Hard clip
@@ -357,12 +353,12 @@ audioio_get_buffer_result_t audiofilters_distortion_get_buffer(audiofilters_dist
                     }
 
                     if (MP_LIKELY(self->bits_per_sample == 16)) {
-                        word_buffer[i] = (sample_word * (MICROPY_FLOAT_CONST(1.0) - mix)) + (word * mix);
+                        word_buffer[i] = (int16_t)((sample_word * (MICROPY_FLOAT_CONST(1.0) - mix)) + (word * mix));
                         if (!self->samples_signed) {
                             word_buffer[i] ^= 0x8000;
                         }
                     } else {
-                        int8_t mixed = (sample_word * (MICROPY_FLOAT_CONST(1.0) - mix)) + (word * mix);
+                        int8_t mixed = (int8_t)((sample_word * (MICROPY_FLOAT_CONST(1.0) - mix)) + (word * mix));
                         if (self->samples_signed) {
                             hword_buffer[i] = mixed;
                         } else {
