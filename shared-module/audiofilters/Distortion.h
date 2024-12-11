@@ -26,6 +26,7 @@ typedef struct {
     synthio_block_slot_t pre_gain;
     synthio_block_slot_t post_gain;
     audiofilters_distortion_mode mode;
+    bool soft_clip;
     synthio_block_slot_t mix;
 
     uint8_t bits_per_sample;

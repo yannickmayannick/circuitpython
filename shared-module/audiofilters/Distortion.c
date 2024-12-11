@@ -19,7 +19,7 @@
 
 void common_hal_audiofilters_distortion_construct(audiofilters_distortion_obj_t *self,
     mp_obj_t drive, mp_obj_t pre_gain, mp_obj_t post_gain,
-    audiofilters_distortion_mode mode, mp_obj_t mix,
+    audiofilters_distortion_mode mode, bool soft_clip, mp_obj_t mix,
     uint32_t buffer_size, uint8_t bits_per_sample, bool samples_signed,
     uint8_t channel_count, uint32_t sample_rate) {
 
@@ -68,6 +68,7 @@ void common_hal_audiofilters_distortion_construct(audiofilters_distortion_obj_t 
     synthio_block_assign_slot(mix, &self->mix, MP_QSTR_mix);
 
     self->mode = mode;
+    self->soft_clip = soft_clip;
 }
 
 bool common_hal_audiofilters_distortion_deinited(audiofilters_distortion_obj_t *self) {
@@ -115,6 +116,14 @@ audiofilters_distortion_mode common_hal_audiofilters_distortion_get_mode(audiofi
 
 void common_hal_audiofilters_distortion_set_mode(audiofilters_distortion_obj_t *self, audiofilters_distortion_mode arg) {
     self->mode = arg;
+}
+
+bool common_hal_audiofilters_distortion_get_soft_clip(audiofilters_distortion_obj_t *self) {
+    return self->soft_clip;
+}
+
+void common_hal_audiofilters_distortion_set_soft_clip(audiofilters_distortion_obj_t *self, bool soft_clip) {
+    self->soft_clip = soft_clip;
 }
 
 mp_obj_t common_hal_audiofilters_distortion_get_mix(audiofilters_distortion_obj_t *self) {

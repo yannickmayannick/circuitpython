@@ -63,6 +63,7 @@ static audiofilters_distortion_mode validate_distortion_mode(mp_obj_t obj, qstr 
 //|         pre_gain: synthio.BlockInput = 0.0,
 //|         post_gain: synthio.BlockInput = 0.0,
 //|         mode: DistortionMode = DistortionMode.CLIP,
+//|         soft_clip: bool = False,
 //|         mix: synthio.BlockInput = 1.0,
 //|         buffer_size: int = 512,
 //|         sample_rate: int = 8000,
@@ -81,6 +82,7 @@ static audiofilters_distortion_mode validate_distortion_mode(mp_obj_t obj, qstr 
 //|         :param synthio.BlockInput pre_gain: Increases or decreases the volume before the effect, in decibels. Value can range from -60 to 60.
 //|         :param synthio.BlockInput post_gain: Increases or decreases the volume after the effect, in decibels. Value can range from -80 to 24.
 //|         :param DistortionMode mode: Distortion type.
+//|         :param bool soft_clip: Whether or not to soft clip (True) or hard clip (False) the output.
 //|         :param synthio.BlockInput mix: The mix as a ratio of the sample (0.0) to the effect (1.0).
 //|         :param int buffer_size: The total size in bytes of each of the two playback buffers to use
 //|         :param int sample_rate: The sample rate to be used
@@ -111,12 +113,13 @@ static audiofilters_distortion_mode validate_distortion_mode(mp_obj_t obj, qstr 
 //|         ...
 
 static mp_obj_t audiofilters_distortion_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *all_args) {
-    enum { ARG_drive, ARG_pre_gain, ARG_post_gain, ARG_mode, ARG_mix, ARG_buffer_size, ARG_sample_rate, ARG_bits_per_sample, ARG_samples_signed, ARG_channel_count, };
+    enum { ARG_drive, ARG_pre_gain, ARG_post_gain, ARG_mode, ARG_soft_clip, ARG_mix, ARG_buffer_size, ARG_sample_rate, ARG_bits_per_sample, ARG_samples_signed, ARG_channel_count, };
     static const mp_arg_t allowed_args[] = {
         { MP_QSTR_drive, MP_ARG_OBJ | MP_ARG_KW_ONLY,  {.u_obj = MP_ROM_INT(0)} },
         { MP_QSTR_pre_gain, MP_ARG_OBJ | MP_ARG_KW_ONLY,  {.u_obj = MP_ROM_INT(0)} },
         { MP_QSTR_post_gain, MP_ARG_OBJ | MP_ARG_KW_ONLY,  {.u_obj = MP_ROM_INT(0)} },
         { MP_QSTR_mode, MP_ARG_OBJ | MP_ARG_KW_ONLY,  {.u_obj = MP_OBJ_NULL} },
+        { MP_QSTR_soft_clip, MP_ARG_BOOL | MP_ARG_KW_ONLY, {.u_bool = false} },
         { MP_QSTR_mix, MP_ARG_OBJ | MP_ARG_KW_ONLY,  {.u_obj = MP_ROM_INT(1)} },
         { MP_QSTR_buffer_size, MP_ARG_INT | MP_ARG_KW_ONLY, {.u_int = 512} },
         { MP_QSTR_sample_rate, MP_ARG_INT | MP_ARG_KW_ONLY, {.u_int = 8000} },
@@ -141,7 +144,7 @@ static mp_obj_t audiofilters_distortion_make_new(const mp_obj_type_t *type, size
     }
 
     audiofilters_distortion_obj_t *self = mp_obj_malloc(audiofilters_distortion_obj_t, &audiofilters_distortion_type);
-    common_hal_audiofilters_distortion_construct(self, args[ARG_drive].u_obj, args[ARG_pre_gain].u_obj, args[ARG_post_gain].u_obj, mode, args[ARG_mix].u_obj, args[ARG_buffer_size].u_int, bits_per_sample, args[ARG_samples_signed].u_bool, channel_count, sample_rate);
+    common_hal_audiofilters_distortion_construct(self, args[ARG_drive].u_obj, args[ARG_pre_gain].u_obj, args[ARG_post_gain].u_obj, mode, args[ARG_soft_clip].u_obj, args[ARG_mix].u_obj, args[ARG_buffer_size].u_int, bits_per_sample, args[ARG_samples_signed].u_bool, channel_count, sample_rate);
     return MP_OBJ_FROM_PTR(self);
 }
 
@@ -257,6 +260,25 @@ MP_PROPERTY_GETSET(audiofilters_distortion_mode_obj,
     (mp_obj_t)&audiofilters_distortion_set_mode_obj);
 
 
+//|     soft_clip: bool
+//|     """Whether or not to soft clip (True) or hard clip (False) the output."""
+static mp_obj_t audiofilters_distortion_obj_get_soft_clip(mp_obj_t self_in) {
+    return mp_obj_new_bool(common_hal_audiofilters_distortion_get_soft_clip(self_in));
+}
+MP_DEFINE_CONST_FUN_OBJ_1(audiofilters_distortion_get_soft_clip_obj, audiofilters_distortion_obj_get_soft_clip);
+
+static mp_obj_t audiofilters_distortion_obj_set_soft_clip(mp_obj_t self_in, mp_obj_t soft_clip_in) {
+    audiofilters_distortion_obj_t *self = MP_OBJ_TO_PTR(self_in);
+    common_hal_audiofilters_distortion_set_soft_clip(self, mp_obj_is_true(soft_clip_in));
+    return mp_const_none;
+}
+MP_DEFINE_CONST_FUN_OBJ_2(audiofilters_distortion_set_soft_clip_obj, audiofilters_distortion_obj_set_soft_clip);
+
+MP_PROPERTY_GETSET(audiofilters_distortion_soft_clip_obj,
+    (mp_obj_t)&audiofilters_distortion_get_soft_clip_obj,
+    (mp_obj_t)&audiofilters_distortion_set_soft_clip_obj);
+
+
 //|     mix: synthio.BlockInput
 //|     """The rate the filtered signal mix between 0 and 1 where 0 is only sample and 1 is all effect."""
 static mp_obj_t audiofilters_distortion_obj_get_mix(mp_obj_t self_in) {
@@ -339,6 +361,7 @@ static const mp_rom_map_elem_t audiofilters_distortion_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_pre_gain), MP_ROM_PTR(&audiofilters_distortion_pre_gain_obj) },
     { MP_ROM_QSTR(MP_QSTR_post_gain), MP_ROM_PTR(&audiofilters_distortion_post_gain_obj) },
     { MP_ROM_QSTR(MP_QSTR_mode), MP_ROM_PTR(&audiofilters_distortion_mode_obj) },
+    { MP_ROM_QSTR(MP_QSTR_soft_clip), MP_ROM_PTR(&audiofilters_distortion_soft_clip_obj) },
     { MP_ROM_QSTR(MP_QSTR_mix), MP_ROM_PTR(&audiofilters_distortion_mix_obj) },
 };
 static MP_DEFINE_CONST_DICT(audiofilters_distortion_locals_dict, audiofilters_distortion_locals_dict_table);
