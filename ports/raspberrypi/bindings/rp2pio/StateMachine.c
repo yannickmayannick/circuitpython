@@ -24,7 +24,7 @@
 //| import memorymap
 //|
 //| FifoType = Literal["auto", "txrx", "tx", "rx", "txput", "txget", "putget"]
-//| """A type representing of the strings ``"auto"``, ``"txrx"``, ``"tx"``, ``"rx"``, ``"txput"``, txget" or ``"putget"``. These values are supported on RP2350. For type-checking only, not actually defined in CircuitPython."""
+//| """A type representing one of the strings ``"auto"``, ``"txrx"``, ``"tx"``, ``"rx"``, ``"txput"``, ``"txget"`` or ``"putget"``. These values are supported on RP2350. For type-checking only, not actually defined in CircuitPython."""
 //| FifoType_piov0 = Literal["auto", "txrx", "tx", "rx"]
 //| """A type representing one of the strings ``"auto"``, ``"txrx"``, ``"tx"``, or ``"rx"``. These values are supported on both RP2350 and RP2040. For type-checking only, not actually defined in CircuitPython."""
 //| MovStatusType = Literal["txfifo", "rxfifo", "irq"]
