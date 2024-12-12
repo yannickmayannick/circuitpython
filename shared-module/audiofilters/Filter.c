@@ -246,9 +246,6 @@ audioio_get_buffer_result_t audiofilters_filter_get_buffer(audiofilters_filter_o
         channel = 0;
     }
 
-    // get the effect values we need from the BlockInput. These may change at run time so you need to do bounds checking if required
-    mp_float_t mix = synthio_block_slot_get_limited(&self->mix, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
-
     // Switch our buffers to the other buffer
     self->last_buf_idx = !self->last_buf_idx;
 
@@ -256,6 +253,10 @@ audioio_get_buffer_result_t audiofilters_filter_get_buffer(audiofilters_filter_o
     int16_t *word_buffer = (int16_t *)self->buffer[self->last_buf_idx];
     int8_t *hword_buffer = self->buffer[self->last_buf_idx];
     uint32_t length = self->buffer_len / (self->bits_per_sample / 8);
+
+    // get the effect values we need from the BlockInput. These may change at run time so you need to do bounds checking if required
+    shared_bindings_synthio_lfo_tick(self->sample_rate, length / self->channel_count);
+    mp_float_t mix = synthio_block_slot_get_limited(&self->mix, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
 
     // Loop over the entire length of our buffer to fill it, this may require several calls to get data from the sample
     while (length != 0) {

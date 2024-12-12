@@ -208,7 +208,16 @@ static mp_float_t db_to_linear(mp_float_t value) {
 audioio_get_buffer_result_t audiofilters_distortion_get_buffer(audiofilters_distortion_obj_t *self, bool single_channel_output, uint8_t channel,
     uint8_t **buffer, uint32_t *buffer_length) {
 
+    // Switch our buffers to the other buffer
+    self->last_buf_idx = !self->last_buf_idx;
+
+    // If we are using 16 bit samples we need a 16 bit pointer, 8 bit needs an 8 bit pointer
+    int16_t *word_buffer = (int16_t *)self->buffer[self->last_buf_idx];
+    int8_t *hword_buffer = self->buffer[self->last_buf_idx];
+    uint32_t length = self->buffer_len / (self->bits_per_sample / 8);
+
     // get the effect values we need from the BlockInput. These may change at run time so you need to do bounds checking if required
+    shared_bindings_synthio_lfo_tick(self->sample_rate, length / self->channel_count);
     mp_float_t drive = synthio_block_slot_get_limited(&self->drive, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
     mp_float_t pre_gain = db_to_linear(synthio_block_slot_get_limited(&self->pre_gain, MICROPY_FLOAT_CONST(-60.0), MICROPY_FLOAT_CONST(60.0)));
     mp_float_t post_gain = db_to_linear(synthio_block_slot_get_limited(&self->post_gain, MICROPY_FLOAT_CONST(-80.0), MICROPY_FLOAT_CONST(24.0)));
@@ -223,14 +232,6 @@ audioio_get_buffer_result_t audiofilters_distortion_get_buffer(audiofilters_dist
     } else if (self->mode == DISTORTION_MODE_WAVESHAPE) {
         drive = MICROPY_FLOAT_CONST(2.0) * drive / (MICROPY_FLOAT_CONST(1.0001) - drive);
     }
-
-    // Switch our buffers to the other buffer
-    self->last_buf_idx = !self->last_buf_idx;
-
-    // If we are using 16 bit samples we need a 16 bit pointer, 8 bit needs an 8 bit pointer
-    int16_t *word_buffer = (int16_t *)self->buffer[self->last_buf_idx];
-    int8_t *hword_buffer = self->buffer[self->last_buf_idx];
-    uint32_t length = self->buffer_len / (self->bits_per_sample / 8);
 
     // Loop over the entire length of our buffer to fill it, this may require several calls to get data from the sample
     while (length != 0) {

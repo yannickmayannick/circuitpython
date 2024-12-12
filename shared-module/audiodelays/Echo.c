@@ -284,15 +284,6 @@ audioio_get_buffer_result_t audiodelays_echo_get_buffer(audiodelays_echo_obj_t *
         channel = 0;
     }
 
-    // get the effect values we need from the BlockInput. These may change at run time so you need to do bounds checking if required
-    mp_float_t mix = synthio_block_slot_get_limited(&self->mix, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
-    mp_float_t decay = synthio_block_slot_get_limited(&self->decay, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
-
-    uint32_t delay_ms = (uint32_t)synthio_block_slot_get(&self->delay_ms);
-    if (self->current_delay_ms != delay_ms) {
-        recalculate_delay(self, delay_ms);
-    }
-
     // Switch our buffers to the other buffer
     self->last_buf_idx = !self->last_buf_idx;
 
@@ -300,6 +291,16 @@ audioio_get_buffer_result_t audiodelays_echo_get_buffer(audiodelays_echo_obj_t *
     int16_t *word_buffer = (int16_t *)self->buffer[self->last_buf_idx];
     int8_t *hword_buffer = self->buffer[self->last_buf_idx];
     uint32_t length = self->buffer_len / (self->bits_per_sample / 8);
+
+    // get the effect values we need from the BlockInput. These may change at run time so you need to do bounds checking if required
+    shared_bindings_synthio_lfo_tick(self->sample_rate, length / self->channel_count);
+    mp_float_t mix = synthio_block_slot_get_limited(&self->mix, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
+    mp_float_t decay = synthio_block_slot_get_limited(&self->decay, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
+
+    uint32_t delay_ms = (uint32_t)synthio_block_slot_get(&self->delay_ms);
+    if (self->current_delay_ms != delay_ms) {
+        recalculate_delay(self, delay_ms);
+    }
 
     // The echo buffer is always stored as a 16-bit value internally
     int16_t *echo_buffer = (int16_t *)self->echo_buffer;
