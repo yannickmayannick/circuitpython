@@ -216,23 +216,6 @@ audioio_get_buffer_result_t audiofilters_distortion_get_buffer(audiofilters_dist
     int8_t *hword_buffer = self->buffer[self->last_buf_idx];
     uint32_t length = self->buffer_len / (self->bits_per_sample / 8);
 
-    // get the effect values we need from the BlockInput. These may change at run time so you need to do bounds checking if required
-    shared_bindings_synthio_lfo_tick(self->sample_rate, length / self->channel_count);
-    mp_float_t drive = synthio_block_slot_get_limited(&self->drive, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
-    mp_float_t pre_gain = db_to_linear(synthio_block_slot_get_limited(&self->pre_gain, MICROPY_FLOAT_CONST(-60.0), MICROPY_FLOAT_CONST(60.0)));
-    mp_float_t post_gain = db_to_linear(synthio_block_slot_get_limited(&self->post_gain, MICROPY_FLOAT_CONST(-80.0), MICROPY_FLOAT_CONST(24.0)));
-    mp_float_t mix = synthio_block_slot_get_limited(&self->mix, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
-
-    // LOFI mode bit mask
-    uint32_t word_mask = 0xFFFFFFFF ^ ((1 << (uint32_t)MICROPY_FLOAT_C_FUN(round)(drive * MICROPY_FLOAT_CONST(14.0))) - 1);
-
-    // Modify drive value depending on mode
-    if (self->mode == DISTORTION_MODE_CLIP) {
-        drive = MICROPY_FLOAT_CONST(1.0001) - drive;
-    } else if (self->mode == DISTORTION_MODE_WAVESHAPE) {
-        drive = MICROPY_FLOAT_CONST(2.0) * drive / (MICROPY_FLOAT_CONST(1.0001) - drive);
-    }
-
     // Loop over the entire length of our buffer to fill it, this may require several calls to get data from the sample
     while (length != 0) {
         // Check if there is no more sample to play, we will either load more data, reset the sample if loop is on or clear the sample
@@ -265,14 +248,38 @@ audioio_get_buffer_result_t audiofilters_distortion_get_buffer(audiofilters_dist
                 }
             }
 
+            // tick all block inputs
+            shared_bindings_synthio_lfo_tick(self->sample_rate, length / self->channel_count);
+            (void)synthio_block_slot_get(&self->drive);
+            (void)synthio_block_slot_get(&self->pre_gain);
+            (void)synthio_block_slot_get(&self->post_gain);
+            (void)synthio_block_slot_get(&self->mix);
+
             length = 0;
         } else {
             // we have a sample to play and apply effect
             // Determine how many bytes we can process to our buffer, the less of the sample we have left and our buffer remaining
-            uint32_t n = MIN(self->sample_buffer_length, length);
+            uint32_t n = MIN(MIN(self->sample_buffer_length, length), SYNTHIO_MAX_DUR * self->channel_count);
 
             int16_t *sample_src = (int16_t *)self->sample_remaining_buffer; // for 16-bit samples
             int8_t *sample_hsrc = (int8_t *)self->sample_remaining_buffer; // for 8-bit samples
+
+            // get the effect values we need from the BlockInput. These may change at run time so you need to do bounds checking if required
+            shared_bindings_synthio_lfo_tick(self->sample_rate, n / self->channel_count);
+            mp_float_t drive = synthio_block_slot_get_limited(&self->drive, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
+            mp_float_t pre_gain = db_to_linear(synthio_block_slot_get_limited(&self->pre_gain, MICROPY_FLOAT_CONST(-60.0), MICROPY_FLOAT_CONST(60.0)));
+            mp_float_t post_gain = db_to_linear(synthio_block_slot_get_limited(&self->post_gain, MICROPY_FLOAT_CONST(-80.0), MICROPY_FLOAT_CONST(24.0)));
+            mp_float_t mix = synthio_block_slot_get_limited(&self->mix, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
+
+            // LOFI mode bit mask
+            uint32_t word_mask = 0xFFFFFFFF ^ ((1 << (uint32_t)MICROPY_FLOAT_C_FUN(round)(drive * MICROPY_FLOAT_CONST(14.0))) - 1);
+
+            // Modify drive value depending on mode
+            if (self->mode == DISTORTION_MODE_CLIP) {
+                drive = MICROPY_FLOAT_CONST(1.0001) - drive;
+            } else if (self->mode == DISTORTION_MODE_WAVESHAPE) {
+                drive = MICROPY_FLOAT_CONST(2.0) * drive / (MICROPY_FLOAT_CONST(1.0001) - drive);
+            }
 
             if (mix <= MICROPY_FLOAT_CONST(0.01)) { // if mix is zero pure sample only
                 for (uint32_t i = 0; i < n; i++) {

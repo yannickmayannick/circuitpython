@@ -254,10 +254,6 @@ audioio_get_buffer_result_t audiofilters_filter_get_buffer(audiofilters_filter_o
     int8_t *hword_buffer = self->buffer[self->last_buf_idx];
     uint32_t length = self->buffer_len / (self->bits_per_sample / 8);
 
-    // get the effect values we need from the BlockInput. These may change at run time so you need to do bounds checking if required
-    shared_bindings_synthio_lfo_tick(self->sample_rate, length / self->channel_count);
-    mp_float_t mix = synthio_block_slot_get_limited(&self->mix, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
-
     // Loop over the entire length of our buffer to fill it, this may require several calls to get data from the sample
     while (length != 0) {
         // Check if there is no more sample to play, we will either load more data, reset the sample if loop is on or clear the sample
@@ -293,14 +289,22 @@ audioio_get_buffer_result_t audiofilters_filter_get_buffer(audiofilters_filter_o
                 }
             }
 
+            // tick all block inputs
+            shared_bindings_synthio_lfo_tick(self->sample_rate, length / self->channel_count);
+            (void)synthio_block_slot_get(&self->mix);
+
             length = 0;
         } else {
             // we have a sample to play and filter
             // Determine how many bytes we can process to our buffer, the less of the sample we have left and our buffer remaining
-            uint32_t n = MIN(self->sample_buffer_length, length);
+            uint32_t n = MIN(MIN(self->sample_buffer_length, length), SYNTHIO_MAX_DUR * self->channel_count);
 
             int16_t *sample_src = (int16_t *)self->sample_remaining_buffer; // for 16-bit samples
             int8_t *sample_hsrc = (int8_t *)self->sample_remaining_buffer; // for 8-bit samples
+
+            // get the effect values we need from the BlockInput. These may change at run time so you need to do bounds checking if required
+            shared_bindings_synthio_lfo_tick(self->sample_rate, n / self->channel_count);
+            mp_float_t mix = synthio_block_slot_get_limited(&self->mix, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
 
             if (mix <= MICROPY_FLOAT_CONST(0.01) || !self->filter_states) { // if mix is zero pure sample only or no biquad filter objects are provided
                 for (uint32_t i = 0; i < n; i++) {

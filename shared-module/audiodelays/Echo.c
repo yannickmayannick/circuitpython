@@ -292,28 +292,8 @@ audioio_get_buffer_result_t audiodelays_echo_get_buffer(audiodelays_echo_obj_t *
     int8_t *hword_buffer = self->buffer[self->last_buf_idx];
     uint32_t length = self->buffer_len / (self->bits_per_sample / 8);
 
-    // get the effect values we need from the BlockInput. These may change at run time so you need to do bounds checking if required
-    shared_bindings_synthio_lfo_tick(self->sample_rate, length / self->channel_count);
-    mp_float_t mix = synthio_block_slot_get_limited(&self->mix, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
-    mp_float_t decay = synthio_block_slot_get_limited(&self->decay, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
-
-    uint32_t delay_ms = (uint32_t)synthio_block_slot_get(&self->delay_ms);
-    if (self->current_delay_ms != delay_ms) {
-        recalculate_delay(self, delay_ms);
-    }
-
     // The echo buffer is always stored as a 16-bit value internally
     int16_t *echo_buffer = (int16_t *)self->echo_buffer;
-    uint32_t echo_buf_len = self->echo_buffer_len / sizeof(uint16_t);
-
-    // Set our echo buffer position accounting for stereo
-    uint32_t echo_buffer_pos = 0;
-    if (self->freq_shift) {
-        echo_buffer_pos = self->echo_buffer_left_pos;
-        if (channel == 1) {
-            echo_buffer_pos = self->echo_buffer_right_pos;
-        }
-    }
 
     // Loop over the entire length of our buffer to fill it, this may require several calls to get data from the sample
     while (length != 0) {
@@ -332,6 +312,35 @@ audioio_get_buffer_result_t audiodelays_echo_get_buffer(audiodelays_echo_obj_t *
                 // Track length in terms of words.
                 self->sample_buffer_length /= (self->bits_per_sample / 8);
                 self->more_data = result == GET_BUFFER_MORE_DATA;
+            }
+        }
+
+        // Determine how many bytes we can process to our buffer, the less of the sample we have left and our buffer remaining
+        uint32_t n;
+        if (self->sample == NULL) {
+            n = MIN(length, SYNTHIO_MAX_DUR * self->channel_count);
+        } else {
+            n = MIN(MIN(self->sample_buffer_length, length), SYNTHIO_MAX_DUR * self->channel_count);
+        }
+
+        // get the effect values we need from the BlockInput. These may change at run time so you need to do bounds checking if required
+        shared_bindings_synthio_lfo_tick(self->sample_rate, n / self->channel_count);
+        mp_float_t mix = synthio_block_slot_get_limited(&self->mix, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
+        mp_float_t decay = synthio_block_slot_get_limited(&self->decay, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
+
+        uint32_t delay_ms = (uint32_t)synthio_block_slot_get(&self->delay_ms);
+        if (self->current_delay_ms != delay_ms) {
+            recalculate_delay(self, delay_ms);
+        }
+
+        uint32_t echo_buf_len = self->echo_buffer_len / sizeof(uint16_t);
+
+        // Set our echo buffer position accounting for stereo
+        uint32_t echo_buffer_pos = 0;
+        if (self->freq_shift) {
+            echo_buffer_pos = self->echo_buffer_left_pos;
+            if (channel == 1) {
+                echo_buffer_pos = self->echo_buffer_right_pos;
             }
         }
 
@@ -401,9 +410,6 @@ audioio_get_buffer_result_t audiodelays_echo_get_buffer(audiodelays_echo_obj_t *
             length = 0;
         } else {
             // we have a sample to play and echo
-            // Determine how many bytes we can process to our buffer, the less of the sample we have left and our buffer remaining
-            uint32_t n = MIN(self->sample_buffer_length, length);
-
             int16_t *sample_src = (int16_t *)self->sample_remaining_buffer; // for 16-bit samples
             int8_t *sample_hsrc = (int8_t *)self->sample_remaining_buffer; // for 8-bit samples
 
@@ -501,13 +507,13 @@ audioio_get_buffer_result_t audiodelays_echo_get_buffer(audiodelays_echo_obj_t *
             self->sample_remaining_buffer += (n * (self->bits_per_sample / 8));
             self->sample_buffer_length -= n;
         }
-    }
 
-    if (self->freq_shift) {
-        if (channel == 0) {
-            self->echo_buffer_left_pos = echo_buffer_pos;
-        } else if (channel == 1) {
-            self->echo_buffer_right_pos = echo_buffer_pos;
+        if (self->freq_shift) {
+            if (channel == 0) {
+                self->echo_buffer_left_pos = echo_buffer_pos;
+            } else if (channel == 1) {
+                self->echo_buffer_right_pos = echo_buffer_pos;
+            }
         }
     }
 
