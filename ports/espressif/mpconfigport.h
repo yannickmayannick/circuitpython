@@ -17,8 +17,6 @@
 
 #define CIRCUITPY_DIGITALIO_HAVE_INPUT_ONLY (1)
 
-#define CIRCUITPY_USB_DEVICE_INSTANCE 1
-
 #include "py/circuitpy_mpconfig.h"
 
 #define MICROPY_NLR_SETJMP                  (1)
