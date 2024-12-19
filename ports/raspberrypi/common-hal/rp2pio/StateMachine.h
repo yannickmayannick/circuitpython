@@ -12,6 +12,24 @@
 #include "common-hal/memorymap/AddressRange.h"
 #include "src/rp2_common/hardware_pio/include/hardware/pio.h"
 
+// pio_pinmask_t can hold ANY pin masks, so it is used before selection of gpiobase
+#if NUM_BANK0_GPIOS > 32
+typedef uint64_t pio_pinmask_t;
+#define PIO_PINMASK_BIT (64)
+#define PIO_PINMASK(i) (UINT64_C(1) << (i))
+#else
+typedef uint32_t pio_pinmask_t;
+#define PIO_PINMASK_BIT (32)
+#define PIO_PINMASK(i) (UINT32_C(1) << (i))
+#endif
+
+// pio peripheral registers only work 32 bits at a time and depend on the selection of base
+// (0 only on RP2040 & RP2350A; 0 or 16 on RP2350B)
+typedef uint32_t pio_pinmask32_t;
+#define PIO_PINMASK32(i) (1u << (i))
+#define PIO_PINMASK32_BASE(i, base) PIO_PINMASK32((i) - (base))
+
+
 enum { PIO_ANY_OFFSET = -1 };
 enum { PIO_FIFO_JOIN_AUTO = -1, PIO_FIFO_TYPE_DEFAULT = PIO_FIFO_JOIN_AUTO };
 enum { PIO_MOV_STATUS_DEFAULT = STATUS_TX_LESSTHAN };
@@ -26,7 +44,7 @@ typedef struct sm_buf_info {
 
 typedef struct {
     mp_obj_base_t base;
-    uint32_t pins; // Bitmask of what pins this state machine uses.
+    pio_pinmask32_t pins; // Bitmask of what pins this state machine uses.
     int state_machine;
     PIO pio;
     const uint16_t *init;
@@ -45,6 +63,9 @@ typedef struct {
     bool out_shift_right;
     bool in_shift_right;
     bool user_interruptible;
+    #if NUM_BANK0_GPIOS > 32
+    uint8_t gpio_offset;
+    #endif
     uint8_t offset;
     uint8_t fifo_depth;  // Either 4 if FIFOs are not joined, or 8 if they are.
 
@@ -79,12 +100,12 @@ bool rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
     const uint16_t *init, size_t init_len,
     const mcu_pin_obj_t *first_out_pin, uint8_t out_pin_count,
     const mcu_pin_obj_t *first_in_pin, uint8_t in_pin_count,
-    uint32_t pull_pin_up, uint32_t pull_pin_down,
+    pio_pinmask_t pull_pin_up, pio_pinmask_t pull_pin_down,
     const mcu_pin_obj_t *first_set_pin, uint8_t set_pin_count,
     const mcu_pin_obj_t *first_sideset_pin, uint8_t sideset_pin_count, bool sideset_pindirs,
-    uint32_t initial_pin_state, uint32_t initial_pin_direction,
+    pio_pinmask_t initial_pin_state, pio_pinmask_t initial_pin_direction,
     const mcu_pin_obj_t *jmp_pin,
-    uint32_t pins_we_use, bool tx_fifo, bool rx_fifo,
+    pio_pinmask_t pins_we_use, bool tx_fifo, bool rx_fifo,
     bool auto_pull, uint8_t pull_threshold, bool out_shift_right,
     bool wait_for_txstall,
     bool auto_push, uint8_t push_threshold, bool in_shift_right,
