@@ -35,8 +35,8 @@ static uint8_t _current_program_offset[NUM_PIOS][NUM_PIO_STATE_MACHINES];
 static uint8_t _current_program_len[NUM_PIOS][NUM_PIO_STATE_MACHINES];
 static bool _never_reset[NUM_PIOS][NUM_PIO_STATE_MACHINES];
 
-static uint32_t _current_pins[NUM_PIOS];
-static uint32_t _current_sm_pins[NUM_PIOS][NUM_PIO_STATE_MACHINES];
+static pio_pinmask_t _current_pins[NUM_PIOS];
+static pio_pinmask_t _current_sm_pins[NUM_PIOS][NUM_PIO_STATE_MACHINES];
 
 static int8_t _sm_dma_plus_one_write[NUM_PIOS][NUM_PIO_STATE_MACHINES];
 static int8_t _sm_dma_plus_one_read[NUM_PIOS][NUM_PIO_STATE_MACHINES];
@@ -79,10 +79,10 @@ static inline void sm_config_set_in_pin_count_issue1878(pio_sm_config *c, uint i
 }
 static void rp2pio_statemachine_set_pull(pio_pinmask_t pull_pin_up, pio_pinmask_t pull_pin_down, pio_pinmask_t pins_we_use) {
     for (size_t i = 0; i < NUM_BANK0_GPIOS; i++) {
-        bool used = pins_we_use & (1 << i);
+        bool used = PIO_PINMASK_IS_SET(pins_we_use, i);
         if (used) {
-            bool pull_up = pull_pin_up & (1 << i);
-            bool pull_down = pull_pin_down & (1 << i);
+            bool pull_up = PIO_PINMASK_IS_SET(pull_pin_up, i);
+            bool pull_down = PIO_PINMASK_IS_SET(pull_pin_down, i);
             gpio_set_pulls(i, pull_up, pull_down);
         }
     }
@@ -142,9 +142,9 @@ static void _reset_statemachine(PIO pio, uint8_t sm, bool leave_pins) {
         pio_remove_program(pio, &program_struct, offset);
     }
 
-    uint32_t pins = _current_sm_pins[pio_index][sm];
+    pio_pinmask_t pins = _current_sm_pins[pio_index][sm];
     for (size_t pin_number = 0; pin_number < NUM_BANK0_GPIOS; pin_number++) {
-        if ((pins & (1 << pin_number)) == 0) {
+        if (PIO_PINMASK_IS_SET(pins, pin_number)) {
             continue;
         }
         _pin_reference_count[pin_number]--;
@@ -152,10 +152,10 @@ static void _reset_statemachine(PIO pio, uint8_t sm, bool leave_pins) {
             if (!leave_pins) {
                 reset_pin_number(pin_number);
             }
-            _current_pins[pio_index] &= ~(1 << pin_number);
+            PIO_PINMASK_CLEAR(_current_pins[pio_index], pin_number);
         }
     }
-    _current_sm_pins[pio_index][sm] = 0;
+    _current_sm_pins[pio_index][sm] = PIO_PINMASK_NONE;
     pio->inte0 &= ~((PIO_IRQ0_INTF_SM0_RXNEMPTY_BITS | PIO_IRQ0_INTF_SM0_TXNFULL_BITS | PIO_IRQ0_INTF_SM0_BITS) << sm);
     pio_sm_unclaim(pio, sm);
 }
@@ -180,7 +180,7 @@ void reset_rp2pio_statemachine(void) {
 }
 
 static pio_pinmask_t _check_pins_free(const mcu_pin_obj_t *first_pin, uint8_t pin_count, bool exclusive_pin_use) {
-    pio_pinmask_t pins_we_use = 0;
+    pio_pinmask_t pins_we_use = PIO_PINMASK_NONE;
     if (first_pin != NULL) {
         for (size_t i = 0; i < pin_count; i++) {
             uint8_t pin_number = first_pin->number + i;
@@ -196,10 +196,8 @@ static pio_pinmask_t _check_pins_free(const mcu_pin_obj_t *first_pin, uint8_t pi
                 assert_pin_free(pin);
             }
             mp_printf(&mp_plat_print, "pins_we_use + pin %d\n", pin_number);
-            pins_we_use |= PIO_PINMASK(pin_number);
-            mp_printf(&mp_plat_print, "pins_we_use = %08x %08x\n",
-                (uint32_t)(pins_we_use >> 32),
-                (uint32_t)(pins_we_use));
+            PIO_PINMASK_SET(pins_we_use, pin_number);
+            PIO_PINMASK_PRINT(pins_we_use);
         }
     }
     return pins_we_use;
@@ -254,7 +252,7 @@ bool rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
     const uint16_t *init, size_t init_len,
     const mcu_pin_obj_t *first_out_pin, uint8_t out_pin_count,
     const mcu_pin_obj_t *first_in_pin, uint8_t in_pin_count,
-    pio_pinmask_t pull_pin_up, pio_pinmask_t pull_pin_down,
+    pio_pinmask_t pull_pin_up, pio_pinmask_t pull_pin_down, // GPIO numbering
     const mcu_pin_obj_t *first_set_pin, uint8_t set_pin_count,
     const mcu_pin_obj_t *first_sideset_pin, uint8_t sideset_pin_count, bool sideset_pindirs,
     pio_pinmask_t initial_pin_state, pio_pinmask_t initial_pin_direction,
@@ -274,13 +272,16 @@ bool rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
     // Create a program id that isn't the pointer so we can store it without storing the original object.
     uint32_t program_id = ~((uint32_t)program);
 
+    int pio_gpio_offset = 0;
+
     #if NUM_BANK0_GPIOS > 32
-    mp_printf(&mp_plat_print, "pins_we_use = %08x %08x\n",
-        (uint32_t)(pins_we_use >> 32),
-        (uint32_t)(pins_we_use));
-    if ((pins_we_use >> 32) != 0) {
-        mp_printf(&mp_plat_print, "uses high pins. nyi\n");
-        return false;
+    PIO_PINMASK_PRINT(pins_we_use);
+    if (PIO_PINMASK_VALUE(pins_we_use) >> 32) {
+        pio_gpio_offset = 16;
+        if (PIO_PINMASK_VALUE(pins_we_use) & 0xffff) {
+            mp_printf(&mp_plat_print, "Uses pins from 0-15 and 32-47. not possible\n");
+            return false;
+        }
     }
     #endif
 
@@ -323,7 +324,8 @@ bool rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
             if (i == pio_index) {
                 continue;
             }
-            if ((_current_pins[i] & pins_we_use) != 0) {
+            pio_pinmask_t intersection = PIO_PINMASK_AND(_current_pins[i], pins_we_use);
+            if (PIO_PINMASK_VALUE(intersection) != 0) {
                 // Pin in use by another PIO already.
                 return false;
             }
@@ -344,18 +346,21 @@ bool rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
     _current_program_len[pio_index][state_machine] = program_len;
     _current_program_offset[pio_index][state_machine] = program_offset;
     _current_sm_pins[pio_index][state_machine] = pins_we_use;
-    _current_pins[pio_index] |= pins_we_use;
+    PIO_PINMASK_MERGE(_current_pins[pio_index], pins_we_use);
 
-    pio_sm_set_pins_with_mask(self->pio, state_machine, initial_pin_state, pins_we_use);
-    pio_sm_set_pindirs_with_mask(self->pio, state_machine, initial_pin_direction, pins_we_use);
+    pio_sm_set_pins_with_mask(self->pio, state_machine, PIO_PINMASK_VALUE(initial_pin_state) >> pio_gpio_offset, PIO_PINMASK_VALUE(pins_we_use) >> pio_gpio_offset);
+    pio_sm_set_pindirs_with_mask(self->pio, state_machine, PIO_PINMASK_VALUE(initial_pin_direction) >> pio_gpio_offset, PIO_PINMASK_VALUE(pins_we_use) >> pio_gpio_offset);
     rp2pio_statemachine_set_pull(pull_pin_up, pull_pin_down, pins_we_use);
+    #if NUM_BANK0_GPIOS > 32
+    self->pio_gpio_offset = pio_gpio_offset;
+    #endif
     self->initial_pin_state = initial_pin_state;
     self->initial_pin_direction = initial_pin_direction;
     self->pull_pin_up = pull_pin_up;
     self->pull_pin_down = pull_pin_down;
 
     for (size_t pin_number = 0; pin_number < NUM_BANK0_GPIOS; pin_number++) {
-        if ((pins_we_use & PIO_PINMASK(pin_number)) == 0) {
+        if (PIO_PINMASK_IS_SET(pins_we_use, pin_number)) {
             continue;
         }
         const mcu_pin_obj_t *pin = mcu_get_pin_by_number(pin_number);
@@ -481,18 +486,20 @@ bool rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
     return true;
 }
 
-static pio_pinmask_t mask_and_shift(const mcu_pin_obj_t *first_pin, uint32_t bit_count, pio_pinmask_t value) {
+static pio_pinmask_t mask_and_shift(const mcu_pin_obj_t *first_pin, uint32_t bit_count, pio_pinmask32_t value_in) {
     if (!first_pin) {
-        return 0;
+        return PIO_PINMASK_NONE;
     }
-    value = value & (PIO_PINMASK(bit_count) - 1);
-    uint32_t shift = first_pin->number;
-    return value << shift;
+    pio_pinmask_value_t mask = (PIO_PINMASK_C(1) << bit_count) - 1;
+    pio_pinmask_value_t value = (pio_pinmask_value_t)PIO_PINMASK32_VALUE(value_in);
+    int shift = first_pin->number;
+    return PIO_PINMASK_FROM_VALUE((value & mask) << shift);
 }
 
 typedef struct {
     struct {
-        uint32_t pins_we_use, in_pin_count, out_pin_count;
+        pio_pinmask_t pins_we_use;
+        uint8_t in_pin_count, out_pin_count, pio_gpio_offset;
         bool has_jmp_pin, auto_push, auto_pull, has_in_pin, has_out_pin, has_set_pin;
     } inputs;
     struct {
@@ -519,11 +526,10 @@ static void consider_instruction(introspect_t *state, uint16_t full_instruction,
     }
     if (instruction == pio_instr_bits_wait) {
         uint16_t wait_source = (full_instruction & 0x0060) >> 5;
-        uint16_t wait_index = full_instruction & 0x001f;
-        if (wait_source == 0 && (state->inputs.pins_we_use & (1 << wait_index)) == 0) { // GPIO
+        uint16_t wait_index = (full_instruction & 0x001f) + state->inputs.pio_gpio_offset;
+        if (wait_source == 0 && !PIO_PINMASK_IS_SET(state->inputs.pins_we_use, wait_index)) { // GPIO
             mp_raise_ValueError_varg(MP_ERROR_TEXT("%q[%u] uses extra pin"), what_program, i);
-        }
-        if (wait_source == 1) { // Input pin
+        } else if (wait_source == 1) { // Input pin
             if (!state->inputs.has_in_pin) {
                 mp_raise_ValueError_varg(MP_ERROR_TEXT("Missing first_in_pin. %q[%u] waits based on pin"), what_program, i);
             }
@@ -603,12 +609,12 @@ void common_hal_rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
     size_t frequency,
     const uint16_t *init, size_t init_len,
     const uint16_t *may_exec, size_t may_exec_len,
-    const mcu_pin_obj_t *first_out_pin, uint8_t out_pin_count, pio_pinmask_t initial_out_pin_state, pio_pinmask_t initial_out_pin_direction,
+    const mcu_pin_obj_t *first_out_pin, uint8_t out_pin_count, pio_pinmask32_t initial_out_pin_state32, pio_pinmask32_t initial_out_pin_direction32,
     const mcu_pin_obj_t *first_in_pin, uint8_t in_pin_count,
-    pio_pinmask_t pull_pin_up, pio_pinmask_t pull_pin_down,
-    const mcu_pin_obj_t *first_set_pin, uint8_t set_pin_count, pio_pinmask_t initial_set_pin_state, pio_pinmask_t initial_set_pin_direction,
+    pio_pinmask32_t in_pull_pin_up32, pio_pinmask32_t in_pull_pin_down32, // relative to first_in_pin
+    const mcu_pin_obj_t *first_set_pin, uint8_t set_pin_count, pio_pinmask32_t initial_set_pin_state32, pio_pinmask32_t initial_set_pin_direction32,
     const mcu_pin_obj_t *first_sideset_pin, uint8_t sideset_pin_count, bool sideset_pindirs,
-    pio_pinmask_t initial_sideset_pin_state, pio_pinmask_t initial_sideset_pin_direction,
+    pio_pinmask32_t initial_sideset_pin_state32, pio_pinmask32_t initial_sideset_pin_direction32,
     bool sideset_enable,
     const mcu_pin_obj_t *jmp_pin, digitalio_pull_t jmp_pull,
     pio_pinmask_t wait_gpio_mask,
@@ -625,16 +631,29 @@ void common_hal_rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
 
     // First, check that all pins are free OR already in use by any PIO if exclusive_pin_use is false.
     pio_pinmask_t pins_we_use = wait_gpio_mask;
-    pins_we_use |= _check_pins_free(first_out_pin, out_pin_count, exclusive_pin_use);
-    pins_we_use |= _check_pins_free(first_in_pin, in_pin_count, exclusive_pin_use);
-    pins_we_use |= _check_pins_free(first_set_pin, set_pin_count, exclusive_pin_use);
-    pins_we_use |= _check_pins_free(first_sideset_pin, sideset_pin_count, exclusive_pin_use);
-    pins_we_use |= _check_pins_free(jmp_pin, 1, exclusive_pin_use);
+    PIO_PINMASK_MERGE(pins_we_use, _check_pins_free(first_out_pin, out_pin_count, exclusive_pin_use));
+    PIO_PINMASK_MERGE(pins_we_use, _check_pins_free(first_in_pin, in_pin_count, exclusive_pin_use));
+    PIO_PINMASK_MERGE(pins_we_use, _check_pins_free(first_set_pin, set_pin_count, exclusive_pin_use));
+    PIO_PINMASK_MERGE(pins_we_use, _check_pins_free(first_sideset_pin, sideset_pin_count, exclusive_pin_use));
+    PIO_PINMASK_MERGE(pins_we_use, _check_pins_free(jmp_pin, 1, exclusive_pin_use));
+
+    int pio_gpio_offset = 0;
+    #if NUM_BANK0_GPIOS > 32
+    PIO_PINMASK_PRINT(pins_we_use);
+    if (PIO_PINMASK_VALUE(pins_we_use) >> 32) {
+        mp_printf(&mp_plat_print, "Using upper bank\n");
+        pio_gpio_offset = 16;
+        if (PIO_PINMASK_VALUE(pins_we_use) & 0xffff) {
+            mp_raise_ValueError_varg(MP_ERROR_TEXT("Cannot use GPIO0..15 together with GPIO32..47"));
+        }
+    }
+    #endif
 
     // Look through the program to see what we reference and make sure it was provided.
     introspect_t state = {
         .inputs = {
             .pins_we_use = pins_we_use,
+            .pio_gpio_offset = pio_gpio_offset,
             .has_jmp_pin = jmp_pin != NULL,
             .has_in_pin = first_in_pin != NULL,
             .has_out_pin = first_out_pin != NULL,
@@ -656,43 +675,54 @@ void common_hal_rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
         mp_raise_ValueError_varg(MP_ERROR_TEXT("Program does OUT without loading OSR"));
     }
 
-    uint32_t initial_pin_state = mask_and_shift(first_out_pin, out_pin_count, initial_out_pin_state);
-    uint32_t initial_pin_direction = mask_and_shift(first_out_pin, out_pin_count, initial_out_pin_direction);
-    initial_set_pin_state = mask_and_shift(first_set_pin, set_pin_count, initial_set_pin_state);
-    initial_set_pin_direction = mask_and_shift(first_set_pin, set_pin_count, initial_set_pin_direction);
-    uint32_t set_out_overlap = mask_and_shift(first_out_pin, out_pin_count, 0xffffffff) &
-        mask_and_shift(first_set_pin, set_pin_count, 0xffffffff);
+    pio_pinmask_t initial_pin_state = mask_and_shift(first_out_pin, out_pin_count, initial_out_pin_state32);
+    pio_pinmask_t initial_pin_direction = mask_and_shift(first_out_pin, out_pin_count, initial_out_pin_direction32);
+    pio_pinmask_t initial_set_pin_state = mask_and_shift(first_set_pin, set_pin_count, initial_set_pin_state32);
+    pio_pinmask_t initial_set_pin_direction = mask_and_shift(first_set_pin, set_pin_count, initial_set_pin_direction32);
+    pio_pinmask_t set_out_overlap = PIO_PINMASK_AND(mask_and_shift(first_out_pin, out_pin_count, PIO_PINMASK32_ALL),
+        mask_and_shift(first_set_pin, set_pin_count, PIO_PINMASK32_ALL));
     // Check that OUT and SET settings agree because we don't have a way of picking one over the other.
-    if ((initial_pin_state & set_out_overlap) != (initial_set_pin_state & set_out_overlap)) {
+    if (!PIO_PINMASK_EQUAL(
+        PIO_PINMASK_AND(initial_pin_state, set_out_overlap),
+        PIO_PINMASK_AND(initial_set_pin_state, set_out_overlap))) {
         mp_raise_ValueError(MP_ERROR_TEXT("Initial set pin state conflicts with initial out pin state"));
     }
-    if ((initial_pin_direction & set_out_overlap) != (initial_set_pin_direction & set_out_overlap)) {
+    if (!PIO_PINMASK_EQUAL(
+        PIO_PINMASK_AND(initial_pin_direction, set_out_overlap),
+        PIO_PINMASK_AND(initial_set_pin_direction, set_out_overlap))) {
         mp_raise_ValueError(MP_ERROR_TEXT("Initial set pin direction conflicts with initial out pin direction"));
     }
-    initial_pin_state |= initial_set_pin_state;
-    initial_pin_direction |= initial_set_pin_direction;
+    PIO_PINMASK_MERGE(initial_pin_state, initial_set_pin_state);
+    PIO_PINMASK_MERGE(initial_pin_direction, initial_set_pin_direction);
 
     // Sideset overrides OUT or SET so we always use its values.
-    uint32_t sideset_mask = mask_and_shift(first_sideset_pin, sideset_pin_count, 0x1f);
-    initial_pin_state = (initial_pin_state & ~sideset_mask) | mask_and_shift(first_sideset_pin, sideset_pin_count, initial_sideset_pin_state);
-    initial_pin_direction = (initial_pin_direction & ~sideset_mask) | mask_and_shift(first_sideset_pin, sideset_pin_count, initial_sideset_pin_direction);
+    pio_pinmask_t sideset_mask = mask_and_shift(first_sideset_pin, sideset_pin_count, PIO_PINMASK32_FROM_VALUE(0x1f));
+    initial_pin_state = PIO_PINMASK_OR(
+        PIO_PINMASK_AND_NOT(initial_pin_state, sideset_mask),
+        mask_and_shift(first_sideset_pin, sideset_pin_count, initial_sideset_pin_state32));
+    initial_pin_direction = PIO_PINMASK_OR(
+        PIO_PINMASK_AND_NOT(initial_pin_direction, sideset_mask),
+        mask_and_shift(first_sideset_pin, sideset_pin_count, initial_sideset_pin_direction32));
 
     // Deal with pull up/downs
-    uint32_t pull_up = mask_and_shift(first_in_pin, in_pin_count, pull_pin_up);
-    uint32_t pull_down = mask_and_shift(first_in_pin, in_pin_count, pull_pin_down);
+    pio_pinmask_t pull_up = mask_and_shift(first_in_pin, in_pin_count, in_pull_pin_up32);
+    pio_pinmask_t pull_down = mask_and_shift(first_in_pin, in_pin_count, in_pull_pin_down32);
 
     if (jmp_pin) {
-        uint32_t jmp_mask = mask_and_shift(jmp_pin, 1, 0x1f);
+        pio_pinmask_t jmp_mask = mask_and_shift(jmp_pin, 1, PIO_PINMASK32_FROM_VALUE(0x1f));
         if (jmp_pull == PULL_UP) {
-            pull_up |= jmp_mask;
+            PIO_PINMASK_MERGE(pull_up, jmp_mask);
         }
         if (jmp_pull == PULL_DOWN) {
-            pull_down |= jmp_mask;
+            PIO_PINMASK_MERGE(pull_down, jmp_mask);
         }
     }
-    if (initial_pin_direction & (pull_up | pull_down)) {
+    if (PIO_PINMASK_VALUE(
+        PIO_PINMASK_AND(initial_pin_direction,
+            PIO_PINMASK_OR(pull_up, pull_down)))) {
         mp_raise_ValueError(MP_ERROR_TEXT("pull masks conflict with direction masks"));
     }
+
     bool ok = rp2pio_statemachine_construct(
         self,
         program, program_len,
@@ -727,9 +757,9 @@ void common_hal_rp2pio_statemachine_restart(rp2pio_statemachine_obj_t *self) {
     pio_sm_exec(self->pio, self->state_machine, self->offset);
     pio_sm_restart(self->pio, self->state_machine);
     uint8_t pio_index = pio_get_index(self->pio);
-    uint32_t pins_we_use = _current_sm_pins[pio_index][self->state_machine];
-    pio_sm_set_pins_with_mask(self->pio, self->state_machine, self->initial_pin_state, pins_we_use);
-    pio_sm_set_pindirs_with_mask(self->pio, self->state_machine, self->initial_pin_direction, pins_we_use);
+    pio_pinmask_t pins_we_use = _current_sm_pins[pio_index][self->state_machine];
+    pio_sm_set_pins_with_mask64(self->pio, self->state_machine, PIO_PINMASK_VALUE(self->initial_pin_state), PIO_PINMASK_VALUE(pins_we_use));
+    pio_sm_set_pindirs_with_mask64(self->pio, self->state_machine, PIO_PINMASK_VALUE(self->initial_pin_direction), PIO_PINMASK_VALUE(pins_we_use));
     rp2pio_statemachine_set_pull(self->pull_pin_up, self->pull_pin_down, pins_we_use);
     common_hal_rp2pio_statemachine_run(self, self->init, self->init_len);
     pio_sm_set_enabled(self->pio, self->state_machine, true);
