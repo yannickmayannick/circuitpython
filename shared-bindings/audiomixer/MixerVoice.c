@@ -13,7 +13,9 @@
 #include "py/objproperty.h"
 #include "py/runtime.h"
 #include "shared-bindings/util.h"
+#if CIRCUITPY_SYNTHIO
 #include "shared-module/synthio/block.h"
+#endif
 
 //| class MixerVoice:
 //|     """Voice objects used with Mixer
@@ -77,7 +79,9 @@ static mp_obj_t audiomixer_mixervoice_obj_stop(size_t n_args, const mp_obj_t *po
 MP_DEFINE_CONST_FUN_OBJ_KW(audiomixer_mixervoice_stop_obj, 1, audiomixer_mixervoice_obj_stop);
 
 //|     level: synthio.BlockInput
-//|     """The volume level of a voice, as a floating point number between 0 and 1."""
+//|     """The volume level of a voice, as a floating point number between 0 and 1. If your board
+//|     does not support synthio, this property will only accept a float value.
+//|     """
 static mp_obj_t audiomixer_mixervoice_obj_get_level(mp_obj_t self_in) {
     return common_hal_audiomixer_mixervoice_get_level(self_in);
 }
