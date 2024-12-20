@@ -195,9 +195,7 @@ static pio_pinmask_t _check_pins_free(const mcu_pin_obj_t *first_pin, uint8_t pi
             if (exclusive_pin_use || _pin_reference_count[pin_number] == 0) {
                 assert_pin_free(pin);
             }
-            mp_printf(&mp_plat_print, "pins_we_use + pin %d\n", pin_number);
             PIO_PINMASK_SET(pins_we_use, pin_number);
-            PIO_PINMASK_PRINT(pins_we_use);
         }
     }
     return pins_we_use;
@@ -265,8 +263,6 @@ static bool use_existing_program(PIO *pio_out, uint *sm_out, int *offset_inout, 
                 *pio_out = pio;
                 *sm_out = j;
                 *offset_inout = _current_program_offset[i][j];
-                mp_printf(&mp_plat_print, "use existing program pio=%i offset=%u\n",
-                    i, _current_program_offset[i][j]);
                 return true;
             }
         }
@@ -300,14 +296,11 @@ bool rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
     // Create a program id that isn't the pointer so we can store it without storing the original object.
     uint32_t program_id = ~((uint32_t)program);
 
-    mp_printf(&mp_plat_print, "construct\n");
-
     uint gpio_base = 0, gpio_count = 0;
     #if NUM_BANK0_GPIOS > 32
-    PIO_PINMASK_PRINT(pins_we_use);
     if (PIO_PINMASK_VALUE(pins_we_use) >> 32) {
         if (PIO_PINMASK_VALUE(pins_we_use) & 0xffff) {
-            mp_printf(&mp_plat_print, "Uses pins from 0-15 and 32-47. not possible\n");
+            // Uses pins from 0-15 and 32-47. not possible
             return false;
         }
     }
@@ -337,7 +330,6 @@ bool rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
 
     if (!use_existing_program(&pio, &state_machine, &offset, program_id, program_len, gpio_base, gpio_count)) {
         uint program_offset;
-        mp_printf(&mp_plat_print, "gpio_base = %d gpio_count = %d\n", gpio_base, gpio_count);
         bool r = pio_claim_free_sm_and_add_program_for_gpio_range(&program_struct, &pio, &state_machine, &program_offset, gpio_base, gpio_count, true);
         if (!r) {
             return false;
@@ -659,9 +651,7 @@ void common_hal_rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
 
     int pio_gpio_offset = 0;
     #if NUM_BANK0_GPIOS > 32
-    PIO_PINMASK_PRINT(pins_we_use);
     if (PIO_PINMASK_VALUE(pins_we_use) >> 32) {
-        mp_printf(&mp_plat_print, "Using upper bank\n");
         pio_gpio_offset = 16;
         if (PIO_PINMASK_VALUE(pins_we_use) & 0xffff) {
             mp_raise_ValueError_varg(MP_ERROR_TEXT("Cannot use GPIO0..15 together with GPIO32..47"));
