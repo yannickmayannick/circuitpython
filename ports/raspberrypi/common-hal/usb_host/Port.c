@@ -127,12 +127,12 @@ usb_host_port_obj_t *common_hal_usb_host_port_construct(const mcu_pin_obj_t *dp,
     assert_pin_free(dp);
     assert_pin_free(dm);
 
-    #if PICO_PIO_VERSION > 0
+    #if PICO_PIO_VERSION == 0
     uint32_t used_gpio_ranges = 0;
     #else
     uint gpio_base = dm->number;
     uint gpio_count = 2;
-    uint32_t required_gpio_ranges = (1u << (gpio_base >> 4)) |
+    uint32_t used_gpio_ranges = (1u << (gpio_base >> 4)) |
         (1u << ((gpio_base + gpio_count - 1) >> 4));
     #endif
 
