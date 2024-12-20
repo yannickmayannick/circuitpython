@@ -9,6 +9,7 @@
 
 #include "shared-module/audiomixer/__init__.h"
 #include "shared-module/audiomixer/Mixer.h"
+#include "shared-module/synthio/block.h"
 
 typedef struct {
     mp_obj_base_t base;
@@ -18,5 +19,5 @@ typedef struct {
     bool more_data;
     uint32_t *remaining_buffer;
     uint32_t buffer_length;
-    uint16_t level;
+    synthio_block_slot_t level;
 } audiomixer_mixervoice_obj_t;

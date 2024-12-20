@@ -15,19 +15,19 @@
 
 void common_hal_audiomixer_mixervoice_construct(audiomixer_mixervoice_obj_t *self) {
     self->sample = NULL;
-    self->level = 1 << 15;
+    common_hal_audiomixer_mixervoice_set_level(self, mp_obj_new_float(1.0));
 }
 
 void common_hal_audiomixer_mixervoice_set_parent(audiomixer_mixervoice_obj_t *self, audiomixer_mixer_obj_t *parent) {
     self->parent = parent;
 }
 
-mp_float_t common_hal_audiomixer_mixervoice_get_level(audiomixer_mixervoice_obj_t *self) {
-    return (mp_float_t)self->level / (1 << 15);
+mp_obj_t common_hal_audiomixer_mixervoice_get_level(audiomixer_mixervoice_obj_t *self) {
+    return self->level.obj;
 }
 
-void common_hal_audiomixer_mixervoice_set_level(audiomixer_mixervoice_obj_t *self, mp_float_t level) {
-    self->level = (uint16_t)(level * (1 << 15));
+void common_hal_audiomixer_mixervoice_set_level(audiomixer_mixervoice_obj_t *self, mp_obj_t arg) {
+    synthio_block_assign_slot(arg, &self->level, MP_QSTR_level);
 }
 
 bool common_hal_audiomixer_mixervoice_get_loop(audiomixer_mixervoice_obj_t *self) {
