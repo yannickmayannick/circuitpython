@@ -192,7 +192,7 @@ static void mix_down_one_voice(audiomixer_mixer_obj_t *self,
         uint32_t *src = voice->remaining_buffer;
 
         // Get the current level from the BlockInput. These may change at run time so you need to do bounds checking if required.
-        shared_bindings_synthio_lfo_tick(self->sample_rate); //, n / self->channel_count); // Requires #9776
+        shared_bindings_synthio_lfo_tick(self->sample_rate);
         uint16_t level = (uint16_t)(synthio_block_slot_get_limited(&voice->level, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0)) * (1 << 15));
 
         // First active voice gets copied over verbatim.
