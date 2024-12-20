@@ -203,22 +203,6 @@ static pio_pinmask_t _check_pins_free(const mcu_pin_obj_t *first_pin, uint8_t pi
     return pins_we_use;
 }
 
-static bool can_add_program(PIO pio, const pio_program_t *program, int offset) {
-    if (offset == -1) {
-        return pio_can_add_program(pio, program);
-    }
-    return pio_can_add_program_at_offset(pio, program, offset);
-}
-
-static uint add_program(PIO pio, const pio_program_t *program, int offset) {
-    if (offset == -1) {
-        return pio_add_program(pio, program);
-    } else {
-        pio_add_program_at_offset(pio, program, offset);
-        return offset;
-    }
-}
-
 static enum pio_fifo_join compute_fifo_type(int fifo_type_in, bool rx_fifo, bool tx_fifo) {
     if (fifo_type_in != PIO_FIFO_JOIN_AUTO) {
         return fifo_type_in;
@@ -244,6 +228,50 @@ static int compute_fifo_depth(enum pio_fifo_join join) {
     #endif
 
     return 4;
+}
+
+
+// from pico-sdk/src/rp2_common/hardware_pio/pio.c
+static bool is_gpio_compatible(PIO pio, uint32_t used_gpio_ranges) {
+    #if PICO_PIO_VERSION > 0
+    bool gpio_base = pio_get_gpio_base(pio);
+    return !((gpio_base && (used_gpio_ranges & 1)) ||
+        (!gpio_base && (used_gpio_ranges & 4)));
+    #else
+    ((void)pio);
+    ((void)used_gpio_ranges);
+    return true;
+    #endif
+}
+
+static bool use_existing_program(PIO *pio_out, uint *sm_out, int *offset_inout, uint32_t program_id, size_t program_len, uint gpio_base, uint gpio_count) {
+    uint32_t required_gpio_ranges;
+    if (gpio_count) {
+        required_gpio_ranges = (1u << (gpio_base >> 4)) |
+            (1u << ((gpio_base + gpio_count - 1) >> 4));
+    } else {
+        required_gpio_ranges = 0;
+    }
+
+    for (size_t i = 0; i < NUM_PIOS; i++) {
+        PIO pio = pio_instances[i];
+        if (!is_gpio_compatible(pio, required_gpio_ranges)) {
+            continue;
+        }
+        for (size_t j = 0; j < NUM_PIO_STATE_MACHINES; j++) {
+            if (_current_program_id[i][j] == program_id &&
+                _current_program_len[i][j] == program_len &&
+                (*offset_inout == -1 || *offset_inout == _current_program_offset[i][j])) {
+                *pio_out = pio;
+                *sm_out = j;
+                *offset_inout = _current_program_offset[i][j];
+                mp_printf(&mp_plat_print, "use existing program pio=%i offset=%u\n",
+                    i, _current_program_offset[i][j]);
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 bool rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
@@ -272,88 +300,80 @@ bool rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
     // Create a program id that isn't the pointer so we can store it without storing the original object.
     uint32_t program_id = ~((uint32_t)program);
 
-    int pio_gpio_offset = 0;
+    mp_printf(&mp_plat_print, "construct\n");
 
+    uint gpio_base = 0, gpio_count = 0;
     #if NUM_BANK0_GPIOS > 32
     PIO_PINMASK_PRINT(pins_we_use);
     if (PIO_PINMASK_VALUE(pins_we_use) >> 32) {
-        pio_gpio_offset = 16;
         if (PIO_PINMASK_VALUE(pins_we_use) & 0xffff) {
             mp_printf(&mp_plat_print, "Uses pins from 0-15 and 32-47. not possible\n");
             return false;
         }
     }
+
+    pio_pinmask_value_t v = PIO_PINMASK_VALUE(pins_we_use);
+    if (v) {
+        while (!(v & 1)) {
+            gpio_base++;
+            v >>= 1;
+        }
+        while (v) {
+            gpio_count++;
+            v >>= 1;
+        }
+    }
     #endif
 
     // Next, find a PIO and state machine to use.
-    size_t pio_index = NUM_PIOS;
-    uint8_t program_offset = 32;
     pio_program_t program_struct = {
         .instructions = (uint16_t *)program,
         .length = program_len,
         .origin = -1
     };
+    PIO pio;
+    uint state_machine;
+    bool added = false;
+
+    if (!use_existing_program(&pio, &state_machine, &offset, program_id, program_len, gpio_base, gpio_count)) {
+        uint program_offset;
+        mp_printf(&mp_plat_print, "gpio_base = %d gpio_count = %d\n", gpio_base, gpio_count);
+        bool r = pio_claim_free_sm_and_add_program_for_gpio_range(&program_struct, &pio, &state_machine, &program_offset, gpio_base, gpio_count, true);
+        if (!r) {
+            return false;
+        }
+        offset = program_offset;
+        added = true;
+    }
+
+    size_t pio_index = pio_get_index(pio);
     for (size_t i = 0; i < NUM_PIOS; i++) {
-        PIO pio = pio_instances[i];
-        uint8_t free_count = 0;
-        for (size_t j = 0; j < NUM_PIO_STATE_MACHINES; j++) {
-            if (_current_program_id[i][j] == program_id &&
-                _current_program_len[i][j] == program_len &&
-                (offset == -1 || offset == _current_program_offset[i][j])) {
-                program_offset = _current_program_offset[i][j];
-            }
-            if (!pio_sm_is_claimed(pio, j)) {
-                free_count++;
-            }
+        if (i == pio_index) {
+            continue;
         }
-        if (free_count > 0 && (program_offset < 32 || can_add_program(pio, &program_struct, offset))) {
-            pio_index = i;
-            if (program_offset < 32) {
-                break;
+        pio_pinmask_t intersection = PIO_PINMASK_AND(_current_pins[i], pins_we_use);
+        if (PIO_PINMASK_VALUE(intersection) != 0) {
+            if (added) {
+                pio_remove_program(pio, &program_struct, offset);
             }
+            pio_sm_unclaim(pio, state_machine);
+            // Pin in use by another PIO already.
+            return false;
         }
-        // Reset program offset if we weren't able to find a free state machine
-        // on that PIO. (We would have broken the loop otherwise.)
-        program_offset = 32;
     }
 
-    size_t state_machine = NUM_PIO_STATE_MACHINES;
-    if (pio_index < NUM_PIOS) {
-        PIO pio = pio_instances[pio_index];
-        for (size_t i = 0; i < NUM_PIOS; i++) {
-            if (i == pio_index) {
-                continue;
-            }
-            pio_pinmask_t intersection = PIO_PINMASK_AND(_current_pins[i], pins_we_use);
-            if (PIO_PINMASK_VALUE(intersection) != 0) {
-                // Pin in use by another PIO already.
-                return false;
-            }
-        }
-        state_machine = pio_claim_unused_sm(pio, false);
-    }
-    if (pio_index == NUM_PIOS || state_machine < 0 || state_machine >= NUM_PIO_STATE_MACHINES) {
-        return false;
-    }
-
-    self->pio = pio_instances[pio_index];
+    self->pio = pio;
     self->state_machine = state_machine;
-    if (program_offset == 32) {
-        program_offset = add_program(self->pio, &program_struct, offset);
-    }
-    self->offset = program_offset;
+    self->offset = offset;
     _current_program_id[pio_index][state_machine] = program_id;
     _current_program_len[pio_index][state_machine] = program_len;
-    _current_program_offset[pio_index][state_machine] = program_offset;
+    _current_program_offset[pio_index][state_machine] = offset;
     _current_sm_pins[pio_index][state_machine] = pins_we_use;
     PIO_PINMASK_MERGE(_current_pins[pio_index], pins_we_use);
 
-    pio_sm_set_pins_with_mask(self->pio, state_machine, PIO_PINMASK_VALUE(initial_pin_state) >> pio_gpio_offset, PIO_PINMASK_VALUE(pins_we_use) >> pio_gpio_offset);
-    pio_sm_set_pindirs_with_mask(self->pio, state_machine, PIO_PINMASK_VALUE(initial_pin_direction) >> pio_gpio_offset, PIO_PINMASK_VALUE(pins_we_use) >> pio_gpio_offset);
+    pio_sm_set_pins_with_mask64(self->pio, state_machine, PIO_PINMASK_VALUE(initial_pin_state), PIO_PINMASK_VALUE(pins_we_use));
+    pio_sm_set_pindirs_with_mask64(self->pio, state_machine, PIO_PINMASK_VALUE(initial_pin_direction), PIO_PINMASK_VALUE(pins_we_use));
     rp2pio_statemachine_set_pull(pull_pin_up, pull_pin_down, pins_we_use);
-    #if NUM_BANK0_GPIOS > 32
-    self->pio_gpio_offset = pio_gpio_offset;
-    #endif
     self->initial_pin_state = initial_pin_state;
     self->initial_pin_direction = initial_pin_direction;
     self->pull_pin_up = pull_pin_up;
@@ -423,8 +443,8 @@ bool rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
 
     mp_arg_validate_int_range(wrap_target, 0, program_len - 1, MP_QSTR_wrap_target);
 
-    wrap += program_offset;
-    wrap_target += program_offset;
+    wrap += offset;
+    wrap_target += offset;
 
     sm_config_set_wrap(&c, wrap_target, wrap);
     sm_config_set_in_shift(&c, in_shift_right, auto_push, push_threshold);
@@ -478,7 +498,7 @@ bool rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
     SM_DMA_CLEAR_CHANNEL_READ(pio_index, state_machine);
     SM_DMA_CLEAR_CHANNEL_WRITE(pio_index, state_machine);
 
-    pio_sm_init(self->pio, self->state_machine, program_offset, &c);
+    pio_sm_init(self->pio, self->state_machine, offset, &c);
     common_hal_rp2pio_statemachine_run(self, init, init_len);
 
     common_hal_rp2pio_statemachine_set_frequency(self, frequency);
