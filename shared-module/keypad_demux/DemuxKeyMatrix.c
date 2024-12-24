@@ -7,6 +7,7 @@
 #include <string.h>
 
 #include "py/gc.h"
+#include "py/mphal.h"
 #include "py/runtime.h"
 #include "shared-bindings/digitalio/DigitalInOut.h"
 #include "shared-bindings/keypad/EventQueue.h"
@@ -104,7 +105,11 @@ static void demuxkeymatrix_scan_now(void *self_in, mp_obj_t timestamp) {
     keypad_demux_demuxkeymatrix_obj_t *self = self_in;
 
     for (size_t row = 0; row < common_hal_keypad_demux_demuxkeymatrix_get_row_count(self); row++) {
-        // Set the row address on demultiplexer
+        // Set the row address on the demultiplexer.  This currently assumes an inverting
+        // demux like the 74hc138 which outputs low on the selected line and high on non-selected ones.
+        // This class should probably support a columns_to_anodes parameter where this case would
+        // be True (the row gets pulled low), and a non-inverting demux like 74hc238 would
+        // set columns_to_anodes=False.
         size_t mask = 0b00000001;
         for (size_t row_addr_pin = 0; row_addr_pin < self->row_addr_digitalinouts->len; row_addr_pin++) {
             digitalio_digitalinout_obj_t *dio = self->row_addr_digitalinouts->items[row_addr_pin];
@@ -112,11 +117,19 @@ static void demuxkeymatrix_scan_now(void *self_in, mp_obj_t timestamp) {
             mask = mask << 1;
         }
 
+        // Wait a moment to let the columns settle.
+        // The normal KeyMatrix uses a 1us delay but that still gave echoes on my
+        // nullbitsco nibble 65% (16 x 5 matrix).  For example when key (row, col) is pressed
+        // both (row, col) and (row+1, col) (and sometimes row+2) are registered,
+        // especially when row+1 is a power of 2 (all mux bits change) and col is 0.
+        // The QMK implementation for this keyboard uses a 5us delay which works here too
+        mp_hal_delay_us(5);
+
         for (size_t column = 0; column < common_hal_keypad_demux_demuxkeymatrix_get_column_count(self); column++) {
             mp_uint_t key_number = row_column_to_key_number(self, row, column);
 
             // Get the current state, by reading whether the column got pulled to the row value or not.
-            // If low, the key is pressed.
+            // (with a columns_to_anodes parameter this could mimic the KeyMatrix code)
             const bool current = !common_hal_digitalio_digitalinout_get_value(self->column_digitalinouts->items[column]);
 
             // Record any transitions.
