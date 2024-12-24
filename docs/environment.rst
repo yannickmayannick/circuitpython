@@ -125,7 +125,7 @@ a rotation of 0. Attempting to initialize the screen with a rotation other than 
 CIRCUITPY_DISPLAY_FREQUENCY
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Allows the entry of a display frequency used during the "dotclock" framebuffer construction.
-If a valid fequency is not defined the board will initialize the framebuffer with a
+If a valid frequency is not defined the board will initialize the framebuffer with a
 frequency of 12500000hz (12.5Mhz). The value should be entered as an integer in hertz
-i.e. CIRCUITPY_DISPLAY_FREQUENCY=16000000 will override the default value with a 16Mhz 
+i.e. CIRCUITPY_DISPLAY_FREQUENCY=16000000 will override the default value with a 16Mhz
 display frequency.
