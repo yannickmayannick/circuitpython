@@ -114,13 +114,13 @@ static size_t demuxkeymatrix_get_key_count(void *self_in) {
 
 static void demuxkeymatrix_scan_now(void *self_in, mp_obj_t timestamp) {
     keypad_demux_demuxkeymatrix_obj_t *self = self_in;
-
-    for (size_t row = 0; row < common_hal_keypad_demux_demuxkeymatrix_get_row_count(self); row++) {
+    // We always scan through the multiplexed lines using the array sizes directly
+    // and apply transposition only when translating to key number.
+    for (int row = 0; row < (1 << self->row_addr_digitalinouts->len); row++) {
         // Set the row address on the demultiplexer.
         // When columns_to_anodes is True (default) we've got an inverting demux
         // so the selected line is pulled low, and we look for rows that get pulled low.
         // When columns_to_anodes is False we do the reverse.
-        // We can safely ignore transposition since it's handled by row_column_to_key_number
         size_t mask = 0b00000001;
         for (size_t row_addr_pin = 0; row_addr_pin < self->row_addr_digitalinouts->len; row_addr_pin++) {
             digitalio_digitalinout_obj_t *dio = self->row_addr_digitalinouts->items[row_addr_pin];
@@ -136,8 +136,10 @@ static void demuxkeymatrix_scan_now(void *self_in, mp_obj_t timestamp) {
         // The QMK implementation for this keyboard uses a 5us delay which works here too
         mp_hal_delay_us(5);
 
-        for (size_t column = 0; column < common_hal_keypad_demux_demuxkeymatrix_get_column_count(self); column++) {
-            mp_uint_t key_number = row_column_to_key_number(self, row, column);
+        for (size_t column = 0; column < self->column_digitalinouts->len; column++) {
+            mp_uint_t key_number = self->transpose
+                ? row_column_to_key_number(self, column, row)
+                : row_column_to_key_number(self, row, column);
 
             // Get the current state, by reading whether the column got pulled to the row value or not,
             // which is the opposite of columns_to_anodes.
