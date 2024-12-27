@@ -1,4 +1,5 @@
 import sys
+import re
 import pathlib
 import xml.etree.ElementTree as ET
 
@@ -8,6 +9,7 @@ SIGNALS = {
     "LPUART": ["RX", "TX", "RTS", "CTS"],
     "I2S": ["RX_DATA0", "RX_SYNC", "TX_BCLK", "TX_DATA0", "TX_SYNC", "MCLK"],
     "MQS": ["LEFT", "RIGHT"],
+    "CAN": ["RX", "TX"],
 }
 
 SIGNAL_RENAME = {
@@ -20,6 +22,22 @@ SIGNAL_RENAME = {
     "TX_DATA": "TX_DATA0",
     "RX_DATA": "RX_DATA0",
 }
+
+INSTANCE_RENAME = {
+    "FLEXCAN" : "CAN"
+}
+
+INSTANCE_RE = re.compile("([a-zA-Z0-9]+?)([0-9]+)$")
+def rename_instance(instance:str)-> str:
+    instance_match = INSTANCE_RE.match(instance)
+    if instance_match is None:
+        return instance
+    instance_res = instance_match.groups()
+    if len(instance_res) < 2:
+        return instance
+    instance_name = str(instance_res[0])
+    instance_id = str(instance_res[1])
+    return INSTANCE_RENAME.get(instance_name, instance_name) + instance_id
 
 SKIP_LPSR = True
 
@@ -54,6 +72,7 @@ for device in devices:
     print(device)
     autogen_warning = autogen_warning_template.format(device)
     svd_fn = svd_folder / device / (device + ".xml")
+
     if not svd_fn.exists():
         svd_fn = svd_folder / device / (device + "_cm7.xml")
 
@@ -144,8 +163,10 @@ for device in devices:
         if name.endswith("SELECT_INPUT"):
             name_split = name.split("_")
             instance = name_split[0]
+            instance = rename_instance(instance)
             signal = "_".join(name_split[1:-2])
             signal = SIGNAL_RENAME.get(signal, signal)
+
             if instance not in peripheral_inputs:
                 peripheral_inputs[instance] = {}
             if signal not in peripheral_inputs[instance]:
@@ -161,6 +182,7 @@ for device in devices:
                     continue
                 alt = int(alt[3:])
                 value = int(evalue.find("value").text, 0)
+                #print(f"instance: {instance}, signal: {signal}, pin_name: {pin_name}")
                 peripheral_inputs[instance][signal][pin_name] = [alt, name, value]
         # Mux registers come before PAD registers.
         elif name.startswith("SW_MUX_CTL_PAD_GPIO"):
@@ -232,6 +254,7 @@ for device in devices:
                         print("skipping", pin_name, connection)
                         continue
                     instance, signal = connection.split("_", maxsplit=1)
+                    instance = rename_instance(instance)
                     signal = SIGNAL_RENAME.get(signal, signal)
                     if instance not in peripheral_inputs:
                         peripheral_inputs[instance] = {}
@@ -288,6 +311,7 @@ for device in devices:
         short_name = ptype.lower()
         if short_name.startswith("lp"):
             short_name = short_name[2:]
+
         # Only one MQS exists and it is related to SAI3
         if ptype != "MQS":
             periph_h.append(
@@ -301,6 +325,7 @@ for device in devices:
         for signal in SIGNALS[ptype]:
             pin_count = 0
             for instance in instances:
+                ###print(f"instance: {instance}")
                 if instance not in peripheral_inputs or signal not in peripheral_inputs[instance]:
                     continue
                 pin_count += len(peripheral_inputs[instance][signal])

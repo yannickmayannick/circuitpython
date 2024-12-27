@@ -120,6 +120,7 @@ SRC_SDK := \
 	drivers/snvs_hp/fsl_snvs_hp.c \
 	drivers/snvs_lp/fsl_snvs_lp.c \
 	drivers/trng/fsl_trng.c \
+	drivers/flexcan/fsl_flexcan.c \
 
 ifeq ($(CIRCUITPY_ANALOGIO), 1)
 SRC_SDK +=	drivers/adc_12b1msps_sar/fsl_adc.c \
