@@ -111,6 +111,7 @@ during power up at 1024x600 otherwise the display will be initialized at a resol
 of 800x480.
 
 `Sunton ESP32-2432S028 <https://circuitpython.org/board/sunton_esp32_2432S028/>`_
+`Sunton ESP32-2432S024C <https://circuitpython.org/board/sunton_esp32_2432S024C/>`_
 
 CIRCUITPY_DISPLAY_ROTATION
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
