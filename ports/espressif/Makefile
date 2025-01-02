@@ -261,7 +261,8 @@ LDFLAGS += \
 	-Tesp32c3.rom.newlib.ld \
 	-Tesp32c3.rom.newlib-time.ld \
 	-Tesp32c3.rom.version.ld \
-	-Tesp32c3.rom.eco3.ld
+	-Tesp32c3.rom.eco3.ld \
+	-Tesp32s3.rom.bt_funcs.ld
 
 CHIP_COMPONENTS = \
 	esp_driver_tsens
@@ -317,7 +318,8 @@ LDFLAGS += \
 	-Tesp32s3.rom.newlib.ld \
 	-Tesp32s3.rom.version.ld \
 	-Tesp32s3.rom.systimer.ld \
-	-Tesp32s3.rom.wdt.ld
+	-Tesp32s3.rom.wdt.ld \
+	-Tesp32s3.rom.bt_funcs.ld
 
 CHIP_COMPONENTS = \
 	esp_driver_tsens
