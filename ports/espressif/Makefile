@@ -75,6 +75,7 @@ INC += \
 	-isystem esp-idf/components/esp_hw_support/dma/include \
 	-isystem esp-idf/components/esp_hw_support/include \
 	-isystem esp-idf/components/esp_hw_support/include/soc \
+	-isystem esp-idf/components/esp_hw_support/port/$(IDF_TARGET)/private_include \
 	-isystem esp-idf/components/esp_mm/include \
 	-isystem esp-idf/components/esp_netif/include \
 	-isystem esp-idf/components/esp_partition/include \
@@ -262,7 +263,7 @@ LDFLAGS += \
 	-Tesp32c3.rom.newlib-time.ld \
 	-Tesp32c3.rom.version.ld \
 	-Tesp32c3.rom.eco3.ld \
-	-Tesp32s3.rom.bt_funcs.ld
+	-Tesp32c3.rom.bt_funcs.ld
 
 CHIP_COMPONENTS = \
 	esp_driver_tsens
@@ -628,8 +629,12 @@ ifneq ($(CIRCUITPY_BLEIO),0)
 	endif
 
 	ifeq ($(BLE_IMPL),libble)
-	BINARY_BLOBS += esp-idf/components/esp_phy/lib/$(IDF_TARGET)/libbtbb.a \
-					esp-idf/components/bt/controller/lib_$(IDF_TARGET)/$(IDF_TARGET)-bt-lib/libble_app.a
+	BINARY_BLOBS += esp-idf/components/esp_phy/lib/$(IDF_TARGET)/libbtbb.a
+	ifeq ($(IDF_TARGET),esp32c6)
+		BINARY_BLOBS += esp-idf/components/bt/controller/lib_$(IDF_TARGET)/$(IDF_TARGET)-bt-lib/$(IDF_TARGET)/libble_app.a
+	else
+		BINARY_BLOBS += esp-idf/components/bt/controller/lib_$(IDF_TARGET)/$(IDF_TARGET)-bt-lib/libble_app.a
+	endif
 	endif
 endif
 ifneq ($(CIRCUITPY_ESPULP),0)
