@@ -246,6 +246,7 @@ CHIP_COMPONENTS = \
 
 else ifeq ($(IDF_TARGET),esp32c2)
 LDFLAGS += \
+	-Tesp32c2.rom.ble.ld \
 	-Tesp32c2.rom.heap.ld \
 	-Tesp32c2.rom.newlib.ld \
 	-Tesp32c2.rom.version.ld \
