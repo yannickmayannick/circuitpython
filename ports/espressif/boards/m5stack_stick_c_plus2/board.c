@@ -96,3 +96,42 @@ static void display_init(void) {
 void board_init(void) {
     display_init();
 }
+
+bool board_requests_safe_mode(void) {
+    // Enable HOLD early on
+    config_pin_as_output_with_level(GPIO_NUM_4, true);
+
+    // Change the buttons to inputs
+    gpio_set_direction(GPIO_NUM_35, GPIO_MODE_INPUT);
+    gpio_set_pull_mode(GPIO_NUM_35, GPIO_FLOATING);
+    gpio_set_direction(GPIO_NUM_37, GPIO_MODE_INPUT);
+    gpio_set_pull_mode(GPIO_NUM_37, GPIO_FLOATING);
+    gpio_set_direction(GPIO_NUM_39, GPIO_MODE_INPUT);
+    gpio_set_pull_mode(GPIO_NUM_39, GPIO_FLOATING);
+
+    // Let the pins settle
+    mp_hal_delay_ms(1);
+
+    // Safe mode if BTN_A is held at boot (logic low)
+    return gpio_get_level(GPIO_NUM_37) == 0;  // BTN_A
+}
+
+bool espressif_board_reset_pin_number(gpio_num_t pin_number) {
+    switch (pin_number) {
+        case GPIO_NUM_4: // HOLD
+            // HOLD(G4) pin must be set high to avoid a power off when battery powered
+            config_pin_as_output_with_level(pin_number, true);
+            return true;
+
+        case GPIO_NUM_35: // BTN_C/PWR
+        case GPIO_NUM_37: // BTN_A
+        case GPIO_NUM_39: // BTN_B
+            gpio_set_direction(pin_number, GPIO_MODE_INPUT);
+            gpio_set_pull_mode(pin_number, GPIO_FLOATING);
+            return true;
+
+        default:
+            return false;
+    }
+    return false;
+}
