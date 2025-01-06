@@ -15,3 +15,6 @@ CIRCUITPY_ESP_PSRAM_SIZE = 2MB
 # down when BTN_C/PWR is held down. We skip the wait and instead enter safe
 # mode if BTN_A is held down during boot with no timeout.
 CIRCUITPY_SKIP_SAFE_MODE_WAIT = 1
+
+# Enable PDMIn for the microphone
+CIRCUITPY_AUDIOBUSIO_PDMIN = 1
