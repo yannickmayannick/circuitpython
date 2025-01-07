@@ -377,6 +377,7 @@ bool rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
         }
         const mcu_pin_obj_t *pin = mcu_get_pin_by_number(pin_number);
         if (!pin) {
+            // TODO: should be impossible, but free resources here anyway
             return false;
         }
         _pin_reference_count[pin_number]++;
