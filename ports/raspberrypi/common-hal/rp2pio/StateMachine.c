@@ -144,7 +144,7 @@ static void _reset_statemachine(PIO pio, uint8_t sm, bool leave_pins) {
 
     pio_pinmask_t pins = _current_sm_pins[pio_index][sm];
     for (size_t pin_number = 0; pin_number < NUM_BANK0_GPIOS; pin_number++) {
-        if (PIO_PINMASK_IS_SET(pins, pin_number)) {
+        if (!PIO_PINMASK_IS_SET(pins, pin_number)) {
             continue;
         }
         _pin_reference_count[pin_number]--;
@@ -372,7 +372,7 @@ bool rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
     self->pull_pin_down = pull_pin_down;
 
     for (size_t pin_number = 0; pin_number < NUM_BANK0_GPIOS; pin_number++) {
-        if (PIO_PINMASK_IS_SET(pins_we_use, pin_number)) {
+        if (!PIO_PINMASK_IS_SET(pins_we_use, pin_number)) {
             continue;
         }
         const mcu_pin_obj_t *pin = mcu_get_pin_by_number(pin_number);
