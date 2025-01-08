@@ -395,7 +395,7 @@ bool rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
         gpio_set_drive_strength(pin_number, GPIO_DRIVE_STRENGTH_2MA);
     }
 
-    pio_sm_config c = {0, 0, 0};
+    pio_sm_config c = pio_get_default_sm_config();
 
     if (frequency == 0) {
         frequency = clock_get_hz(clk_sys);
