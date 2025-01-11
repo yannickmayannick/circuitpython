@@ -233,7 +233,7 @@ msgstr "%q должно быть кратно 8."
 #: ports/raspberrypi/bindings/cyw43/__init__.c py/argcheck.c py/objexcept.c
 #: shared-bindings/bitmapfilter/__init__.c shared-bindings/canio/CAN.c
 #: shared-bindings/digitalio/Pull.c shared-bindings/supervisor/__init__.c
-#: shared-module/synthio/Synthesizer.c
+#: shared-module/synthio/Biquad.c shared-module/synthio/Synthesizer.c
 msgid "%q must be of type %q or %q, not %q"
 msgstr "%q должно быть типа%q или%q, а не%q"
 
@@ -817,6 +817,10 @@ msgstr "Невозможно указать RTS или CTS в режиме RS485
 #: py/objslice.c
 msgid "Cannot subclass slice"
 msgstr "Невозможно создать подкласс среза"
+
+#: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
+msgid "Cannot use GPIO0..15 together with GPIO32..47"
+msgstr ""
 
 #: ports/nordic/common-hal/alarm/pin/PinAlarm.c
 msgid "Cannot wake on pin edge, only level"
@@ -3472,10 +3476,6 @@ msgstr "Метка '%q' не определена"
 msgid "label redefined"
 msgstr "Метка переопределена"
 
-#: shared-bindings/audiomixer/MixerVoice.c
-msgid "level must be between 0 and 1"
-msgstr "уровень должен быть между 0 и 1"
-
 #: py/objarray.c
 msgid "lhs and rhs should be compatible"
 msgstr "lhs и rhs должны быть совместимыми"
@@ -4463,6 +4463,9 @@ msgstr "zi должно быть типа float"
 #: extmod/ulab/code/scipy/signal/signal.c
 msgid "zi must be of shape (n_section, 2)"
 msgstr "zi должен иметь форму (n_section, 2)"
+
+#~ msgid "level must be between 0 and 1"
+#~ msgstr "уровень должен быть между 0 и 1"
 
 #~ msgid "init I2C"
 #~ msgstr "инициализация I2C"
