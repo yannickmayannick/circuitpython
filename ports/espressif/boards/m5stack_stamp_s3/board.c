@@ -4,8 +4,14 @@
 //
 // SPDX-License-Identifier: MIT
 
-#include "mpconfigboard.h"
 #include "supervisor/board.h"
+
+// Below section commented out due to LCD not being included by default with StampS3
+// Can be re-enabled to add LCD functionality included by Cardputer replacement kit
+
+/*
+
+#include "mpconfigboard.h"
 #include "supervisor/shared/serial.h"
 #include "shared-bindings/busio/SPI.h"
 #include "shared-bindings/fourwire/FourWire.h"
@@ -93,3 +99,5 @@ void board_init(void) {
 }
 
 // TODO: Should we turn off the display when asleep, in board_deinit() ?
+
+*/

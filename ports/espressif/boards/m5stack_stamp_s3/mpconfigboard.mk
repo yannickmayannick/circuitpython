@@ -10,5 +10,5 @@ CIRCUITPY_ESP_FLASH_FREQ = 80m
 CIRCUITPY_ESP_FLASH_SIZE = 8MB
 CIRCUITPY_ESPCAMERA = 0
 
-CIRCUITPY_GIFIO = 1
-CIRCUITPY_MAX3421E = 0
+# Include these Python libraries in firmware.
+FROZEN_MPY_DIRS += $(TOP)/frozen/Adafruit_CircuitPython_NeoPixel
