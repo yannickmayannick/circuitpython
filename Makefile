@@ -268,7 +268,7 @@ stubs:
 	@$(PYTHON) tools/extract_pyi.py ports/atmel-samd/bindings $(STUBDIR)
 	@$(PYTHON) tools/extract_pyi.py ports/espressif/bindings $(STUBDIR)
 	@$(PYTHON) tools/extract_pyi.py ports/raspberrypi/bindings $(STUBDIR)
-	@cp setup.py-stubs circuitpython-stubs/setup.py
+	@sed -e "s,__version__,`python -msetuptools_scm`," < setup.py-stubs > circuitpython-stubs/setup.py
 	@cp README.rst-stubs circuitpython-stubs/README.rst
 	@cp MANIFEST.in-stubs circuitpython-stubs/MANIFEST.in
 	@$(PYTHON) tools/board_stubs/build_board_specific_stubs/board_stub_builder.py
