@@ -27,12 +27,6 @@
 #include "common-hal/canio/__init__.h"
 #include "shared-bindings/canio/RemoteTransmissionRequest.h"
 
-typedef union
-{
-    uint32_t word;
-    uint8_t bytes[4];
-} mimxrt_word_bytes_t;
-
 // Convert from back from FLEXCAN IDs to normal CAN IDs.
 #define FLEXCAN_ID_TO_CAN_ID_STD(id) \
     ((uint32_t)((((uint32_t)(id)) & CAN_ID_STD_MASK) >> CAN_ID_STD_SHIFT))
@@ -62,17 +56,15 @@ bool mimxrt_canio_message_obj_to_flexcan_frame(canio_message_obj_t *src, flexcan
     }
 
     dst->length = src->size; // CAN frame data length in bytes (Range: 0~8). 
-    mimxrt_word_bytes_t mixVal;
-    mixVal.bytes[0] = src->data[0];
-    mixVal.bytes[1] = src->data[1];
-    mixVal.bytes[2] = src->data[2];
-    mixVal.bytes[3] = src->data[3];
-    dst->dataWord0 = mixVal.word; // CAN Frame payload word0.
-    mixVal.bytes[0] = src->data[4];
-    mixVal.bytes[1] = src->data[5];
-    mixVal.bytes[2] = src->data[6];
-    mixVal.bytes[3] = src->data[7];
-    dst->dataWord1 = mixVal.word; // CAN Frame payload word1.
+
+    dst->dataByte0 = src->data[0];
+    dst->dataByte1 = src->data[1];
+    dst->dataByte2 = src->data[2];
+    dst->dataByte3 = src->data[3];
+    dst->dataByte4 = src->data[4];
+    dst->dataByte5 = src->data[5];
+    dst->dataByte6 = src->data[6];
+    dst->dataByte7 = src->data[7];
 
     return true;
 }
@@ -97,17 +89,15 @@ bool mimxrt_flexcan_frame_to_canio_message_obj(flexcan_frame_t *src, canio_messa
     }
 
     dst->size = src->length; // CAN frame data length in bytes (Range: 0~8). 
-    mimxrt_word_bytes_t mixVal;
-    mixVal.word = src->dataWord0; // CAN Frame payload word0.
-    dst->data[0] = mixVal.bytes[0];
-    dst->data[1] = mixVal.bytes[1];
-    dst->data[2] = mixVal.bytes[2];
-    dst->data[3] = mixVal.bytes[3];
-    mixVal.word = src->dataWord1; // CAN Frame payload word1.
-    dst->data[4] = mixVal.bytes[0];
-    dst->data[5] = mixVal.bytes[1];
-    dst->data[6] = mixVal.bytes[2];
-    dst->data[7] = mixVal.bytes[3];
+
+    dst->data[0] = src->dataByte0;
+    dst->data[1] = src->dataByte1;
+    dst->data[2] = src->dataByte2;
+    dst->data[3] = src->dataByte3;
+    dst->data[4] = src->dataByte4;
+    dst->data[5] = src->dataByte5;
+    dst->data[6] = src->dataByte6;
+    dst->data[7] = src->dataByte7;
 
     return true;
 }
