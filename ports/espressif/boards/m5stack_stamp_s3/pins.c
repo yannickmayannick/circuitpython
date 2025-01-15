@@ -148,10 +148,5 @@ static const mp_rom_map_elem_t board_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR_IO18), MP_ROM_PTR(&pin_GPIO18) },
     { MP_ROM_QSTR(MP_QSTR_G18), MP_ROM_PTR(&pin_GPIO18) },
 
-    // Below Display Object commented out due to LCD not being included by default with StampS3
-    // Can be re-enabled to add LCD functionality included by Cardputer replacement kit
-
-    // Display Object
-    // { MP_ROM_QSTR(MP_QSTR_DISPLAY), MP_ROM_PTR(&displays[0].display)},
 };
 MP_DEFINE_CONST_DICT(board_module_globals, board_module_globals_table);
