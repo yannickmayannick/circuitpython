@@ -115,6 +115,10 @@ mp_obj_t common_hal_canio_listener_receive(canio_listener_obj_t *self) {
         mp_raise_OSError(MP_EIO);
     }
 
+    // We've read from the FIFO, clear the "frame available" flag, which
+    // allows the CPU to serve the next FIFO entry
+    FLEXCAN_ClearMbStatusFlags(self->can->data->base, (uint32_t)kFLEXCAN_RxFifoFrameAvlFlag);
+
     canio_message_obj_t *message = m_new_obj(canio_message_obj_t);
     if (!mimxrt_flexcan_frame_to_canio_message_obj(&rx_frame, message)) {
         mp_raise_ValueError(MP_ERROR_TEXT("Unable to receive CAN Message: missing or malformed flexcan frame"));
