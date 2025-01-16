@@ -21,7 +21,11 @@ struct wave_format_chunk {
     uint32_t byte_rate;
     uint16_t block_align;
     uint16_t bits_per_sample;
-    uint16_t extra_params; // Assumed to be zero below.
+    uint16_t extra_params;
+    uint16_t valid_bits_per_sample;
+    uint32_t channel_mask;
+    uint16_t extended_audio_format;
+    uint8_t extended_guid[14];
 };
 
 void common_hal_audioio_wavefile_construct(audioio_wavefile_obj_t *self,
@@ -56,11 +60,14 @@ void common_hal_audioio_wavefile_construct(audioio_wavefile_obj_t *self,
     if (bytes_read != format_size) {
     }
 
-    if (format.audio_format != 1 ||
+    if ((format_size != 40 && format.audio_format != 1) ||
         format.num_channels > 2 ||
         format.bits_per_sample > 16 ||
-        (format_size == 18 &&
-         format.extra_params != 0)) {
+        (format_size == 18 && format.extra_params != 0) ||
+        (format_size == 40 &&
+         (format.audio_format != 0xfffe ||
+          format.extended_audio_format != 1 ||
+          format.valid_bits_per_sample != format.bits_per_sample))) {
         mp_raise_ValueError(MP_ERROR_TEXT("Unsupported format"));
     }
     // Get the sample_rate
