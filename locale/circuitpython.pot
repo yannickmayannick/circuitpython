@@ -975,10 +975,6 @@ msgstr ""
 msgid "Failed to allocate %q buffer"
 msgstr ""
 
-#: shared-bindings/ramlog/ramlog.c
-msgid "Failed to allocate RAM log buffer"
-msgstr ""
-
 #: ports/espressif/common-hal/wifi/__init__.c
 msgid "Failed to allocate Wifi memory"
 msgstr ""
@@ -2319,6 +2315,7 @@ msgstr ""
 #: ports/espressif/boards/m5stack_core_fire/mpconfigboard.h
 #: ports/espressif/boards/m5stack_stick_c/mpconfigboard.h
 #: ports/espressif/boards/m5stack_stick_c_plus/mpconfigboard.h
+#: ports/espressif/boards/m5stack_stick_c_plus2/mpconfigboard.h
 msgid "You pressed button A at start up."
 msgstr ""
 
