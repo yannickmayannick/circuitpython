@@ -11,6 +11,7 @@
 #include <stdio.h>
 
 #include "py/mpconfig.h"
+#include "py/mpprint.h"
 
 #ifdef CIRCUITPY_BOOT_OUTPUT_FILE
 #include "py/misc.h"
