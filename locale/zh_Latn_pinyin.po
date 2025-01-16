@@ -2367,6 +2367,7 @@ msgstr "nín zài qǐ dòng shí àn xià le liǎng gè àn niǔ."
 #: ports/espressif/boards/m5stack_core_fire/mpconfigboard.h
 #: ports/espressif/boards/m5stack_stick_c/mpconfigboard.h
 #: ports/espressif/boards/m5stack_stick_c_plus/mpconfigboard.h
+#: ports/espressif/boards/m5stack_stick_c_plus2/mpconfigboard.h
 msgid "You pressed button A at start up."
 msgstr "nín zài qǐ dòng shí àn xià le àn niǔ A."
 
