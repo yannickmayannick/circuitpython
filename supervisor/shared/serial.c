@@ -9,6 +9,7 @@
 
 #include "py/mpconfig.h"
 #include "py/mphal.h"
+#include "py/mpprint.h"
 
 #include "supervisor/shared/cpu.h"
 #include "supervisor/shared/display.h"
@@ -34,7 +35,6 @@
 #endif
 
 #if CIRCUITPY_CONSOLE_UART
-#include "py/mpprint.h"
 #include "shared-bindings/busio/UART.h"
 
 busio_uart_obj_t console_uart;
