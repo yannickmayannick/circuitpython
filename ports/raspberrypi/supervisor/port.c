@@ -326,10 +326,6 @@ safe_mode_t port_init(void) {
     // Reset everything into a known state before board_init.
     reset_port();
 
-    #ifdef CIRCUITPY_PSRAM_CHIP_SELECT
-    setup_psram();
-    #endif
-
     // Initialize RTC
     #if CIRCUITPY_RTC
     common_hal_rtc_init();
@@ -338,6 +334,15 @@ safe_mode_t port_init(void) {
     // For the tick.
     hardware_alarm_claim(0);
     hardware_alarm_set_callback(0, _tick_callback);
+
+    // RP2 port-specific early serial initialization for psram debug.
+    // The RTC must already be initialized, otherwise the serial UART
+    // will hang.
+    serial_early_init();
+
+    #ifdef CIRCUITPY_PSRAM_CHIP_SELECT
+    setup_psram();
+    #endif
 
     // Check brownout.
 
