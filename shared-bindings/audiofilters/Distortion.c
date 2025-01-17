@@ -71,9 +71,8 @@ static audiofilters_distortion_mode validate_distortion_mode(mp_obj_t obj, qstr 
 //|         samples_signed: bool = True,
 //|         channel_count: int = 1,
 //|     ) -> None:
-//|         """Create a Distortion effect where the original sample is processed through a biquad filter
-//|            created by a synthio.Synthesizer object. This can be used to generate a low-pass,
-//|            high-pass, or band-pass filter.
+//|         """Create a Distortion effect where the original sample is manipulated to create a distorted
+//|            sound according to the DistortionMode.
 //|
 //|            The mix parameter allows you to change how much of the unchanged sample passes through to
 //|            the output to how much of the effect audio you hear as the output.
