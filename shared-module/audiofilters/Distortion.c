@@ -79,9 +79,6 @@ bool common_hal_audiofilters_distortion_deinited(audiofilters_distortion_obj_t *
 }
 
 void common_hal_audiofilters_distortion_deinit(audiofilters_distortion_obj_t *self) {
-    if (common_hal_audiofilters_distortion_deinited(self)) {
-        return;
-    }
     self->buffer[0] = NULL;
     self->buffer[1] = NULL;
 }
