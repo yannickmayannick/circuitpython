@@ -101,7 +101,7 @@ static uint8_t mimxrt10xx_flexcan_get_free_tx_mbid(canio_can_obj_t *self) {
     MICROPY_END_ATOMIC_SECTION(atomic_state);
 
     if (!found_free_tx_mb) {
-        mp_raise_ValueError(MP_ERROR_TEXT("Unable to send CAN Message: all tx message buffer is busy"));
+        mp_raise_ValueError(MP_ERROR_TEXT("Unable to send CAN Message: all Tx message buffers are busy"));
     }
 
     return MIMXRT10XX_FLEXCAN_TX_ARRID_TO_MBID(tx_array_id);
@@ -146,13 +146,13 @@ static void mimxrt10xx_flexcan_handle_error(canio_can_obj_t *self) {
     }
 }
 
-static void mimxrt10xx_flexcan_callback(CAN_Type *base, flexcan_handle_t *handle, status_t status, uint32_t result, void *selfPtr)
+static FLEXCAN_CALLBACK(mimxrt10xx_flexcan_callback)
 {
     (void) base; // unused variable
     (void) handle; // unused variable
     // The result field can either be a message buffer index or a status flags value.
 
-    canio_can_obj_t *self = (canio_can_obj_t*) selfPtr;
+    canio_can_obj_t *self = (canio_can_obj_t*) userData;
 
     switch (status) {
 
