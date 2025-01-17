@@ -37,6 +37,15 @@
 
 #include "sdk/drivers/flexcan/fsl_flexcan.h"
 
+
+// Be verbose
+#define MIMXRT_CANIO_CAN_DEBUG(...) (void)0
+//#define MIMXRT_CANIO_CAN_DEBUG(...) mp_printf(&mp_plat_print, __VA_ARGS__)
+
+#define MIMXRT_CANIO_CAN_CALLBACK_DEBUG(...) (void)0
+//#define MIMXRT_CANIO_CAN_CALLBACK_DEBUG(...) mp_printf(&mp_plat_print, __VA_ARGS__)
+
+
 static CAN_Type *const flexcan_bases[] = CAN_BASE_PTRS; // e.g.: { (CAN_Type *)0u, CAN1, CAN2, CAN3 }
 static canio_can_obj_t *can_objs[MP_ARRAY_SIZE(mcu_can_banks)];
 
@@ -83,6 +92,7 @@ static uint8_t mimxrt10xx_flexcan_get_free_tx_mbid(canio_can_obj_t *self) {
         if (!(self->data->tx_state & tx_array_id_bit))
         {
             // Found a free tx array id. Mark it as used.
+            MIMXRT_CANIO_CAN_DEBUG("canio: Found free Tx MB: %d\n", tx_array_id);
             self->data->tx_state |= tx_array_id_bit;
             found_free_tx_mb = true;
             break;
@@ -148,60 +158,75 @@ static void mimxrt10xx_flexcan_callback(CAN_Type *base, flexcan_handle_t *handle
 
         // Process rx message buffer is idle event.
         case kStatus_FLEXCAN_RxIdle:
+            MIMXRT_CANIO_CAN_CALLBACK_DEBUG("canio: callback got status = RxIdle\n");
             // We don't control any rx message buffers 'manually'. The rx fifo has control.
             break;
 
         // Process tx message buffer is idle event.
         case kStatus_FLEXCAN_TxIdle:
+            MIMXRT_CANIO_CAN_CALLBACK_DEBUG("canio: callback got status = TxIdle\n");
             mimxrt10xx_flexcan_set_tx_mb_free_by_mbid(self, result);
             break;
 
         // Process tx message buffer is busy event.
         case kStatus_FLEXCAN_TxBusy:
+            MIMXRT_CANIO_CAN_CALLBACK_DEBUG("canio: callback got status = TxBusy\n");
             mimxrt10xx_flexcan_set_tx_mb_busy_by_mbid(self, result);
             break;
 
         // Process remote message is send out and message buffer changed to receive one event.
         case kStatus_FLEXCAN_TxSwitchToRx:
+            MIMXRT_CANIO_CAN_CALLBACK_DEBUG("canio: callback got status = TxSwitchToRx\n");
             mimxrt10xx_flexcan_set_tx_mb_free_by_mbid(self, result);
             break;
 
         // Process rx message buffer is busy event.
         case kStatus_FLEXCAN_RxBusy:
+            MIMXRT_CANIO_CAN_CALLBACK_DEBUG("canio: callback got status = RxBusy\n");
             break;
 
         // Process rx message buffer is overflowed event.
         case kStatus_FLEXCAN_RxOverflow:
+            MIMXRT_CANIO_CAN_CALLBACK_DEBUG("canio: callback got status = RxOverflow\n");
             break;
 
         // Process rx message fifo is busy event.
         case kStatus_FLEXCAN_RxFifoBusy:
+            MIMXRT_CANIO_CAN_CALLBACK_DEBUG("canio: callback got status = RxFifoBusy\n");
             break;
 
         // Process rx message fifo is idle event.
         case kStatus_FLEXCAN_RxFifoIdle:
+            MIMXRT_CANIO_CAN_CALLBACK_DEBUG("canio: callback got status = RxFifoIdle\n");
             break;
 
         // Process rx message fifo is overflowed event.
         case kStatus_FLEXCAN_RxFifoOverflow:
+            MIMXRT_CANIO_CAN_CALLBACK_DEBUG("canio: callback got status = RxFifoOverflow\n");
             break;
 
         // Process rx message fifo is almost overflowed event.
         case kStatus_FLEXCAN_RxFifoWarning:
+            MIMXRT_CANIO_CAN_CALLBACK_DEBUG("canio: callback got status = RxFifoWarning\n");
             break;
 
         // Process rx message fifo is disabled during reading event.
         case kStatus_FLEXCAN_RxFifoDisabled:
+            MIMXRT_CANIO_CAN_CALLBACK_DEBUG("canio: callback got status = RxFifoDisabled\n");
             break;
 
         // Process FlexCAN is waken up from stop mode event.
         case kStatus_FLEXCAN_WakeUp:
+            MIMXRT_CANIO_CAN_CALLBACK_DEBUG("canio: callback got status = WakeUp\n");
             break;
 
         // Process unhandled interrupt asserted event.
         case kStatus_FLEXCAN_UnHandled:
         // Process FlexCAN module error and status event.
         case kStatus_FLEXCAN_ErrorStatus:
+            // This is *very* verbose when the bus is disconnected!
+            //MIMXRT_CANIO_CAN_CALLBACK_DEBUG("canio: callback got status = UnHandled or ErrorStatus");
+
             // We could do some fancy statistics update, but canio does not have.
             mimxrt10xx_flexcan_handle_error(self);
             break;
@@ -214,10 +239,10 @@ void common_hal_canio_can_construct(canio_can_obj_t *self, const mcu_pin_obj_t *
     const mcu_periph_obj_t *rx_periph = find_pin_function(mcu_can_rx_list, rx, &instance, MP_QSTR_rx);
     const mcu_periph_obj_t *tx_periph = find_pin_function(mcu_can_tx_list, tx, &instance, MP_QSTR_tx);
 
-    // mp_printf(&mp_plat_print, "can instance: %d\n", instance);
-    // mp_printf(&mp_plat_print, "can loopback: %d\n", loopback ? 1 : 0);
-    // mp_printf(&mp_plat_print, "can silent: %d\n", silent ? 1 : 0);
-    // mp_printf(&mp_plat_print, "can baudrate: %d\n", baudrate);
+    MIMXRT_CANIO_CAN_DEBUG("canio: init instance: %d\n", instance);
+    MIMXRT_CANIO_CAN_DEBUG("canio: init loopback: %d\n", loopback ? 1 : 0);
+    MIMXRT_CANIO_CAN_DEBUG("canio: init silent: %d\n", silent ? 1 : 0);
+    MIMXRT_CANIO_CAN_DEBUG("canio: init baudrate: %d\n", baudrate);
 
     self->rx_pin = rx;
     self->tx_pin = tx;
