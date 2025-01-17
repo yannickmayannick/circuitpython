@@ -59,19 +59,39 @@ void common_hal_canio_listener_construct(canio_listener_obj_t *self, canio_can_o
 
     self->can = can;
 
-    for (size_t i = 0; i < nmatch; i++) {
-        if (matches[i]->extended) {
-            self->can->data->rx_fifo_filter[i] = FLEXCAN_RX_FIFO_STD_FILTER_TYPE_A(matches[i]->id, 0, 1);
-        } else {
-            self->can->data->rx_fifo_filter[i] = FLEXCAN_RX_FIFO_STD_FILTER_TYPE_A(matches[i]->id, 0, 0);
-        }
-    }
-
+    // Init configuration variables
     flexcan_rx_fifo_config_t fifo_config;
     fifo_config.idFilterNum = nmatch;
     fifo_config.idFilterTable = self->can->data->rx_fifo_filter;
     fifo_config.idFilterType = kFLEXCAN_RxFifoFilterTypeA;
     fifo_config.priority = kFLEXCAN_RxFifoPrioHigh;
+
+    if (nmatch == 0) {
+        // If the user has provided no matches, we need to set at least one
+        // filter that instructs the system to ignore all bits.
+        fifo_config.idFilterNum = 1;
+        self->can->data->rx_fifo_filter[0] = 0x0;
+        FLEXCAN_SetRxIndividualMask(self->can->data->base, 0, 0x0);
+    }
+    else {
+        // Required to touch any CAN registers
+        FLEXCAN_EnterFreezeMode(self->can->data->base);
+
+        for (size_t i = 0; i < nmatch; i++) {
+            if (matches[i]->extended) {
+                self->can->data->rx_fifo_filter[i] = FLEXCAN_RX_FIFO_EXT_FILTER_TYPE_A(matches[i]->id, 0, 1);
+                self->can->data->base->RXIMR[i] = FLEXCAN_RX_FIFO_EXT_MASK_TYPE_A(matches[i]->mask, 0, 1);
+            } else {
+                self->can->data->rx_fifo_filter[i] = FLEXCAN_RX_FIFO_STD_FILTER_TYPE_A(matches[i]->id, 0, 0);
+                self->can->data->base->RXIMR[i] = FLEXCAN_RX_FIFO_STD_MASK_TYPE_A(matches[i]->mask, 0, 0);
+            }
+        }
+
+        // For consistency, even though FLEXCAN_SetRxFifoConfig() below will
+        // enter and exit freeze mode again anyway
+        FLEXCAN_ExitFreezeMode(self->can->data->base);
+    }
+
     FLEXCAN_SetRxFifoConfig(self->can->data->base, &fifo_config, true);
 }
 

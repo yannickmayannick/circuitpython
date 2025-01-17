@@ -267,7 +267,7 @@ void common_hal_canio_can_construct(canio_can_obj_t *self, const mcu_pin_obj_t *
     config.enableLoopBack       = loopback;
     config.enableListenOnlyMode = silent;
     config.maxMbNum             = 64;
-    config.enableIndividMask    = true;
+    config.enableIndividMask    = true; // required to enable matching using a 'Listener'
     // config.disableSelfReception = true; // TODO: do we want to disable this?
 
     #if (defined(MIMXRT10XX_FLEXCAN_USE_IMPROVED_TIMING_CONFIG) && MIMXRT10XX_FLEXCAN_USE_IMPROVED_TIMING_CONFIG)
@@ -290,9 +290,6 @@ void common_hal_canio_can_construct(canio_can_obj_t *self, const mcu_pin_obj_t *
     FLEXCAN_TransferCreateHandle(self->data->base, &self->data->handle, mimxrt10xx_flexcan_callback, (void*)self);
 
     // Set rx mask to don't care on all bits.
-    FLEXCAN_SetRxMbGlobalMask(self->data->base, FLEXCAN_RX_MB_EXT_MASK(0x00, 0, 0));
-    FLEXCAN_SetRxFifoGlobalMask(self->data->base, FLEXCAN_RX_MB_EXT_MASK(0x00, 0, 0));
-
     flexcan_rx_fifo_config_t fifo_config;
     fifo_config.idFilterNum = 0;
     fifo_config.idFilterTable = self->data->rx_fifo_filter;

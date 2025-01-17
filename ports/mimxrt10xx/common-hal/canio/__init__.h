@@ -58,7 +58,12 @@ typedef uint32_t canio_can_filter_t;
 // Convert from frame array index to tx message buffer index.
 #define MIMXRT10XX_FLEXCAN_TX_ARRID_TO_MBID(x) (x + MIMXRT10XX_FLEXCAN_TX_MBID_MIN)
 
-// Limits the Canio module's Listener filter complexity.
+// We limit the amount of filter+mask pairs to 8 because above that the filters
+// are impacted by the global mask rather than individual masks alone, which is
+// not compatible with the current canio implementation.
+//
+// See Table 44-22 of the i.MX RT1060 Processor Reference Manual, Rev. 3
+// for more details.
 #define MIMXRT10XX_FLEXCAN_RX_FILTER_COUNT (8)
 
 // Enables/disables SDK calculated "improved" timing configuration.
