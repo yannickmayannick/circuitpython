@@ -268,14 +268,14 @@ audioio_get_buffer_result_t audiofilters_distortion_get_buffer(audiofilters_dist
             mp_float_t post_gain = db_to_linear(synthio_block_slot_get_limited(&self->post_gain, MICROPY_FLOAT_CONST(-80.0), MICROPY_FLOAT_CONST(24.0)));
             mp_float_t mix = synthio_block_slot_get_limited(&self->mix, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
 
-            // LOFI mode bit mask
-            uint32_t word_mask = 0xFFFFFFFF ^ ((1 << (uint32_t)MICROPY_FLOAT_C_FUN(round)(drive * MICROPY_FLOAT_CONST(14.0))) - 1);
-
             // Modify drive value depending on mode
+            uint32_t word_mask = 0;
             if (self->mode == DISTORTION_MODE_CLIP) {
                 drive = MICROPY_FLOAT_CONST(1.0001) - drive;
             } else if (self->mode == DISTORTION_MODE_WAVESHAPE) {
                 drive = MICROPY_FLOAT_CONST(2.0) * drive / (MICROPY_FLOAT_CONST(1.0001) - drive);
+            } else if (self->mode == DISTORTION_MODE_LOFI) {
+                word_mask = 0xFFFFFFFF ^ ((1 << (uint32_t)MICROPY_FLOAT_C_FUN(round)(drive * MICROPY_FLOAT_CONST(14.0))) - 1);
             }
 
             if (mix <= MICROPY_FLOAT_CONST(0.01)) { // if mix is zero pure sample only
