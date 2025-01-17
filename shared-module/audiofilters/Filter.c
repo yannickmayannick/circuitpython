@@ -275,6 +275,10 @@ audioio_get_buffer_result_t audiofilters_filter_get_buffer(audiofilters_filter_o
         }
 
         if (self->sample == NULL) {
+            // tick all block inputs
+            shared_bindings_synthio_lfo_tick(self->sample_rate, length / self->channel_count);
+            (void)synthio_block_slot_get(&self->mix);
+
             if (self->samples_signed) {
                 memset(word_buffer, 0, length * (self->bits_per_sample / 8));
             } else {
@@ -288,10 +292,6 @@ audioio_get_buffer_result_t audiofilters_filter_get_buffer(audiofilters_filter_o
                     memset(hword_buffer, 128, length * (self->bits_per_sample / 8));
                 }
             }
-
-            // tick all block inputs
-            shared_bindings_synthio_lfo_tick(self->sample_rate, length / self->channel_count);
-            (void)synthio_block_slot_get(&self->mix);
 
             length = 0;
         } else {
