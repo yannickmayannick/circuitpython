@@ -7,6 +7,7 @@
 
 #include <stdint.h>
 #include "py/runtime.h"
+#include <math.h>
 
 void common_hal_audiodelays_echo_construct(audiodelays_echo_obj_t *self, uint32_t max_delay_ms,
     mp_obj_t delay_ms, mp_obj_t decay, mp_obj_t mix,
@@ -334,7 +335,7 @@ audioio_get_buffer_result_t audiodelays_echo_get_buffer(audiodelays_echo_obj_t *
         mp_float_t mix = synthio_block_slot_get_limited(&self->mix, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
         mp_float_t decay = synthio_block_slot_get_limited(&self->decay, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
 
-        mp_float_t f_delay_ms = synthio_block_slot(&self->delay_ms);
+        mp_float_t f_delay_ms = synthio_block_slot_get(&self->delay_ms);
         if (MICROPY_FLOAT_C_FUN(fabs)(self->current_delay_ms - f_delay_ms) >= self->sample_ms) {
             recalculate_delay(self, f_delay_ms);
         }
