@@ -8,6 +8,7 @@
 #include "py/obj.h"
 
 #include "shared-module/audiocore/__init__.h"
+#include "shared-module/synthio/__init__.h"
 #include "shared-module/synthio/block.h"
 
 extern const mp_obj_type_t audiodelays_echo_type;

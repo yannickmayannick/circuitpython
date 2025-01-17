@@ -145,8 +145,7 @@ static synthio_envelope_definition_t *synthio_synth_get_note_envelope(synthio_sy
 // much additional processing.
 //
 // https://en.wikipedia.org/wiki/Dynamic_range_compression
-static
-int16_t mix_down_sample(int32_t sample) {
+int16_t synthio_mix_down_sample(int32_t sample) {
     if (sample < RANGE_LOW) {
         sample = (((sample - RANGE_LOW) * RANGE_SCALE) >> RANGE_SHIFT) + RANGE_LOW;
     } else if (sample > RANGE_HIGH) {
@@ -345,7 +344,7 @@ void synthio_synth_synthesize(synthio_synth_t *synth, uint8_t **bufptr, uint32_t
     // mix down audio
     for (size_t i = 0; i < dur * synth->channel_count; i++) {
         int32_t sample = out_buffer32[i];
-        out_buffer16[i] = mix_down_sample(sample);
+        out_buffer16[i] = synthio_mix_down_sample(sample);
     }
 
     // advance envelope states

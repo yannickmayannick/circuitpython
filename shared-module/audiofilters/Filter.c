@@ -212,32 +212,6 @@ void common_hal_audiofilters_filter_stop(audiofilters_filter_obj_t *self) {
     return;
 }
 
-#define RANGE_LOW_16 (-28000)
-#define RANGE_HIGH_16 (28000)
-#define RANGE_SHIFT_16 (16)
-#define RANGE_SCALE_16 (0xfffffff / (32768 * 2 - RANGE_HIGH_16)) // 2 for echo+sample
-
-// dynamic range compression via a downward compressor with hard knee
-//
-// When the output value is within the range +-28000 (about 85% of full scale),
-// it is unchanged. Otherwise, it undergoes a gain reduction so that the
-// largest possible values, (+32768,-32767) * 2 (2 for echo and sample),
-// still fit within the output range
-//
-// This produces a much louder overall volume with multiple voices, without
-// much additional processing.
-//
-// https://en.wikipedia.org/wiki/Dynamic_range_compression
-static
-int16_t mix_down_sample(int32_t sample) {
-    if (sample < RANGE_LOW_16) {
-        sample = (((sample - RANGE_LOW_16) * RANGE_SCALE_16) >> RANGE_SHIFT_16) + RANGE_LOW_16;
-    } else if (sample > RANGE_HIGH_16) {
-        sample = (((sample - RANGE_HIGH_16) * RANGE_SCALE_16) >> RANGE_SHIFT_16) + RANGE_HIGH_16;
-    }
-    return sample;
-}
-
 audioio_get_buffer_result_t audiofilters_filter_get_buffer(audiofilters_filter_obj_t *self, bool single_channel_output, uint8_t channel,
     uint8_t **buffer, uint32_t *buffer_length) {
     (void)channel;
@@ -341,7 +315,7 @@ audioio_get_buffer_result_t audiofilters_filter_get_buffer(audiofilters_filter_o
                     // Mix processed signal with original sample and transfer to output buffer
                     for (uint32_t j = 0; j < n_samples; j++) {
                         if (MP_LIKELY(self->bits_per_sample == 16)) {
-                            word_buffer[i + j] = mix_down_sample((int32_t)((sample_src[i + j] * (MICROPY_FLOAT_CONST(1.0) - mix)) + (self->filter_buffer[j] * mix)));
+                            word_buffer[i + j] = synthio_mix_down_sample((int32_t)((sample_src[i + j] * (MICROPY_FLOAT_CONST(1.0) - mix)) + (self->filter_buffer[j] * mix)));
                             if (!self->samples_signed) {
                                 word_buffer[i + j] ^= 0x8000;
                             }
