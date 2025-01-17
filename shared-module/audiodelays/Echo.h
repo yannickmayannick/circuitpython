@@ -16,7 +16,8 @@ typedef struct {
     mp_obj_base_t base;
     uint32_t max_delay_ms;
     synthio_block_slot_t delay_ms;
-    uint32_t current_delay_ms;
+    mp_float_t current_delay_ms;
+    mp_float_t sample_ms;
     synthio_block_slot_t decay;
     synthio_block_slot_t mix;
 

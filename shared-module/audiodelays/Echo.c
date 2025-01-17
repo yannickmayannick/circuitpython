@@ -85,6 +85,9 @@ void common_hal_audiodelays_echo_construct(audiodelays_echo_obj_t *self, uint32_
     }
     memset(self->echo_buffer, 0, self->max_echo_buffer_len);
 
+    // calculate the length of a single sample in milliseconds
+    self->sample_ms = MICROPY_FLOAT_CONST(1000.0) / self->sample_rate;
+
     // calculate everything needed for the current delay
     mp_float_t f_delay_ms = synthio_block_slot_get(&self->delay_ms);
     recalculate_delay(self, f_delay_ms);
@@ -127,6 +130,9 @@ void common_hal_audiodelays_echo_set_delay_ms(audiodelays_echo_obj_t *self, mp_o
 }
 
 void recalculate_delay(audiodelays_echo_obj_t *self, mp_float_t f_delay_ms) {
+    // Require that delay is at least 1 sample long
+    f_delay_ms = MAX(f_delay_ms, self->sample_ms);
+
     if (self->freq_shift) {
         // Calculate the rate of iteration over the echo buffer with 8 sub-bits
         self->echo_buffer_rate = (uint32_t)MAX(self->max_delay_ms / f_delay_ms * MICROPY_FLOAT_CONST(256.0), MICROPY_FLOAT_CONST(1.0));
@@ -153,7 +159,7 @@ void recalculate_delay(audiodelays_echo_obj_t *self, mp_float_t f_delay_ms) {
         memset(self->echo_buffer + self->echo_buffer_len, 0, self->max_echo_buffer_len - self->echo_buffer_len);
     }
 
-    self->current_delay_ms = (uint32_t)f_delay_ms;
+    self->current_delay_ms = f_delay_ms;
 }
 
 mp_obj_t common_hal_audiodelays_echo_get_decay(audiodelays_echo_obj_t *self) {
@@ -328,9 +334,9 @@ audioio_get_buffer_result_t audiodelays_echo_get_buffer(audiodelays_echo_obj_t *
         mp_float_t mix = synthio_block_slot_get_limited(&self->mix, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
         mp_float_t decay = synthio_block_slot_get_limited(&self->decay, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
 
-        uint32_t delay_ms = (uint32_t)synthio_block_slot_get(&self->delay_ms);
-        if (self->current_delay_ms != delay_ms) {
-            recalculate_delay(self, delay_ms);
+        mp_float_t f_delay_ms = synthio_block_slot(&self->delay_ms);
+        if (MICROPY_FLOAT_C_FUN(fabs)(self->current_delay_ms - f_delay_ms) >= self->sample_ms) {
+            recalculate_delay(self, f_delay_ms);
         }
 
         uint32_t echo_buf_len = self->echo_buffer_len / sizeof(uint16_t);
