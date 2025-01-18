@@ -315,7 +315,7 @@ audioio_get_buffer_result_t audiofilters_filter_get_buffer(audiofilters_filter_o
                     // Mix processed signal with original sample and transfer to output buffer
                     for (uint32_t j = 0; j < n_samples; j++) {
                         if (MP_LIKELY(self->bits_per_sample == 16)) {
-                            word_buffer[i + j] = synthio_mix_down_sample((int32_t)((sample_src[i + j] * (MICROPY_FLOAT_CONST(1.0) - mix)) + (self->filter_buffer[j] * mix)));
+                            word_buffer[i + j] = synthio_mix_down_sample((int32_t)((sample_src[i + j] * (MICROPY_FLOAT_CONST(1.0) - mix)) + (self->filter_buffer[j] * mix)), SYNTHIO_MIX_DOWN_SCALE(2));
                             if (!self->samples_signed) {
                                 word_buffer[i + j] ^= 0x8000;
                             }

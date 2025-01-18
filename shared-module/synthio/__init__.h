@@ -14,6 +14,10 @@
 #define SYNTHIO_NOTE_IS_PLAYING(synth, i) ((synth)->envelope_state[(i)].state != SYNTHIO_ENVELOPE_STATE_RELEASE)
 #define SYNTHIO_FREQUENCY_SHIFT (16)
 
+#define SYNTHIO_MIX_DOWN_RANGE_LOW (-28000)
+#define SYNTHIO_MIX_DOWN_RANGE_HIGH (28000)
+#define SYNTHIO_MIX_DOWN_SCALE(x) (0xfffffff / (32768 * x - SYNTHIO_MIX_DOWN_RANGE_HIGH))
+
 #include "shared-module/audiocore/__init__.h"
 #include "shared-bindings/synthio/__init__.h"
 
@@ -79,7 +83,7 @@ bool synthio_span_change_note(synthio_synth_t *synth, mp_obj_t old_note, mp_obj_
 void synthio_envelope_step(synthio_envelope_definition_t *definition, synthio_envelope_state_t *state, int n_samples);
 void synthio_envelope_definition_set(synthio_envelope_definition_t *envelope, mp_obj_t obj, uint32_t sample_rate);
 
-int16_t synthio_mix_down_sample(int32_t sample);
+int16_t synthio_mix_down_sample(int32_t sample, int32_t scale);
 
 uint64_t synthio_frequency_convert_float_to_scaled(mp_float_t frequency_hz);
 uint32_t synthio_frequency_convert_float_to_dds(mp_float_t frequency_hz, int32_t sample_rate);
