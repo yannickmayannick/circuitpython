@@ -55,6 +55,7 @@ copyright = """\
 // SPDX-FileCopyrightText: Copyright (c) 2019 Lucian Copeland for Adafruit Industries
 // SPDX-FileCopyrightText: Copyright (c) 2019 Artur Pacholec
 // SPDX-FileCopyrightText: Copyright (c) 2023 Scott Shawcroft for Adafruit Industries
+// SPDX-FileCopyrightText: Copyright (c) 2023 qutefox
 //
 // SPDX-License-Identifier: MIT
 """
