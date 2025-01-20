@@ -40,14 +40,15 @@
 #include "supervisor/shared/tick.h"
 #include "sdk/drivers/flexcan/fsl_flexcan.h"
 
-/*
-typedef struct {
-    mp_obj_base_t base;
-    int id;
-    int mask;
-    bool extended;
-} canio_match_obj_t;
-*/
+
+// Convert from back from FLEXCAN IDs to normal CAN IDs.
+#define FLEXCAN_ID_TO_CAN_ID_STD(id) \
+    ((uint32_t)((((uint32_t)(id)) & CAN_ID_STD_MASK) >> CAN_ID_STD_SHIFT))
+
+#define FLEXCAN_ID_TO_CAN_ID_EXT(id) \
+    ((uint32_t)((((uint32_t)(id)) & (CAN_ID_STD_MASK | CAN_ID_EXT_MASK)) \
+    >> CAN_ID_EXT_SHIFT))
+
 
 void common_hal_canio_listener_construct(canio_listener_obj_t *self, canio_can_obj_t *can, size_t nmatch, canio_match_obj_t **matches, float timeout) {
 
@@ -140,9 +141,34 @@ mp_obj_t common_hal_canio_listener_receive(canio_listener_obj_t *self) {
     FLEXCAN_ClearMbStatusFlags(self->can->data->base, (uint32_t)kFLEXCAN_RxFifoFrameAvlFlag);
 
     canio_message_obj_t *message = m_new_obj(canio_message_obj_t);
-    if (!mimxrt_flexcan_frame_to_canio_message_obj(&rx_frame, message)) {
-        mp_raise_ValueError(MP_ERROR_TEXT("Unable to receive CAN Message: missing or malformed flexcan frame"));
+    memset(message, 0, sizeof(canio_message_obj_t));
+
+    if (rx_frame.format == kFLEXCAN_FrameFormatExtend) {
+        message->extended = true;
+        message->id = rx_frame.id;
+    } else {
+        message->extended = false;
+        message->id = rx_frame.id >> 18; // standard ids are left-aligned
     }
+
+    if (rx_frame.type == kFLEXCAN_FrameTypeRemote) {
+        message->base.type = &canio_remote_transmission_request_type;
+    } else {
+        message->base.type = &canio_message_type;
+    }
+
+    message->size = rx_frame.length;
+
+    // We can safely copy all bytes, as both flexcan_frame_t and
+    // canio_message_obj_t define the data array as 8 bytes long.
+    message->data[0] = rx_frame.dataByte0;
+    message->data[1] = rx_frame.dataByte1;
+    message->data[2] = rx_frame.dataByte2;
+    message->data[3] = rx_frame.dataByte3;
+    message->data[4] = rx_frame.dataByte4;
+    message->data[5] = rx_frame.dataByte5;
+    message->data[6] = rx_frame.dataByte6;
+    message->data[7] = rx_frame.dataByte7;
 
     return message;
 }

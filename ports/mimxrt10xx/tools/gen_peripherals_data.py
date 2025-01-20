@@ -182,7 +182,6 @@ for device in devices:
                     continue
                 alt = int(alt[3:])
                 value = int(evalue.find("value").text, 0)
-                #print(f"instance: {instance}, signal: {signal}, pin_name: {pin_name}")
                 peripheral_inputs[instance][signal][pin_name] = [alt, name, value]
         # Mux registers come before PAD registers.
         elif name.startswith("SW_MUX_CTL_PAD_GPIO"):
@@ -325,7 +324,6 @@ for device in devices:
         for signal in SIGNALS[ptype]:
             pin_count = 0
             for instance in instances:
-                ###print(f"instance: {instance}")
                 if instance not in peripheral_inputs or signal not in peripheral_inputs[instance]:
                     continue
                 pin_count += len(peripheral_inputs[instance][signal])

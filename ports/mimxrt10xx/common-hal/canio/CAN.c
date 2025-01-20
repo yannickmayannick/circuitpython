@@ -383,10 +383,37 @@ void common_hal_canio_can_send(canio_can_obj_t *self, mp_obj_t message_in) {
     }
 
     canio_message_obj_t *message = message_in;
+
     flexcan_frame_t tx_frame;
-    if (!mimxrt_canio_message_obj_to_flexcan_frame(message, &tx_frame)) {
-        mp_raise_ValueError(MP_ERROR_TEXT("Unable to send CAN Message: missing or malformed canio message object"));
+    memset(&tx_frame, 0, sizeof(tx_frame)); // Zero out output.
+
+    if (message->extended) {
+        tx_frame.id = FLEXCAN_ID_EXT(message->id);
+        tx_frame.format = kFLEXCAN_FrameFormatExtend;
+    } else {
+        tx_frame.id = FLEXCAN_ID_STD(message->id);
+        tx_frame.format = kFLEXCAN_FrameFormatStandard;
     }
+
+    if (message->base.type == &canio_remote_transmission_request_type) {
+        tx_frame.type = kFLEXCAN_FrameTypeRemote;
+    } else {
+        tx_frame.type = kFLEXCAN_FrameTypeData;
+    }
+
+    tx_frame.length = message->size;
+
+    // We can safely copy all bytes, as both flexcan_frame_t and
+    // canio_message_obj_t define the data array as 8 bytes long,
+    // even if the actual DLC is shorter.
+    tx_frame.dataByte0 = message->data[0];
+    tx_frame.dataByte1 = message->data[1];
+    tx_frame.dataByte2 = message->data[2];
+    tx_frame.dataByte3 = message->data[3];
+    tx_frame.dataByte4 = message->data[4];
+    tx_frame.dataByte5 = message->data[5];
+    tx_frame.dataByte6 = message->data[6];
+    tx_frame.dataByte7 = message->data[7];
 
     flexcan_mb_transfer_t tx_xfer;
     tx_xfer.mbIdx = mimxrt10xx_flexcan_get_free_tx_mbid(self);

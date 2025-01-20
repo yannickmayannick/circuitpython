@@ -29,10 +29,6 @@
 #include "shared-module/canio/Message.h"
 #include "sdk/drivers/flexcan/fsl_flexcan.h"
 
-typedef struct canio_listener canio_listener_t;
-typedef struct canio_can canio_can_t;
-typedef uint32_t canio_can_filter_t;
-
 // There are 64 message buffers in each mimxrt10xx chip.
 // Rx fifo will use the message buffers at the front (from index zero).
 // As far as I can see rx fifo uses message buffer 0 to 5.
@@ -75,7 +71,3 @@ typedef struct {
     uint8_t tx_state;
     uint32_t rx_fifo_filter[MIMXRT10XX_FLEXCAN_RX_FILTER_COUNT];
 } mimxrt10xx_flexcan_data_t;
-
-bool mimxrt_canio_message_obj_to_flexcan_frame(canio_message_obj_t *src, flexcan_frame_t *dst);
-bool mimxrt_flexcan_frame_to_canio_message_obj(flexcan_frame_t *src, canio_message_obj_t *dst);
-
