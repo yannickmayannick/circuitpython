@@ -21,10 +21,10 @@
 
 // Be verbose
 #define MIMXRT_CANIO_CAN_DEBUG(...) (void)0
-//#define MIMXRT_CANIO_CAN_DEBUG(...) mp_printf(&mp_plat_print, __VA_ARGS__)
+// #define MIMXRT_CANIO_CAN_DEBUG(...) mp_printf(&mp_plat_print, __VA_ARGS__)
 
 #define MIMXRT_CANIO_CAN_CALLBACK_DEBUG(...) (void)0
-//#define MIMXRT_CANIO_CAN_CALLBACK_DEBUG(...) mp_printf(&mp_plat_print, __VA_ARGS__)
+// #define MIMXRT_CANIO_CAN_CALLBACK_DEBUG(...) mp_printf(&mp_plat_print, __VA_ARGS__)
 
 
 static CAN_Type *const flexcan_bases[] = CAN_BASE_PTRS; // e.g.: { (CAN_Type *)0u, CAN1, CAN2, CAN3 }
@@ -67,11 +67,10 @@ static uint8_t mimxrt10xx_flexcan_get_free_tx_mbid(canio_can_obj_t *self) {
     bool found_free_tx_mb = false;
     int8_t tx_array_id = 0;
     mp_uint_t atomic_state = MICROPY_BEGIN_ATOMIC_SECTION();
-    for ( ; tx_array_id < MIMXRT10XX_FLEXCAN_TX_MB_NUM ; ++tx_array_id)
+    for ( ; tx_array_id < MIMXRT10XX_FLEXCAN_TX_MB_NUM; ++tx_array_id)
     {
         uint64_t tx_array_id_bit = (1UL << tx_array_id);
-        if (!(self->data->tx_state & tx_array_id_bit))
-        {
+        if (!(self->data->tx_state & tx_array_id_bit)) {
             // Found a free tx array id. Mark it as used.
             MIMXRT_CANIO_CAN_DEBUG("canio: Found free Tx MB: %d\n", tx_array_id);
             self->data->tx_state |= tx_array_id_bit;
@@ -88,27 +87,23 @@ static uint8_t mimxrt10xx_flexcan_get_free_tx_mbid(canio_can_obj_t *self) {
     return MIMXRT10XX_FLEXCAN_TX_ARRID_TO_MBID(tx_array_id);
 }
 
-static void mimxrt10xx_flexcan_set_tx_mb_free_by_mbid(canio_can_obj_t *self, uint8_t mb_idx)
-{
+static void mimxrt10xx_flexcan_set_tx_mb_free_by_mbid(canio_can_obj_t *self, uint8_t mb_idx) {
     // We simply set the Nth bit zero. This means that that message buffer is free to use.
     uint64_t tx_array_id_bit = (1UL << MIMXRT10XX_FLEXCAN_TX_MBID_TO_ARRID(mb_idx));
     self->data->tx_state &= ~(tx_array_id_bit);
 }
 
-static void mimxrt10xx_flexcan_set_tx_mb_busy_by_mbid(canio_can_obj_t *self, uint8_t mb_idx)
-{
+static void mimxrt10xx_flexcan_set_tx_mb_busy_by_mbid(canio_can_obj_t *self, uint8_t mb_idx) {
     // We simply set the Nth bit 1. This means that that message buffer is busy and cannot be used.
     uint64_t tx_array_id_bit = (1UL << MIMXRT10XX_FLEXCAN_TX_MBID_TO_ARRID(mb_idx));
     self->data->tx_state |= tx_array_id_bit;
 }
 
-static void mimxrt10xx_flexcan_abort_tx_frames(canio_can_obj_t *self)
-{
-    for (uint8_t tx_array_id = 0 ; tx_array_id < MIMXRT10XX_FLEXCAN_TX_MB_NUM ; ++tx_array_id)
+static void mimxrt10xx_flexcan_abort_tx_frames(canio_can_obj_t *self) {
+    for (uint8_t tx_array_id = 0; tx_array_id < MIMXRT10XX_FLEXCAN_TX_MB_NUM; ++tx_array_id)
     {
         uint64_t tx_array_id_bit = (1UL << tx_array_id);
-        if (self->data->tx_state & tx_array_id_bit)
-        {
+        if (self->data->tx_state & tx_array_id_bit) {
             // Found a used/busy tx message buffer. Abort it.
             FLEXCAN_TransferAbortSend(self->data->base, &self->data->handle, MIMXRT10XX_FLEXCAN_TX_ARRID_TO_MBID(tx_array_id));
 
@@ -119,8 +114,7 @@ static void mimxrt10xx_flexcan_abort_tx_frames(canio_can_obj_t *self)
 
 static void mimxrt10xx_flexcan_handle_error(canio_can_obj_t *self) {
     canio_bus_state_t state = common_hal_canio_can_state_get(self);
-    if (state == BUS_STATE_OFF)
-    {
+    if (state == BUS_STATE_OFF) {
         // Abort any pending tx and rx in case of bus-off.
         mimxrt10xx_flexcan_abort_tx_frames(self);
         FLEXCAN_TransferAbortReceiveFifo(self->data->base, &self->data->handle);
@@ -129,11 +123,11 @@ static void mimxrt10xx_flexcan_handle_error(canio_can_obj_t *self) {
 
 static FLEXCAN_CALLBACK(mimxrt10xx_flexcan_callback)
 {
-    (void) base; // unused variable
-    (void) handle; // unused variable
+    (void)base;  // unused variable
+    (void)handle;  // unused variable
     // The result field can either be a message buffer index or a status flags value.
 
-    canio_can_obj_t *self = (canio_can_obj_t*) userData;
+    canio_can_obj_t *self = (canio_can_obj_t *)userData;
 
     switch (status) {
 
@@ -206,7 +200,7 @@ static FLEXCAN_CALLBACK(mimxrt10xx_flexcan_callback)
         // Process FlexCAN module error and status event.
         case kStatus_FLEXCAN_ErrorStatus:
             // This is *very* verbose when the bus is disconnected!
-            //MIMXRT_CANIO_CAN_CALLBACK_DEBUG("canio: callback got status = UnHandled or ErrorStatus");
+            // MIMXRT_CANIO_CAN_CALLBACK_DEBUG("canio: callback got status = UnHandled or ErrorStatus");
 
             // We could do some fancy statistics update, but canio does not have.
             mimxrt10xx_flexcan_handle_error(self);
@@ -243,24 +237,23 @@ void common_hal_canio_can_construct(canio_can_obj_t *self, const mcu_pin_obj_t *
     FLEXCAN_GetDefaultConfig(&config);
 
     // Change default flexcan module configuration based on canio constructor parameters.
-    config.clkSrc               = CLOCK_GetMux(kCLOCK_CanMux);
-    config.baudRate             = baudrate;
-    config.enableLoopBack       = loopback;
+    config.clkSrc = CLOCK_GetMux(kCLOCK_CanMux);
+    config.baudRate = baudrate;
+    config.enableLoopBack = loopback;
     config.enableListenOnlyMode = silent;
-    config.maxMbNum             = 64;
-    config.enableIndividMask    = true; // required to enable matching using a 'Listener'
+    config.maxMbNum = 64;
+    config.enableIndividMask = true;    // required to enable matching using a 'Listener'
     // config.disableSelfReception = true; // TODO: do we want to disable this?
 
     #if (defined(MIMXRT10XX_FLEXCAN_USE_IMPROVED_TIMING_CONFIG) && MIMXRT10XX_FLEXCAN_USE_IMPROVED_TIMING_CONFIG)
-        // If improved timing configuration is enabled then tell the SDK to calculate it.
-        flexcan_timing_config_t timing_config;
-        memset(&timing_config, 0, sizeof(flexcan_timing_config_t));
-        if (FLEXCAN_CalculateImprovedTimingValues(self->data->base, config.baudRate, MIMXRT10XX_FLEXCAN_CLK_FREQ, &timing_config))
-        {
-            // SDK could calculate the improved timing configuration. Yay!
-            // Let's update our flexcan module config to use it.
-            memcpy(&(config.timingConfig), &timing_config, sizeof(flexcan_timing_config_t));
-        }
+    // If improved timing configuration is enabled then tell the SDK to calculate it.
+    flexcan_timing_config_t timing_config;
+    memset(&timing_config, 0, sizeof(flexcan_timing_config_t));
+    if (FLEXCAN_CalculateImprovedTimingValues(self->data->base, config.baudRate, MIMXRT10XX_FLEXCAN_CLK_FREQ, &timing_config)) {
+        // SDK could calculate the improved timing configuration. Yay!
+        // Let's update our flexcan module config to use it.
+        memcpy(&(config.timingConfig), &timing_config, sizeof(flexcan_timing_config_t));
+    }
     #endif
 
     // Initialize the flexcan module with user-defined settings.
@@ -268,7 +261,7 @@ void common_hal_canio_can_construct(canio_can_obj_t *self, const mcu_pin_obj_t *
 
     // Create FlexCAN handle structure and set call back function.
     // As callback data we set 'self'. In callback we can cast it back to 'canio_can_obj_t'.
-    FLEXCAN_TransferCreateHandle(self->data->base, &self->data->handle, mimxrt10xx_flexcan_callback, (void*)self);
+    FLEXCAN_TransferCreateHandle(self->data->base, &self->data->handle, mimxrt10xx_flexcan_callback, (void *)self);
 
     // Set rx mask to don't care on all bits.
     flexcan_rx_fifo_config_t fifo_config;
@@ -323,7 +316,9 @@ void common_hal_canio_can_restart(canio_can_obj_t *self) {
     // But I will leave this code here just in case.
 
     canio_bus_state_t state = common_hal_canio_can_state_get(self);
-    if (state != BUS_STATE_OFF) return;
+    if (state != BUS_STATE_OFF) {
+        return;
+    }
 
     self->data->base->CTRL1 &= ~CAN_CTRL1_BOFFREC_MASK;
 
@@ -357,8 +352,7 @@ void common_hal_canio_can_send(canio_can_obj_t *self, mp_obj_t message_in) {
     maybe_auto_restart(self);
 
     canio_bus_state_t state = common_hal_canio_can_state_get(self);
-    if (state == BUS_STATE_OFF)
-    {
+    if (state == BUS_STATE_OFF) {
         // Bus is off. Transmit failed.
         mp_raise_OSError(MP_ENODEV);
     }

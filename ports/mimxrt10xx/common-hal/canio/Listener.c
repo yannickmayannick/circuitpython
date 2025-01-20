@@ -55,8 +55,7 @@ void common_hal_canio_listener_construct(canio_listener_obj_t *self, canio_can_o
         fifo_config.idFilterNum = 1;
         self->can->data->rx_fifo_filter[0] = 0x0;
         FLEXCAN_SetRxIndividualMask(self->can->data->base, 0, 0x0);
-    }
-    else {
+    } else {
         // Required to touch any CAN registers
         FLEXCAN_EnterFreezeMode(self->can->data->base);
 
@@ -94,7 +93,9 @@ void common_hal_canio_listener_check_for_deinit(canio_listener_obj_t *self) {
 }
 
 int common_hal_canio_listener_in_waiting(canio_listener_obj_t *self) {
-    if(FLEXCAN_GetMbStatusFlags(self->can->data->base, kFLEXCAN_RxFifoFrameAvlFlag)) return 1;
+    if (FLEXCAN_GetMbStatusFlags(self->can->data->base, kFLEXCAN_RxFifoFrameAvlFlag)) {
+        return 1;
+    }
     return 0;
 }
 
@@ -114,7 +115,7 @@ mp_obj_t common_hal_canio_listener_receive(canio_listener_obj_t *self) {
     }
 
     flexcan_frame_t rx_frame;
-    if(FLEXCAN_ReadRxFifo(self->can->data->base, &rx_frame) != kStatus_Success) {
+    if (FLEXCAN_ReadRxFifo(self->can->data->base, &rx_frame) != kStatus_Success) {
         mp_raise_OSError(MP_EIO);
     }
 

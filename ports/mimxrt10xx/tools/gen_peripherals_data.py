@@ -23,12 +23,12 @@ SIGNAL_RENAME = {
     "RX_DATA": "RX_DATA0",
 }
 
-INSTANCE_RENAME = {
-    "FLEXCAN" : "CAN"
-}
+INSTANCE_RENAME = {"FLEXCAN": "CAN"}
 
 INSTANCE_RE = re.compile("([a-zA-Z0-9]+?)([0-9]+)$")
-def rename_instance(instance:str)-> str:
+
+
+def rename_instance(instance: str) -> str:
     instance_match = INSTANCE_RE.match(instance)
     if instance_match is None:
         return instance
@@ -38,6 +38,7 @@ def rename_instance(instance:str)-> str:
     instance_name = str(instance_res[0])
     instance_id = str(instance_res[1])
     return INSTANCE_RENAME.get(instance_name, instance_name) + instance_id
+
 
 SKIP_LPSR = True
 

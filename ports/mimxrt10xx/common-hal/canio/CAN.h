@@ -14,7 +14,7 @@
 
 typedef struct canio_can_obj {
     mp_obj_base_t base;
-    mimxrt10xx_flexcan_data_t* data;
+    mimxrt10xx_flexcan_data_t *data;
     int baudrate;
     const mcu_pin_obj_t *rx_pin;
     const mcu_pin_obj_t *tx_pin;
