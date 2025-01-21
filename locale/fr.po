@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 12:55-0600\n"
-"PO-Revision-Date: 2024-12-13 23:00+0000\n"
-"Last-Translator: Olivier Deveault <olivierdeveault+g@gmail.com>\n"
+"PO-Revision-Date: 2025-01-21 19:04+0000\n"
+"Last-Translator: Franck Sauvé <fksauve@gmail.com>\n"
 "Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.9-rc\n"
+"X-Generator: Weblate 5.10-dev\n"
 
 #: main.c
 msgid ""
@@ -708,7 +708,7 @@ msgstr "Tampon trop court de %d octets"
 #: shared-bindings/framebufferio/FramebufferDisplay.c
 #: shared-bindings/struct/__init__.c shared-module/struct/__init__.c
 msgid "Buffer too small"
-msgstr "Tampon trop court"
+msgstr "Tampon trop petit"
 
 #: ports/atmel-samd/common-hal/paralleldisplaybus/ParallelBus.c
 #: ports/espressif/common-hal/paralleldisplaybus/ParallelBus.c
@@ -747,10 +747,12 @@ msgid "Can only alarm on RTC IO from deep sleep."
 msgstr "L'alarme ne peut être que sur TRC IO depuis un sommeil profond."
 
 #: ports/espressif/common-hal/alarm/pin/PinAlarm.c
+#, fuzzy
 msgid "Can only alarm on one low pin while others alarm high from deep sleep."
 msgstr ""
-"L'alarme peut seulement être sur une broche basse tandis que d'autres "
-"alarment sont sur des broches hautes depuis le sommeil profond."
+"L'alarme peut uniquement être active sur une broche à l'état bas, tandis que "
+"les autres alarmes restent actives sur des broches à l'état haut lors d'une "
+"sortie du mode de sommeil profond"
 
 #: ports/espressif/common-hal/alarm/pin/PinAlarm.c
 msgid "Can only alarm on two low pins from deep sleep."
