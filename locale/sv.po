@@ -1042,6 +1042,7 @@ msgstr "Filen hittades inte"
 
 #: ports/atmel-samd/common-hal/canio/Listener.c
 #: ports/espressif/common-hal/canio/Listener.c
+#: ports/mimxrt10xx/common-hal/canio/Listener.c
 #: ports/stm/common-hal/canio/Listener.c
 msgid "Filters too complex"
 msgstr "Filter för komplexa"
@@ -2178,6 +2179,10 @@ msgstr "Kan inte initiera tolken"
 #: shared-module/displayio/OnDiskBitmap.c
 msgid "Unable to read color palette data"
 msgstr "Det går inte att läsa färgpalettdata"
+
+#: ports/mimxrt10xx/common-hal/canio/CAN.c
+msgid "Unable to send CAN Message: all Tx message buffers are busy"
+msgstr ""
 
 #: ports/espressif/common-hal/mdns/Server.c
 #: ports/raspberrypi/common-hal/mdns/Server.c

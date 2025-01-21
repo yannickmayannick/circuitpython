@@ -1043,6 +1043,7 @@ msgstr "zhǎo bú dào wén jiàn"
 
 #: ports/atmel-samd/common-hal/canio/Listener.c
 #: ports/espressif/common-hal/canio/Listener.c
+#: ports/mimxrt10xx/common-hal/canio/Listener.c
 #: ports/stm/common-hal/canio/Listener.c
 msgid "Filters too complex"
 msgstr "guò lǜ qì tài fù zá"
@@ -2184,6 +2185,10 @@ msgstr "Wúfǎ chūshǐhuà jiěxī qì"
 #: shared-module/displayio/OnDiskBitmap.c
 msgid "Unable to read color palette data"
 msgstr "Wúfǎ dúqǔ tiáosèbǎn shùjù"
+
+#: ports/mimxrt10xx/common-hal/canio/CAN.c
+msgid "Unable to send CAN Message: all Tx message buffers are busy"
+msgstr ""
 
 #: ports/espressif/common-hal/mdns/Server.c
 #: ports/raspberrypi/common-hal/mdns/Server.c
