@@ -7,7 +7,7 @@ ENTRY(Reset_Handler)
 
 _ld_default_stack_size = 24K;
 
-/* Specify the memory areas */
+/* Specify the memory areas -- CircuitPython is loaded on the external QSPI flash */
 MEMORY
 {
     FLASH (rx)          : ORIGIN = 0x90000000, LENGTH = 8M    /* 8M */
