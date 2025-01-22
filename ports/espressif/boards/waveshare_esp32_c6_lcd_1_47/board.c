@@ -11,6 +11,7 @@
 #include "shared-bindings/fourwire/FourWire.h"
 #include "shared-module/displayio/__init__.h"
 #include "shared-module/displayio/mipi_constants.h"
+#include "shared-bindings/board/__init__.h"
 
 #define DELAY 0x80
 
@@ -40,18 +41,8 @@ uint8_t display_init_sequence[] = {
 };
 
 static void display_init(void) {
+    busio_spi_obj_t *spi = common_hal_board_create_spi(0);
     fourwire_fourwire_obj_t *bus = &allocate_display_bus()->fourwire_bus;
-    busio_spi_obj_t *spi = &bus->inline_bus;
-
-    common_hal_busio_spi_construct(
-        spi,
-        &pin_GPIO7,     // CLK
-        &pin_GPIO6,     // MOSI
-        NULL,           // MISO not connected
-        false);         // Not half-duplex
-
-    common_hal_busio_spi_never_reset(spi);
-
     bus->base.type = &fourwire_fourwire_type;
 
     common_hal_fourwire_fourwire_construct(
@@ -73,7 +64,7 @@ static void display_init(void) {
         bus,
         172,            // width (after rotation)
         320,            // height (after rotation)
-        34,             // column start
+        34,              // column start
         0,              // row start
         0,              // rotation
         16,             // color depth
