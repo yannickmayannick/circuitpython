@@ -11,6 +11,7 @@
 #include "shared-bindings/fourwire/FourWire.h"
 #include "shared-module/displayio/__init__.h"
 #include "shared-module/displayio/mipi_constants.h"
+#include "shared-bindings/board/__init__.h"
 
 #define DELAY 0x80
 
