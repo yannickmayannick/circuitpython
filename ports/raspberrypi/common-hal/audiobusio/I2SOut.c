@@ -274,6 +274,9 @@ void common_hal_audiobusio_i2sout_play(audiobusio_i2sout_obj_t *self,
     } else if (result == AUDIO_DMA_MEMORY_ERROR) {
         common_hal_audiobusio_i2sout_stop(self);
         mp_raise_RuntimeError(MP_ERROR_TEXT("Unable to allocate buffers for signed conversion"));
+    } else if (result == AUDIO_DMA_SOURCE_ERROR) {
+        common_hal_audiobusio_i2sout_stop(self);
+        mp_raise_RuntimeError(MP_ERROR_TEXT("Audio source error"));
     }
 
     self->playing = true;
