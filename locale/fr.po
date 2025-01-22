@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 12:55-0600\n"
-"PO-Revision-Date: 2025-01-21 19:04+0000\n"
+"PO-Revision-Date: 2025-01-22 17:38+0000\n"
 "Last-Translator: Franck Sauvé <fksauve@gmail.com>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -747,7 +747,6 @@ msgid "Can only alarm on RTC IO from deep sleep."
 msgstr "L'alarme ne peut être que sur TRC IO depuis un sommeil profond."
 
 #: ports/espressif/common-hal/alarm/pin/PinAlarm.c
-#, fuzzy
 msgid "Can only alarm on one low pin while others alarm high from deep sleep."
 msgstr ""
 "L'alarme peut uniquement être active sur une broche à l'état bas, tandis que "
@@ -757,13 +756,13 @@ msgstr ""
 #: ports/espressif/common-hal/alarm/pin/PinAlarm.c
 msgid "Can only alarm on two low pins from deep sleep."
 msgstr ""
-"L'alarme peut seulement être sur deux broches basses depuis le sommeil "
-"profond."
+"Peut uniquement déclencher une alarme à partir de deux broches configurées "
+"en niveau bas depuis le mode de sommeil profond."
 
 #: ports/espressif/common-hal/_bleio/Characteristic.c
 #: ports/nordic/common-hal/_bleio/Characteristic.c
 msgid "Can't set CCCD on local Characteristic"
-msgstr "Impossible de définir CCCD sur une caractéristique locale"
+msgstr "Impossible de définir BLE CCCD sur une caractéristique locale"
 
 #: shared-bindings/storage/__init__.c shared-bindings/usb_cdc/__init__.c
 #: shared-bindings/usb_hid/__init__.c shared-bindings/usb_midi/__init__.c
@@ -774,7 +773,8 @@ msgstr "Impossible de changer de périphérique USB maintenant"
 #: shared-bindings/_bleio/Adapter.c
 msgid "Cannot create a new Adapter; use _bleio.adapter;"
 msgstr ""
-"Un nouveau Adapter ne peut être créé ; Adapter; utilisez _bleio.adapter;"
+"Impossible de créer un nouvel adaptateur Bluetooth ; utilisez l'adaptateur "
+"existant via _bleio.adapter. ;"
 
 #: shared-bindings/displayio/Bitmap.c
 #: shared-bindings/memorymonitor/AllocationSize.c
@@ -787,7 +787,8 @@ msgstr "Impossible de supprimer les valeurs"
 #: ports/nordic/common-hal/digitalio/DigitalInOut.c
 #: ports/raspberrypi/common-hal/digitalio/DigitalInOut.c
 msgid "Cannot get pull while in output mode"
-msgstr "Ne peut être tiré ('pull') en mode sortie ('output')"
+msgstr ""
+"Une GPIO ne peut être en mode ('pull') si déja en mode de sortie ('output')"
 
 #: ports/nordic/common-hal/microcontroller/Processor.c
 msgid "Cannot get temperature"
@@ -796,12 +797,12 @@ msgstr "Impossible de lire la température"
 #: shared-bindings/_bleio/Adapter.c
 msgid "Cannot have scan responses for extended, connectable advertisements."
 msgstr ""
-"Impossible d'avoir des réponses d'analyse pour les publicités étendues et "
-"connectables."
+"Les publicités BLE étendues et connectables ne peuvent pas inclure de "
+"réponses au scan."
 
 #: ports/espressif/common-hal/alarm/pin/PinAlarm.c
 msgid "Cannot pull on input-only pin."
-msgstr "Ne peut tirer ('pull') sur une broche d'entrée ('input') seule."
+msgstr "Ne peut tirer ('pull') sur une broche d'entrée ('input') ."
 
 #: shared-bindings/audiobusio/PDMIn.c
 msgid "Cannot record to a file"
@@ -809,12 +810,13 @@ msgstr "Impossible d'enregistrer vers un fichier"
 
 #: shared-module/storage/__init__.c
 msgid "Cannot remount '/' when visible via USB."
-msgstr "Ne peut démonter '/' quand est visible par USB."
+msgstr ""
+"Ne peut démonter '/' la racine du système de fichier quand elle est déja vue "
+"par le port USB."
 
 #: shared-bindings/digitalio/DigitalInOut.c
 msgid "Cannot set value when direction is input."
-msgstr ""
-"Impossible d'affecter une valeur quand la direction est entrante ('input')."
+msgstr "Impossible d'affecter une valeur quand le GPIO est entrant ('input')."
 
 #: ports/espressif/common-hal/busio/UART.c
 #: ports/mimxrt10xx/common-hal/busio/UART.c
@@ -823,16 +825,16 @@ msgstr "Impossible de spécifier RTS ou CTS en mode RS485"
 
 #: py/objslice.c
 msgid "Cannot subclass slice"
-msgstr "On ne peut faire de sous-classes de tranches"
+msgstr "On ne peut faire des tranches de sous-classes"
 
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 msgid "Cannot use GPIO0..15 together with GPIO32..47"
-msgstr ""
+msgstr "Ne peut utiliser les GPIO de 0 à 15 en même temps que les GPIO 32 à 47"
 
 #: ports/nordic/common-hal/alarm/pin/PinAlarm.c
 msgid "Cannot wake on pin edge, only level"
 msgstr ""
-"Impossible de réveiller via une bordure d'une broche, seulement via un niveau"
+"Impossible de réveiller via une une pin , seulement via un changement d'état"
 
 #: ports/espressif/common-hal/alarm/pin/PinAlarm.c
 msgid "Cannot wake on pin edge. Only level."
