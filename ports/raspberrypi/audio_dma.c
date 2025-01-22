@@ -159,7 +159,6 @@ static void audio_dma_load_next_block(audio_dma_t *dma, size_t buffer_idx) {
                 !dma_channel_is_busy(dma->channel[1])) {
                 // No data has been read, and both DMA channels have now finished, so it's safe to stop.
                 audio_dma_stop(dma);
-                assert(dma->channel[buffer_idx] < NUM_DMA_CHANNELS);
             }
         }
     }
