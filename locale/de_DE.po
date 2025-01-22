@@ -618,6 +618,11 @@ msgstr "Versuche %d Blöcke zu allokieren"
 msgid "Audio conversion not implemented"
 msgstr "Audio-Konvertierung nicht implementiert"
 
+#: ports/raspberrypi/common-hal/audiobusio/I2SOut.c
+#: ports/raspberrypi/common-hal/audiopwmio/PWMAudioOut.c
+msgid "Audio source error"
+msgstr ""
+
 #: shared-bindings/wifi/Radio.c
 msgid "AuthMode.OPEN is not used with password"
 msgstr "AuthMode.OPEN wird mit Passwort nicht verwendet"
@@ -2397,6 +2402,7 @@ msgstr "Der BOOT-Knopf wurde beim Starten gedrückt"
 
 #: ports/espressif/boards/adafruit_feather_esp32c6_4mbflash_nopsram/mpconfigboard.h
 #: ports/espressif/boards/adafruit_itsybitsy_esp32/mpconfigboard.h
+#: ports/espressif/boards/waveshare_esp32_c6_lcd_1_47/mpconfigboard.h
 msgid "You pressed the BOOT button at start up."
 msgstr "Der BOOT-Knopf wurde beim Starten gedrückt."
 
