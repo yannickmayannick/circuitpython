@@ -488,7 +488,7 @@ void __not_in_flash_func(isr_dma_0)(void) {
         }
         if (MP_STATE_PORT(background_pio_read)[i] != NULL) {
             rp2pio_statemachine_obj_t *pio = MP_STATE_PORT(background_pio_read)[i];
-            rp2pio_statemachine_dma_complete_write(pio, i);
+            rp2pio_statemachine_dma_complete_read(pio, i);
         }
         if (MP_STATE_PORT(background_pio_write)[i] != NULL) {
             rp2pio_statemachine_obj_t *pio = MP_STATE_PORT(background_pio_write)[i];

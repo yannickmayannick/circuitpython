@@ -1392,9 +1392,9 @@ bool common_hal_rp2pio_statemachine_background_read(rp2pio_statemachine_obj_t *s
 
     common_hal_mcu_disable_interrupts();
     // Acknowledge any previous pending interrupt
-    dma_hw->ints1 |= 1u << channel_read;
+    dma_hw->ints0 |= 1u << channel_read;
     MP_STATE_PORT(background_pio_read)[channel_read] = self;
-    dma_hw->inte1 |= 1u << channel_read;
+    dma_hw->inte0 |= 1u << channel_read;
     irq_set_mask_enabled(1 << DMA_IRQ_0, true);
     dma_start_channel_mask((1u << channel_read));
     common_hal_mcu_enable_interrupts();
