@@ -96,7 +96,7 @@ static void rp2pio_statemachine_clear_dma_write(int pio_index, int sm) {
         if (!dma_hw->inte0) {
             irq_set_mask_enabled(1 << DMA_IRQ_0, false);
         }
-        MP_STATE_PORT(background_pio)[channel_write] = NULL;
+        MP_STATE_PORT(background_pio_write)[channel_write] = NULL;
         dma_channel_abort(channel_write);
         dma_channel_unclaim(channel_write);
     }
@@ -111,7 +111,7 @@ static void rp2pio_statemachine_clear_dma_read(int pio_index, int sm) {
         if (!dma_hw->inte0) {
             irq_set_mask_enabled(1 << DMA_IRQ_0, false);
         }
-        MP_STATE_PORT(background_pio)[channel_read] = NULL;
+        MP_STATE_PORT(background_pio_read)[channel_read] = NULL;
         dma_channel_abort(channel_read);
         dma_channel_unclaim(channel_read);
     }
@@ -1229,7 +1229,7 @@ bool common_hal_rp2pio_statemachine_background_write(rp2pio_statemachine_obj_t *
 
     // Acknowledge any previous pending interrupt
     dma_hw->ints0 |= 1u << channel_write;
-    MP_STATE_PORT(background_pio)[channel_write] = self;
+    MP_STATE_PORT(background_pio_write)[channel_write] = self;
     dma_hw->inte0 |= 1u << channel_write;
 
     irq_set_mask_enabled(1 << DMA_IRQ_0, true);
@@ -1392,10 +1392,10 @@ bool common_hal_rp2pio_statemachine_background_read(rp2pio_statemachine_obj_t *s
 
     common_hal_mcu_disable_interrupts();
     // Acknowledge any previous pending interrupt
-    dma_hw->ints1 |= 1u << channel_read;
-    MP_STATE_PORT(background_pio)[channel_read] = self;
-    dma_hw->inte1 |= 1u << channel_read;
-    irq_set_mask_enabled(1 << DMA_IRQ_1, true);
+    dma_hw->ints0 |= 1u << channel_read;
+    MP_STATE_PORT(background_pio_read)[channel_read] = self;
+    dma_hw->inte0 |= 1u << channel_read;
+    irq_set_mask_enabled(1 << DMA_IRQ_0, true);
     dma_start_channel_mask((1u << channel_read));
     common_hal_mcu_enable_interrupts();
 
@@ -1485,4 +1485,5 @@ mp_obj_t common_hal_rp2pio_statemachine_get_last_write(rp2pio_statemachine_obj_t
 
 // Use a compile-time constant for MP_REGISTER_POINTER so the preprocessor will
 // not split the expansion across multiple lines.
-MP_REGISTER_ROOT_POINTER(mp_obj_t background_pio[enum_NUM_DMA_CHANNELS]);
+MP_REGISTER_ROOT_POINTER(mp_obj_t background_pio_read[enum_NUM_DMA_CHANNELS]);
+MP_REGISTER_ROOT_POINTER(mp_obj_t background_pio_write[enum_NUM_DMA_CHANNELS]);
