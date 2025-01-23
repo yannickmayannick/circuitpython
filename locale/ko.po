@@ -645,6 +645,11 @@ msgstr "%d 블록 할당 시도"
 msgid "Audio conversion not implemented"
 msgstr "오디오 변환이 구현되지 않음"
 
+#: ports/raspberrypi/common-hal/audiobusio/I2SOut.c
+#: ports/raspberrypi/common-hal/audiopwmio/PWMAudioOut.c
+msgid "Audio source error"
+msgstr ""
+
 #: shared-bindings/wifi/Radio.c
 msgid "AuthMode.OPEN is not used with password"
 msgstr "AuthMode.OPEN은 암호와 함께 사용되지 않습니다"
@@ -2414,6 +2419,7 @@ msgstr ""
 
 #: ports/espressif/boards/adafruit_feather_esp32c6_4mbflash_nopsram/mpconfigboard.h
 #: ports/espressif/boards/adafruit_itsybitsy_esp32/mpconfigboard.h
+#: ports/espressif/boards/waveshare_esp32_c6_lcd_1_47/mpconfigboard.h
 msgid "You pressed the BOOT button at start up."
 msgstr ""
 
