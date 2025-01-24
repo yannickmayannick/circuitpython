@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 12:55-0600\n"
-"PO-Revision-Date: 2025-01-23 18:03+0000\n"
+"PO-Revision-Date: 2025-01-25 09:05+0000\n"
 "Last-Translator: Franck Sauvé <fksauve@gmail.com>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -1029,29 +1029,29 @@ msgstr "Echec allocation mémoire pour Wifi"
 
 #: ports/espressif/common-hal/wifi/ScannedNetworks.c
 msgid "Failed to allocate wifi scan memory"
-msgstr "Impossible d'allouer la mémoire pour le scan wifi"
+msgstr "Scan wifi: échec allocation mémoire"
 
 #: ports/stm/common-hal/audiopwmio/PWMAudioOut.c
 msgid "Failed to buffer the sample"
-msgstr "Échec du tamponage de l'échantillon"
+msgstr "Échec du tampon de l'échantillon"
 
 #: ports/espressif/common-hal/_bleio/Adapter.c
 #: ports/nordic/common-hal/_bleio/Adapter.c
 msgid "Failed to connect: internal error"
-msgstr "Impossible de se connecter : erreur interne"
+msgstr "Connection impossible: erreur interne"
 
 #: ports/nordic/common-hal/_bleio/Adapter.c
 msgid "Failed to connect: timeout"
-msgstr "Impossible de se connecter: délai dépassé"
+msgstr "Connection impossible: délai dépassé"
 
 #: shared-module/audiomp3/MP3Decoder.c
 msgid "Failed to parse MP3 file"
-msgstr "Impossible d'analyser le fichier MP3"
+msgstr "Echec de parcours du fichier MP3"
 
 #: ports/nordic/sd_mutex.c
 #, c-format
 msgid "Failed to release mutex, err 0x%04x"
-msgstr "Impossible de libérer mutex, err 0x%04x"
+msgstr "Écchec de liberaton du mutex, err 0x%04x"
 
 #: supervisor/shared/safe_mode.c
 msgid "Failed to write internal flash."
@@ -1074,29 +1074,28 @@ msgstr "Filtres trop complexe"
 
 #: ports/espressif/common-hal/dualbank/__init__.c
 msgid "Firmware is duplicate"
-msgstr "Le logiciel est identique"
+msgstr "Le Firmware est identique"
 
 #: ports/espressif/common-hal/dualbank/__init__.c
 msgid "Firmware is invalid"
-msgstr "Logiciel invalide"
+msgstr "Firmware invalide"
 
 #: ports/espressif/common-hal/dualbank/__init__.c
 msgid "Firmware is too big"
-msgstr "Logiciel trop volumineux"
+msgstr "Firmware trop grand"
 
 #: shared-bindings/bitmaptools/__init__.c
 msgid "For L8 colorspace, input bitmap must have 8 bits per pixel"
-msgstr ""
-"Avec l'espace de couleur L8, l'image d'entrée doit avoir 8 bits par pixel"
+msgstr "Pour l'espace de couleur L8, l'image bitmap doit avoir 8 bits par pixel"
 
 #: shared-bindings/bitmaptools/__init__.c
 msgid "For RGB colorspaces, input bitmap must have 16 bits per pixel"
 msgstr ""
-"Avec l'espace de couleur RVB, l'image d'entrée doit avoir 16 bits par pixel"
+"Pour l'espace de couleur RVB, l'image d'entrée doit avoir 16 bits par pixel"
 
 #: ports/cxd56/common-hal/camera/Camera.c
 msgid "Format not supported"
-msgstr "Format non pris en charge"
+msgstr "Format non supporté"
 
 #: ports/mimxrt10xx/common-hal/microcontroller/Processor.c
 msgid ""
@@ -1108,7 +1107,7 @@ msgstr ""
 #: shared-bindings/bitbangio/I2C.c shared-bindings/bitbangio/SPI.c
 #: shared-bindings/busio/I2C.c shared-bindings/busio/SPI.c
 msgid "Function requires lock"
-msgstr "La fonction nécessite un verrou ('lock')"
+msgstr "La fonction requier un verrou ('lock')"
 
 #: ports/cxd56/common-hal/gnss/GNSS.c
 msgid "GNSS init"
@@ -1162,13 +1161,13 @@ msgstr "Taille de tampon incorrecte"
 
 #: ports/raspberrypi/bindings/rp2pio/StateMachine.c
 msgid "Init program size invalid"
-msgstr "Taille du programme d'initialisation non valide"
+msgstr "Taille du programme d'initialisation invalide"
 
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 msgid "Initial set pin direction conflicts with initial out pin direction"
 msgstr ""
-"Direction initiale de \"set pin\" est en conflit avec la direction initiale "
-"de \"out pin\""
+"Direction initiale de \"set pin\" est en conflit avec la direction de "
+"\"out pin\""
 
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 msgid "Initial set pin state conflicts with initial out pin state"
@@ -1179,8 +1178,7 @@ msgstr ""
 #, c-format
 msgid "Input buffer length (%d) must be a multiple of the strand count (%d)"
 msgstr ""
-"La taille (%d) du tampon d'entrée doit être un multiple du nombre (%d) de "
-"brins"
+"La taille (%d) du tampon d'entrée doit être au modulo du nombre (%d) de brins"
 
 #: ports/atmel-samd/common-hal/pulseio/PulseIn.c
 msgid "Input taking too long"
@@ -1252,7 +1250,7 @@ msgstr "Erreur d'interruption."
 
 #: shared-module/jpegio/JpegDecoder.c
 msgid "Interrupted by output function"
-msgstr "Interrompu par une fonction de sortie"
+msgstr "Interrompu par la fonction de sortie"
 
 #: ports/espressif/common-hal/_bleio/Service.c
 #: ports/espressif/common-hal/espulp/ULP.c
@@ -1282,7 +1280,7 @@ msgstr "Broche invalide pour '%q'"
 
 #: ports/stm/common-hal/analogio/AnalogIn.c
 msgid "Invalid ADC Unit value"
-msgstr "Valeur d'unité ADC non valide"
+msgstr "Unité invalide pour l'ADC"
 
 #: ports/espressif/common-hal/_bleio/__init__.c
 #: ports/nordic/common-hal/_bleio/__init__.c
@@ -1303,7 +1301,7 @@ msgstr "Paramètre invalide"
 
 #: shared-module/displayio/Bitmap.c
 msgid "Invalid bits per value"
-msgstr "Bits par valeur invalides"
+msgstr "Bits invalides par valeur"
 
 #: shared-module/os/getenv.c
 #, c-format
@@ -1321,15 +1319,15 @@ msgstr "Format invalide"
 
 #: shared-module/audiocore/WaveFile.c
 msgid "Invalid format chunk size"
-msgstr "Taille de bloc de formatage invalide"
+msgstr "Formatage de bloc invalide"
 
 #: shared-bindings/wifi/Radio.c
 msgid "Invalid hex password"
-msgstr "Mot de passe hexadécimal invalide"
+msgstr "Mot de passe hexa invalide"
 
 #: ports/espressif/common-hal/wifi/Radio.c
 msgid "Invalid multicast MAC address"
-msgstr "Adresse MAC multicast invalide"
+msgstr "MAC address multicast invalide"
 
 #: ports/espressif/common-hal/espidf/__init__.c
 msgid "Invalid size"
@@ -1337,7 +1335,7 @@ msgstr "Taille invalide"
 
 #: shared-module/ssl/SSLSocket.c
 msgid "Invalid socket for TLS"
-msgstr "Socket non valide pour TLS"
+msgstr "Socket invalide pour TLS"
 
 #: ports/espressif/common-hal/espidf/__init__.c
 #: ports/nordic/common-hal/_bleio/__init__.c
@@ -1370,7 +1368,7 @@ msgstr "Ce calque est déjà dans un groupe"
 
 #: shared-module/displayio/Group.c
 msgid "Layer must be a Group or TileGrid subclass"
-msgstr "Le calque doit être une sous-classe de Group ou TileGrid"
+msgstr "La couche doit être une sous-classe de Group ou TileGrid"
 
 #: shared-bindings/audiocore/RawSample.c
 msgid "Length of %q must be an even multiple of channel_count * type_size"
@@ -1378,7 +1376,7 @@ msgstr "Longueur de %q doit être un multiple pair de channel_count * type_size"
 
 #: ports/espressif/common-hal/espidf/__init__.c
 msgid "MAC address was invalid"
-msgstr "Adresse physique (MAC) invalide"
+msgstr "MAC Address invalide"
 
 #: ports/espressif/common-hal/_bleio/Characteristic.c
 #: ports/espressif/common-hal/_bleio/Descriptor.c
@@ -1392,7 +1390,7 @@ msgstr "Le mapping doit être un tuple"
 #: ports/raspberrypi/bindings/rp2pio/StateMachine.c
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 msgid "Mismatched data size"
-msgstr "La taille des données ne correspond pas"
+msgstr "Non correspondance de la taille des données"
 
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 msgid "Mismatched swap flag"
@@ -1432,11 +1430,11 @@ msgstr ""
 
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 msgid "Missing jmp_pin. %q[%u] jumps on pin"
-msgstr "Manque jmp_pin. %q[%u] effectue un saut sur broche"
+msgstr "Manque jmp_pin. %q[%u] passe à la broche suivante"
 
 #: shared-module/storage/__init__.c
 msgid "Mount point directory missing"
-msgstr "Répertoire de montage manquant"
+msgstr "Point de montage manquant"
 
 #: shared-bindings/busio/UART.c shared-bindings/displayio/Group.c
 msgid "Must be a %q subclass."
@@ -1444,20 +1442,20 @@ msgstr "Doit être une sous-classe de %q."
 
 #: ports/espressif/common-hal/dotclockframebuffer/DotClockFramebuffer.c
 msgid "Must provide 5/6/5 RGB pins"
-msgstr "5/6/5 broches RGB doivent être fournies"
+msgstr "broches RGB 5/6/5 requises"
 
 #: ports/mimxrt10xx/common-hal/busio/SPI.c shared-bindings/busio/SPI.c
 msgid "Must provide MISO or MOSI pin"
-msgstr "Doit fournir une broche MISO ou MOSI"
+msgstr "Fournir broches MISO ou MOSI"
 
 #: shared-bindings/rgbmatrix/RGBMatrix.c
 #, c-format
 msgid "Must use a multiple of 6 rgb pins, not %d"
-msgstr "Doit utiliser un multiple de 6 broches RVB, pas %d"
+msgstr "Demande un multiple de 6 broches RVB, pas %d"
 
 #: supervisor/shared/safe_mode.c
 msgid "NLR jump failed. Likely memory corruption."
-msgstr "Saut NLR échoué. Corruption de mémoire probable."
+msgstr "Echec saut NLR . Mémoire probablement corompue."
 
 #: ports/espressif/common-hal/nvm/ByteArray.c
 msgid "NVS Error"
@@ -1469,7 +1467,7 @@ msgstr "Nom ou service inconnu"
 
 #: shared-bindings/displayio/TileGrid.c
 msgid "New bitmap must be same size as old bitmap"
-msgstr "La taille du nouveau bitmap doit être la même que l'ancien"
+msgstr "La taille du nouveau bitmap doit être indentique à l'ancien"
 
 #: ports/espressif/common-hal/_bleio/__init__.c
 msgid "Nimble out of memory"
@@ -1504,20 +1502,20 @@ msgstr "Pas de DAC sur la puce"
 #: ports/raspberrypi/common-hal/audiobusio/I2SOut.c
 #: ports/raspberrypi/common-hal/audiopwmio/PWMAudioOut.c
 msgid "No DMA channel found"
-msgstr "Aucun canal DMA trouvé"
+msgstr "Pas de canal DMA trouvé"
 
 #: ports/raspberrypi/common-hal/audiopwmio/PWMAudioOut.c
 msgid "No DMA pacing timer found"
-msgstr "Aucun minuteur de rythme DMA trouvé"
+msgstr "Aucun temporisateur de régulation DMA trouvé"
 
 #: shared-module/adafruit_bus_device/i2c_device/I2CDevice.c
 #, c-format
 msgid "No I2C device at address: 0x%x"
-msgstr "Aucun périphérique I2S à l'adresse : 0x%x"
+msgstr "Pas de périphérique I2S à l'adresse : 0x%x"
 
 #: supervisor/shared/web_workflow/web_workflow.c
 msgid "No IP"
-msgstr "Aucune IP"
+msgstr "Pas d' IP"
 
 #: ports/atmel-samd/common-hal/microcontroller/__init__.c
 #: ports/cxd56/common-hal/microcontroller/__init__.c
