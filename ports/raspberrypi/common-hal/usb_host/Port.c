@@ -114,7 +114,8 @@ static size_t get_usb_pio(void) {
 
 
 usb_host_port_obj_t *common_hal_usb_host_port_construct(const mcu_pin_obj_t *dp, const mcu_pin_obj_t *dm) {
-    if (dp->number + 1 != dm->number) {
+    if ((dp->number + 1 != dm->number)
+        && (dp->number - 1 != dm->number)) {
         raise_ValueError_invalid_pins();
     }
     usb_host_port_obj_t *self = &usb_host_instance;
@@ -133,6 +134,8 @@ usb_host_port_obj_t *common_hal_usb_host_port_construct(const mcu_pin_obj_t *dp,
     pio_usb_configuration_t pio_cfg = PIO_USB_DEFAULT_CONFIG;
     pio_cfg.skip_alarm_pool = true;
     pio_cfg.pin_dp = dp->number;
+    if (dp->number - 1 == dm->number) {
+        pio_cfg.pinout = PIO_USB_PINOUT_DMDP;
     }
     pio_cfg.pio_tx_num = get_usb_pio();
     pio_cfg.pio_rx_num = pio_cfg.pio_tx_num;
