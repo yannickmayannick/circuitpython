@@ -9,10 +9,8 @@
 #include "shared-bindings/microcontroller/Pin.h"
 #include "shared-module/audiocore/__init__.h"
 
-
-#ifdef SOC_DAC_SUPPORTED
-
 #include "driver/dac_continuous.h"
+
 
 #if defined(CONFIG_IDF_TARGET_ESP32)
 #define pin_CHANNEL_0 pin_GPIO25
@@ -557,5 +555,3 @@ void common_hal_audioio_audioout_stop(audioio_audioout_obj_t *self) {
 bool common_hal_audioio_audioout_get_playing(audioio_audioout_obj_t *self) {
     return self->playing && !self->paused;
 }
-
-#endif
