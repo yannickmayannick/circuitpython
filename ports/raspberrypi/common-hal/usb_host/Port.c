@@ -33,7 +33,6 @@
 
 usb_host_port_obj_t usb_host_instance;
 
-static PIO pio_instances[2] = {pio0, pio1};
 volatile bool _core1_ready = false;
 
 static void __not_in_flash_func(core1_main)(void) {
@@ -76,7 +75,7 @@ static void __not_in_flash_func(core1_main)(void) {
 }
 
 static uint8_t _sm_free_count(uint8_t pio_index) {
-    PIO pio = pio_instances[pio_index];
+    PIO pio = pio_get_instance(pio_index);
     uint8_t free_count = 0;
     for (size_t j = 0; j < NUM_PIO_STATE_MACHINES; j++) {
         if (!pio_sm_is_claimed(pio, j)) {
@@ -87,7 +86,7 @@ static uint8_t _sm_free_count(uint8_t pio_index) {
 }
 
 static bool _has_program_room(uint8_t pio_index, uint8_t program_size) {
-    PIO pio = pio_instances[pio_index];
+    PIO pio = pio_get_instance(pio_index);
     pio_program_t program_struct = {
         .instructions = NULL,
         .length = program_size,
@@ -148,7 +147,7 @@ usb_host_port_obj_t *common_hal_usb_host_port_construct(const mcu_pin_obj_t *dp,
     self->dp = dp;
     self->dm = dm;
 
-    PIO pio = pio_instances[pio_cfg.pio_tx_num];
+    PIO pio = pio_get_instance(pio_cfg.pio_tx_num);
 
     // Unclaim everything so that the library can.
     dma_channel_unclaim(pio_cfg.tx_ch);
