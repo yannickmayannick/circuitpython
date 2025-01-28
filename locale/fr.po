@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 12:55-0600\n"
-"PO-Revision-Date: 2025-01-27 22:04+0000\n"
+"PO-Revision-Date: 2025-01-28 08:40+0000\n"
 "Last-Translator: Franck Sauvé <fksauve@gmail.com>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -3014,7 +3014,7 @@ msgstr "les dimensions ne correspondent pas"
 
 #: py/emitnative.c
 msgid "div/mod not implemented for uint"
-msgstr "div/mod ne sont pas implémentés pour uint"
+msgstr "div/Mod non implémenté pour uint"
 
 #: extmod/ulab/code/numpy/create.c
 msgid "divide by zero"
@@ -3026,11 +3026,11 @@ msgstr "division par zéro"
 
 #: extmod/ulab/code/numpy/vector.c
 msgid "dtype must be float, or complex"
-msgstr "le dtype doit être un flottant, ou un complexe"
+msgstr "le dtype doit être de type flottant ou complexe"
 
 #: extmod/ulab/code/ndarray_operators.c
 msgid "dtype of int32 is not supported"
-msgstr "dtype de int32 non pris en charge"
+msgstr "dtype en int32 non supporté"
 
 #: py/objdeque.c
 msgid "empty"
@@ -3054,7 +3054,8 @@ msgstr "séquence vide"
 
 #: py/objstr.c
 msgid "end of format while looking for conversion specifier"
-msgstr "fin de format en cherchant une spécification de conversion"
+msgstr ""
+"fin du format atteinte lors de la recherche du spécificateur de conversion"
 
 #: shared-bindings/alarm/time/TimeAlarm.c
 msgid "epoch_time not supported on this board"
