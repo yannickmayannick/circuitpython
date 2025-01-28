@@ -322,7 +322,7 @@ bool rp2pio_statemachine_construct(rp2pio_statemachine_obj_t *self,
     pio_program_t program_struct = {
         .instructions = (uint16_t *)program,
         .length = program_len,
-        .origin = -1
+        .origin = offset,
     };
     PIO pio;
     uint state_machine;
