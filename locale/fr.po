@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 12:55-0600\n"
-"PO-Revision-Date: 2025-01-27 22:04+0000\n"
+"PO-Revision-Date: 2025-01-28 12:49+0000\n"
 "Last-Translator: Franck Sauvé <fksauve@gmail.com>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -3014,7 +3014,7 @@ msgstr "les dimensions ne correspondent pas"
 
 #: py/emitnative.c
 msgid "div/mod not implemented for uint"
-msgstr "div/mod ne sont pas implémentés pour uint"
+msgstr "div/Mod non implémenté pour uint"
 
 #: extmod/ulab/code/numpy/create.c
 msgid "divide by zero"
@@ -3026,11 +3026,11 @@ msgstr "division par zéro"
 
 #: extmod/ulab/code/numpy/vector.c
 msgid "dtype must be float, or complex"
-msgstr "le dtype doit être un flottant, ou un complexe"
+msgstr "le dtype doit être de type flottant ou complexe"
 
 #: extmod/ulab/code/ndarray_operators.c
 msgid "dtype of int32 is not supported"
-msgstr "dtype de int32 non pris en charge"
+msgstr "dtype en int32 non supporté"
 
 #: py/objdeque.c
 msgid "empty"
@@ -3054,11 +3054,12 @@ msgstr "séquence vide"
 
 #: py/objstr.c
 msgid "end of format while looking for conversion specifier"
-msgstr "fin de format en cherchant une spécification de conversion"
+msgstr ""
+"fin du format atteinte lors de la recherche du spécificateur de conversion"
 
 #: shared-bindings/alarm/time/TimeAlarm.c
 msgid "epoch_time not supported on this board"
-msgstr "epoch_time n'est pas supporté sur ce panneau"
+msgstr "epoch_time n'est pas supporté sur cet plateforme"
 
 #: ports/nordic/common-hal/busio/UART.c
 #, c-format
@@ -3075,7 +3076,7 @@ msgstr "':' attendu après la spécification de format"
 
 #: py/obj.c
 msgid "expected tuple/list"
-msgstr "un tuple ou une liste est attendu"
+msgstr "demande un tuple ou une liste"
 
 #: py/modthread.c
 msgid "expecting a dict for keyword args"
@@ -3087,11 +3088,11 @@ msgstr "une instruction assembleur est attendue"
 
 #: py/compile.c
 msgid "expecting just a value for set"
-msgstr "une simple valeur est attendue pour l'ensemble 'set'"
+msgstr "au moins une valeur requise pour un 'set'"
 
 #: py/compile.c
 msgid "expecting key:value for dict"
-msgstr "couple clef:valeur attendu pour un dictionnaire 'dict'"
+msgstr "couple clef:valeur requis pour un dictionnaire 'dict'"
 
 #: shared-bindings/msgpack/__init__.c
 msgid "ext_hook is not a function"
@@ -3113,11 +3114,11 @@ msgstr "le fichier doit être un fichier ouvert en mode 'byte'"
 
 #: shared-bindings/traceback/__init__.c
 msgid "file write is not available"
-msgstr "l'écriture de fichier n'est pas disponible"
+msgstr "écriture de fichier indisponible"
 
 #: shared-bindings/storage/__init__.c
 msgid "filesystem must provide mount method"
-msgstr "le system de fichier doit fournir une méthode 'mount'"
+msgstr "le system de fichier requier une méthode 'mount'"
 
 #: extmod/ulab/code/numpy/vector.c
 msgid "first argument must be a callable"
@@ -3141,7 +3142,7 @@ msgstr "le premier argument de super() doit être un type"
 
 #: extmod/ulab/code/scipy/linalg/linalg.c
 msgid "first two arguments must be ndarrays"
-msgstr "les deux premiers paramètres doivent être des ndarrays"
+msgstr "les deux premiers arguments doivent être des ndarrays"
 
 #: extmod/ulab/code/ndarray.c
 msgid "flattening order must be either 'C', or 'F'"
@@ -3153,15 +3154,15 @@ msgstr "le paramêtre flip doit être un ndarray"
 
 #: py/objint.c
 msgid "float too big"
-msgstr "nombre à virgule flottante trop grand"
+msgstr "nombre flottant trop grand"
 
 #: py/nativeglue.c
 msgid "float unsupported"
-msgstr "valeures flotantes non supportées"
+msgstr "flottant non supporté"
 
 #: shared-bindings/_stage/Text.c
 msgid "font must be 2048 bytes long"
-msgstr "la police doit être longue de 2048 octets"
+msgstr "la police doit être de 2048 octets"
 
 #: extmod/moddeflate.c
 msgid "format"
@@ -3169,7 +3170,7 @@ msgstr "format"
 
 #: py/objstr.c
 msgid "format requires a dict"
-msgstr "le format nécessite un dict"
+msgstr "le format requier un dict"
 
 #: py/objdeque.c
 msgid "full"
@@ -3194,7 +3195,7 @@ msgstr "la fonction a le même signe aux extrémités de l'intervalle"
 
 #: extmod/ulab/code/ndarray.c
 msgid "function is defined for ndarrays only"
-msgstr "fonction définie que pour les ndarrays"
+msgstr "la fonction n'est définie que pour les ndarrays"
 
 #: extmod/ulab/code/numpy/carray/carray.c
 msgid "function is implemented for ndarrays only"
@@ -3226,7 +3227,7 @@ msgstr "la fonction prend %d argument(s) positionnels mais %d ont été donné(s
 
 #: py/objgenerator.c
 msgid "generator already executing"
-msgstr "générateur déjà en cours d'exécution"
+msgstr "générateur déjà en exécution"
 
 #: py/objgenerator.c
 msgid "generator ignored GeneratorExit"
@@ -3234,7 +3235,7 @@ msgstr "le générateur a ignoré GeneratorExit"
 
 #: py/objgenerator.c py/runtime.c
 msgid "generator raised StopIteration"
-msgstr "générateur (generator) à surlevé StopIteration"
+msgstr "le générateur a levé l'exception StopIteration"
 
 #: shared-bindings/_stage/Layer.c
 msgid "graphic must be 2048 bytes long"
@@ -3242,7 +3243,7 @@ msgstr "graphic doit être long de 2048 octets"
 
 #: extmod/modhashlib.c
 msgid "hash is final"
-msgstr "hash est final"
+msgstr "le hachage est final"
 
 #: extmod/modheapq.c
 msgid "heap must be a list"
@@ -3258,7 +3259,7 @@ msgstr "identifiant redéfini comme nonlocal"
 
 #: py/compile.c
 msgid "import * not at module level"
-msgstr "import * n'est pas au niveau du module"
+msgstr "import * non au niveau du module"
 
 #: py/persistentcode.c
 msgid "incompatible .mpy arch"
@@ -3301,7 +3302,7 @@ msgstr "les indices doivent être des entiers"
 #: extmod/ulab/code/ndarray.c
 msgid "indices must be integers, slices, or Boolean lists"
 msgstr ""
-"les indices doivent être des entiers, des tranches ou des listes booléennes"
+"les indices doivent être des entiers, des tranches, des listes booléennes"
 
 #: extmod/ulab/code/scipy/optimize/optimize.c
 msgid "initial values must be iterable"
@@ -3317,16 +3318,15 @@ msgstr "l'assembleur doit être une fonction"
 
 #: extmod/ulab/code/numpy/vector.c
 msgid "input and output dimensions differ"
-msgstr "les dimensions de sortie et d'entrée sont différentes"
+msgstr "les dimensions d'entrée et de sortie diffèrent"
 
 #: extmod/ulab/code/numpy/vector.c
 msgid "input and output shapes differ"
-msgstr "les formes d'entrée et de sortie sont différentes"
+msgstr "Les dimensions d'entrée et de sortie diffèrent"
 
 #: extmod/ulab/code/numpy/create.c
 msgid "input argument must be an integer, a tuple, or a list"
-msgstr ""
-"le paramètre entrant doit être un nombre entier, un tuple, ou une liste"
+msgstr "le paramètre entrant doit être un nombre entier, un tuple, une liste"
 
 #: extmod/ulab/code/numpy/fft/fft_tools.c
 msgid "input array length must be power of 2"
@@ -3375,7 +3375,7 @@ msgstr "l'entrée doit être un ndarray"
 
 #: extmod/ulab/code/numpy/carray/carray.c
 msgid "input must be an ndarray, or a scalar"
-msgstr "l'entrée doit être un ndarray, ou un scalaire"
+msgstr "l'entrée doit être un ndarray, un scalaire"
 
 #: extmod/ulab/code/scipy/signal/signal.c
 msgid "input must be one-dimensional"
@@ -3387,11 +3387,11 @@ msgstr "l'entrée doit être une matrice carrée"
 
 #: extmod/ulab/code/numpy/numerical.c
 msgid "input must be tuple, list, range, or ndarray"
-msgstr "l'entrée 'input' doit être tuple, list, range ou ndarray"
+msgstr "l'entrée 'input' doit être un tuple, list, range, ndarray"
 
 #: extmod/ulab/code/numpy/poly.c
 msgid "input vectors must be of equal length"
-msgstr "les vecteurs d'entrée doivent être de longueur égale"
+msgstr "les vecteurs d'entrée doivent être de même longueur"
 
 #: extmod/ulab/code/numpy/approx.c
 msgid "interp is defined for 1D iterables of equal length"
@@ -3444,7 +3444,7 @@ msgstr "clé invalide"
 
 #: py/compile.c
 msgid "invalid micropython decorator"
-msgstr "décorateur micropython invalide"
+msgstr "décorateur Micropython invalide"
 
 #: ports/espressif/common-hal/espcamera/Camera.c
 msgid "invalid setting"
@@ -3452,7 +3452,7 @@ msgstr "réglage invalide"
 
 #: shared-bindings/random/__init__.c
 msgid "invalid step"
-msgstr "pas invalide"
+msgstr "étape invalide"
 
 #: py/compile.c py/parse.c
 msgid "invalid syntax"
@@ -3460,7 +3460,7 @@ msgstr "syntaxe invalide"
 
 #: py/parsenum.c
 msgid "invalid syntax for integer"
-msgstr "syntaxe invalide pour un entier"
+msgstr "Syntaxe entier invalide"
 
 #: py/parsenum.c
 #, c-format
@@ -3487,13 +3487,13 @@ msgstr "les itérations n'ont pas convergé"
 
 #: py/objstr.c
 msgid "join expects a list of str/bytes objects consistent with self object"
-msgstr ""
-"'join' s'attend à une liste d'objets str/bytes cohérents avec l'objet self"
+msgstr "'join' attend une liste d'objets str/bytes cohérents avec l'objet self"
 
 #: py/argcheck.c
 msgid "keyword argument(s) not implemented - use normal args instead"
 msgstr ""
-"paramètre mot clé non implanté - utilisez paramètres normaux à la place"
+"argument(s) de mot-clé non implémenté(s) - utilisez des arguments normaux à "
+"la place"
 
 #: py/emitinlinethumb.c py/emitinlinextensa.c
 msgid "label '%q' not defined"
@@ -3513,7 +3513,7 @@ msgstr "la variable locale '%q' a le type '%q' mais la source est '%q'"
 
 #: py/emitnative.c
 msgid "local '%q' used before type known"
-msgstr "variable locale '%q' utilisée avant d'en connaitre le type"
+msgstr "variable locale '%q' utilisée avant que le type soit connu"
 
 #: py/vm.c
 msgid "local variable referenced before assignment"
@@ -3688,7 +3688,7 @@ msgstr "pas de carte SD"
 
 #: py/vm.c
 msgid "no active exception to reraise"
-msgstr "aucune exception active à relever"
+msgstr "aucune exception active à lever à nouveau"
 
 #: py/compile.c
 msgid "no binding for nonlocal found"
@@ -3696,11 +3696,11 @@ msgstr "pas de lien trouvé pour nonlocal"
 
 #: shared-module/msgpack/__init__.c
 msgid "no default packer"
-msgstr "aucun emballeur par défault"
+msgstr "pas de 'packer' par défaut"
 
 #: extmod/modrandom.c extmod/ulab/code/numpy/random/random.c
 msgid "no default seed"
-msgstr "aucun seed par défaut"
+msgstr "pas de 'seed' par défaut"
 
 #: py/builtinimport.c
 msgid "no module named '%q'"
@@ -3708,11 +3708,11 @@ msgstr "pas de module '%q'"
 
 #: shared-module/sdcardio/SDCard.c
 msgid "no response from SD card"
-msgstr "pas de réponse de la carte SD"
+msgstr "la carte SD ne réponds pas"
 
 #: ports/espressif/common-hal/espcamera/Camera.c py/objobject.c py/runtime.c
 msgid "no such attribute"
-msgstr "pas de tel attribut"
+msgstr "aucun attribut"
 
 #: ports/espressif/common-hal/_bleio/Connection.c
 #: ports/nordic/common-hal/_bleio/Connection.c
@@ -3726,15 +3726,15 @@ msgstr ""
 
 #: py/objstr.c
 msgid "non-hex digit found"
-msgstr "chiffre non-héxadécimale trouvé"
+msgstr "chiffre non-héxa trouvé"
 
 #: ports/nordic/common-hal/_bleio/Adapter.c
 msgid "non-zero timeout must be > 0.01"
-msgstr "le délai non-zéro doit être > 0.01"
+msgstr "le dépassement de délai non-zéro doit être > 0.01"
 
 #: shared-bindings/_bleio/Adapter.c
 msgid "non-zero timeout must be >= interval"
-msgstr "le délai non-zéro doit être >= interval"
+msgstr "le dépassement de délai non-zéro doit être >= interval"
 
 #: shared-bindings/_bleio/UUID.c
 msgid "not a 128-bit UUID"
@@ -3759,24 +3759,25 @@ msgstr "n'est pas implémenté pour les dtype complexes"
 
 #: extmod/ulab/code/numpy/bitwise.c
 msgid "not supported for input types"
-msgstr "non pris en charge pour types d'entrée"
+msgstr "non supporté pour les types d'entrée"
 
 #: extmod/ulab/code/numpy/create.c
 msgid "number of points must be at least 2"
-msgstr "le nombre de points doit être d'au moins 2"
+msgstr "au moins 2 points"
 
 #: py/builtinhelp.c
+#, fuzzy
 msgid "object "
 msgstr "objet "
 
 #: py/obj.c
 #, c-format
 msgid "object '%s' isn't a tuple or list"
-msgstr "l'objet '%s' n'est pas un tuple ou une liste"
+msgstr "l'objet '%s' n'est pas un tuple, une liste"
 
 #: py/obj.c
 msgid "object doesn't support item assignment"
-msgstr "les objets ne supportent pas l'assignation des éléments"
+msgstr "l'objet ne supporte pas l'assignation d'élément"
 
 #: py/obj.c
 msgid "object doesn't support item deletion"
@@ -3784,7 +3785,7 @@ msgstr "l'objet ne supporte pas la suppression d'éléments"
 
 #: py/obj.c
 msgid "object has no len"
-msgstr "l'objet n'a pas de 'len'"
+msgstr "l'objet n'a pas de longeur 'len'"
 
 #: py/obj.c
 msgid "object isn't subscriptable"
@@ -3809,11 +3810,11 @@ msgstr "objet non itérable"
 #: py/obj.c
 #, c-format
 msgid "object of type '%s' has no len()"
-msgstr "l'objet de type '%s' n'a pas de len()"
+msgstr "l'objet de type '%s' n'a pas de longeur len()"
 
 #: py/obj.c
 msgid "object with buffer protocol required"
-msgstr "un objet avec un protocole de tampon est nécessaire"
+msgstr "un objet avec un protocole de buffer est requis"
 
 #: py/objstr.c
 msgid "odd-length string"
@@ -3825,16 +3826,15 @@ msgstr "inactif"
 
 #: extmod/ulab/code/utils/utils.c
 msgid "offset is too large"
-msgstr "offset est trop large"
+msgstr "l'offset est trop large"
 
 #: shared-bindings/dualbank/__init__.c
 msgid "offset must be >= 0"
-msgstr "offset doit être >= 0"
+msgstr "l'offset doit être >= 0"
 
 #: extmod/ulab/code/numpy/create.c
 msgid "offset must be non-negative and no greater than buffer length"
-msgstr ""
-"offset ne doit pas être négatif, et pas plus grand que la taille du tampon"
+msgstr "l'offset peu être négatif, et plus grand que la taille du tampon"
 
 #: ports/nordic/common-hal/audiobusio/PDMIn.c
 #: ports/stm/common-hal/audiobusio/PDMIn.c
@@ -3851,7 +3851,7 @@ msgstr "seuls les ndarrays peuvent être concaténés"
 
 #: ports/stm/common-hal/audiobusio/PDMIn.c
 msgid "only oversample=64 is supported"
-msgstr "seul oversample=64 supporté"
+msgstr "seul oversample=64 est supporté"
 
 #: ports/nordic/common-hal/audiobusio/PDMIn.c
 #: ports/stm/common-hal/audiobusio/PDMIn.c
@@ -4305,7 +4305,7 @@ msgstr "paramètre nommé inattendu"
 #: py/argcheck.c py/bc.c py/objnamedtuple.c
 #: shared-bindings/traceback/__init__.c
 msgid "unexpected keyword argument '%q'"
-msgstr "paramètre nommé '%q' inattendu"
+msgstr "mot clé nommé '%q' inattendu"
 
 #: py/lexer.c
 msgid "unicode name escapes"
@@ -4313,7 +4313,7 @@ msgstr "échappements de nom unicode"
 
 #: py/parse.c
 msgid "unindent doesn't match any outer indent level"
-msgstr "unindent ne correspond pas au niveau d'indentation parent"
+msgstr "'unindent' ne correspond pas au niveau d'indentation parent"
 
 #: py/objstr.c
 #, c-format
@@ -4410,29 +4410,29 @@ msgid ""
 "weights must be a sequence with an odd square number of elements (usually 9 "
 "or 25)"
 msgstr ""
-"poids doit être une séquence avec nombre carré impair d'éléments "
-"(habituellement 9 ou 25)"
+"le poids requier une séquence de nombre carré impair d'éléments ("
+"habituellement 9 ou 25)"
 
 #: shared-bindings/bitmapfilter/__init__.c
 msgid "weights must be an object of type %q, %q, %q, or %q, not %q "
-msgstr "poids doit être un objet de type %q, %q, %q ou %q, pas %q. "
+msgstr "le poids requier un objet de type %q, %q, %q ou %q, pas %q. "
 
 #: shared-bindings/is31fl3741/FrameBuffer.c
 msgid "width must be greater than zero"
-msgstr "width doit être plus que zero"
+msgstr "width doit être plus grand que zero"
 
 #: ports/espressif/common-hal/wifi/Radio.c
 #: ports/raspberrypi/common-hal/wifi/Radio.c
 msgid "wifi is not enabled"
-msgstr "wifi n'est pas activé"
+msgstr "le WiFi est inactif"
 
 #: ports/raspberrypi/common-hal/wifi/Monitor.c
 msgid "wifi.Monitor not available"
-msgstr "wifi.Monitor non disponible"
+msgstr "wifi.Monitor indisponible"
 
 #: shared-bindings/_bleio/Adapter.c
 msgid "window must be <= interval"
-msgstr "la fenêtre (window) doit être <= intervalle (interval)"
+msgstr "la fenêtre (window) doit être <= à l'intervalle (interval)"
 
 #: extmod/ulab/code/numpy/numerical.c
 msgid "wrong axis index"
@@ -4440,7 +4440,7 @@ msgstr "index d'axe incorrecte"
 
 #: extmod/ulab/code/numpy/create.c
 msgid "wrong axis specified"
-msgstr "axe incorrecte spécifiée"
+msgstr "axe spécifiée incorrect"
 
 #: extmod/ulab/code/numpy/io/io.c
 msgid "wrong dtype"
