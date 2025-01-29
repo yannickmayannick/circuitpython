@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 12:55-0600\n"
-"PO-Revision-Date: 2025-01-28 12:49+0000\n"
+"PO-Revision-Date: 2025-01-29 13:02+0000\n"
 "Last-Translator: Franck Sauvé <fksauve@gmail.com>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -3909,31 +3909,31 @@ msgstr ""
 
 #: extmod/ulab/code/utils/utils.c
 msgid "out array is too small"
-msgstr "matrice de sortie est trop petite"
+msgstr "la matrice de sortie est trop petite"
 
 #: extmod/ulab/code/numpy/random/random.c
 msgid "out has wrong type"
-msgstr "sortie est de type incorrect"
+msgstr "la sortie est de type incorrect"
 
 #: extmod/ulab/code/numpy/vector.c
 msgid "out keyword is not supported for complex dtype"
-msgstr "mot clé out non pris en charge pour dtype complexe"
+msgstr "mot clé 'out' non pris en charge pour 'dtype' complexe"
 
 #: extmod/ulab/code/numpy/vector.c
 msgid "out keyword is not supported for function"
-msgstr "mot clé out non pris en charge pour function"
+msgstr "mot clé 'out 'non pris en charge pour 'function'"
 
 #: extmod/ulab/code/utils/utils.c
 msgid "out must be a float dense array"
-msgstr "la matrice sortante doit être de type float"
+msgstr "la matrice sortante doit être de type floattant"
 
 #: extmod/ulab/code/numpy/vector.c
 msgid "out must be an ndarray"
-msgstr "out doit être un ndarray"
+msgstr "'out' doit être un ndarray"
 
 #: extmod/ulab/code/numpy/vector.c
 msgid "out must be of float dtype"
-msgstr "out doit être de dtype float"
+msgstr "'out' doit être de dtype float"
 
 #: shared-bindings/bitmaptools/__init__.c
 msgid "out of range of target"
@@ -3970,7 +3970,7 @@ msgstr "les paramètres doivent être des registres dans la séquence r0 à r3"
 
 #: extmod/vfs_posix_file.c
 msgid "poll on file not available on win32"
-msgstr "le polling sur un fichier n'est pas disponible sous win32"
+msgstr "Le 'polling' sur un fichier est indisponible sous Win32"
 
 #: ports/espressif/common-hal/pulseio/PulseIn.c
 msgid "pop from an empty PulseIn"
@@ -3991,11 +3991,11 @@ msgstr "port doit être >= 0"
 
 #: py/compile.c
 msgid "positional arg after **"
-msgstr "paramètre positionnel après **"
+msgstr "paramètre de positionaprès **"
 
 #: py/compile.c
 msgid "positional arg after keyword arg"
-msgstr "argument positionnel après argument mot clé"
+msgstr "argument de position après un argument mot clé"
 
 #: py/objint_mpz.c
 msgid "pow() 3rd argument cannot be 0"
@@ -4007,7 +4007,7 @@ msgstr "pow() avec 3 arguments nécessite des entiers"
 
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 msgid "pull masks conflict with direction masks"
-msgstr "masque pull est en conflit avec les masques de direction"
+msgstr "le masque pull est en conflit avec les masques de direction"
 
 #: py/parse.c
 msgid "raw f-strings are not supported"
@@ -4041,7 +4041,7 @@ msgstr "return attendait '%q' mais a reçu '%q'"
 #: shared-bindings/rgbmatrix/RGBMatrix.c
 #, c-format
 msgid "rgb_pins[%d] duplicates another pin assignment"
-msgstr "rgb_pins[%d] duplique une autre affectation de broches"
+msgstr "rgb_pins[%d] duplique une autre assignation de pin"
 
 #: shared-bindings/rgbmatrix/RGBMatrix.c
 #, c-format
@@ -4063,7 +4063,7 @@ msgstr "taux d'échantillonage hors intervalle"
 
 #: py/modmicropython.c
 msgid "schedule queue full"
-msgstr "file de schédule pleine"
+msgstr "file d'attente 'schedule ' de planification pleine"
 
 #: py/builtinimport.c
 msgid "script compilation not supported"
@@ -4075,7 +4075,7 @@ msgstr "set non-supporté"
 
 #: extmod/ulab/code/numpy/random/random.c
 msgid "shape must be None, and integer or a tuple of integers"
-msgstr "shape doit être None et nombre entier ou un tuple de nombres entiers"
+msgstr "la forme doit être None, un entier ou un tuple d'entier"
 
 #: extmod/ulab/code/ndarray.c
 msgid "shape must be integer or tuple of integers"
@@ -4083,19 +4083,19 @@ msgstr "la forme doit être un entier ou un tuple d'entiers"
 
 #: shared-module/msgpack/__init__.c
 msgid "short read"
-msgstr "donnée trop petite"
+msgstr "lecture incomplète"
 
 #: py/objstr.c
 msgid "sign not allowed in string format specifier"
-msgstr "signe non autorisé dans les spéc. de formats de chaînes de caractères"
+msgstr "signe non autorisé dans le spécificateur de format de chaîne"
 
 #: py/objstr.c
 msgid "sign not allowed with integer format specifier 'c'"
-msgstr "signe non autorisé avec la spéc. de format d'entier 'c'"
+msgstr "signe non autorisé avec le spécificateur de format d'entier 'c'"
 
 #: extmod/ulab/code/ulab_tools.c
 msgid "size is defined for ndarrays only"
-msgstr "la taille n'est définie que pour les ndarrays"
+msgstr "la taille est définie uniquement pour les ndarrays"
 
 #: extmod/ulab/code/numpy/random/random.c
 msgid "size must match out.shape when used together"
@@ -4107,7 +4107,7 @@ msgstr "slice non-supporté"
 
 #: py/objint.c py/sequence.c
 msgid "small int overflow"
-msgstr "dépassement de capacité d'un entier court"
+msgstr "dépassement d'un petit entier"
 
 #: main.c
 msgid "soft reboot\n"
@@ -4119,7 +4119,7 @@ msgstr "le paramètre de «sort» doit être un ndarray"
 
 #: extmod/ulab/code/scipy/signal/signal.c
 msgid "sos array must be of shape (n_section, 6)"
-msgstr "la matrice sos doit être de forme (n_section, 6)"
+msgstr "la matrice 'sos' doit être de forme (n_section, 6)"
 
 #: extmod/ulab/code/scipy/signal/signal.c
 msgid "sos[:, 3] should be all ones"
@@ -4167,7 +4167,7 @@ msgstr "arguments de type chaine de caractères sans encodage"
 
 #: py/objstrunicode.c
 msgid "string index out of range"
-msgstr "index de chaîne hors gamme"
+msgstr "indice de chaîne hors limites"
 
 #: py/objstrunicode.c
 #, c-format
@@ -4209,11 +4209,11 @@ msgstr "délai d'expiration en attente de l'index de pulsation"
 
 #: shared-module/sdcardio/SDCard.c
 msgid "timeout waiting for v1 card"
-msgstr "délai d'expiration dépassé en attendant une carte v1"
+msgstr "délai d'attente dépassé pour la carte v1"
 
 #: shared-module/sdcardio/SDCard.c
 msgid "timeout waiting for v2 card"
-msgstr "délai d'expiration dépassé en attendant une carte v2"
+msgstr "délai d'attente dépassé pour la carte v2"
 
 #: ports/stm/common-hal/pwmio/PWMOut.c
 msgid "timer re-init"
@@ -4225,11 +4225,11 @@ msgstr "timestamp hors intervalle pour le 'time_t' de la plateforme"
 
 #: extmod/ulab/code/ndarray.c
 msgid "tobytes can be invoked for dense arrays only"
-msgstr "tobytes ne peut être appelée que pour des matrices dense"
+msgstr "'tobytes' ne peut être appelée que pour des matrices dense"
 
 #: py/compile.c
 msgid "too many args"
-msgstr "args trop nombreux"
+msgstr "argsuments trop nombreux"
 
 #: extmod/ulab/code/ndarray.c extmod/ulab/code/numpy/create.c
 msgid "too many dimensions"
@@ -4241,7 +4241,7 @@ msgstr "trop d'indices"
 
 #: py/asmthumb.c
 msgid "too many locals for native method"
-msgstr "trop de locals pour une méthode native"
+msgstr "trop de 'locals' pour une méthode native"
 
 #: py/runtime.c
 #, c-format
