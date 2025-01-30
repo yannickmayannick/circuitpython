@@ -351,8 +351,8 @@ audioio_get_buffer_result_t audiodelays_echo_get_buffer(audiodelays_echo_obj_t *
                         echo = echo_buffer[echo_buffer_pos >> 8];
                         next_buffer_pos = echo_buffer_pos + self->echo_buffer_rate;
 
-                        word = (int16_t)(echo * decay);
                         for (uint32_t j = echo_buffer_pos >> 8; j < next_buffer_pos >> 8; j++) {
+                            word = (int16_t)(echo_buffer[j % echo_buf_len] * decay);
                             echo_buffer[j % echo_buf_len] = word;
                         }
                     } else {
@@ -421,33 +421,33 @@ audioio_get_buffer_result_t audiodelays_echo_get_buffer(audiodelays_echo_obj_t *
                     if (self->freq_shift) {
                         echo = echo_buffer[echo_buffer_pos >> 8];
                         next_buffer_pos = echo_buffer_pos + self->echo_buffer_rate;
-                        word = (int32_t)(echo * decay + sample_word);
                     } else {
                         echo = echo_buffer[self->echo_buffer_read_pos++];
                         word = (int32_t)(echo * decay + sample_word);
                     }
 
                     if (MP_LIKELY(self->bits_per_sample == 16)) {
-                        word = synthio_mix_down_sample(word, SYNTHIO_MIX_DOWN_SCALE(2));
                         if (self->freq_shift) {
                             for (uint32_t j = echo_buffer_pos >> 8; j < next_buffer_pos >> 8; j++) {
+                                word = (int32_t)(echo_buffer[j % echo_buf_len] * decay + sample_word);
+                                word = synthio_mix_down_sample(word, SYNTHIO_MIX_DOWN_SCALE(2));
                                 echo_buffer[j % echo_buf_len] = (int16_t)word;
                             }
                         } else {
+                            word = synthio_mix_down_sample(word, SYNTHIO_MIX_DOWN_SCALE(2));
                             echo_buffer[self->echo_buffer_write_pos++] = (int16_t)word;
                         }
                     } else {
-                        // Do not have mix_down for 8 bit so just hard cap samples into 1 byte
-                        if (word > 127) {
-                            word = 127;
-                        } else if (word < -128) {
-                            word = -128;
-                        }
                         if (self->freq_shift) {
                             for (uint32_t j = echo_buffer_pos >> 8; j < next_buffer_pos >> 8; j++) {
+                                word = (int32_t)(echo_buffer[j % echo_buf_len] * decay + sample_word);
+                                // Do not have mix_down for 8 bit so just hard cap samples into 1 byte
+                                word = MIN(MAX(word, -128), 127);
                                 echo_buffer[j % echo_buf_len] = (int8_t)word;
                             }
                         } else {
+                            // Do not have mix_down for 8 bit so just hard cap samples into 1 byte
+                            word = MIN(MAX(word, -128), 127);
                             echo_buffer[self->echo_buffer_write_pos++] = (int8_t)word;
                         }
                     }
