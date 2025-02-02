@@ -16,7 +16,7 @@
 
 #define DEFAULT_SAMPLE_RATE 32000
 
-typedef void (*audioout_sample_convert_func_t)(void *in_buffer, size_t in_buffer_size, uint8_t *out_buffer, uint32_t *out_buffer_size);
+typedef bool (*audioout_sample_convert_func_t)(void *in_buffer, size_t in_buffer_size, uint8_t **out_buffer, uint32_t *out_buffer_size);
 
 typedef struct {
     uint8_t *ptr;
@@ -41,6 +41,7 @@ typedef struct {
     uint8_t put_buffer_index;
     buf_info_t dma_buffers[NUM_DMA_BUFFERS + 1];
     background_callback_t callback;
-    uint8_t scratch_buffer[DMA_BUFFER_SIZE];
+    uint8_t *scratch_buffer;
+    size_t scratch_buffer_size;
     audioout_sample_convert_func_t samples_convert;
 } audioio_audioout_obj_t;
