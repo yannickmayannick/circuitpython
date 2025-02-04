@@ -35,14 +35,6 @@ def _all_submodules():
 all_submodules = _all_submodules()
 
 
-def matching_submodules(s):
-    if s.endswith("/"):
-        return [m for m in all_submodules if m.startswith(s)]
-    elif s not in all_submodules:
-        raise ValueError(f"{s!r} is not a submodule")
-    return [s]
-
-
 # Submodules needed by port builds outside of their ports directory.
 # Should we try and detect these?
 PORT_DEPS = {

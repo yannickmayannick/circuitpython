@@ -80,6 +80,7 @@
 //|         that the socket closes when the stream ends.
 //|         """
 //|         ...
+//|
 
 static mp_obj_t audiomp3_mp3file_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *args) {
     mp_arg_check_num(n_args, n_kw, 1, 2, false);
@@ -112,6 +113,7 @@ static mp_obj_t audiomp3_mp3file_make_new(const mp_obj_type_t *type, size_t n_ar
 //|     def deinit(self) -> None:
 //|         """Deinitialises the MP3 and releases all memory resources for reuse."""
 //|         ...
+//|
 static mp_obj_t audiomp3_mp3file_deinit(mp_obj_t self_in) {
     audiomp3_mp3file_obj_t *self = MP_OBJ_TO_PTR(self_in);
     common_hal_audiomp3_mp3file_deinit(self);
@@ -128,12 +130,14 @@ static void check_for_deinit(audiomp3_mp3file_obj_t *self) {
 //|     def __enter__(self) -> MP3Decoder:
 //|         """No-op used by Context Managers."""
 //|         ...
+//|
 //  Provided by context manager helper.
 
 //|     def __exit__(self) -> None:
 //|         """Automatically deinitializes the hardware when exiting a context. See
 //|         :ref:`lifetime-and-contextmanagers` for more info."""
 //|         ...
+//|
 static mp_obj_t audiomp3_mp3file_obj___exit__(size_t n_args, const mp_obj_t *args) {
     (void)n_args;
     common_hal_audiomp3_mp3file_deinit(args[0]);
@@ -143,6 +147,7 @@ static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(audiomp3_mp3file___exit___obj, 4, 4, 
 
 //|     file: typing.BinaryIO
 //|     """File to play back."""
+//|
 static mp_obj_t audiomp3_mp3file_obj_get_file(mp_obj_t self_in) {
     audiomp3_mp3file_obj_t *self = MP_OBJ_TO_PTR(self_in);
     check_for_deinit(self);
@@ -166,6 +171,7 @@ MP_DEFINE_CONST_FUN_OBJ_2(audiomp3_mp3file_set_file_obj, audiomp3_mp3file_obj_se
 //|     def open(self, filepath: str) -> None:
 //|         """Takes in the name of a mp3 file, opens it, and replaces the old playback file."""
 //|         ...
+//|
 static mp_obj_t audiomp3_mp3file_obj_open(mp_obj_t self_in, mp_obj_t path) {
     audiomp3_mp3file_obj_t *self = MP_OBJ_TO_PTR(self_in);
     check_for_deinit(self);
@@ -244,6 +250,7 @@ MP_PROPERTY_GETTER(audiomp3_mp3file_rms_level_obj,
 
 //|     samples_decoded: int
 //|     """The number of audio samples decoded from the current file. (read only)"""
+//|
 //|
 static mp_obj_t audiomp3_mp3file_obj_get_samples_decoded(mp_obj_t self_in) {
     audiomp3_mp3file_obj_t *self = MP_OBJ_TO_PTR(self_in);

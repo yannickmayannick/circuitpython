@@ -62,6 +62,7 @@
 //|             time.sleep(1)
 //|           print("stopped")"""
 //|         ...
+//|
 static mp_obj_t audiomixer_mixer_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *all_args) {
     enum { ARG_voice_count, ARG_buffer_size, ARG_channel_count, ARG_bits_per_sample, ARG_samples_signed, ARG_sample_rate };
     static const mp_arg_t allowed_args[] = {
@@ -98,6 +99,7 @@ static mp_obj_t audiomixer_mixer_make_new(const mp_obj_type_t *type, size_t n_ar
 //|     def deinit(self) -> None:
 //|         """Deinitialises the Mixer and releases any hardware resources for reuse."""
 //|         ...
+//|
 static mp_obj_t audiomixer_mixer_deinit(mp_obj_t self_in) {
     audiomixer_mixer_obj_t *self = MP_OBJ_TO_PTR(self_in);
     common_hal_audiomixer_mixer_deinit(self);
@@ -114,12 +116,14 @@ static void check_for_deinit(audiomixer_mixer_obj_t *self) {
 //|     def __enter__(self) -> Mixer:
 //|         """No-op used by Context Managers."""
 //|         ...
+//|
 //  Provided by context manager helper.
 
 //|     def __exit__(self) -> None:
 //|         """Automatically deinitializes the hardware when exiting a context. See
 //|         :ref:`lifetime-and-contextmanagers` for more info."""
 //|         ...
+//|
 static mp_obj_t audiomixer_mixer_obj___exit__(size_t n_args, const mp_obj_t *args) {
     (void)n_args;
     common_hal_audiomixer_mixer_deinit(args[0]);
@@ -158,6 +162,7 @@ MP_PROPERTY_GETTER(audiomixer_mixer_sample_rate_obj,
 //|
 //|        >>> mixer.voice
 //|        (<MixerVoice>,)"""
+//|
 static mp_obj_t audiomixer_mixer_obj_get_voice(mp_obj_t self_in) {
     audiomixer_mixer_obj_t *self = MP_OBJ_TO_PTR(self_in);
     check_for_deinit(self);
@@ -178,6 +183,7 @@ MP_PROPERTY_GETTER(audiomixer_mixer_voice_obj,
 //|
 //|         The sample must match the Mixer's encoding settings given in the constructor."""
 //|         ...
+//|
 static mp_obj_t audiomixer_mixer_obj_play(size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
     enum { ARG_sample, ARG_voice, ARG_loop };
     static const mp_arg_t allowed_args[] = {
@@ -205,6 +211,7 @@ MP_DEFINE_CONST_FUN_OBJ_KW(audiomixer_mixer_play_obj, 1, audiomixer_mixer_obj_pl
 //|     def stop_voice(self, voice: int = 0) -> None:
 //|         """Stops playback of the sample on the given voice."""
 //|         ...
+//|
 //|
 static mp_obj_t audiomixer_mixer_obj_stop_voice(size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
     enum { ARG_voice };

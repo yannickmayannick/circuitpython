@@ -60,6 +60,7 @@ static zephyr_serial_uart_obj_t *native_uart(mp_obj_t uart_obj) {
 //|     def deinit(self) -> None:
 //|         """Deinitialises the UART and releases any hardware resources for reuse."""
 //|         ...
+//|
 static mp_obj_t _zephyr_serial_uart_obj_deinit(mp_obj_t self_in) {
     zephyr_serial_uart_obj_t *self = native_uart(self_in);
     zephyr_serial_uart_deinit(self);
@@ -76,12 +77,14 @@ static void check_for_deinit(zephyr_serial_uart_obj_t *self) {
 //|     def __enter__(self) -> UART:
 //|         """No-op used by Context Managers."""
 //|         ...
+//|
 //  Provided by context manager helper.
 
 //|     def __exit__(self) -> None:
 //|         """Automatically deinitializes the hardware when exiting a context. See
 //|         :ref:`lifetime-and-contextmanagers` for more info."""
 //|         ...
+//|
 static mp_obj_t _zephyr_serial_uart_obj___exit__(size_t n_args, const mp_obj_t *args) {
     (void)n_args;
     zephyr_serial_uart_deinit(MP_OBJ_TO_PTR(args[0]));
@@ -104,6 +107,7 @@ static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(_zephyr_serial_uart___exit___obj, 4, 
 //|         :return: Data read
 //|         :rtype: bytes or None"""
 //|         ...
+//|
 
 //|     def readinto(self, buf: WriteableBuffer) -> Optional[int]:
 //|         """Read bytes into the ``buf``. Read at most ``len(buf)`` bytes.
@@ -113,6 +117,7 @@ static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(_zephyr_serial_uart___exit___obj, 4, 
 //|
 //|         *New in CircuitPython 4.0:* No length parameter is permitted."""
 //|         ...
+//|
 
 //|     def readline(self) -> bytes:
 //|         """Read a line, ending in a newline character, or
@@ -123,6 +128,7 @@ static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(_zephyr_serial_uart___exit___obj, 4, 
 //|         :return: the line read
 //|         :rtype: bytes or None"""
 //|         ...
+//|
 
 //|     def write(self, buf: ReadableBuffer) -> Optional[int]:
 //|         """Write the buffer of bytes to the bus.
@@ -132,6 +138,7 @@ static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(_zephyr_serial_uart___exit___obj, 4, 
 //|           :return: the number of bytes written
 //|           :rtype: int or None"""
 //|         ...
+//|
 
 // These three methods are used by the shared stream methods.
 static mp_uint_t _zephyr_serial_uart_read(mp_obj_t self_in, void *buf_in, mp_uint_t size, int *errcode) {
@@ -212,6 +219,7 @@ MP_PROPERTY_GETTER(_zephyr_serial_uart_in_waiting_obj,
 
 //|     timeout: float
 //|     """The current timeout, in seconds (float)."""
+//|
 static mp_obj_t _zephyr_serial_uart_obj_get_timeout(mp_obj_t self_in) {
     zephyr_serial_uart_obj_t *self = native_uart(self_in);
     check_for_deinit(self);
@@ -237,6 +245,7 @@ MP_PROPERTY_GETSET(_zephyr_serial_uart_timeout_obj,
 //|     def reset_input_buffer(self) -> None:
 //|         """Discard any unread characters in the input buffer."""
 //|         ...
+//|
 //|
 static mp_obj_t _zephyr_serial_uart_obj_reset_input_buffer(mp_obj_t self_in) {
     zephyr_serial_uart_obj_t *self = native_uart(self_in);

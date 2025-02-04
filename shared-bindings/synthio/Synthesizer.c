@@ -25,6 +25,7 @@
 //| LFOOrLFOSequence = Union["LFO", Sequence["LFO"]]
 //| """An LFO or a sequence of LFOs"""
 //|
+//|
 //| class Synthesizer:
 //|     def __init__(
 //|         self,
@@ -47,6 +48,7 @@
 //|         :param ReadableBuffer waveform: A single-cycle waveform. Default is a 50% duty cycle square wave. If specified, must be a ReadableBuffer of type 'h' (signed 16 bit)
 //|         :param Optional[Envelope] envelope: An object that defines the loudness of a note over time. The default envelope, `None` provides no ramping, voices turn instantly on and off.
 //|         """
+//|
 static mp_obj_t synthio_synthesizer_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *all_args) {
     enum { ARG_sample_rate, ARG_channel_count, ARG_waveform, ARG_envelope };
     static const mp_arg_t allowed_args[] = {
@@ -81,6 +83,7 @@ static void check_for_deinit(synthio_synthesizer_obj_t *self) {
 //|         Pressing a note that was already pressed has no effect.
 //|
 //|         :param NoteOrNoteSequence press: Any sequence of notes."""
+//|
 static mp_obj_t synthio_synthesizer_press(mp_obj_t self_in, mp_obj_t press) {
     synthio_synthesizer_obj_t *self = MP_OBJ_TO_PTR(self_in);
     check_for_deinit(self);
@@ -94,6 +97,7 @@ static MP_DEFINE_CONST_FUN_OBJ_2(synthio_synthesizer_press_obj, synthio_synthesi
 //|         Releasing a note that was already released has no effect.
 //|
 //|         :param NoteOrNoteSequence release: Any sequence of notes."""
+//|
 static mp_obj_t synthio_synthesizer_release(mp_obj_t self_in, mp_obj_t release) {
     synthio_synthesizer_obj_t *self = MP_OBJ_TO_PTR(self_in);
     check_for_deinit(self);
@@ -127,6 +131,7 @@ static MP_DEFINE_CONST_FUN_OBJ_2(synthio_synthesizer_release_obj, synthio_synthe
 //|
 //|         Note: for compatibility, ``release_then_press`` may be used as an alias
 //|         for this function. This compatibility name will be removed in 9.0."""
+//|
 static mp_obj_t synthio_synthesizer_change(mp_uint_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
     enum { ARG_release, ARG_press, ARG_retrigger };
     static const mp_arg_t allowed_args[] = {
@@ -155,6 +160,7 @@ static MP_DEFINE_CONST_FUN_OBJ_KW(synthio_synthesizer_change_obj, 1, synthio_syn
 //|         attack phase with an initial amplitude of 0.
 //|
 //|         :param NoteOrNoteSequence press: Any sequence of notes."""
+//|
 static mp_obj_t synthio_synthesizer_release_all_then_press(mp_obj_t self_in, mp_obj_t press) {
     synthio_synthesizer_obj_t *self = MP_OBJ_TO_PTR(self_in);
     check_for_deinit(self);
@@ -167,6 +173,7 @@ static MP_DEFINE_CONST_FUN_OBJ_2(synthio_synthesizer_release_all_then_press_obj,
 //
 //|     def release_all(self) -> None:
 //|         """Turn any currently-playing notes off"""
+//|
 static mp_obj_t synthio_synthesizer_release_all(mp_obj_t self_in) {
     synthio_synthesizer_obj_t *self = MP_OBJ_TO_PTR(self_in);
     check_for_deinit(self);
@@ -178,6 +185,7 @@ static MP_DEFINE_CONST_FUN_OBJ_1(synthio_synthesizer_release_all_obj, synthio_sy
 //|     def deinit(self) -> None:
 //|         """Deinitialises the object and releases any memory resources for reuse."""
 //|         ...
+//|
 static mp_obj_t synthio_synthesizer_deinit(mp_obj_t self_in) {
     synthio_synthesizer_obj_t *self = MP_OBJ_TO_PTR(self_in);
     common_hal_synthio_synthesizer_deinit(self);
@@ -188,12 +196,14 @@ static MP_DEFINE_CONST_FUN_OBJ_1(synthio_synthesizer_deinit_obj, synthio_synthes
 //|     def __enter__(self) -> Synthesizer:
 //|         """No-op used by Context Managers."""
 //|         ...
+//|
 //  Provided by context manager helper.
 //|
 //|     def __exit__(self) -> None:
 //|         """Automatically deinitializes the hardware when exiting a context. See
 //|         :ref:`lifetime-and-contextmanagers` for more info."""
 //|         ...
+//|
 static mp_obj_t synthio_synthesizer_obj___exit__(size_t n_args, const mp_obj_t *args) {
     (void)n_args;
     common_hal_synthio_synthesizer_deinit(args[0]);
@@ -255,6 +265,7 @@ MP_PROPERTY_GETTER(synthio_synthesizer_pressed_obj,
 //|         If the note is currently playing (including in the release phase), the returned value gives the current envelope state and the current envelope value.
 //|
 //|         If the note is not playing on this synthesizer, returns the tuple ``(None, 0.0)``."""
+//|
 static mp_obj_t synthio_synthesizer_obj_note_info(mp_obj_t self_in, mp_obj_t note) {
     synthio_synthesizer_obj_t *self = MP_OBJ_TO_PTR(self_in);
     check_for_deinit(self);
@@ -295,6 +306,7 @@ MP_PROPERTY_GETTER(synthio_synthesizer_blocks_obj,
 //|
 //|         ``Q`` controls how peaked the response will be at the cutoff frequency. A large value makes the response more peaked.
 //|         """
+//|
 
 enum passfilter_arg_e { ARG_f0, ARG_Q };
 
@@ -336,6 +348,7 @@ MP_DEFINE_CONST_FUN_OBJ_KW(synthio_synthesizer_lpf_fun_obj, 1, synthio_synthesiz
 //|
 //|         ``Q`` controls how peaked the response will be at the cutoff frequency. A large value makes the response more peaked.
 //|         """
+//|
 
 static mp_obj_t synthio_synthesizer_hpf(size_t n_pos, const mp_obj_t *pos_args, mp_map_t *kw_args) {
     mp_arg_val_t args[MP_ARRAY_SIZE(passfilter_properties)];
@@ -366,6 +379,7 @@ static mp_obj_t synthio_synthesizer_hpf(size_t n_pos, const mp_obj_t *pos_args, 
 //|
 //|         The coefficients are scaled such that the filter has a 0dB peak gain.
 //|         """
+//|
 //|
 
 MP_DEFINE_CONST_FUN_OBJ_KW(synthio_synthesizer_hpf_fun_obj, 1, synthio_synthesizer_hpf);

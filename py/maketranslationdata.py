@@ -90,8 +90,8 @@ def translate(translation_file, i18ns):
         translations = []
         for original in i18ns:
             unescaped = original
-            for s in C_ESCAPES:
-                unescaped = unescaped.replace(C_ESCAPES[s], s)
+            for s, replacement in C_ESCAPES.items():
+                unescaped = unescaped.replace(replacement, s)
             if original == "en_US":
                 translation = table.info()["language"]
             else:
@@ -593,12 +593,15 @@ def output_translation_data(encoding_table, i18ns, out):
         total_text_compressed_size += len(compressed)
         decompressed = decompress(encoding_table, compressed, encoded_length_bits)
         assert decompressed == translation, (decompressed, translation)
-        for c in C_ESCAPES:
-            decompressed = decompressed.replace(c, C_ESCAPES[c])
+        for c, replacement in C_ESCAPES.items():
+            decompressed = decompressed.replace(c, replacement)
         formatted = ["{:d}".format(x) for x in compressed]
         out.write(
             "const struct compressed_string translation{} = {{ .data = {}, .tail = {{ {} }} }}; // {}\n".format(
-                i, formatted[0], ", ".join(formatted[1:]), original, decompressed
+                i,
+                formatted[0],
+                ", ".join(formatted[1:]),
+                original,
             )
         )
         total_text_size += len(translation.encode("utf-8"))

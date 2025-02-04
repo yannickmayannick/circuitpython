@@ -502,7 +502,7 @@ async def build_circuitpython():
             not autogen_board_info_fn.exists()
             or autogen_board_info_fn.read_text() != tomlkit.dumps(autogen_board_info)
         ):
-            logger.error(f"autogen_board_info.toml is out of date.")
+            logger.error("autogen_board_info.toml is out of date.")
             raise RuntimeError(
                 f"autogen_board_info.toml is missing or out of date. Please run `make BOARD={board}` locally and commit {autogen_board_info_fn}."
             )
@@ -519,7 +519,6 @@ async def build_circuitpython():
         source_files.append(file)
     qstr_flags = "-DNO_QSTR"
     async with asyncio.TaskGroup() as tg:
-        extra_source_flags = {}
         for source_file in source_files:
             tg.create_task(
                 preprocess_and_split_defs(

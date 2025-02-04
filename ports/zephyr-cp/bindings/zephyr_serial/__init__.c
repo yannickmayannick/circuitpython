@@ -15,8 +15,7 @@
 
 #include "py/runtime.h"
 
-//| """Zephyr UART driver for fixed busses.
-//| """
+//| """Zephyr UART driver for fixed busses."""
 
 static const mp_rom_map_elem_t zephyr_serial_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR___name__), MP_ROM_QSTR(MP_QSTR_zephyr_serial) },

@@ -93,7 +93,7 @@ CONNECTORS = {
 
 
 @cpbuild.run_in_thread
-def zephyr_dts_to_cp_board(builddir, zephyrbuilddir):
+def zephyr_dts_to_cp_board(builddir, zephyrbuilddir):  # noqa: C901
     board_dir = builddir / "board"
     # Auto generate board files from device tree.
 
@@ -124,8 +124,6 @@ def zephyr_dts_to_cp_board(builddir, zephyrbuilddir):
     # board_id_yaml = yaml.safe_load(board_id_yaml.read_text())
     # print(board_id_yaml)
     # board_name = board_id_yaml["name"]
-
-    enabled_modules = []
 
     dts = zephyrbuilddir / "zephyr.dts"
     edt_pickle = dtlib.DT(dts)
@@ -291,7 +289,7 @@ def zephyr_dts_to_cp_board(builddir, zephyrbuilddir):
     board_pin_mapping = []
     for ioport in sorted(ioports.keys()):
         for num in ioports[ioport]:
-            pin_object_name = f"P{ioport[len(shared_prefix):].upper()}_{num:02d}"
+            pin_object_name = f"P{ioport[len(shared_prefix) :].upper()}_{num:02d}"
             if status_led and (ioport, num) == status_led:
                 status_led = pin_object_name
             pin_defs.append(

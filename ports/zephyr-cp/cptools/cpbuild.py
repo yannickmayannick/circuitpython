@@ -318,7 +318,7 @@ def parse_depfile(f):
         if dep.startswith("/"):
             extradeps.append(pathlib.Path(dep))
         else:
-            extradeps.append(self.srcdir / dep)
+            raise RuntimeError(f"Unexpected depfile entry {dep}")
 
 
 class Compiler:
@@ -396,41 +396,4 @@ class Compiler:
             description=f"Create archive {output_file.relative_to(self.srcdir)}",
             working_directory=self.srcdir,
             extradeps=objects,
-        )
-
-    async def link(
-        self,
-        objects: list[pathlib.Path],
-        output_file: pathlib.Path,
-        linker_script: pathlib.Path,
-        flags: list[str] = [],
-        print_memory_use=True,
-        output_map_file=True,
-        gc_sections=True,
-    ):
-        output_file.parent.mkdir(parents=True, exist_ok=True)
-        link_flags = []
-        if print_memory_use:
-            link_flags.append("-Wl,--print-memory-usage")
-        if output_map_file:
-            link_flags.append(
-                "-Wl,-Map="
-                + str(output_file.with_suffix(".elf.map").relative_to(caller_directory))
-            )
-        if gc_sections:
-            link_flags.append("-Wl,--gc-sections")
-        await run_command(
-            [
-                self.c_compiler,
-                *link_flags,
-                *flags,
-                *objects,
-                "-fuse-ld=lld",
-                "-T",
-                linker_script,
-                "-o",
-                output_file,
-            ],
-            description=f"Link {output_file.relative_to(cwd)}",
-            working_directory=caller_directory,
         )

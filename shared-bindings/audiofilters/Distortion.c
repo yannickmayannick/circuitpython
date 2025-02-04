@@ -31,6 +31,7 @@
 //|     WAVESHAPE: DistortionMode
 //|     """Waveshaper distortions are used mainly by electronic musicians to achieve an extra-abrasive sound."""
 //|
+//|
 
 MAKE_ENUM_VALUE(audiofilters_distortion_mode_type, distortion_mode, CLIP, DISTORTION_MODE_CLIP);
 MAKE_ENUM_VALUE(audiofilters_distortion_mode_type, distortion_mode, LOFI, DISTORTION_MODE_LOFI);
@@ -110,6 +111,7 @@ static audiofilters_distortion_mode validate_distortion_mode(mp_obj_t obj, qstr 
 //|               synth.release(note)
 //|               time.sleep(5)"""
 //|         ...
+//|
 
 static mp_obj_t audiofilters_distortion_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *all_args) {
     enum { ARG_drive, ARG_pre_gain, ARG_post_gain, ARG_mode, ARG_soft_clip, ARG_mix, ARG_buffer_size, ARG_sample_rate, ARG_bits_per_sample, ARG_samples_signed, ARG_channel_count, };
@@ -150,6 +152,7 @@ static mp_obj_t audiofilters_distortion_make_new(const mp_obj_type_t *type, size
 //|     def deinit(self) -> None:
 //|         """Deinitialises the Distortion."""
 //|         ...
+//|
 static mp_obj_t audiofilters_distortion_deinit(mp_obj_t self_in) {
     audiofilters_distortion_obj_t *self = MP_OBJ_TO_PTR(self_in);
     common_hal_audiofilters_distortion_deinit(self);
@@ -166,12 +169,14 @@ static void check_for_deinit(audiofilters_distortion_obj_t *self) {
 //|     def __enter__(self) -> Distortion:
 //|         """No-op used by Context Managers."""
 //|         ...
+//|
 //  Provided by context manager helper.
 
 //|     def __exit__(self) -> None:
 //|         """Automatically deinitializes when exiting a context. See
 //|         :ref:`lifetime-and-contextmanagers` for more info."""
 //|         ...
+//|
 static mp_obj_t audiofilters_distortion_obj___exit__(size_t n_args, const mp_obj_t *args) {
     (void)n_args;
     common_hal_audiofilters_distortion_deinit(args[0]);
@@ -299,6 +304,7 @@ MP_PROPERTY_GETSET(audiofilters_distortion_mix_obj,
 
 //|     playing: bool
 //|     """True when the effect is playing a sample. (read-only)"""
+//|
 static mp_obj_t audiofilters_distortion_obj_get_playing(mp_obj_t self_in) {
     audiofilters_distortion_obj_t *self = MP_OBJ_TO_PTR(self_in);
     check_for_deinit(self);
@@ -315,6 +321,7 @@ MP_PROPERTY_GETTER(audiofilters_distortion_playing_obj,
 //|
 //|         The sample must match the encoding settings given in the constructor."""
 //|         ...
+//|
 static mp_obj_t audiofilters_distortion_obj_play(size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
     enum { ARG_sample, ARG_loop };
     static const mp_arg_t allowed_args[] = {
@@ -337,6 +344,7 @@ MP_DEFINE_CONST_FUN_OBJ_KW(audiofilters_distortion_play_obj, 1, audiofilters_dis
 //|     def stop(self) -> None:
 //|         """Stops playback of the sample."""
 //|         ...
+//|
 //|
 static mp_obj_t audiofilters_distortion_obj_stop(mp_obj_t self_in) {
     audiofilters_distortion_obj_t *self = MP_OBJ_TO_PTR(self_in);

@@ -50,6 +50,7 @@
 //|           print("stopped")
 //|         """
 //|         ...
+//|
 static mp_obj_t audioio_wavefile_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *args) {
     mp_arg_check_num(n_args, n_kw, 1, 2, false);
     mp_obj_t arg = args[0];
@@ -79,6 +80,7 @@ static mp_obj_t audioio_wavefile_make_new(const mp_obj_type_t *type, size_t n_ar
 //|     def deinit(self) -> None:
 //|         """Deinitialises the WaveFile and releases all memory resources for reuse."""
 //|         ...
+//|
 static mp_obj_t audioio_wavefile_deinit(mp_obj_t self_in) {
     audioio_wavefile_obj_t *self = MP_OBJ_TO_PTR(self_in);
     common_hal_audioio_wavefile_deinit(self);
@@ -95,12 +97,14 @@ static void check_for_deinit(audioio_wavefile_obj_t *self) {
 //|     def __enter__(self) -> WaveFile:
 //|         """No-op used by Context Managers."""
 //|         ...
+//|
 //  Provided by context manager helper.
 
 //|     def __exit__(self) -> None:
 //|         """Automatically deinitializes the hardware when exiting a context. See
 //|         :ref:`lifetime-and-contextmanagers` for more info."""
 //|         ...
+//|
 static mp_obj_t audioio_wavefile_obj___exit__(size_t n_args, const mp_obj_t *args) {
     (void)n_args;
     common_hal_audioio_wavefile_deinit(args[0]);
@@ -144,6 +148,7 @@ MP_PROPERTY_GETTER(audioio_wavefile_bits_per_sample_obj,
     (mp_obj_t)&audioio_wavefile_get_bits_per_sample_obj);
 //|     channel_count: int
 //|     """Number of audio channels. (read only)"""
+//|
 //|
 static mp_obj_t audioio_wavefile_obj_get_channel_count(mp_obj_t self_in) {
     audioio_wavefile_obj_t *self = MP_OBJ_TO_PTR(self_in);

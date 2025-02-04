@@ -58,8 +58,7 @@ ALIASES_BY_BOARD = {
 
 ALIASES_BRAND_NAMES = {
     "circuitplayground_express_4h": "Adafruit Circuit Playground Express 4-H",
-    "circuitplayground_express_digikey_pycon2019":
-        "Circuit Playground Express Digi-Key PyCon 2019",
+    "circuitplayground_express_digikey_pycon2019": "Circuit Playground Express Digi-Key PyCon 2019",
     "edgebadge": "Adafruit EdgeBadge",
     "pyportal_pynt": "Adafruit PyPortal Pynt",
     "gemma_m0_pycon2018": "Adafruit Gemma M0 PyCon 2018",
@@ -119,8 +118,12 @@ def get_bindings():
     bindings_modules = []
     for d in get_circuitpython_root_dir().glob("ports/*/bindings"):
         bindings_modules.extend(module.name for module in d.iterdir() if d.is_dir())
-    return shared_bindings_modules + bindings_modules + MODULES_NOT_IN_BINDINGS + \
-        list(ADDITIONAL_MODULES.keys())
+    return (
+        shared_bindings_modules
+        + bindings_modules
+        + MODULES_NOT_IN_BINDINGS
+        + list(ADDITIONAL_MODULES.keys())
+    )
 
 
 def get_board_mapping():
@@ -188,16 +191,23 @@ def get_settings_from_makefile(port_dir, board_name):
 
     This list must explicitly include any setting queried by tools/ci_set_matrix.py.
     """
-    if os.getenv('NO_BINDINGS_MATRIX'):
-        return {
-                'CIRCUITPY_BUILD_EXTENSIONS': '.bin'
-                }
+    if os.getenv("NO_BINDINGS_MATRIX"):
+        return {"CIRCUITPY_BUILD_EXTENSIONS": ".bin"}
 
     contents = subprocess.run(
-        ["make", "-C", port_dir, "-f", "Makefile", f"BOARD={board_name}",
-         "print-CFLAGS", "print-CIRCUITPY_BUILD_EXTENSIONS",
-         "print-FROZEN_MPY_DIRS", "print-SRC_PATTERNS",
-         "print-SRC_SUPERVISOR"],
+        [
+            "make",
+            "-C",
+            port_dir,
+            "-f",
+            "Makefile",
+            f"BOARD={board_name}",
+            "print-CFLAGS",
+            "print-CIRCUITPY_BUILD_EXTENSIONS",
+            "print-FROZEN_MPY_DIRS",
+            "print-SRC_PATTERNS",
+            "print-SRC_SUPERVISOR",
+        ],
         encoding="utf-8",
         errors="replace",
         stdout=subprocess.PIPE,
@@ -213,8 +223,8 @@ def get_settings_from_makefile(port_dir, board_name):
 
     settings = {}
     for line in contents.stdout.split("\n"):
-        if line.startswith('CFLAGS ='):
-            for m in re.findall(r'-D([A-Z][A-Z0-9_]*)=(\d+)', line):
+        if line.startswith("CFLAGS ="):
+            for m in re.findall(r"-D([A-Z][A-Z0-9_]*)=(\d+)", line):
                 settings[m[0]] = m[1]
         elif m := re.match(r"^([A-Z][A-Z0-9_]*) = (.*)$", line):
             settings[m.group(1)] = m.group(2)
@@ -259,10 +269,12 @@ def get_repository_url(directory):
     repository_urls[directory] = path
     return path
 
+
 def remove_prefix(s, prefix):
     if not s.startswith(prefix):
         raise ValueError(f"{s=} does not start with {prefix=}")
     return s.removeprefix(prefix)
+
 
 def frozen_modules_from_dirs(frozen_mpy_dirs, withurl):
     """
@@ -275,7 +287,7 @@ def frozen_modules_from_dirs(frozen_mpy_dirs, withurl):
     """
     frozen_modules = []
     for frozen_path in filter(lambda x: x, frozen_mpy_dirs.split(" ")):
-        frozen_path = remove_prefix(frozen_path, '../../')
+        frozen_path = remove_prefix(frozen_path, "../../")
         source_dir = get_circuitpython_root_dir() / frozen_path
         url_repository = get_repository_url(source_dir)
         for sub in source_dir.glob("*"):
@@ -304,9 +316,14 @@ def lookup_setting(settings, key, default=""):
     return value
 
 
-def support_matrix_by_board(use_branded_name=True, withurl=True,
-                            add_port=False, add_chips=False,
-                            add_pins=False, add_branded_name=False):
+def support_matrix_by_board(
+    use_branded_name=True,
+    withurl=True,
+    add_port=False,
+    add_chips=False,
+    add_pins=False,
+    add_branded_name=False,
+):
     """Compiles a list of the available core modules available for each
     board.
     """
@@ -335,13 +352,11 @@ def support_matrix_by_board(use_branded_name=True, withurl=True,
             else:
                 with open(board_directory / "mpconfigboard.h") as get_name:
                     board_contents = get_name.read()
-                board_name_re = re.search(
-                    r"(?<=MICROPY_HW_BOARD_NAME)\s+(.+)", board_contents
-                )
+                board_name_re = re.search(r"(?<=MICROPY_HW_BOARD_NAME)\s+(.+)", board_contents)
                 if board_name_re:
                     branded_name = board_name_re.group(1).strip('"')
                     if '"' in branded_name:  # sometimes the closing " is not at line end
-                        branded_name = branded_name[:branded_name.index('"')]
+                        branded_name = branded_name[: branded_name.index('"')]
                     board_name = branded_name
 
         if use_branded_name:
@@ -352,25 +367,21 @@ def support_matrix_by_board(use_branded_name=True, withurl=True,
         if add_chips:
             with open(board_directory / "mpconfigboard.h") as get_name:
                 board_contents = get_name.read()
-            mcu_re = re.search(
-                r'(?<=MICROPY_HW_MCU_NAME)\s+(.+)', board_contents
-            )
+            mcu_re = re.search(r"(?<=MICROPY_HW_MCU_NAME)\s+(.+)", board_contents)
             if mcu_re:
                 mcu = mcu_re.group(1).strip('"')
                 if '"' in mcu:  # in case the closing " is not at line end
-                    mcu = mcu[:mcu.index('"')]
+                    mcu = mcu[: mcu.index('"')]
             else:
                 mcu = ""
             with open(board_directory / "mpconfigboard.mk") as get_name:
                 board_contents = get_name.read()
-            flash_re = re.search(
-                r'(?<=EXTERNAL_FLASH_DEVICES)\s+=\s+(.+)', board_contents
-            )
+            flash_re = re.search(r"(?<=EXTERNAL_FLASH_DEVICES)\s+=\s+(.+)", board_contents)
             if flash_re:
                 # deal with the variability in the way multiple flash chips
                 # are denoted.  We want them to end up as a quoted,
                 # comma separated string
-                flash = flash_re.group(1).replace('"','')
+                flash = flash_re.group(1).replace('"', "")
                 flash = f'"{flash}"'
             else:
                 flash = ""
@@ -406,28 +417,23 @@ def support_matrix_by_board(use_branded_name=True, withurl=True,
         if "CIRCUITPY_BUILD_EXTENSIONS" in settings:
             board_extensions = settings["CIRCUITPY_BUILD_EXTENSIONS"]
             if isinstance(board_extensions, str):
-                board_extensions = [
-                    extension.strip()
-                    for extension in board_extensions.split(",")
-                ]
+                board_extensions = [extension.strip() for extension in board_extensions.split(",")]
         else:
             raise OSError(f"Board extensions undefined: {board_name}.")
 
         frozen_modules = []
         if "FROZEN_MPY_DIRS" in settings:
-            frozen_modules = frozen_modules_from_dirs(
-                settings["FROZEN_MPY_DIRS"], withurl
-            )
+            frozen_modules = frozen_modules_from_dirs(settings["FROZEN_MPY_DIRS"], withurl)
             if frozen_modules:
                 frozen_modules.sort()
 
         # generate alias boards too
 
         board_info = {
-                       "modules": board_modules,
-                       "frozen_libraries": frozen_modules,
-                       "extensions": board_extensions,
-                      }
+            "modules": board_modules,
+            "frozen_libraries": frozen_modules,
+            "extensions": board_extensions,
+        }
         if add_branded_name:
             board_info["branded_name"] = branded_name
         if add_port:
@@ -437,12 +443,7 @@ def support_matrix_by_board(use_branded_name=True, withurl=True,
             board_info["flash"] = flash
         if add_pins:
             board_info["pins"] = pins
-        board_matrix = [
-            (
-                board_name,
-                board_info
-            )
-        ]
+        board_matrix = [(board_name, board_info)]
         if board_id in ALIASES_BY_BOARD:
             for alias in ALIASES_BY_BOARD[board_id]:
                 if use_branded_name:
@@ -454,7 +455,7 @@ def support_matrix_by_board(use_branded_name=True, withurl=True,
                     "modules": board_modules,
                     "frozen_libraries": frozen_modules,
                     "extensions": board_extensions,
-                    }
+                }
                 if add_branded_name:
                     board_info["branded_name"] = branded_name
                 if add_port:
@@ -464,15 +465,9 @@ def support_matrix_by_board(use_branded_name=True, withurl=True,
                     board_info["flash"] = flash
                 if add_pins:
                     board_info["pins"] = pins
-                board_matrix.append(
-                    (
-                        alias,
-                        board_info
-                    )
-                )
+                board_matrix.append((alias, board_info))
 
         return board_matrix  # this is now a list of (board,modules)
-
 
     board_mapping = get_board_mapping()
     real_boards = []
@@ -483,9 +478,7 @@ def support_matrix_by_board(use_branded_name=True, withurl=True,
     mapped_exec = executor.map(support_matrix, real_boards)
     # flatmap with comprehensions
     boards = dict(
-        sorted(
-            [board for matrix in mapped_exec for board in matrix], key=lambda x: x[0]
-        )
+        sorted([board for matrix in mapped_exec for board in matrix], key=lambda x: x[0])
     )
 
     return boards

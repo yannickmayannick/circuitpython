@@ -65,7 +65,7 @@ def make_version_header(repo_path, filename):
 """ % (
         git_tag,
         git_hash,
-        datetime.date.today().strftime("%Y-%m-%d"),
+        build_date.strftime("%Y-%m-%d"),
         ver[0].replace("v", ""),
         ver[1],
         ver[2],

@@ -14,7 +14,7 @@ requests-cache
 polib
 
 # For pre-commit
-black
+ruff
 pyyaml
 pre-commit
 micropython-uncrustify
