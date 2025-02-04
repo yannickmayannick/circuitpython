@@ -75,25 +75,36 @@ void common_hal_audioio_wavefile_construct(audioio_wavefile_obj_t *self,
     self->channel_count = format.num_channels;
     self->bits_per_sample = format.bits_per_sample;
 
-    // TODO(tannewt): Skip any extra chunks that occur before the data section.
+    uint8_t chunk_tag[4];
+    uint32_t chunk_length;
+    bool found_data_chunk = false;
 
-    uint8_t data_tag[4];
-    if (f_read(&self->file->fp, &data_tag, 4, &bytes_read) != FR_OK) {
-        mp_raise_OSError(MP_EIO);
-    }
-    if (bytes_read != 4 ||
-        memcmp((uint8_t *)data_tag, "data", 4) != 0) {
-        mp_raise_ValueError(MP_ERROR_TEXT("Data chunk must follow fmt chunk"));
+    while (!found_data_chunk) {
+        if (f_read(&self->file->fp, &chunk_tag, 4, &bytes_read) != FR_OK) {
+            mp_raise_OSError(MP_EIO);
+        }
+        if (bytes_read != 4) {
+            mp_raise_OSError(MP_EIO);
+        }
+        if (memcmp((uint8_t *)chunk_tag, "data", 4) == 0) {
+            found_data_chunk = true;
+        }
+
+        if (f_read(&self->file->fp, &chunk_length, 4, &bytes_read) != FR_OK) {
+            mp_raise_OSError(MP_EIO);
+        }
+        if (bytes_read != 4) {
+            mp_raise_OSError(MP_EIO);
+        }
+
+        if (!found_data_chunk) {
+            if (f_lseek(&self->file->fp, f_tell(&self->file->fp) + chunk_length) != FR_OK) {
+                mp_raise_OSError(MP_EIO);
+            }
+        }
     }
 
-    uint32_t data_length;
-    if (f_read(&self->file->fp, &data_length, 4, &bytes_read) != FR_OK) {
-        mp_raise_OSError(MP_EIO);
-    }
-    if (bytes_read != 4) {
-        mp_arg_error_invalid(MP_QSTR_file);
-    }
-    self->file_length = data_length;
+    self->file_length = chunk_length;
     self->data_start = self->file->fp.fptr;
 
     // Try to allocate two buffers, one will be loaded from file and the other
