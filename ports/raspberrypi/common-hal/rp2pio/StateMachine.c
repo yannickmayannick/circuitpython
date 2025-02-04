@@ -247,10 +247,12 @@ static bool use_existing_program(PIO *pio_out, uint *sm_out, int *offset_inout, 
             if (_current_program_id[i][j] == program_id &&
                 _current_program_len[i][j] == program_len &&
                 (*offset_inout == -1 || *offset_inout == _current_program_offset[i][j])) {
-                *pio_out = pio;
-                *sm_out = j;
-                *offset_inout = _current_program_offset[i][j];
-                return true;
+                *sm_out = pio_claim_unused_sm(pio, false);
+                if (*sm_out >= 0) {
+                    *pio_out = pio;
+                    *offset_inout = _current_program_offset[i][j];
+                    return true;
+                }
             }
         }
     }
