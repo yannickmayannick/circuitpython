@@ -52,6 +52,7 @@
 //|             pass
 //|           print("stopped")"""
 //|         ...
+//|
 static mp_obj_t synthio_miditrack_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *all_args) {
     enum { ARG_buffer, ARG_tempo, ARG_sample_rate, ARG_waveform, ARG_envelope };
     static const mp_arg_t allowed_args[] = {
@@ -84,6 +85,7 @@ static mp_obj_t synthio_miditrack_make_new(const mp_obj_type_t *type, size_t n_a
 //|     def deinit(self) -> None:
 //|         """Deinitialises the MidiTrack and releases any hardware resources for reuse."""
 //|         ...
+//|
 static mp_obj_t synthio_miditrack_deinit(mp_obj_t self_in) {
     synthio_miditrack_obj_t *self = MP_OBJ_TO_PTR(self_in);
     common_hal_synthio_miditrack_deinit(self);
@@ -100,12 +102,14 @@ static void check_for_deinit(synthio_miditrack_obj_t *self) {
 //|     def __enter__(self) -> MidiTrack:
 //|         """No-op used by Context Managers."""
 //|         ...
+//|
 //  Provided by context manager helper.
 
 //|     def __exit__(self) -> None:
 //|         """Automatically deinitializes the hardware when exiting a context. See
 //|         :ref:`lifetime-and-contextmanagers` for more info."""
 //|         ...
+//|
 static mp_obj_t synthio_miditrack_obj___exit__(size_t n_args, const mp_obj_t *args) {
     (void)n_args;
     common_hal_synthio_miditrack_deinit(args[0]);
@@ -128,6 +132,7 @@ MP_PROPERTY_GETTER(synthio_miditrack_sample_rate_obj,
 
 //|     error_location: Optional[int]
 //|     """Offset, in bytes within the midi data, of a decoding error"""
+//|
 //|
 static mp_obj_t synthio_miditrack_obj_get_error_location(mp_obj_t self_in) {
     synthio_miditrack_obj_t *self = MP_OBJ_TO_PTR(self_in);

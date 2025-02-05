@@ -78,6 +78,7 @@
 //|     def flush(self) -> None:
 //|         """Force out any unwritten bytes, waiting until they are written."""
 //|         ...
+//|
 
 // These three methods are used by the shared stream methods.
 static mp_uint_t usb_cdc_serial_read_stream(mp_obj_t self_in, void *buf_in, mp_uint_t size, int *errcode) {
@@ -155,6 +156,7 @@ MP_PROPERTY_GETTER(usb_cdc_serial_in_waiting_obj,
 
 //|     out_waiting: int
 //|     """Returns the number of bytes waiting to be written on the USB serial output. (read-only)"""
+//|
 static mp_obj_t usb_cdc_serial_get_out_waiting(mp_obj_t self_in) {
     usb_cdc_serial_obj_t *self = MP_OBJ_TO_PTR(self_in);
     return mp_obj_new_int(common_hal_usb_cdc_serial_get_out_waiting(self));
@@ -167,6 +169,7 @@ MP_PROPERTY_GETTER(usb_cdc_serial_out_waiting_obj,
 //|     def reset_input_buffer(self) -> None:
 //|         """Clears any unread bytes."""
 //|         ...
+//|
 static mp_obj_t usb_cdc_serial_reset_input_buffer(mp_obj_t self_in) {
     usb_cdc_serial_obj_t *self = MP_OBJ_TO_PTR(self_in);
     common_hal_usb_cdc_serial_reset_input_buffer(self);
@@ -177,6 +180,7 @@ MP_DEFINE_CONST_FUN_OBJ_1(usb_cdc_serial_reset_input_buffer_obj, usb_cdc_serial_
 //|     def reset_output_buffer(self) -> None:
 //|         """Clears any unwritten bytes."""
 //|         ...
+//|
 static mp_obj_t usb_cdc_serial_reset_output_buffer(mp_obj_t self_in) {
     usb_cdc_serial_obj_t *self = MP_OBJ_TO_PTR(self_in);
     common_hal_usb_cdc_serial_reset_output_buffer(self);
@@ -210,6 +214,7 @@ MP_PROPERTY_GETSET(usb_cdc_serial_timeout_obj,
 //|     """The initial value of `write_timeout` is ``None``. If ``None``, wait indefinitely to finish
 //|     writing all the bytes passed to ``write()``.If 0, do not wait.
 //|     If > 0, wait only ``write_timeout`` seconds."""
+//|
 //|
 static mp_obj_t usb_cdc_serial_get_write_timeout(mp_obj_t self_in) {
     usb_cdc_serial_obj_t *self = MP_OBJ_TO_PTR(self_in);

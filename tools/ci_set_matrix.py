@@ -39,7 +39,6 @@ import build_board_info
 from shared_bindings_matrix import (
     get_settings_from_makefile,
     SUPPORTED_PORTS,
-    all_ports_all_boards,
 )
 
 # Files that never influence board builds
@@ -151,7 +150,7 @@ def set_boards(build_all: bool):
 
     if not build_all:
         pattern_port = re.compile(r"^ports/([^/]+)/")
-        pattern_board = re.compile(r"^ports/[^/]+/boards/([^/]+)/")
+        pattern_board = re.compile(r"^ports/([^/]+)/boards/([^/]+)/")
         pattern_module = re.compile(
             r"^(ports/[^/]+/(?:common-hal|bindings)|shared-bindings|shared-module)/([^/]+)/"
         )
@@ -166,7 +165,14 @@ def set_boards(build_all: bool):
             # See if it is board specific
             board_matches = pattern_board.search(file)
             if board_matches:
-                boards_to_build.add(board_matches.group(1))
+                port = board_matches.group(1)
+                board = board_matches.group(2)
+                if port == "zephyr-cp":
+                    p = pathlib.Path(file)
+                    board_id = p.parent.name
+                    vendor_id = p.parent.parent.name
+                    board = f"{vendor_id}_{board_id}"
+                boards_to_build.add(board)
                 continue
 
             # See if it is port specific
@@ -182,6 +188,15 @@ def set_boards(build_all: bool):
             # makefile for each board and determine whether to build them that way
             if file.startswith("frozen") or file.startswith("supervisor") or module_matches:
                 boards = port_to_board[port] if port else all_board_ids
+
+                # Zephyr boards don't use make, so build them and don't compute their settings.
+                for board in port_to_board["zephyr-cp"]:
+                    if board in boards:
+                        boards_to_build.add(board)
+
+                for board in boards_to_build:
+                    if board in boards:
+                        boards.remove(board)
                 compute_board_settings(boards)
 
                 for board in boards:
@@ -234,6 +249,7 @@ def set_boards(build_all: bool):
         # A board can appear due to its _deletion_ (rare)
         # if this happens it's not in `board_to_port`.
         if not port:
+            print("skip", board)
             continue
         port_to_boards_to_build.setdefault(port, []).append(board)
         print(" ", board)
