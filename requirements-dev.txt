@@ -14,7 +14,7 @@ requests-cache
 polib
 
 # For pre-commit
-ruff
+ruff==0.9.4 # ruff version must exactly match pre-commit-config.yaml
 pyyaml
 pre-commit
 micropython-uncrustify
