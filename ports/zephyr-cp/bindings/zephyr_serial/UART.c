@@ -259,7 +259,7 @@ static const mp_rom_map_elem_t _zephyr_serial_uart_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR___del__),      MP_ROM_PTR(&_zephyr_serial_uart_deinit_obj) },
     { MP_ROM_QSTR(MP_QSTR_deinit),       MP_ROM_PTR(&_zephyr_serial_uart_deinit_obj) },
     { MP_ROM_QSTR(MP_QSTR___enter__),    MP_ROM_PTR(&default___enter___obj) },
-    { MP_ROM_QSTR(MP_QSTR___exit__),     MP_ROM_PTR(&_zephyr_serial_uart___exit___obj) },
+    { MP_ROM_QSTR(MP_QSTR___exit__),     MP_ROM_PTR(&default___exit___obj) },
 
     // Standard stream methods.
     { MP_OBJ_NEW_QSTR(MP_QSTR_read),     MP_ROM_PTR(&mp_stream_read_obj) },

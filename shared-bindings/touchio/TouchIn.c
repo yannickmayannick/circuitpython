@@ -79,17 +79,12 @@ static void check_for_deinit(touchio_touchin_obj_t *self) {
 //|         :ref:`lifetime-and-contextmanagers` for more info."""
 //|         ...
 //|
-static mp_obj_t touchio_touchin_obj___exit__(size_t n_args, const mp_obj_t *args) {
-    (void)n_args;
-    common_hal_touchio_touchin_deinit(args[0]);
-    return mp_const_none;
-}
-static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(touchio_touchin___exit___obj, 4, 4, touchio_touchin_obj___exit__);
+//  Provided by context manager helper.
 
 //|     value: bool
 //|     """Whether the touch pad is being touched or not. (read-only)
 //|
-//|     True when `raw_value` > `threshold`."""
+//|     True when `raw_value` > `threshold`.:m"""
 static mp_obj_t touchio_touchin_obj_get_value(mp_obj_t self_in) {
     touchio_touchin_obj_t *self = MP_OBJ_TO_PTR(self_in);
     check_for_deinit(self);
@@ -156,7 +151,7 @@ MP_PROPERTY_GETSET(touchio_touchin_threshold_obj,
 
 static const mp_rom_map_elem_t touchio_touchin_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR___enter__), MP_ROM_PTR(&default___enter___obj) },
-    { MP_ROM_QSTR(MP_QSTR___exit__), MP_ROM_PTR(&touchio_touchin___exit___obj) },
+    { MP_ROM_QSTR(MP_QSTR___exit__), MP_ROM_PTR(&default___exit___obj) },
     { MP_ROM_QSTR(MP_QSTR_deinit), MP_ROM_PTR(&touchio_touchin_deinit_obj) },
 
     { MP_OBJ_NEW_QSTR(MP_QSTR_value), MP_ROM_PTR(&touchio_touchin_value_obj)},

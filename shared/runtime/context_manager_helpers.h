@@ -8,4 +8,5 @@
 
 #include "py/obj.h"
 
-MP_DECLARE_CONST_FUN_OBJ_1(default___enter___obj);
+#define default___enter___obj (mp_identity_obj)
+MP_DECLARE_CONST_FUN_OBJ_VAR_BETWEEN(default___exit___obj);
