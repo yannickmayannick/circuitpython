@@ -43,7 +43,6 @@
 #include "src/rp2_common/hardware_sync/include/hardware/sync.h"
 #include "src/rp2_common/hardware_timer/include/hardware/timer.h"
 #if CIRCUITPY_CYW43
-#include "py/mphal.h"
 #include "pico/cyw43_arch.h"
 #endif
 #include "src/common/pico_time/include/pico/time.h"
