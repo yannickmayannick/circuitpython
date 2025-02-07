@@ -187,7 +187,10 @@ def set_boards(build_all: bool):
             # As a (nearly) last resort, for some certain files, we compute the settings from the
             # makefile for each board and determine whether to build them that way
             if file.startswith("frozen") or file.startswith("supervisor") or module_matches:
-                boards = port_to_board[port] if port else all_board_ids
+                # Take a copy, because we remove items from it below. For
+                # instance, if we remove items from, say, all_board_ids, then
+                # the logic to build all boards breaks.
+                boards = set(port_to_board[port] if port else all_board_ids)
 
                 # Zephyr boards don't use make, so build them and don't compute their settings.
                 for board in port_to_board["zephyr-cp"]:
