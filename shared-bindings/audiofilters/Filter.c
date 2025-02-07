@@ -7,6 +7,7 @@
 #include <stdint.h>
 
 #include "shared-bindings/audiofilters/Filter.h"
+#include "shared-bindings/audiocore/__init__.h"
 #include "shared-module/audiofilters/Filter.h"
 
 #include "shared/runtime/context_manager_helpers.h"
@@ -109,9 +110,7 @@ static mp_obj_t audiofilters_filter_deinit(mp_obj_t self_in) {
 static MP_DEFINE_CONST_FUN_OBJ_1(audiofilters_filter_deinit_obj, audiofilters_filter_deinit);
 
 static void check_for_deinit(audiofilters_filter_obj_t *self) {
-    if (common_hal_audiofilters_filter_deinited(self)) {
-        raise_deinited_error();
-    }
+    audiosample_check_for_deinit(&self->base);
 }
 
 //|     def __enter__(self) -> Filter:
@@ -238,17 +237,14 @@ static const mp_rom_map_elem_t audiofilters_filter_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_playing), MP_ROM_PTR(&audiofilters_filter_playing_obj) },
     { MP_ROM_QSTR(MP_QSTR_filter), MP_ROM_PTR(&audiofilters_filter_filter_obj) },
     { MP_ROM_QSTR(MP_QSTR_mix), MP_ROM_PTR(&audiofilters_filter_mix_obj) },
+    AUDIOSAMPLE_FIELDS,
 };
 static MP_DEFINE_CONST_DICT(audiofilters_filter_locals_dict, audiofilters_filter_locals_dict_table);
 
 static const audiosample_p_t audiofilters_filter_proto = {
     MP_PROTO_IMPLEMENT(MP_QSTR_protocol_audiosample)
-    .sample_rate = (audiosample_sample_rate_fun)common_hal_audiofilters_filter_get_sample_rate,
-    .bits_per_sample = (audiosample_bits_per_sample_fun)common_hal_audiofilters_filter_get_bits_per_sample,
-    .channel_count = (audiosample_channel_count_fun)common_hal_audiofilters_filter_get_channel_count,
     .reset_buffer = (audiosample_reset_buffer_fun)audiofilters_filter_reset_buffer,
     .get_buffer = (audiosample_get_buffer_fun)audiofilters_filter_get_buffer,
-    .get_buffer_structure = (audiosample_get_buffer_structure_fun)audiofilters_filter_get_buffer_structure,
 };
 
 MP_DEFINE_CONST_OBJ_TYPE(

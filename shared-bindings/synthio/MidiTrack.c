@@ -13,6 +13,7 @@
 #include "shared-bindings/util.h"
 #include "shared-bindings/synthio/MidiTrack.h"
 #include "shared-bindings/synthio/__init__.h"
+#include "shared-bindings/audiocore/__init__.h"
 
 //| class MidiTrack:
 //|     """Simple MIDI synth"""
@@ -94,9 +95,7 @@ static mp_obj_t synthio_miditrack_deinit(mp_obj_t self_in) {
 static MP_DEFINE_CONST_FUN_OBJ_1(synthio_miditrack_deinit_obj, synthio_miditrack_deinit);
 
 static void check_for_deinit(synthio_miditrack_obj_t *self) {
-    if (common_hal_synthio_miditrack_deinited(self)) {
-        raise_deinited_error();
-    }
+    audiosample_check_for_deinit(&self->synth.base);
 }
 
 //|     def __enter__(self) -> MidiTrack:
@@ -120,15 +119,6 @@ static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(synthio_miditrack___exit___obj, 4, 4,
 //|     sample_rate: int
 //|     """32 bit value that tells how quickly samples are played in Hertz (cycles per second)."""
 //|
-static mp_obj_t synthio_miditrack_obj_get_sample_rate(mp_obj_t self_in) {
-    synthio_miditrack_obj_t *self = MP_OBJ_TO_PTR(self_in);
-    check_for_deinit(self);
-    return MP_OBJ_NEW_SMALL_INT(common_hal_synthio_miditrack_get_sample_rate(self));
-}
-MP_DEFINE_CONST_FUN_OBJ_1(synthio_miditrack_get_sample_rate_obj, synthio_miditrack_obj_get_sample_rate);
-
-MP_PROPERTY_GETTER(synthio_miditrack_sample_rate_obj,
-    (mp_obj_t)&synthio_miditrack_get_sample_rate_obj);
 
 //|     error_location: Optional[int]
 //|     """Offset, in bytes within the midi data, of a decoding error"""
@@ -155,19 +145,15 @@ static const mp_rom_map_elem_t synthio_miditrack_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR___exit__), MP_ROM_PTR(&synthio_miditrack___exit___obj) },
 
     // Properties
-    { MP_ROM_QSTR(MP_QSTR_sample_rate), MP_ROM_PTR(&synthio_miditrack_sample_rate_obj) },
     { MP_ROM_QSTR(MP_QSTR_error_location), MP_ROM_PTR(&synthio_miditrack_error_location_obj) },
+    AUDIOSAMPLE_FIELDS,
 };
 static MP_DEFINE_CONST_DICT(synthio_miditrack_locals_dict, synthio_miditrack_locals_dict_table);
 
 static const audiosample_p_t synthio_miditrack_proto = {
     MP_PROTO_IMPLEMENT(MP_QSTR_protocol_audiosample)
-    .sample_rate = (audiosample_sample_rate_fun)common_hal_synthio_miditrack_get_sample_rate,
-    .bits_per_sample = (audiosample_bits_per_sample_fun)common_hal_synthio_miditrack_get_bits_per_sample,
-    .channel_count = (audiosample_channel_count_fun)common_hal_synthio_miditrack_get_channel_count,
     .reset_buffer = (audiosample_reset_buffer_fun)synthio_miditrack_reset_buffer,
     .get_buffer = (audiosample_get_buffer_fun)synthio_miditrack_get_buffer,
-    .get_buffer_structure = (audiosample_get_buffer_structure_fun)synthio_miditrack_get_buffer_structure,
 };
 
 MP_DEFINE_CONST_OBJ_TYPE(

@@ -17,6 +17,7 @@
 #include "shared-bindings/synthio/Synthesizer.h"
 #include "shared-bindings/synthio/LFO.h"
 #include "shared-bindings/synthio/__init__.h"
+#include "shared-bindings/audiocore/__init__.h"
 
 //| NoteSequence = Sequence[Union[int, Note]]
 //| """A sequence of notes, which can each be integer MIDI note numbers or `Note` objects"""
@@ -72,9 +73,7 @@ static mp_obj_t synthio_synthesizer_make_new(const mp_obj_type_t *type, size_t n
 }
 
 static void check_for_deinit(synthio_synthesizer_obj_t *self) {
-    if (common_hal_synthio_synthesizer_deinited(self)) {
-        raise_deinited_error();
-    }
+    audiosample_check_for_deinit(&self->synth.base);
 }
 
 //|     def press(self, /, press: NoteOrNoteSequence = ()) -> None:
@@ -234,15 +233,6 @@ MP_PROPERTY_GETSET(synthio_synthesizer_envelope_obj,
 
 //|     sample_rate: int
 //|     """32 bit value that tells how quickly samples are played in Hertz (cycles per second)."""
-static mp_obj_t synthio_synthesizer_obj_get_sample_rate(mp_obj_t self_in) {
-    synthio_synthesizer_obj_t *self = MP_OBJ_TO_PTR(self_in);
-    check_for_deinit(self);
-    return MP_OBJ_NEW_SMALL_INT(common_hal_synthio_synthesizer_get_sample_rate(self));
-}
-MP_DEFINE_CONST_FUN_OBJ_1(synthio_synthesizer_get_sample_rate_obj, synthio_synthesizer_obj_get_sample_rate);
-
-MP_PROPERTY_GETTER(synthio_synthesizer_sample_rate_obj,
-    (mp_obj_t)&synthio_synthesizer_get_sample_rate_obj);
 
 //|     pressed: NoteSequence
 //|     """A sequence of the currently pressed notes (read-only property).
@@ -332,7 +322,7 @@ static mp_obj_t synthio_synthesizer_lpf(size_t n_pos, const mp_obj_t *pos_args, 
         args[ARG_Q].u_obj == MP_OBJ_NULL ? MICROPY_FLOAT_CONST(0.7071067811865475) :
         mp_arg_validate_type_float(args[ARG_Q].u_obj, MP_QSTR_Q);
 
-    mp_float_t w0 = f0 / self->synth.sample_rate * 2 * MP_PI;
+    mp_float_t w0 = f0 / self->synth.base.sample_rate * 2 * MP_PI;
 
     return common_hal_synthio_new_lpf(w0, Q);
 
@@ -363,7 +353,7 @@ static mp_obj_t synthio_synthesizer_hpf(size_t n_pos, const mp_obj_t *pos_args, 
         args[ARG_Q].u_obj == MP_OBJ_NULL ? MICROPY_FLOAT_CONST(0.7071067811865475) :
         mp_arg_validate_type_float(args[ARG_Q].u_obj, MP_QSTR_Q);
 
-    mp_float_t w0 = f0 / self->synth.sample_rate * 2 * MP_PI;
+    mp_float_t w0 = f0 / self->synth.base.sample_rate * 2 * MP_PI;
 
     return common_hal_synthio_new_hpf(w0, Q);
 
@@ -397,7 +387,7 @@ static mp_obj_t synthio_synthesizer_bpf(size_t n_pos, const mp_obj_t *pos_args, 
         args[ARG_Q].u_obj == MP_OBJ_NULL ? MICROPY_FLOAT_CONST(0.7071067811865475) :
         mp_arg_validate_type_float(args[ARG_Q].u_obj, MP_QSTR_Q);
 
-    mp_float_t w0 = f0 / self->synth.sample_rate * 2 * MP_PI;
+    mp_float_t w0 = f0 / self->synth.base.sample_rate * 2 * MP_PI;
 
     return common_hal_synthio_new_bpf(w0, Q);
 
@@ -422,22 +412,18 @@ static const mp_rom_map_elem_t synthio_synthesizer_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_band_pass_filter), MP_ROM_PTR(&synthio_synthesizer_bpf_fun_obj) },
     // Properties
     { MP_ROM_QSTR(MP_QSTR_envelope), MP_ROM_PTR(&synthio_synthesizer_envelope_obj) },
-    { MP_ROM_QSTR(MP_QSTR_sample_rate), MP_ROM_PTR(&synthio_synthesizer_sample_rate_obj) },
     { MP_ROM_QSTR(MP_QSTR_max_polyphony), MP_ROM_INT(CIRCUITPY_SYNTHIO_MAX_CHANNELS) },
     { MP_ROM_QSTR(MP_QSTR_pressed), MP_ROM_PTR(&synthio_synthesizer_pressed_obj) },
     { MP_ROM_QSTR(MP_QSTR_note_info), MP_ROM_PTR(&synthio_synthesizer_note_info_obj) },
     { MP_ROM_QSTR(MP_QSTR_blocks), MP_ROM_PTR(&synthio_synthesizer_blocks_obj) },
+    AUDIOSAMPLE_FIELDS,
 };
 static MP_DEFINE_CONST_DICT(synthio_synthesizer_locals_dict, synthio_synthesizer_locals_dict_table);
 
 static const audiosample_p_t synthio_synthesizer_proto = {
     MP_PROTO_IMPLEMENT(MP_QSTR_protocol_audiosample)
-    .sample_rate = (audiosample_sample_rate_fun)common_hal_synthio_synthesizer_get_sample_rate,
-    .bits_per_sample = (audiosample_bits_per_sample_fun)common_hal_synthio_synthesizer_get_bits_per_sample,
-    .channel_count = (audiosample_channel_count_fun)common_hal_synthio_synthesizer_get_channel_count,
     .reset_buffer = (audiosample_reset_buffer_fun)synthio_synthesizer_reset_buffer,
     .get_buffer = (audiosample_get_buffer_fun)synthio_synthesizer_get_buffer,
-    .get_buffer_structure = (audiosample_get_buffer_structure_fun)synthio_synthesizer_get_buffer_structure,
 };
 
 MP_DEFINE_CONST_OBJ_TYPE(
