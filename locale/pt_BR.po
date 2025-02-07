@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 12:55-0600\n"
-"PO-Revision-Date: 2025-01-28 08:40+0000\n"
+"PO-Revision-Date: 2025-02-07 13:01+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -762,6 +762,7 @@ msgstr ""
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "Can't construct AudioOut because continuous channel already open"
 msgstr ""
+"Não é possível construir o AudioOut porque o canal contínuo já está aberto"
 
 #: ports/espressif/common-hal/_bleio/Characteristic.c
 #: ports/nordic/common-hal/_bleio/Characteristic.c
@@ -1033,23 +1034,23 @@ msgstr "Falha ao conectar: tempo limite"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "Failed to create continuous channels: invalid arg"
-msgstr ""
+msgstr "Houve uma falha ao criar canais contínuos: arg inválido"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "Failed to create continuous channels: invalid state"
-msgstr ""
+msgstr "Houve uma falha ao criar canais contínuos: estado inválido"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "Failed to create continuous channels: no mem"
-msgstr ""
+msgstr "Houve uma falha ao criar canais contínuos: sem mem"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "Failed to create continuous channels: not found"
-msgstr ""
+msgstr "Houve uma falha ao criar canais contínuos: não encontrado"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "Failed to enable continuous"
-msgstr ""
+msgstr "Houve uma falha ao ativar o modo contínuo"
 
 #: shared-module/audiomp3/MP3Decoder.c
 msgid "Failed to parse MP3 file"
@@ -1057,7 +1058,7 @@ msgstr "Falha ao analisar o arquivo MP3"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "Failed to register continuous events callback"
-msgstr ""
+msgstr "Houve uma falha ao registrar a chamada de retorno de eventos contínuos"
 
 #: ports/nordic/sd_mutex.c
 #, c-format
@@ -1066,7 +1067,7 @@ msgstr "Houve uma falha ao liberar o mutex, err 0x%04x"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "Failed to start async audio"
-msgstr ""
+msgstr "Houve uma falha ao iniciar o áudio assíncrono"
 
 #: supervisor/shared/safe_mode.c
 msgid "Failed to write internal flash."
@@ -2506,7 +2507,7 @@ msgstr "os endereços estão vazios"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "already playing"
-msgstr ""
+msgstr "já está tocando"
 
 #: py/compile.c
 msgid "annotation must be an identifier"
@@ -2589,7 +2590,7 @@ msgstr "atributos não compatíveis"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "audio format not supported"
-msgstr ""
+msgstr "formato de áudio não compatível"
 
 #: extmod/ulab/code/ulab_tools.c
 msgid "axis is out of bounds"
