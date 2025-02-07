@@ -8,6 +8,7 @@
 #include <stdint.h>
 
 #include "shared/runtime/context_manager_helpers.h"
+#include "shared-bindings/audiocore/__init__.h"
 #include "py/objproperty.h"
 #include "py/runtime.h"
 #include "py/stream.h"
@@ -122,9 +123,7 @@ static mp_obj_t audiomp3_mp3file_deinit(mp_obj_t self_in) {
 static MP_DEFINE_CONST_FUN_OBJ_1(audiomp3_mp3file_deinit_obj, audiomp3_mp3file_deinit);
 
 static void check_for_deinit(audiomp3_mp3file_obj_t *self) {
-    if (common_hal_audiomp3_mp3file_deinited(self)) {
-        raise_deinited_error();
-    }
+    audiosample_check_for_deinit(&self->base);
 }
 
 //|     def __enter__(self) -> MP3Decoder:
@@ -193,48 +192,12 @@ MP_PROPERTY_GETSET(audiomp3_mp3file_file_obj,
 //|     """32 bit value that dictates how quickly samples are loaded into the DAC
 //|     in Hertz (cycles per second). When the sample is looped, this can change
 //|     the pitch output without changing the underlying sample."""
-static mp_obj_t audiomp3_mp3file_obj_get_sample_rate(mp_obj_t self_in) {
-    audiomp3_mp3file_obj_t *self = MP_OBJ_TO_PTR(self_in);
-    check_for_deinit(self);
-    return MP_OBJ_NEW_SMALL_INT(common_hal_audiomp3_mp3file_get_sample_rate(self));
-}
-MP_DEFINE_CONST_FUN_OBJ_1(audiomp3_mp3file_get_sample_rate_obj, audiomp3_mp3file_obj_get_sample_rate);
-
-static mp_obj_t audiomp3_mp3file_obj_set_sample_rate(mp_obj_t self_in, mp_obj_t sample_rate) {
-    audiomp3_mp3file_obj_t *self = MP_OBJ_TO_PTR(self_in);
-    check_for_deinit(self);
-    common_hal_audiomp3_mp3file_set_sample_rate(self, mp_obj_get_int(sample_rate));
-    return mp_const_none;
-}
-MP_DEFINE_CONST_FUN_OBJ_2(audiomp3_mp3file_set_sample_rate_obj, audiomp3_mp3file_obj_set_sample_rate);
-
-MP_PROPERTY_GETSET(audiomp3_mp3file_sample_rate_obj,
-    (mp_obj_t)&audiomp3_mp3file_get_sample_rate_obj,
-    (mp_obj_t)&audiomp3_mp3file_set_sample_rate_obj);
 
 //|     bits_per_sample: int
 //|     """Bits per sample. (read only)"""
-static mp_obj_t audiomp3_mp3file_obj_get_bits_per_sample(mp_obj_t self_in) {
-    audiomp3_mp3file_obj_t *self = MP_OBJ_TO_PTR(self_in);
-    check_for_deinit(self);
-    return MP_OBJ_NEW_SMALL_INT(common_hal_audiomp3_mp3file_get_bits_per_sample(self));
-}
-MP_DEFINE_CONST_FUN_OBJ_1(audiomp3_mp3file_get_bits_per_sample_obj, audiomp3_mp3file_obj_get_bits_per_sample);
-
-MP_PROPERTY_GETTER(audiomp3_mp3file_bits_per_sample_obj,
-    (mp_obj_t)&audiomp3_mp3file_get_bits_per_sample_obj);
 
 //|     channel_count: int
 //|     """Number of audio channels. (read only)"""
-static mp_obj_t audiomp3_mp3file_obj_get_channel_count(mp_obj_t self_in) {
-    audiomp3_mp3file_obj_t *self = MP_OBJ_TO_PTR(self_in);
-    check_for_deinit(self);
-    return MP_OBJ_NEW_SMALL_INT(common_hal_audiomp3_mp3file_get_channel_count(self));
-}
-MP_DEFINE_CONST_FUN_OBJ_1(audiomp3_mp3file_get_channel_count_obj, audiomp3_mp3file_obj_get_channel_count);
-
-MP_PROPERTY_GETTER(audiomp3_mp3file_channel_count_obj,
-    (mp_obj_t)&audiomp3_mp3file_get_channel_count_obj);
 
 //|     rms_level: float
 //|     """The RMS audio level of a recently played moment of audio. (read only)"""
@@ -272,22 +235,16 @@ static const mp_rom_map_elem_t audiomp3_mp3file_locals_dict_table[] = {
 
     // Properties
     { MP_ROM_QSTR(MP_QSTR_file), MP_ROM_PTR(&audiomp3_mp3file_file_obj) },
-    { MP_ROM_QSTR(MP_QSTR_sample_rate), MP_ROM_PTR(&audiomp3_mp3file_sample_rate_obj) },
-    { MP_ROM_QSTR(MP_QSTR_bits_per_sample), MP_ROM_PTR(&audiomp3_mp3file_bits_per_sample_obj) },
-    { MP_ROM_QSTR(MP_QSTR_channel_count), MP_ROM_PTR(&audiomp3_mp3file_channel_count_obj) },
     { MP_ROM_QSTR(MP_QSTR_rms_level), MP_ROM_PTR(&audiomp3_mp3file_rms_level_obj) },
     { MP_ROM_QSTR(MP_QSTR_samples_decoded), MP_ROM_PTR(&audiomp3_mp3file_samples_decoded_obj) },
+    AUDIOSAMPLE_FIELDS,
 };
 static MP_DEFINE_CONST_DICT(audiomp3_mp3file_locals_dict, audiomp3_mp3file_locals_dict_table);
 
 static const audiosample_p_t audiomp3_mp3file_proto = {
     MP_PROTO_IMPLEMENT(MP_QSTR_protocol_audiosample)
-    .sample_rate = (audiosample_sample_rate_fun)common_hal_audiomp3_mp3file_get_sample_rate,
-    .bits_per_sample = (audiosample_bits_per_sample_fun)common_hal_audiomp3_mp3file_get_bits_per_sample,
-    .channel_count = (audiosample_channel_count_fun)common_hal_audiomp3_mp3file_get_channel_count,
     .reset_buffer = (audiosample_reset_buffer_fun)audiomp3_mp3file_reset_buffer,
     .get_buffer = (audiosample_get_buffer_fun)audiomp3_mp3file_get_buffer,
-    .get_buffer_structure = (audiosample_get_buffer_structure_fun)audiomp3_mp3file_get_buffer_structure,
 };
 
 MP_DEFINE_CONST_OBJ_TYPE(

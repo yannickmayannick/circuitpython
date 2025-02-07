@@ -12,6 +12,7 @@
 #include "py/runtime.h"
 #include "shared-bindings/util.h"
 #include "shared-bindings/audiocore/RawSample.h"
+#include "shared-bindings/audiocore/__init__.h"
 
 //| class RawSample:
 //|     """A raw audio sample buffer in memory"""
@@ -120,12 +121,6 @@ static mp_obj_t audioio_rawsample_deinit(mp_obj_t self_in) {
 }
 static MP_DEFINE_CONST_FUN_OBJ_1(audioio_rawsample_deinit_obj, audioio_rawsample_deinit);
 
-static void check_for_deinit(audioio_rawsample_obj_t *self) {
-    if (common_hal_audioio_rawsample_deinited(self)) {
-        raise_deinited_error();
-    }
-}
-
 //|     def __enter__(self) -> RawSample:
 //|         """No-op used by Context Managers."""
 //|         ...
@@ -151,24 +146,6 @@ static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(audioio_rawsample___exit___obj, 4, 4,
 //|     change it."""
 //|
 //|
-static mp_obj_t audioio_rawsample_obj_get_sample_rate(mp_obj_t self_in) {
-    audioio_rawsample_obj_t *self = MP_OBJ_TO_PTR(self_in);
-    check_for_deinit(self);
-    return MP_OBJ_NEW_SMALL_INT(common_hal_audioio_rawsample_get_sample_rate(self));
-}
-MP_DEFINE_CONST_FUN_OBJ_1(audioio_rawsample_get_sample_rate_obj, audioio_rawsample_obj_get_sample_rate);
-
-static mp_obj_t audioio_rawsample_obj_set_sample_rate(mp_obj_t self_in, mp_obj_t sample_rate) {
-    audioio_rawsample_obj_t *self = MP_OBJ_TO_PTR(self_in);
-    check_for_deinit(self);
-    common_hal_audioio_rawsample_set_sample_rate(self, mp_obj_get_int(sample_rate));
-    return mp_const_none;
-}
-MP_DEFINE_CONST_FUN_OBJ_2(audioio_rawsample_set_sample_rate_obj, audioio_rawsample_obj_set_sample_rate);
-
-MP_PROPERTY_GETSET(audioio_rawsample_sample_rate_obj,
-    (mp_obj_t)&audioio_rawsample_get_sample_rate_obj,
-    (mp_obj_t)&audioio_rawsample_set_sample_rate_obj);
 
 static const mp_rom_map_elem_t audioio_rawsample_locals_dict_table[] = {
     // Methods
@@ -177,18 +154,14 @@ static const mp_rom_map_elem_t audioio_rawsample_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR___exit__), MP_ROM_PTR(&audioio_rawsample___exit___obj) },
 
     // Properties
-    { MP_ROM_QSTR(MP_QSTR_sample_rate), MP_ROM_PTR(&audioio_rawsample_sample_rate_obj) },
+    AUDIOSAMPLE_FIELDS,
 };
 static MP_DEFINE_CONST_DICT(audioio_rawsample_locals_dict, audioio_rawsample_locals_dict_table);
 
 static const audiosample_p_t audioio_rawsample_proto = {
     MP_PROTO_IMPLEMENT(MP_QSTR_protocol_audiosample)
-    .sample_rate = (audiosample_sample_rate_fun)common_hal_audioio_rawsample_get_sample_rate,
-    .bits_per_sample = (audiosample_bits_per_sample_fun)common_hal_audioio_rawsample_get_bits_per_sample,
-    .channel_count = (audiosample_channel_count_fun)common_hal_audioio_rawsample_get_channel_count,
     .reset_buffer = (audiosample_reset_buffer_fun)audioio_rawsample_reset_buffer,
     .get_buffer = (audiosample_get_buffer_fun)audioio_rawsample_get_buffer,
-    .get_buffer_structure = (audiosample_get_buffer_structure_fun)audioio_rawsample_get_buffer_structure,
 };
 
 MP_DEFINE_CONST_OBJ_TYPE(
