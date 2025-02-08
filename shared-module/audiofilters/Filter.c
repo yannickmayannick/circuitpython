@@ -218,6 +218,13 @@ audioio_get_buffer_result_t audiofilters_filter_get_buffer(audiofilters_filter_o
             shared_bindings_synthio_lfo_tick(self->base.sample_rate, length / self->base.channel_count);
             (void)synthio_block_slot_get(&self->mix);
 
+            // Tick biquad filters
+            for (uint8_t j = 0; j < self->filter_states_len; j++) {
+                mp_obj_t filter_obj = self->filter_objs[j];
+                if (mp_obj_is_type(filter_obj, &synthio_block_biquad_type_obj)) {
+                    common_hal_synthio_block_biquad_tick(filter_obj, &self->filter_states[j]);
+                }
+            }
             if (self->base.samples_signed) {
                 memset(word_buffer, 0, length * (self->base.bits_per_sample / 8));
             } else {
