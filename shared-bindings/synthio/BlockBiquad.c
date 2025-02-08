@@ -146,7 +146,6 @@ MP_PROPERTY_GETSET(synthio_block_biquad_frequency_obj,
 //|     Q: BlockInput
 //|     """The sharpness (Q) of the filter"""
 //|
-//|
 static mp_obj_t synthio_block_biquad_get_Q(mp_obj_t self_in) {
     synthio_block_biquad_t *self = MP_OBJ_TO_PTR(self_in);
     return common_hal_synthio_block_biquad_get_Q(self);
@@ -170,6 +169,7 @@ MP_PROPERTY_GETSET(synthio_block_biquad_Q_obj,
 //|     This setting only has an effect for peaking and shelving EQ filters. It is related
 //|     to the filter gain according to the formula ``A = 10^(dBgain/40)``.
 //|     """
+//|
 //|
 static mp_obj_t synthio_block_biquad_get_A(mp_obj_t self_in) {
     synthio_block_biquad_t *self = MP_OBJ_TO_PTR(self_in);

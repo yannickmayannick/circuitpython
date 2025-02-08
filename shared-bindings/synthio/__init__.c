@@ -32,9 +32,9 @@
 //| At least 2 simultaneous notes are supported.  samd5x, mimxrt10xx and rp2040 platforms support up to 12 notes.
 //| """
 //|
-//|
 
 //| AnyBiquad = Union["Biquad", "BlockBiquad"]
+//|
 //|
 //| class EnvelopeState:
 //|     ATTACK: EnvelopeState
