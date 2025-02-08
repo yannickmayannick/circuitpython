@@ -7,7 +7,7 @@ from synthio import Note, LFO, MathOperation, Synthesizer
 
 random.seed(41)
 
-whitedata = array.array('h', [random.randint(-32000, 32000) for i in range(600)])
+whitedata = array.array("h", [random.randint(-32000, 32000) for i in range(600)])
 white8k = RawSample(whitedata, sample_rate=8000)
 
 sinedata = array.array("h", [int(32767 * sin(i * 2 * pi / 600)) for i in range(600)])

@@ -2,6 +2,7 @@ from audiofilters import Filter
 from audiofilterhelper import synth_test, white8k
 from synthio import BlockBiquad, FilterMode
 
+
 @synth_test
 def basic_filter():
     effect = Filter(
