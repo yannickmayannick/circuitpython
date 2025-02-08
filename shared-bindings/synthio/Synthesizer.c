@@ -295,6 +295,8 @@ MP_PROPERTY_GETTER(synthio_synthesizer_blocks_obj,
 //|         of the filter.
 //|
 //|         ``Q`` controls how peaked the response will be at the cutoff frequency. A large value makes the response more peaked.
+//|
+//|         .. note:: This is deprecated in ``9.x.x`` and will be removed in ``10.0.0``. Use `BlockBiquad` objects instead.
 //|         """
 //|
 
@@ -337,6 +339,8 @@ MP_DEFINE_CONST_FUN_OBJ_KW(synthio_synthesizer_lpf_fun_obj, 1, synthio_synthesiz
 //|         of the filter.
 //|
 //|         ``Q`` controls how peaked the response will be at the cutoff frequency. A large value makes the response more peaked.
+//|
+//|         .. note:: This is deprecated in ``9.x.x`` and will be removed in ``10.0.0``. Use `BlockBiquad` objects instead.
 //|         """
 //|
 
@@ -368,6 +372,8 @@ static mp_obj_t synthio_synthesizer_hpf(size_t n_pos, const mp_obj_t *pos_args, 
 //|         ``Q`` Controls how peaked the response will be at the cutoff frequency. A large value makes the response more peaked.
 //|
 //|         The coefficients are scaled such that the filter has a 0dB peak gain.
+//|
+//|         .. note:: This is deprecated in ``9.x.x`` and will be removed in ``10.0.0``. Use `BlockBiquad` objects instead.
 //|         """
 //|
 //|
