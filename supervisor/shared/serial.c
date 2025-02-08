@@ -198,12 +198,12 @@ void serial_early_init(void) {
 
     #if CIRCUITPY_PORT_SERIAL
     port_serial_early_init();
+    #endif
 
     _serial_console_early_inited = true;
 
     // Do an initial print so that we can confirm the serial output is working.
     CIRCUITPY_CONSOLE_UART_PRINTF("Serial console setup\n");
-    #endif
 }
 
 void serial_init(void) {
