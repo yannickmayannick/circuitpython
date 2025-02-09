@@ -34,8 +34,8 @@
 //|            (the voices) from the delay buffer. The voices played are evenly spaced across the delay
 //|            buffer. So for 2 voices you would hear the current sample and the one delay milliseconds back.
 //|            The delay timing of the chorus can be changed at runtime with the delay_ms parameter but the delay
-//|            can never exceed the max_delay_ms parameter. The maximum delay is 100ms.
-//|
+//|            can never exceed the max_delay_ms parameter. The maximum delay you can set is limited by available
+//|            memory.
 //|         :param int max_delay_ms: The maximum time the chorus can be in milliseconds
 //|         :param synthio.BlockInput delay_ms: The current time of the chorus delay in milliseconds. Must be less the max_delay_ms.
 //|         :param synthio.BlockInput voices: The number of voices playing split evenly over the delay buffer.
@@ -83,7 +83,7 @@ static mp_obj_t audiodelays_chorus_make_new(const mp_obj_type_t *type, size_t n_
     mp_arg_val_t args[MP_ARRAY_SIZE(allowed_args)];
     mp_arg_parse_all_kw_array(n_args, n_kw, all_args, MP_ARRAY_SIZE(allowed_args), allowed_args, args);
 
-    mp_int_t max_delay_ms = mp_arg_validate_int_range(args[ARG_max_delay_ms].u_int, 1, 100, MP_QSTR_max_delay_ms);
+    mp_int_t max_delay_ms = mp_arg_validate_int_range(args[ARG_max_delay_ms].u_int, 1, 4000, MP_QSTR_max_delay_ms);
 
     mp_int_t channel_count = mp_arg_validate_int_range(args[ARG_channel_count].u_int, 1, 2, MP_QSTR_channel_count);
     mp_int_t sample_rate = mp_arg_validate_int_min(args[ARG_sample_rate].u_int, 1, MP_QSTR_sample_rate);

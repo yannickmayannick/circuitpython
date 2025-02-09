@@ -304,12 +304,12 @@ audioio_get_buffer_result_t audiodelays_chorus_get_buffer(audiodelays_chorus_obj
                     int32_t c_pos = self->chorus_buffer_pos - 1;
 
                     for (int32_t v = 0; v < voices; v++) {
-                        word += chorus_buffer[c_pos];
-
-                        c_pos -= step;
                         if (c_pos < 0) {
                             c_pos += chorus_buf_len;
                         }
+                        word += chorus_buffer[c_pos];
+
+                        c_pos -= step;
                     }
                     word = word / voices;
 
