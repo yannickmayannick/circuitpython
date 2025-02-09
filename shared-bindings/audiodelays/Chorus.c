@@ -23,7 +23,7 @@
 //|     def __init__(
 //|         self,
 //|         max_delay_ms: int = 50,
-//|         delay_ms: BlockInput = 50.0,
+//|         delay_ms: synthio.BlockInput = 50.0,
 //|         voices: synthio.BlockInput = 1.0,
 //|         buffer_size: int = 512,
 //|         sample_rate: int = 8000,
