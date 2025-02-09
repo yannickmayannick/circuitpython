@@ -8,6 +8,7 @@
 
 #include "shared-bindings/audiodelays/Chorus.h"
 #include "shared-module/audiodelays/Chorus.h"
+#include "shared-bindings/audiocore/__init__.h"
 
 #include "shared/runtime/context_manager_helpers.h"
 #include "py/binary.h"
@@ -110,9 +111,7 @@ static mp_obj_t audiodelays_chorus_deinit(mp_obj_t self_in) {
 static MP_DEFINE_CONST_FUN_OBJ_1(audiodelays_chorus_deinit_obj, audiodelays_chorus_deinit);
 
 static void check_for_deinit(audiodelays_chorus_obj_t *self) {
-    if (common_hal_audiodelays_chorus_deinited(self)) {
-        raise_deinited_error();
-    }
+    audiosample_check_for_deinit(&self->base);
 }
 
 //|     def __enter__(self) -> Chorus:
@@ -237,17 +236,14 @@ static const mp_rom_map_elem_t audiodelays_chorus_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_playing), MP_ROM_PTR(&audiodelays_chorus_playing_obj) },
     { MP_ROM_QSTR(MP_QSTR_delay_ms), MP_ROM_PTR(&audiodelays_chorus_delay_ms_obj) },
     { MP_ROM_QSTR(MP_QSTR_voices), MP_ROM_PTR(&audiodelays_chorus_voices_obj) },
+    AUDIOSAMPLE_FIELDS,
 };
 static MP_DEFINE_CONST_DICT(audiodelays_chorus_locals_dict, audiodelays_chorus_locals_dict_table);
 
 static const audiosample_p_t audiodelays_chorus_proto = {
     MP_PROTO_IMPLEMENT(MP_QSTR_protocol_audiosample)
-    .sample_rate = (audiosample_sample_rate_fun)common_hal_audiodelays_chorus_get_sample_rate,
-    .bits_per_sample = (audiosample_bits_per_sample_fun)common_hal_audiodelays_chorus_get_bits_per_sample,
-    .channel_count = (audiosample_channel_count_fun)common_hal_audiodelays_chorus_get_channel_count,
     .reset_buffer = (audiosample_reset_buffer_fun)audiodelays_chorus_reset_buffer,
     .get_buffer = (audiosample_get_buffer_fun)audiodelays_chorus_get_buffer,
-    .get_buffer_structure = (audiosample_get_buffer_structure_fun)audiodelays_chorus_get_buffer_structure,
 };
 
 MP_DEFINE_CONST_OBJ_TYPE(

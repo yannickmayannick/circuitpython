@@ -16,10 +16,12 @@ void common_hal_audiodelays_chorus_construct(audiodelays_chorus_obj_t *self, uin
 
     // Basic settings every effect and audio sample has
     // These are the effects values, not the source sample(s)
-    self->bits_per_sample = bits_per_sample; // Most common is 16, but 8 is also supported in many places
-    self->samples_signed = samples_signed; // Are the samples we provide signed (common is true)
-    self->channel_count = channel_count; // Channels can be 1 for mono or 2 for stereo
-    self->sample_rate = sample_rate; // Sample rate for the effect, this generally needs to match all audio objects
+    self->base.bits_per_sample = bits_per_sample; // Most common is 16, but 8 is also supported in many places
+    self->base.samples_signed = samples_signed; // Are the samples we provide signed (common is true)
+    self->base.channel_count = channel_count; // Channels can be 1 for mono or 2 for stereo
+    self->base.sample_rate = sample_rate; // Sample rate for the effect, this generally needs to match all audio objects
+    self->base.single_buffer = false;
+    self->base.max_buffer_length = buffer_size;
 
     // To smooth things out as CircuitPython is doing other tasks most audio objects have a buffer
     // A double buffer is set up here so the audio output can use DMA on buffer 1 while we
@@ -70,7 +72,7 @@ void common_hal_audiodelays_chorus_construct(audiodelays_chorus_obj_t *self, uin
 
     // Allocate the chorus buffer for the max possible delay, chorus is always 16-bit
     self->max_delay_ms = max_delay_ms;
-    self->max_chorus_buffer_len = self->sample_rate / MICROPY_FLOAT_CONST(1000.0) * max_delay_ms * (self->channel_count * sizeof(uint16_t)); // bytes
+    self->max_chorus_buffer_len = self->base.sample_rate / MICROPY_FLOAT_CONST(1000.0) * max_delay_ms * (self->base.channel_count * sizeof(uint16_t)); // bytes
     self->chorus_buffer = m_malloc(self->max_chorus_buffer_len);
     if (self->chorus_buffer == NULL) {
         common_hal_audiodelays_chorus_deinit(self);
@@ -79,7 +81,7 @@ void common_hal_audiodelays_chorus_construct(audiodelays_chorus_obj_t *self, uin
     memset(self->chorus_buffer, 0, self->max_chorus_buffer_len);
 
     // calculate the length of a single sample in milliseconds
-    self->sample_ms = MICROPY_FLOAT_CONST(1000.0) / self->sample_rate;
+    self->sample_ms = MICROPY_FLOAT_CONST(1000.0) / self->base.sample_rate;
 
     // calculate everything needed for the current delay
     mp_float_t f_delay_ms = synthio_block_slot_get(&self->delay_ms);
@@ -122,7 +124,7 @@ void chorus_recalculate_delay(audiodelays_chorus_obj_t *self, mp_float_t f_delay
     f_delay_ms = MAX(f_delay_ms, self->sample_ms);
 
     // Calculate the current chorus buffer length in bytes
-    uint32_t new_chorus_buffer_len = (uint32_t)(self->sample_rate / MICROPY_FLOAT_CONST(1000.0) * f_delay_ms) * (self->channel_count * sizeof(uint16_t));
+    uint32_t new_chorus_buffer_len = (uint32_t)(self->base.sample_rate / MICROPY_FLOAT_CONST(1000.0) * f_delay_ms) * (self->base.channel_count * sizeof(uint16_t));
 
     if (new_chorus_buffer_len < 0) { // or too short!
         return;
@@ -141,18 +143,6 @@ void common_hal_audiodelays_chorus_set_voices(audiodelays_chorus_obj_t *self, mp
     synthio_block_assign_slot(voices, &self->voices, MP_QSTR_voices);
 }
 
-uint32_t common_hal_audiodelays_chorus_get_sample_rate(audiodelays_chorus_obj_t *self) {
-    return self->sample_rate;
-}
-
-uint8_t common_hal_audiodelays_chorus_get_channel_count(audiodelays_chorus_obj_t *self) {
-    return self->channel_count;
-}
-
-uint8_t common_hal_audiodelays_chorus_get_bits_per_sample(audiodelays_chorus_obj_t *self) {
-    return self->bits_per_sample;
-}
-
 void audiodelays_chorus_reset_buffer(audiodelays_chorus_obj_t *self,
     bool single_channel_output,
     uint8_t channel) {
@@ -167,27 +157,7 @@ bool common_hal_audiodelays_chorus_get_playing(audiodelays_chorus_obj_t *self) {
 }
 
 void common_hal_audiodelays_chorus_play(audiodelays_chorus_obj_t *self, mp_obj_t sample, bool loop) {
-    // When a sample is to be played we must ensure the samples values matches what we expect
-    // Then we reset the sample and get the first buffer to play
-    // The get_buffer function will actually process that data
-
-    if (audiosample_sample_rate(sample) != self->sample_rate) {
-        mp_raise_ValueError_varg(MP_ERROR_TEXT("The sample's %q does not match"), MP_QSTR_sample_rate);
-    }
-    if (audiosample_channel_count(sample) != self->channel_count) {
-        mp_raise_ValueError_varg(MP_ERROR_TEXT("The sample's %q does not match"), MP_QSTR_channel_count);
-    }
-    if (audiosample_bits_per_sample(sample) != self->bits_per_sample) {
-        mp_raise_ValueError_varg(MP_ERROR_TEXT("The sample's %q does not match"), MP_QSTR_bits_per_sample);
-    }
-    bool single_buffer;
-    bool samples_signed;
-    uint32_t max_buffer_length;
-    uint8_t spacing;
-    audiosample_get_buffer_structure(sample, false, &single_buffer, &samples_signed, &max_buffer_length, &spacing);
-    if (samples_signed != self->samples_signed) {
-        mp_raise_ValueError_varg(MP_ERROR_TEXT("The sample's %q does not match"), MP_QSTR_signedness);
-    }
+    audiosample_must_match(&self->base, sample);
 
     self->sample = sample;
     self->loop = loop;
@@ -196,7 +166,7 @@ void common_hal_audiodelays_chorus_play(audiodelays_chorus_obj_t *self, mp_obj_t
     audioio_get_buffer_result_t result = audiosample_get_buffer(self->sample, false, 0, (uint8_t **)&self->sample_remaining_buffer, &self->sample_buffer_length);
 
     // Track remaining sample length in terms of bytes per sample
-    self->sample_buffer_length /= (self->bits_per_sample / 8);
+    self->sample_buffer_length /= (self->base.bits_per_sample / 8);
     // Store if we have more data in the sample to retrieve
     self->more_data = result == GET_BUFFER_MORE_DATA;
 
@@ -219,7 +189,7 @@ audioio_get_buffer_result_t audiodelays_chorus_get_buffer(audiodelays_chorus_obj
     // If we are using 16 bit samples we need a 16 bit pointer, 8 bit needs an 8 bit pointer
     int16_t *word_buffer = (int16_t *)self->buffer[self->last_buf_idx];
     int8_t *hword_buffer = self->buffer[self->last_buf_idx];
-    uint32_t length = self->buffer_len / (self->bits_per_sample / 8);
+    uint32_t length = self->buffer_len / (self->base.bits_per_sample / 8);
 
     // The chorus buffer is always stored as a 16-bit value internally
     int16_t *chorus_buffer = (int16_t *)self->chorus_buffer;
@@ -240,7 +210,7 @@ audioio_get_buffer_result_t audiodelays_chorus_get_buffer(audiodelays_chorus_obj
                 // Load another sample buffer to play
                 audioio_get_buffer_result_t result = audiosample_get_buffer(self->sample, false, 0, (uint8_t **)&self->sample_remaining_buffer, &self->sample_buffer_length);
                 // Track length in terms of words.
-                self->sample_buffer_length /= (self->bits_per_sample / 8);
+                self->sample_buffer_length /= (self->base.bits_per_sample / 8);
                 self->more_data = result == GET_BUFFER_MORE_DATA;
             }
         }
@@ -248,13 +218,13 @@ audioio_get_buffer_result_t audiodelays_chorus_get_buffer(audiodelays_chorus_obj
         // Determine how many bytes we can process to our buffer, the less of the sample we have left and our buffer remaining
         uint32_t n;
         if (self->sample == NULL) {
-            n = MIN(length, SYNTHIO_MAX_DUR * self->channel_count);
+            n = MIN(length, SYNTHIO_MAX_DUR * self->base.channel_count);
         } else {
-            n = MIN(MIN(self->sample_buffer_length, length), SYNTHIO_MAX_DUR * self->channel_count);
+            n = MIN(MIN(self->sample_buffer_length, length), SYNTHIO_MAX_DUR * self->base.channel_count);
         }
 
         // get the effect values we need from the BlockInput. These may change at run time so you need to do bounds checking if required
-        shared_bindings_synthio_lfo_tick(self->sample_rate, n / self->channel_count);
+        shared_bindings_synthio_lfo_tick(self->base.sample_rate, n / self->base.channel_count);
 
         int32_t voices = MAX(synthio_block_slot_get(&self->voices), 1.0);
 
@@ -264,17 +234,17 @@ audioio_get_buffer_result_t audiodelays_chorus_get_buffer(audiodelays_chorus_obj
         }
 
         if (self->sample == NULL) {
-            if (self->samples_signed) {
-                memset(word_buffer, 0, n * (self->bits_per_sample / 8));
+            if (self->base.samples_signed) {
+                memset(word_buffer, 0, n * (self->base.bits_per_sample / 8));
             } else {
                 // For unsigned samples set to the middle which is "quiet"
-                if (MP_LIKELY(self->bits_per_sample == 16)) {
+                if (MP_LIKELY(self->base.bits_per_sample == 16)) {
                     uint16_t *uword_buffer = (uint16_t *)word_buffer;
                     for (uint32_t i = 0; i < n; i++) {
                         *uword_buffer++ = 32768;
                     }
                 } else {
-                    memset(hword_buffer, 128, n * (self->bits_per_sample / 8));
+                    memset(hword_buffer, 128, n * (self->base.bits_per_sample / 8));
                 }
             }
         } else {
@@ -283,10 +253,10 @@ audioio_get_buffer_result_t audiodelays_chorus_get_buffer(audiodelays_chorus_obj
 
             for (uint32_t i = 0; i < n; i++) {
                 int32_t sample_word = 0;
-                if (MP_LIKELY(self->bits_per_sample == 16)) {
+                if (MP_LIKELY(self->base.bits_per_sample == 16)) {
                     sample_word = sample_src[i];
                 } else {
-                    if (self->samples_signed) {
+                    if (self->base.samples_signed) {
                         sample_word = sample_hsrc[i];
                     } else {
                         // Be careful here changing from an 8 bit unsigned to signed into a 32-bit signed
@@ -316,14 +286,14 @@ audioio_get_buffer_result_t audiodelays_chorus_get_buffer(audiodelays_chorus_obj
                     word = synthio_mix_down_sample(word, SYNTHIO_MIX_DOWN_SCALE(2));
                 }
 
-                if (MP_LIKELY(self->bits_per_sample == 16)) {
+                if (MP_LIKELY(self->base.bits_per_sample == 16)) {
                     word_buffer[i] = word;
-                    if (!self->samples_signed) {
+                    if (!self->base.samples_signed) {
                         word_buffer[i] ^= 0x8000;
                     }
                 } else {
                     int8_t out = word;
-                    if (self->samples_signed) {
+                    if (self->base.samples_signed) {
                         hword_buffer[i] = out;
                     } else {
                         hword_buffer[i] = (uint8_t)out ^ 0x80;
@@ -334,7 +304,7 @@ audioio_get_buffer_result_t audiodelays_chorus_get_buffer(audiodelays_chorus_obj
                     self->chorus_buffer_pos = 0;
                 }
             }
-            self->sample_remaining_buffer += (n * (self->bits_per_sample / 8));
+            self->sample_remaining_buffer += (n * (self->base.bits_per_sample / 8));
             self->sample_buffer_length -= n;
         }
         // Update the remaining length and the buffer positions based on how much we wrote into our buffer
@@ -349,19 +319,4 @@ audioio_get_buffer_result_t audiodelays_chorus_get_buffer(audiodelays_chorus_obj
 
     // Chorus always returns more data but some effects may return GET_BUFFER_DONE or GET_BUFFER_ERROR (see audiocore/__init__.h)
     return GET_BUFFER_MORE_DATA;
-}
-
-void audiodelays_chorus_get_buffer_structure(audiodelays_chorus_obj_t *self, bool single_channel_output,
-    bool *single_buffer, bool *samples_signed, uint32_t *max_buffer_length, uint8_t *spacing) {
-
-    // Return information about the effect's buffer (not the sample's)
-    // These are used by calling audio objects to determine how to handle the effect's buffer
-    *single_buffer = false;
-    *samples_signed = self->samples_signed;
-    *max_buffer_length = self->buffer_len;
-    if (single_channel_output) {
-        *spacing = self->channel_count;
-    } else {
-        *spacing = 1;
-    }
 }
