@@ -31,6 +31,7 @@
 //|         :param ~microcontroller.Pin miso: The pin transferring data from the secondary to the main
 //|         :param ~microcontroller.Pin ss: The secondary selection pin"""
 //|         ...
+//|
 static mp_obj_t spitarget_spi_target_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *all_args) {
     spitarget_spi_target_obj_t *self = mp_obj_malloc(spitarget_spi_target_obj_t, &spitarget_spi_target_type);
     enum { ARG_sck, ARG_mosi, ARG_miso, ARG_ss };
@@ -90,6 +91,7 @@ static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(spitarget_spi_target___exit___obj, 4,
 //|         :param bytearray miso_packet: Packet data to be sent from secondary to main on next request.
 //|         :param bytearray mosi_packet: Packet to be filled with data from main on next request.
 //|         """
+//|
 static mp_obj_t spitarget_spi_target_load_packet(size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
     mp_check_self(mp_obj_is_type(pos_args[0], &spitarget_spi_target_type));
     spitarget_spi_target_obj_t *self = MP_OBJ_TO_PTR(pos_args[0]);
@@ -125,6 +127,7 @@ static MP_DEFINE_CONST_FUN_OBJ_KW(spitarget_spi_target_load_packet_obj, 1, spita
 //|         :param float timeout: Timeout in seconds. Zero means wait forever, a negative value means check once
 //|         :return: True if the transfer is complete, or False if no response received before the timeout
 //|         """
+//|
 //|
 static mp_obj_t spitarget_spi_target_wait_transfer(size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
     mp_check_self(mp_obj_is_type(pos_args[0], &spitarget_spi_target_type));

@@ -38,8 +38,8 @@
 //|         """``sleep_memory`` is ``True`` if its length is greater than zero.
 //|         This is an easy way to check for its existence.
 //|         """
-//|
 //|         ...
+//|
 //|     def __len__(self) -> int:
 //|         """Return the length. This is used by (`len`)"""
 //|         ...
