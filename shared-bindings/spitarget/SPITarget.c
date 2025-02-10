@@ -84,7 +84,7 @@ STATIC MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(spitarget_spi_target___exit___obj, 4,
 //|         """Queue data for the next SPI transfer from the main device.
 //|         If a packet has already been queued for this SPI bus but has not yet been transferred, an error will be raised.
 //|
-//|         :param bytearray miso_packet: Packet data to be sent from secondary to main on next request."""
+//|         :param bytearray miso_packet: Packet data to be sent from secondary to main on next request.
 //|         :param bytearray mosi_packet: Packet to be filled with data from main on next request."""
 //|
 STATIC mp_obj_t spitarget_spi_target_load_packet(size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
