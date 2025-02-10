@@ -16,7 +16,7 @@ typedef struct {
     uint8_t SS_pin;
 
     uint8_t *mosi_packet;
-    uint8_t *miso_packet;
+    const uint8_t *miso_packet;
 
     dma_descr_t running_dma;
 } spitarget_spi_target_obj_t;
