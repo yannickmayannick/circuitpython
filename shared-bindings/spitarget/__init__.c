@@ -48,20 +48,20 @@
 //|   >>> spi.write(bytearray([0, 0])) # ADC command: read from A0
 //|   >>> adc_result = bytearray(2)
 //|   >>> spi.readinto(adc_result)
-//|   >>> adc_result
-//|   bytearray(b'\xc4\x16')
+//|   >>> list(adc_result) # show output from ADC
+//|   [196, 22]
 //|   >>> spi.unlock()
 //|
 //| """
 
 
 
-STATIC const mp_rom_map_elem_t spitarget_module_globals_table[] = {
+static const mp_rom_map_elem_t spitarget_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR___name__), MP_ROM_QSTR(MP_QSTR_spitarget) },
     { MP_ROM_QSTR(MP_QSTR_SPITarget), MP_ROM_PTR(&spitarget_spi_target_type) },
 };
 
-STATIC MP_DEFINE_CONST_DICT(spitarget_module_globals, spitarget_module_globals_table);
+static MP_DEFINE_CONST_DICT(spitarget_module_globals, spitarget_module_globals_table);
 
 const mp_obj_module_t spitarget_module = {
     .base = { &mp_type_module },
