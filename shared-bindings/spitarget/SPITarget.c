@@ -21,7 +21,7 @@
 //|         sck: microcontroller.Pin,
 //|         mosi: microcontroller.Pin,
 //|         miso: microcontroller.Pin,
-//|         ss: microcontroller.Pin
+//|         ss: microcontroller.Pin,
 //|     ) -> None:
 //|         """SPI is a four-wire protocol for communicating between devices.
 //|         This implements the secondary (aka target or peripheral) side.
@@ -85,8 +85,8 @@ STATIC MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(spitarget_spi_target___exit___obj, 4,
 //|         If a packet has already been queued for this SPI bus but has not yet been transferred, an error will be raised.
 //|
 //|         :param bytearray miso_packet: Packet data to be sent from secondary to main on next request.
-//|         :param bytearray mosi_packet: Packet to be filled with data from main on next request."""
-//|
+//|         :param bytearray mosi_packet: Packet to be filled with data from main on next request.
+//|         """
 STATIC mp_obj_t spitarget_spi_target_load_packet(size_t n_args, const mp_obj_t *pos_args, mp_map_t *kw_args) {
     mp_check_self(mp_obj_is_type(pos_args[0], &spitarget_spi_target_type));
     spitarget_spi_target_obj_t *self = MP_OBJ_TO_PTR(pos_args[0]);
