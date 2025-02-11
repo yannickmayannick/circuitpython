@@ -15,6 +15,8 @@
 #define CIRCUITPY_BOARD_SPI         (1)
 #define CIRCUITPY_BOARD_SPI_PIN     {{.clock = &pin_PA05, .mosi = &pin_PA04, .miso = &pin_PA06}}
 
+#define CIRCUITPY_INTERNAL_FLASH_FILESYSTEM_SIZE (60 * 1024)
+
 #define IGNORE_PIN_PA00     1
 
 #define IGNORE_PIN_PA03     1
