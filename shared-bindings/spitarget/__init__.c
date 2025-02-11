@@ -35,22 +35,40 @@
 //|           miso_buffer[1] = (reading) & 0xFF
 //|           # Send array of bytes over SPI to main
 //|           device.load_packet(mosi_buffer, miso_buffer)
-//|           device.wait_transfer(0)
+//|           while not device.wait_transfer(timeout=-1):
+//|               pass
 //|           # Handle command from main, which sets the ADC channel
 //|           selected_channel = map_adc_channel((mosi_buffer[0] << 8) | mosi_buffer[1])
 //|
 //| Communicating with the ADC emulator from the REPL of an attached CircuitPython board might look like ::
 //|
+//|   >>> import board
+//|   >>> import digitalio
 //|   >>> import busio
+//|   >>> import time
+//|   >>>
+//|   >>> ## setup
 //|   >>> spi = busio.SPI(board.SCK, board.MOSI, board.MISO)
+//|   >>> cs = digitalio.DigitalInOut(board.CS)
+//|   >>> cs.direction = digitalio.Direction.OUTPUT
+//|   >>> cs.value = True
 //|   >>> spi.try_lock()
 //|   True
-//|   >>> spi.write(bytearray([0, 0])) # ADC command: read from A0
+//|   >>>
+//|   >>> ## ADC command: read from A0
+//|   >>> cs.value = False
+//|   >>> spi.write(bytearray([0, 0]))
+//|   >>> cs.value = True
+//|   >>>
+//|   >>> # wait for ADC to read a value
+//|   >>>
+//|   >>> ## get two-byte output from ADC
 //|   >>> adc_result = bytearray(2)
-//|   >>> spi.readinto(adc_result)
-//|   >>> list(adc_result) # show output from ADC
-//|   [196, 22]
-//|   >>> spi.unlock()
+//|   >>> cs.value = False
+//|   >>> spi.readinto(adc_result, write_value=1)
+//|   >>> cs.value = True
+//|   >>> list(adc_result)
+//|   [0, 255]
 //|
 //| """
 
