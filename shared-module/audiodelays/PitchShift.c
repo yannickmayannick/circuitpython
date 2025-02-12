@@ -248,7 +248,7 @@ audioio_get_buffer_result_t audiodelays_pitch_shift_get_buffer(audiodelays_pitch
             // get the effect values we need from the BlockInput. These may change at run time so you need to do bounds checking if required
             shared_bindings_synthio_lfo_tick(self->base.sample_rate, n / self->base.channel_count);
             mp_float_t semitones = synthio_block_slot_get(&self->semitones);
-            mp_float_t mix = synthio_block_slot_get_limited(&self->mix, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
+            mp_float_t mix = synthio_block_slot_get_limited(&self->mix, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0)) * MICROPY_FLOAT_CONST(2.0);
 
             // Only recalculate rate if semitones has changes
             if (memcmp(&semitones, &self->current_semitones, sizeof(mp_float_t))) {
@@ -300,13 +300,16 @@ audioio_get_buffer_result_t audiodelays_pitch_shift_get_buffer(audiodelays_pitch
                     word /= (int32_t)overlap_size;
                 }
 
+                word = (int32_t)((sample_word * MIN(MICROPY_FLOAT_CONST(2.0) - mix, MICROPY_FLOAT_CONST(1.0))) + (word * MIN(mix, MICROPY_FLOAT_CONST(1.0))));
+                word = synthio_mix_down_sample(word, SYNTHIO_MIX_DOWN_SCALE(2));
+
                 if (MP_LIKELY(self->base.bits_per_sample == 16)) {
-                    word_buffer[i] = (int16_t)((sample_word * (MICROPY_FLOAT_CONST(1.0) - mix)) + (word * mix));
+                    word_buffer[i] = (int16_t)word;
                     if (!self->base.samples_signed) {
                         word_buffer[i] ^= 0x8000;
                     }
                 } else {
-                    int8_t mixed = (int8_t)((sample_word * (MICROPY_FLOAT_CONST(1.0) - mix)) + (word * mix));
+                    int8_t mixed = (int8_t)word;
                     if (self->base.samples_signed) {
                         hword_buffer[i] = mixed;
                     } else {
