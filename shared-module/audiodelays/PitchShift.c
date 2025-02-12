@@ -270,7 +270,7 @@ audioio_get_buffer_result_t audiodelays_pitch_shift_get_buffer(audiodelays_pitch
                     }
                 }
 
-                if (self->overlap_len) {
+                if (overlap_size) {
                     // Copy last sample from overlap and store in buffer
                     window_buffer[self->window_index + window_size * buf_offset] = overlap_buffer[self->overlap_index + overlap_size * buf_offset];
 
@@ -289,7 +289,7 @@ audioio_get_buffer_result_t audiodelays_pitch_shift_get_buffer(audiodelays_pitch
                 int32_t word = (int32_t)window_buffer[read_index + window_size * buf_offset];
                 
                 // Check if we're within the overlap range and mix buffer sample with overlap sample
-                if (read_overlap_offset > 0 && read_overlap_offset <= overlap_size) {
+                if (overlap_size && read_overlap_offset > 0 && read_overlap_offset <= overlap_size) {
                     // Apply volume based on overlap position to buffer sample
                     word *= (int32_t)read_overlap_offset;
 
