@@ -287,7 +287,7 @@ audioio_get_buffer_result_t audiodelays_pitch_shift_get_buffer(audiodelays_pitch
 
                 // Read sample from buffer
                 int32_t word = (int32_t)window_buffer[read_index + window_size * buf_offset];
-                
+
                 // Check if we're within the overlap range and mix buffer sample with overlap sample
                 if (overlap_size && read_overlap_offset > 0 && read_overlap_offset <= overlap_size) {
                     // Apply volume based on overlap position to buffer sample
@@ -316,21 +316,27 @@ audioio_get_buffer_result_t audiodelays_pitch_shift_get_buffer(audiodelays_pitch
                         hword_buffer[i] = (uint8_t)mixed ^ 0x80;
                     }
                 }
-                
+
                 if (self->base.channel_count == 1 || buf_offset) {
                     // Increment window buffer write pointer
                     self->window_index++;
-                    if (self->window_index >= window_size) self->window_index = 0;
+                    if (self->window_index >= window_size) {
+                        self->window_index = 0;
+                    }
 
                     // Increment overlap buffer pointer
                     if (overlap_size) {
                         self->overlap_index++;
-                        if (self->overlap_index >= overlap_size) self->overlap_index = 0;
+                        if (self->overlap_index >= overlap_size) {
+                            self->overlap_index = 0;
+                        }
                     }
 
                     // Increment window buffer read pointer by rate
                     self->read_index += self->read_rate;
-                    if (self->read_index >= window_size << PITCH_READ_SHIFT) self->read_index -= window_size << PITCH_READ_SHIFT;
+                    if (self->read_index >= window_size << PITCH_READ_SHIFT) {
+                        self->read_index -= window_size << PITCH_READ_SHIFT;
+                    }
                 }
             }
 
