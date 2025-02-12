@@ -313,20 +313,22 @@ audioio_get_buffer_result_t audiodelays_pitch_shift_get_buffer(audiodelays_pitch
                         hword_buffer[i] = (uint8_t)mixed ^ 0x80;
                     }
                 }
+                
+                if (self->base.channel_count == 1 || buf_offset) {
+                    // Increment window buffer write pointer
+                    self->window_index++;
+                    if (self->window_index >= window_size) self->window_index = 0;
 
-                // Increment window buffer write pointer
-                self->window_index++;
-                if (self->window_index >= window_size) self->window_index = 0;
+                    // Increment overlap buffer pointer
+                    if (overlap_size) {
+                        self->overlap_index++;
+                        if (self->overlap_index >= overlap_size) self->overlap_index = 0;
+                    }
 
-                // Increment overlap buffer pointer
-                if (self->overlap_len) {
-                    self->overlap_index++;
-                    if (self->overlap_index >= overlap_size) self->overlap_index = 0;
+                    // Increment window buffer read pointer by rate
+                    self->read_index += self->read_rate;
+                    if (self->read_index >= window_size << PITCH_READ_SHIFT) self->read_index -= window_size << PITCH_READ_SHIFT;
                 }
-
-                // Increment window buffer read pointer by rate
-                self->read_index += self->read_rate;
-                if (self->read_index >= window_size << PITCH_READ_SHIFT) self->read_index -= window_size << PITCH_READ_SHIFT;
             }
 
             // Update the remaining length and the buffer positions based on how much we wrote into our buffer
