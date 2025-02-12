@@ -286,7 +286,7 @@ audioio_get_buffer_result_t audiodelays_pitch_shift_get_buffer(audiodelays_pitch
                 uint32_t read_overlap_offset = read_index + window_size * (read_index < self->window_index) - self->window_index;
 
                 // Read sample from buffer
-                int32_t word = (int32_t)window_buffer[self->read_index + window_size * buf_offset];
+                int32_t word = (int32_t)window_buffer[read_index + window_size * buf_offset];
                 
                 // Check if we're within the overlap range and mix buffer sample with overlap sample
                 if (read_overlap_offset > 0 && read_overlap_offset <= overlap_size) {
