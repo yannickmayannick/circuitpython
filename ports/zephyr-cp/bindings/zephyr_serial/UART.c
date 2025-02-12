@@ -85,12 +85,7 @@ static void check_for_deinit(zephyr_serial_uart_obj_t *self) {
 //|         :ref:`lifetime-and-contextmanagers` for more info."""
 //|         ...
 //|
-static mp_obj_t _zephyr_serial_uart_obj___exit__(size_t n_args, const mp_obj_t *args) {
-    (void)n_args;
-    zephyr_serial_uart_deinit(MP_OBJ_TO_PTR(args[0]));
-    return mp_const_none;
-}
-static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(_zephyr_serial_uart___exit___obj, 4, 4, _zephyr_serial_uart_obj___exit__);
+//  Provided by context manager helper.
 
 // These are standard stream methods. Code is in py/stream.c.
 //
