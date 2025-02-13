@@ -122,6 +122,8 @@ a rotation of 0. Attempting to initialize the screen with a rotation other than 
 90, 180 or 270 is not supported and will result in an unexpected screen rotation.
 
 `Sunton ESP32-8048S050 <https://circuitpython.org/board/sunton_esp32_8048S050/>`_
+`Adafruit Feather RP2350 <https://circuitpython.org/board/adafruit_feather_rp2350/>`_
+`Adafruit Metro RP2350 <https://circuitpython.org/board/adafruit_metro_rp2350/>`_
 
 CIRCUITPY_DISPLAY_FREQUENCY
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -130,3 +132,46 @@ If a valid frequency is not defined the board will initialize the framebuffer wi
 frequency of 12500000hz (12.5Mhz). The value should be entered as an integer in hertz
 i.e. CIRCUITPY_DISPLAY_FREQUENCY=16000000 will override the default value with a 16Mhz
 display frequency.
+
+`Sunton ESP32-8048S050 <https://circuitpython.org/board/sunton_esp32_8048S050/>`_
+
+
+CIRCUITPY_PICODVI_ENABLE
+~~~~~~~~~~~~~~~~~~~~~~~~
+Whether to configure the display at board initialization time, one of the following:
+
+.. code-block::
+
+    CIRCUITPY_PICODVI_ENABLE="detect" # when EDID EEPROM is detected (default)
+    CIRCUITPY_PICODVI_ENABLE="always"
+    CIRCUITPY_PICODVI_ENABLE="never"
+
+A display configured in this manner is available at ``supervisor.runtime.display``
+until it is released by ``displayio.release_displays()``. It does not appear at
+``board.DISPLAY``.
+
+`Adafruit Feather RP2350 <https://circuitpython.org/board/adafruit_feather_rp2350/>`_
+`Adafruit Metro RP2350 <https://circuitpython.org/board/adafruit_metro_rp2350/>`_
+
+CIRCUITPY_DISPLAY_WIDTH, CIRCUITPY_DISPLAY_HEIGHT, and CIRCUITPY_DISPLAY_COLOR_DEPTH (RP2350 boards with DVI or HSTX connector)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Selects the desired resolution and color depth.
+
+Supported resolutions are:
+ * 640x480 with color depth 1, 2, 4 or 8 bits per pixel
+ * 320x240 with color depth 8 or 16 bits per pixel
+
+The default value, if unspecified, is 320x240 with 16 bits per pixel.
+
+If height is unspecified, it is set from the width. For example, a width of 640
+implies a height of 480.
+
+Example: Configure the display to 640x480 black and white (1 bit per pixel):
+
+.. code-block::
+
+    CIRCUITPY_DISPLAY_WIDTH=640
+    CIRCUITPY_DISPLAY_COLOR_DEPTH=1
+
+`Adafruit Feather RP2350 <https://circuitpython.org/board/adafruit_feather_rp2350/>`_
+`Adafruit Metro RP2350 <https://circuitpython.org/board/adafruit_metro_rp2350/>`_
