@@ -159,9 +159,9 @@ static const mp_rom_map_elem_t touchio_touchin_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR___exit__), MP_ROM_PTR(&touchio_touchin___exit___obj) },
     { MP_ROM_QSTR(MP_QSTR_deinit), MP_ROM_PTR(&touchio_touchin_deinit_obj) },
 
-    { MP_OBJ_NEW_QSTR(MP_QSTR_value), MP_ROM_PTR(&touchio_touchin_value_obj)},
-    { MP_OBJ_NEW_QSTR(MP_QSTR_raw_value), MP_ROM_PTR(&touchio_touchin_raw_value_obj)},
-    { MP_OBJ_NEW_QSTR(MP_QSTR_threshold), MP_ROM_PTR(&touchio_touchin_threshold_obj)},
+    { MP_ROM_QSTR(MP_QSTR_value), MP_ROM_PTR(&touchio_touchin_value_obj)},
+    { MP_ROM_QSTR(MP_QSTR_raw_value), MP_ROM_PTR(&touchio_touchin_raw_value_obj)},
+    { MP_ROM_QSTR(MP_QSTR_threshold), MP_ROM_PTR(&touchio_touchin_threshold_obj)},
 };
 
 static MP_DEFINE_CONST_DICT(touchio_touchin_locals_dict, touchio_touchin_locals_dict_table);
