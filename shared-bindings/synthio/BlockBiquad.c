@@ -22,11 +22,11 @@
 //|     NOTCH: FilterMode
 //|     """A notch filter"""
 //|     LOW_SHELF: FilterMode
-//|     """A notch filter"""
+//|     """A low shelf filter"""
 //|     HIGH_SHELF: FilterMode
-//|     """A notch filter"""
+//|     """A high shelf filter"""
 //|     PEAKING_EQ: FilterMode
-//|     """A notch filter"""
+//|     """A peaking equalizer filter"""
 //|
 //|
 
