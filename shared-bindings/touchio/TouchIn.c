@@ -84,7 +84,7 @@ static void check_for_deinit(touchio_touchin_obj_t *self) {
 //|     value: bool
 //|     """Whether the touch pad is being touched or not. (read-only)
 //|
-//|     True when `raw_value` > `threshold`.:m"""
+//|     True when `raw_value` > `threshold`."""
 static mp_obj_t touchio_touchin_obj_get_value(mp_obj_t self_in) {
     touchio_touchin_obj_t *self = MP_OBJ_TO_PTR(self_in);
     check_for_deinit(self);
