@@ -54,7 +54,7 @@ static const mp_rom_map_elem_t board_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR_APA102_CLK), MP_ROM_PTR(&pin_GPIO39) },
     { MP_ROM_QSTR(MP_QSTR_APA102_DI), MP_ROM_PTR(&pin_GPIO40) },
 
-    // SD card control pins    
+    // SD card control pins
     { MP_ROM_QSTR(MP_QSTR_SD_D0), MP_ROM_PTR(&pin_GPIO14) },
     { MP_ROM_QSTR(MP_QSTR_SD_D1), MP_ROM_PTR(&pin_GPIO17) },
     { MP_ROM_QSTR(MP_QSTR_SD_D2), MP_ROM_PTR(&pin_GPIO21) },
