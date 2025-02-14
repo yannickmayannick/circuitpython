@@ -70,8 +70,8 @@ void board_init(void) {
         0, // start up time
         stop_sequence,
         sizeof(stop_sequence),
-        400, // width
-        300, // height
+        WIDTH, // width
+        HEIGHT, // height
         300, // RAM width
         400, // RAM height
         0, // colstart
