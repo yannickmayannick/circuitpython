@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 12:55-0600\n"
-"PO-Revision-Date: 2025-02-07 13:01+0000\n"
+"PO-Revision-Date: 2025-02-15 19:02+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.10\n"
 
 #: main.c
 msgid ""
@@ -612,6 +612,8 @@ msgstr "Os valores das matrizes devem ser bytes simples."
 #: ports/atmel-samd/common-hal/spitarget/SPITarget.c
 msgid "Async SPI transfer in progress on this bus, keep awaiting."
 msgstr ""
+"Transferência SPI assíncrona em andamento nesse barramento, continue "
+"aguardando."
 
 #: shared-module/memorymonitor/AllocationAlarm.c
 #, c-format
@@ -1777,6 +1779,8 @@ msgstr "O canal A da fatia do PWM já está em uso"
 #: shared-bindings/spitarget/SPITarget.c
 msgid "Packet buffers for an SPI transfer must have the same length."
 msgstr ""
+"Os buffers de pacotes para uma transferência SPI devem ter o mesmo "
+"comprimento."
 
 #: shared-module/jpegio/JpegDecoder.c
 msgid "Parameter error"
