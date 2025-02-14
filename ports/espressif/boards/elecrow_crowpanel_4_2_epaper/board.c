@@ -6,13 +6,13 @@
 
 #include "supervisor/board.h"
 #include "mpconfigboard.h"
-#include "hal/include/hal_gpio.h"
 #include "shared-bindings/busio/SPI.h"
 #include "shared-bindings/fourwire/FourWire.h"
-#include "shared-bindings/time/__init__.h"
+#include "shared-bindings/microcontroller/Pin.h"
 #include "shared-module/displayio/__init__.h"
 #include "shared-module/displayio/mipi_constants.h"
-
+#include "shared-bindings/board/__init__.h"
+#include "shared-bindings/digitalio/DigitalInOut.h"
 
 #define DELAY 0x80
 #define HEIGHT 300
