@@ -36,6 +36,15 @@ uint8_t refresh_sequence[] = {
 };
 
 void board_init(void) {
+
+    // Pull EPD Enable pin high
+    digitalio_digitalinout_obj_t vext_pin_obj;
+    vext_pin_obj.base.type = &digitalio_digitalinout_type;
+    common_hal_digitalio_digitalinout_construct(&vext_pin_obj, &pin_GPIO7);
+    common_hal_digitalio_digitalinout_switch_to_output(&vext_pin_obj, true, DRIVE_MODE_PUSH_PULL);
+    common_hal_digitalio_digitalinout_never_reset(&vext_pin_obj);
+
+    // Set up SPI bus
     fourwire_fourwire_obj_t *bus = &allocate_display_bus()->fourwire_bus;
     busio_spi_obj_t *spi = &bus->inline_bus;
     common_hal_busio_spi_construct(spi, &pin_GPIO12, &pin_GPIO11, NULL, false);
@@ -51,6 +60,7 @@ void board_init(void) {
         0, // Polarity
         0); // Phase
 
+    // Set up EPD object
     epaperdisplay_epaperdisplay_obj_t *display = &allocate_display()->epaper_display;
     display->base.type = &epaperdisplay_epaperdisplay_type;
     common_hal_epaperdisplay_epaperdisplay_construct(display,
@@ -62,11 +72,11 @@ void board_init(void) {
         sizeof(stop_sequence),
         400, // width
         300, // height
-        400, // RAM width
-        300, // RAM height
+        300, // RAM width
+        400, // RAM height
         0, // colstart
         0, // rowstart
-        0, // rotation
+        90, // rotation
         NO_COMMAND, // set_column_window_command
         NO_COMMAND, // set_row_window_command
         NO_COMMAND, // set_current_column_command
@@ -87,6 +97,16 @@ void board_init(void) {
         false, // acep
         false, // two_byte_sequence_length
         false); // address_little_endian
+}
+
+void board_deinit(void) {
+    epaperdisplay_epaperdisplay_obj_t *display = &displays[0].epaper_display;
+    if (display->base.type == &epaperdisplay_epaperdisplay_type) {
+        while (common_hal_epaperdisplay_epaperdisplay_get_busy(display)) {
+            RUN_BACKGROUND_TASKS;
+        }
+    }
+    common_hal_displayio_release_displays();
 }
 
 // Use the MP_WEAK supervisor/shared/board.c versions of routines not defined here.
