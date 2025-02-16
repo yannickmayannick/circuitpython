@@ -134,7 +134,7 @@ bool common_hal_picodvi_framebuffer_preflight(
     mp_uint_t color_depth) {
 
     // for each supported resolution, check the color depth is supported
-    if (width == 640 && height == 640) {
+    if (width == 640 && height == 480) {
         return color_depth == 1 || color_depth == 2 || color_depth == 4 || color_depth == 8;
     }
     if (width == 320 && height == 240) {
