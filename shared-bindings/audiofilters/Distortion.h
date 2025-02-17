@@ -20,10 +20,6 @@ void common_hal_audiofilters_distortion_construct(audiofilters_distortion_obj_t 
 void common_hal_audiofilters_distortion_deinit(audiofilters_distortion_obj_t *self);
 bool common_hal_audiofilters_distortion_deinited(audiofilters_distortion_obj_t *self);
 
-uint32_t common_hal_audiofilters_distortion_get_sample_rate(audiofilters_distortion_obj_t *self);
-uint8_t common_hal_audiofilters_distortion_get_channel_count(audiofilters_distortion_obj_t *self);
-uint8_t common_hal_audiofilters_distortion_get_bits_per_sample(audiofilters_distortion_obj_t *self);
-
 mp_obj_t common_hal_audiofilters_distortion_get_drive(audiofilters_distortion_obj_t *self);
 void common_hal_audiofilters_distortion_set_drive(audiofilters_distortion_obj_t *self, mp_obj_t arg);
 

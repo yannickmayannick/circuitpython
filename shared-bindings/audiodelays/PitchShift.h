@@ -18,10 +18,6 @@ void common_hal_audiodelays_pitch_shift_construct(audiodelays_pitch_shift_obj_t 
 void common_hal_audiodelays_pitch_shift_deinit(audiodelays_pitch_shift_obj_t *self);
 bool common_hal_audiodelays_pitch_shift_deinited(audiodelays_pitch_shift_obj_t *self);
 
-uint32_t common_hal_audiodelays_pitch_shift_get_sample_rate(audiodelays_pitch_shift_obj_t *self);
-uint8_t common_hal_audiodelays_pitch_shift_get_channel_count(audiodelays_pitch_shift_obj_t *self);
-uint8_t common_hal_audiodelays_pitch_shift_get_bits_per_sample(audiodelays_pitch_shift_obj_t *self);
-
 mp_obj_t common_hal_audiodelays_pitch_shift_get_semitones(audiodelays_pitch_shift_obj_t *self);
 void common_hal_audiodelays_pitch_shift_set_semitones(audiodelays_pitch_shift_obj_t *self, mp_obj_t semitones);
 
