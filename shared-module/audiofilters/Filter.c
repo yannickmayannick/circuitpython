@@ -4,6 +4,7 @@
 //
 // SPDX-License-Identifier: MIT
 #include "shared-bindings/audiofilters/Filter.h"
+#include "shared-bindings/audiocore/__init__.h"
 
 #include "shared-module/synthio/BlockBiquad.h"
 #include <stdint.h>
@@ -67,6 +68,7 @@ void common_hal_audiofilters_filter_deinit(audiofilters_filter_obj_t *self) {
     if (common_hal_audiofilters_filter_deinited(self)) {
         return;
     }
+    audiosample_mark_deinit(&self->base);
     self->buffer[0] = NULL;
     self->buffer[1] = NULL;
     self->filter = mp_const_none;

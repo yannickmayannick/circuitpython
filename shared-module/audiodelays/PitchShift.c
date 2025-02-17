@@ -4,6 +4,7 @@
 //
 // SPDX-License-Identifier: MIT
 #include "shared-bindings/audiodelays/PitchShift.h"
+#include "shared-bindings/audiocore/__init__.h"
 
 #include <stdint.h>
 #include "py/runtime.h"
@@ -105,6 +106,7 @@ void common_hal_audiodelays_pitch_shift_deinit(audiodelays_pitch_shift_obj_t *se
     if (common_hal_audiodelays_pitch_shift_deinited(self)) {
         return;
     }
+    audiosample_mark_deinit(&self->base);
     self->window_buffer = NULL;
     self->overlap_buffer = NULL;
     self->buffer[0] = NULL;
