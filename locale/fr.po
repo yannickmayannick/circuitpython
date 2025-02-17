@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 12:55-0600\n"
-"PO-Revision-Date: 2025-01-29 13:02+0000\n"
+"PO-Revision-Date: 2025-02-18 09:43+0000\n"
 "Last-Translator: Franck Sauvé <fksauve@gmail.com>\n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.10.1-dev\n"
 
 #: main.c
 msgid ""
@@ -41,7 +41,7 @@ msgid ""
 "issues."
 msgstr ""
 "\n"
-"Veuillez créer un incident github.com/adafruit/circuitpython/issues."
+"Veuillez créer un incident sur github.com/adafruit/circuitpython/issues."
 
 #: supervisor/shared/safe_mode.c
 msgid ""
@@ -49,7 +49,7 @@ msgid ""
 "Press reset to exit safe mode.\n"
 msgstr ""
 "\n"
-"\"Pour quitter le mode sans échec, appuyez sur reset.\"\n"
+"Pour quitter le mode sans échec, appuyez sur reset.\n"
 
 #: supervisor/shared/safe_mode.c
 msgid ""
@@ -89,8 +89,8 @@ msgstr "%%c nécessite un chiffre entier 'int' ou un caractère 'char'"
 msgid ""
 "%d address pins, %d rgb pins and %d tiles indicate a height of %d, not %d"
 msgstr ""
-"%d broches d'adresse, %d broches RGB et %d pour tile indique une hauteur de "
-"%d, et non %d"
+"%d broches d'adresse, %d broches RGB et %d pour 'tiles' indique une hauteur "
+"de %d, et non %d"
 
 #: shared-bindings/microcontroller/Pin.c
 msgid "%q and %q contain duplicate pins"
@@ -429,7 +429,7 @@ msgstr "'data' nécessite au moins 2 paramètres"
 
 #: py/compile.c
 msgid "'data' requires integer arguments"
-msgstr "'data' nécessite des paramètre de chiffres entiers"
+msgstr "'data' nécessite des paramètre de types entiers"
 
 #: py/compile.c
 msgid "'label' requires 1 argument"
@@ -479,7 +479,7 @@ msgstr "pow() non supporté avec 3 paramètres"
 
 #: ports/raspberrypi/common-hal/wifi/Radio.c
 msgid "AP could not be started"
-msgstr "Le point d'accès n'a pas pu être démarré"
+msgstr "Le point d'accès AP n'a pas pu être démarré"
 
 #: shared-bindings/_bleio/Address.c shared-bindings/ipaddress/IPv4Address.c
 #, c-format
@@ -510,7 +510,7 @@ msgstr "Tous les périphériques I2C sont utilisés"
 #: ports/espressif/common-hal/canio/Listener.c
 #: ports/stm/common-hal/canio/Listener.c
 msgid "All RX FIFOs in use"
-msgstr "Tout les RX FIFOs sont utilisé"
+msgstr "Tout les RX FIFOs sont utilisés"
 
 #: ports/espressif/common-hal/busio/SPI.c ports/nordic/common-hal/busio/SPI.c
 msgid "All SPI peripherals are in use"
@@ -528,7 +528,7 @@ msgstr "Tout les canaux sont utilisés"
 
 #: ports/raspberrypi/common-hal/usb_host/Port.c
 msgid "All dma channels in use"
-msgstr "Toutes les canals DMA sont utilisées"
+msgstr "Toutes les canaux DMA sont utilisés"
 
 #: ports/atmel-samd/common-hal/audioio/AudioOut.c
 msgid "All event channels in use"
@@ -585,7 +585,7 @@ msgstr "Déjà en cours d'exécution"
 #: ports/espressif/common-hal/wifi/Radio.c
 #: ports/raspberrypi/common-hal/wifi/Radio.c
 msgid "Already scanning for wifi networks"
-msgstr "Déjà à la recherche des réseaux wifi"
+msgstr "Déjà à la recherche des réseaux WiFi"
 
 #: shared-module/os/getenv.c
 #, c-format
@@ -608,11 +608,11 @@ msgstr "L'array doit contenir des demi-mots (type 'H')"
 #: shared-bindings/alarm/SleepMemory.c shared-bindings/memorymap/AddressRange.c
 #: shared-bindings/nvm/ByteArray.c
 msgid "Array values should be single bytes."
-msgstr "Les valeurs de l'array doivent être des octets singuliers."
+msgstr "Les valeurs du tableau doivent être constituées d'un seul octet."
 
 #: ports/atmel-samd/common-hal/spitarget/SPITarget.c
 msgid "Async SPI transfer in progress on this bus, keep awaiting."
-msgstr ""
+msgstr "Transfert Async SPI sur ce bus en cours, patientez."
 
 #: shared-module/memorymonitor/AllocationAlarm.c
 #, c-format
@@ -645,8 +645,8 @@ msgid ""
 "Auto-reload is on. Simply save files over USB to run them or enter REPL to "
 "disable.\n"
 msgstr ""
-"Auto-chargement activé. Copiez ou sauvegardez les fichiers via USB pour les "
-"lancer ou démarrez le REPL pour le désactiver.\n"
+"Auto-chargement activé. Sauvegardez les fichiers via USB pour les lancer ou "
+"démarrez le REPL pour le désactiver.\n"
 
 #: ports/espressif/common-hal/canio/CAN.c
 msgid "Baudrate not supported by peripheral"
@@ -756,9 +756,9 @@ msgstr "L'alarme ne peut être que sur TRC IO depuis un sommeil profond."
 #: ports/espressif/common-hal/alarm/pin/PinAlarm.c
 msgid "Can only alarm on one low pin while others alarm high from deep sleep."
 msgstr ""
-"L'alarme peut uniquement être active sur une broche à l'état bas, tandis que "
-"les autres alarmes restent actives sur des broches à l'état haut lors d'une "
-"sortie du mode de sommeil profond"
+"Ne peut déclencher l'alarme que sur une broche en état bas tandis que les "
+"autres déclenchent l'alarme sur une broche à l'état haut à partir du sommeil "
+"profond."
 
 #: ports/espressif/common-hal/alarm/pin/PinAlarm.c
 msgid "Can only alarm on two low pins from deep sleep."
@@ -768,7 +768,7 @@ msgstr ""
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "Can't construct AudioOut because continuous channel already open"
-msgstr ""
+msgstr "Impossible de construire AudioOut , le canal est déja ouvert"
 
 #: ports/espressif/common-hal/_bleio/Characteristic.c
 #: ports/nordic/common-hal/_bleio/Characteristic.c
@@ -784,8 +784,8 @@ msgstr "Impossible de changer de périphérique USB maintenant"
 #: shared-bindings/_bleio/Adapter.c
 msgid "Cannot create a new Adapter; use _bleio.adapter;"
 msgstr ""
-"Impossible de créer un nouvel adaptateur Bluetooth ; utilisez l'adaptateur "
-"existant via _bleio.adapter. ;"
+"Impossible de créer un nouvel adaptateur ; utilisez l'adaptateur existant "
+"via _bleio.adapter. ;"
 
 #: shared-bindings/displayio/Bitmap.c
 #: shared-bindings/memorymonitor/AllocationSize.c
@@ -840,19 +840,16 @@ msgstr "On ne peut faire des tranches de sous-classes"
 
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 msgid "Cannot use GPIO0..15 together with GPIO32..47"
-msgstr ""
-"Ne peut utiliser les GPIO de 0 à 15 simultanément avec les GPIO 32 à 47"
+msgstr "Impossible d'utiliser en même temps les GPIO 0 à 15 et les GPIO 32 à 45"
 
 #: ports/nordic/common-hal/alarm/pin/PinAlarm.c
 msgid "Cannot wake on pin edge, only level"
 msgstr ""
-"Impossible de réveiller via une une pin , seulement via un changement d'état"
+"Impossible de réveiller par une broche , seulement via un changement d'état"
 
 #: ports/espressif/common-hal/alarm/pin/PinAlarm.c
 msgid "Cannot wake on pin edge. Only level."
-msgstr ""
-"Impossible de réveiller via une bordure d'une broche. Seulement via un "
-"niveau."
+msgstr "Impossible de réveiller via une broche. Seulement via un niveau."
 
 #: shared-bindings/_bleio/CharacteristicBuffer.c
 msgid "CharacteristicBuffer writing not provided"
@@ -1052,23 +1049,23 @@ msgstr "Connection impossible: délai dépassé"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "Failed to create continuous channels: invalid arg"
-msgstr ""
+msgstr "Échec de la création de canaux continus : argument invalide"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "Failed to create continuous channels: invalid state"
-msgstr ""
+msgstr "Échec de la création de canaux continus : état invalide"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "Failed to create continuous channels: no mem"
-msgstr ""
+msgstr "Échec de la création de canaux continus : pas de mémoire"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "Failed to create continuous channels: not found"
-msgstr ""
+msgstr "Échec de la création de canaux continus : introuvable"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "Failed to enable continuous"
-msgstr ""
+msgstr "Impossible d'activer les canaux continus"
 
 #: shared-module/audiomp3/MP3Decoder.c
 msgid "Failed to parse MP3 file"
@@ -1076,7 +1073,7 @@ msgstr "Echec de parcours du fichier MP3"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "Failed to register continuous events callback"
-msgstr ""
+msgstr "Impossible d'enregistrer les 'events callback' des canaux continus"
 
 #: ports/nordic/sd_mutex.c
 #, c-format
@@ -1085,7 +1082,7 @@ msgstr "Écchec de liberaton du mutex, err 0x%04x"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "Failed to start async audio"
-msgstr ""
+msgstr "Impossible de lancer async audio"
 
 #: supervisor/shared/safe_mode.c
 msgid "Failed to write internal flash."
@@ -1793,7 +1790,7 @@ msgstr "Canal A de PWM slice est utilisé"
 
 #: shared-bindings/spitarget/SPITarget.c
 msgid "Packet buffers for an SPI transfer must have the same length."
-msgstr ""
+msgstr "Les packets du buffer SPI transfert doivent être de la même taille."
 
 #: shared-module/jpegio/JpegDecoder.c
 msgid "Parameter error"
@@ -1835,7 +1832,7 @@ msgid ""
 "bytes.  If this cannot be avoided, pass allow_inefficient=True to the "
 "constructor"
 msgstr ""
-"Le brochage utilise %d octets par élément, ce qui dépasse l'idéal de %d "
+"Le brochage utilise %d octets par élément, ce qui dépasse le seuil de %d "
 "octets. Si cela est inévitable, passez allow_inefficient=True au "
 "constructeur."
 
@@ -1982,7 +1979,7 @@ msgstr "Format correct mais non supporté"
 
 #: main.c
 msgid "Running in safe mode! Not running saved code.\n"
-msgstr "Mode sans-échec! Le code sauvegardé n'est pas éxecuté.\n"
+msgstr "Mode sans- échec ! Le code sauvegardé n'est pas éxecuté.\n"
 
 #: shared-module/sdcardio/SDCard.c
 msgid "SD card CSD format not supported"
@@ -2527,7 +2524,7 @@ msgstr "adresses vides"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "already playing"
-msgstr ""
+msgstr "en cours de lecture"
 
 #: py/compile.c
 msgid "annotation must be an identifier"
@@ -2610,7 +2607,7 @@ msgstr "attributs non pris en charge"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "audio format not supported"
-msgstr ""
+msgstr "format audio incomptatible"
 
 #: extmod/ulab/code/ulab_tools.c
 msgid "axis is out of bounds"
@@ -3589,7 +3586,7 @@ msgstr "f-string mal formé"
 
 #: shared-bindings/_stage/Layer.c
 msgid "map buffer too small"
-msgstr "tampon trop petit"
+msgstr "tampon de la matrice trop petit"
 
 #: py/modmath.c shared-bindings/math/__init__.c
 msgid "math domain error"
@@ -3816,9 +3813,8 @@ msgid "number of points must be at least 2"
 msgstr "au moins 2 points"
 
 #: py/builtinhelp.c
-#, fuzzy
 msgid "object "
-msgstr "objet "
+msgstr "objet . "
 
 #: py/obj.c
 #, c-format
