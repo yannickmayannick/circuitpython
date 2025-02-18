@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 12:55-0600\n"
-"PO-Revision-Date: 2025-02-18 09:43+0000\n"
-"Last-Translator: Franck Sauvé <fksauve@gmail.com>\n"
+"PO-Revision-Date: 2025-02-19 11:46+0000\n"
+"Last-Translator: Noel Gaetan <gaetan.noel@viacesi.fr>\n"
 "Language-Team: \n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -528,7 +528,7 @@ msgstr "Tout les canaux sont utilisés"
 
 #: ports/raspberrypi/common-hal/usb_host/Port.c
 msgid "All dma channels in use"
-msgstr "Toutes les canaux DMA sont utilisés"
+msgstr "Tout les canaux DMA sont utilisés"
 
 #: ports/atmel-samd/common-hal/audioio/AudioOut.c
 msgid "All event channels in use"
