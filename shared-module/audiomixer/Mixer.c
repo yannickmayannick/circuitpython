@@ -53,10 +53,6 @@ void common_hal_audiomixer_mixer_deinit(audiomixer_mixer_obj_t *self) {
     self->second_buffer = NULL;
 }
 
-bool common_hal_audiomixer_mixer_deinited(audiomixer_mixer_obj_t *self) {
-    return self->first_buffer == NULL;
-}
-
 bool common_hal_audiomixer_mixer_get_playing(audiomixer_mixer_obj_t *self) {
     for (uint8_t v = 0; v < self->voice_count; v++) {
         if (common_hal_audiomixer_mixervoice_get_playing(MP_OBJ_TO_PTR(self->voice[v]))) {

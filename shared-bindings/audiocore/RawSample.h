@@ -15,4 +15,3 @@ void common_hal_audioio_rawsample_construct(audioio_rawsample_obj_t *self,
     uint8_t channel_count, uint32_t sample_rate, bool single_buffer);
 
 void common_hal_audioio_rawsample_deinit(audioio_rawsample_obj_t *self);
-bool common_hal_audioio_rawsample_deinited(audioio_rawsample_obj_t *self);

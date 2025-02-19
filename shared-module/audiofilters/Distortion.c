@@ -74,13 +74,6 @@ void common_hal_audiofilters_distortion_construct(audiofilters_distortion_obj_t 
     self->soft_clip = soft_clip;
 }
 
-bool common_hal_audiofilters_distortion_deinited(audiofilters_distortion_obj_t *self) {
-    if (self->buffer[0] == NULL) {
-        return true;
-    }
-    return false;
-}
-
 void common_hal_audiofilters_distortion_deinit(audiofilters_distortion_obj_t *self) {
     audiosample_mark_deinit(&self->base);
     self->buffer[0] = NULL;

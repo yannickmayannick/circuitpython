@@ -17,4 +17,3 @@ void common_hal_audioio_wavefile_construct(audioio_wavefile_obj_t *self,
     pyb_file_obj_t *file, uint8_t *buffer, size_t buffer_size);
 
 void common_hal_audioio_wavefile_deinit(audioio_wavefile_obj_t *self);
-bool common_hal_audioio_wavefile_deinited(audioio_wavefile_obj_t *self);

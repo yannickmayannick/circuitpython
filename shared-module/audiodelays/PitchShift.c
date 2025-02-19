@@ -95,17 +95,7 @@ void common_hal_audiodelays_pitch_shift_construct(audiodelays_pitch_shift_obj_t 
     recalculate_rate(self, f_semitones);
 }
 
-bool common_hal_audiodelays_pitch_shift_deinited(audiodelays_pitch_shift_obj_t *self) {
-    if (self->window_buffer == NULL) {
-        return true;
-    }
-    return false;
-}
-
 void common_hal_audiodelays_pitch_shift_deinit(audiodelays_pitch_shift_obj_t *self) {
-    if (common_hal_audiodelays_pitch_shift_deinited(self)) {
-        return;
-    }
     audiosample_mark_deinit(&self->base);
     self->window_buffer = NULL;
     self->overlap_buffer = NULL;

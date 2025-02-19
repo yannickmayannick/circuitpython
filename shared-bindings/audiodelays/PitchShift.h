@@ -16,7 +16,6 @@ void common_hal_audiodelays_pitch_shift_construct(audiodelays_pitch_shift_obj_t 
     uint8_t channel_count, uint32_t sample_rate);
 
 void common_hal_audiodelays_pitch_shift_deinit(audiodelays_pitch_shift_obj_t *self);
-bool common_hal_audiodelays_pitch_shift_deinited(audiodelays_pitch_shift_obj_t *self);
 
 mp_obj_t common_hal_audiodelays_pitch_shift_get_semitones(audiodelays_pitch_shift_obj_t *self);
 void common_hal_audiodelays_pitch_shift_set_semitones(audiodelays_pitch_shift_obj_t *self, mp_obj_t semitones);
