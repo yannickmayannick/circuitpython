@@ -455,7 +455,7 @@ SRC_S_UPPER_CHIP_VARIANT := \
 	sdk/src/rp2_common/pico_double/double_fma_dcp.S \
 	sdk/src/rp2_common/pico_double/double_sci_m33.S \
 	sdk/src/rp2_common/pico_float/float_sci_m33_vfp.S \
-	sdk/src/rp2_common/pico_float/float_conv_m33.S \
+	sdk/src/rp2_common/pico_float/float_common_m33.S \
 
 PICO_LDFLAGS += $(PICO_WRAP_FLOAT_SCI_FLAGS) $(PICO_WRAP_DOUBLE_FLAGS)
 
