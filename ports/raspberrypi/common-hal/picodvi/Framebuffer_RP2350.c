@@ -271,6 +271,11 @@ void common_hal_picodvi_framebuffer_construct(picodvi_framebuffer_obj_t *self,
     // streaming support.
     self->framebuffer = (uint32_t *)port_malloc(framebuffer_size * sizeof(uint32_t), true);
     if (self->framebuffer == NULL || ((size_t)self->framebuffer & 0xf0000000) == 0x10000000) {
+        if (self->framebuffer != NULL) {
+            // Return the memory in PSRAM.
+            port_free(self->framebuffer);
+            self->framebuffer = NULL;
+        }
         m_malloc_fail(framebuffer_size * sizeof(uint32_t));
         return;
     }

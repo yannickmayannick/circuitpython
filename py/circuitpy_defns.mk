@@ -739,6 +739,7 @@ SRC_SHARED_MODULE_ALL = \
 	usb/__init__.c \
 	usb/core/__init__.c \
 	usb/core/Device.c \
+	usb/util/__init__.c \
 	ustack/__init__.c \
 	vectorio/Circle.c \
 	vectorio/Polygon.c \

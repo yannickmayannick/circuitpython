@@ -9,6 +9,8 @@
 #include "shared-bindings/usb_host/Port.h"
 #include "supervisor/board.h"
 
+#include "common-hal/picodvi/__init__.h"
+
 // Use the MP_WEAK supervisor/shared/board.c versions of routines not defined here.
 
 
@@ -25,12 +27,22 @@ bool board_reset_pin_number(uint8_t pin_number) {
 
         return true;
     }
+    // Set I2S out of reset.
+    if (pin_number == 22) {
+        gpio_put(pin_number, 1);
+        gpio_set_dir(pin_number, GPIO_OUT);
+        gpio_set_function(pin_number, GPIO_FUNC_SIO);
+
+        return true;
+    }
     return false;
 }
 #endif
 
-#if defined(DEFAULT_USB_HOST_DATA_PLUS)
 void board_init(void) {
+    #if defined(DEFAULT_USB_HOST_DATA_PLUS)
     common_hal_usb_host_port_construct(DEFAULT_USB_HOST_DATA_PLUS, DEFAULT_USB_HOST_DATA_MINUS);
+    #endif
+
+    picodvi_autoconstruct();
 }
-#endif
