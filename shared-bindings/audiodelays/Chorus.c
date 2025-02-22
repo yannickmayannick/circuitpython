@@ -37,6 +37,7 @@
 //|            The delay timing of the chorus can be changed at runtime with the delay_ms parameter but the delay
 //|            can never exceed the max_delay_ms parameter. The maximum delay you can set is limited by available
 //|            memory.
+//|
 //|         :param int max_delay_ms: The maximum time the chorus can be in milliseconds
 //|         :param synthio.BlockInput delay_ms: The current time of the chorus delay in milliseconds. Must be less the max_delay_ms.
 //|         :param synthio.BlockInput voices: The number of voices playing split evenly over the delay buffer.
