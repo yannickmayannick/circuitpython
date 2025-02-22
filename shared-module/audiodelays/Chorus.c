@@ -72,7 +72,7 @@ void common_hal_audiodelays_chorus_construct(audiodelays_chorus_obj_t *self, uin
 
     // Allocate the chorus buffer for the max possible delay, chorus is always 16-bit
     self->max_delay_ms = max_delay_ms;
-    self->max_chorus_buffer_len = self->base.sample_rate / MICROPY_FLOAT_CONST(1000.0) * max_delay_ms * (self->base.channel_count * sizeof(uint16_t)); // bytes
+    self->max_chorus_buffer_len = (uint32_t)(self->base.sample_rate / MICROPY_FLOAT_CONST(1000.0) * max_delay_ms * (self->base.channel_count * sizeof(uint16_t))); // bytes
     self->chorus_buffer = m_malloc(self->max_chorus_buffer_len);
     if (self->chorus_buffer == NULL) {
         common_hal_audiodelays_chorus_deinit(self);
@@ -125,10 +125,6 @@ void chorus_recalculate_delay(audiodelays_chorus_obj_t *self, mp_float_t f_delay
 
     // Calculate the current chorus buffer length in bytes
     uint32_t new_chorus_buffer_len = (uint32_t)(self->base.sample_rate / MICROPY_FLOAT_CONST(1000.0) * f_delay_ms) * (self->base.channel_count * sizeof(uint16_t));
-
-    if (new_chorus_buffer_len < 0) { // or too short!
-        return;
-    }
 
     self->chorus_buffer_len = new_chorus_buffer_len;
 
@@ -227,7 +223,7 @@ audioio_get_buffer_result_t audiodelays_chorus_get_buffer(audiodelays_chorus_obj
         // get the effect values we need from the BlockInput. These may change at run time so you need to do bounds checking if required
         shared_bindings_synthio_lfo_tick(self->base.sample_rate, n / self->base.channel_count);
 
-        int32_t voices = MAX(synthio_block_slot_get(&self->voices), 1.0);
+        int32_t voices = (int32_t)MAX(synthio_block_slot_get(&self->voices), 1.0);
         int32_t mix_down_scale = SYNTHIO_MIX_DOWN_SCALE(voices);
 
         mp_float_t f_delay_ms = synthio_block_slot_get(&self->delay_ms);
