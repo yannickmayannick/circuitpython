@@ -194,6 +194,7 @@ audioio_get_buffer_result_t audiodelays_chorus_get_buffer(audiodelays_chorus_obj
     // The chorus buffer is always stored as a 16-bit value internally
     int16_t *chorus_buffer = (int16_t *)self->chorus_buffer;
     uint32_t chorus_buf_len = self->chorus_buffer_len / sizeof(uint16_t);
+    uint32_t max_chorus_buf_len = self->max_chorus_buffer_len / sizeof(uint16_t);
 
     // Loop over the entire length of our buffer to fill it, this may require several calls to get data from the sample
     while (length != 0) {
@@ -227,6 +228,7 @@ audioio_get_buffer_result_t audiodelays_chorus_get_buffer(audiodelays_chorus_obj
         shared_bindings_synthio_lfo_tick(self->base.sample_rate, n / self->base.channel_count);
 
         int32_t voices = MAX(synthio_block_slot_get(&self->voices), 1.0);
+        int32_t mix_down_scale = SYNTHIO_MIX_DOWN_SCALE(voices);
 
         mp_float_t f_delay_ms = synthio_block_slot_get(&self->delay_ms);
         if (MICROPY_FLOAT_C_FUN(fabs)(self->current_delay_ms - f_delay_ms) >= self->sample_ms) {
@@ -275,15 +277,18 @@ audioio_get_buffer_result_t audiodelays_chorus_get_buffer(audiodelays_chorus_obj
 
                     for (int32_t v = 0; v < voices; v++) {
                         if (c_pos < 0) {
-                            c_pos += chorus_buf_len;
+                            c_pos += max_chorus_buf_len;
                         }
                         word += chorus_buffer[c_pos];
 
                         c_pos -= step;
                     }
-                    word = word / voices;
 
-                    word = synthio_mix_down_sample(word, SYNTHIO_MIX_DOWN_SCALE(2));
+                    // Dividing would get an average but does not sound as good
+                    // Leaving this here in case someone wants to try an average instead
+                    // word = word / voices;
+
+                    word = synthio_mix_down_sample(word, mix_down_scale);
                 }
 
                 if (MP_LIKELY(self->base.bits_per_sample == 16)) {
@@ -300,7 +305,7 @@ audioio_get_buffer_result_t audiodelays_chorus_get_buffer(audiodelays_chorus_obj
                     }
                 }
 
-                if (self->chorus_buffer_pos >= chorus_buf_len) {
+                if (self->chorus_buffer_pos >= max_chorus_buf_len) {
                     self->chorus_buffer_pos = 0;
                 }
             }
