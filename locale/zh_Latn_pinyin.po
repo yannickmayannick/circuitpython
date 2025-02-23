@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: circuitpython-cn\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 12:55-0600\n"
-"PO-Revision-Date: 2025-02-22 13:45+0000\n"
-"Last-Translator: Jiayin Liu <jiayinliuao@hotmail.com>\n"
+"PO-Revision-Date: 2025-02-24 05:02+0000\n"
+"Last-Translator: hexthat <hexthat@gmail.com>\n"
 "Language-Team: Chinese Hanyu Pinyin\n"
 "Language: zh_Latn_pinyin\n"
 "MIME-Version: 1.0\n"
@@ -765,7 +765,7 @@ msgstr ""
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "Can't construct AudioOut because continuous channel already open"
-msgstr ""
+msgstr "wúfǎ gòuzào AudioOut, yīnwéi liánxù tōngdào yǐ dǎkāi"
 
 #: ports/espressif/common-hal/_bleio/Characteristic.c
 #: ports/nordic/common-hal/_bleio/Characteristic.c
@@ -1035,23 +1035,23 @@ msgstr "Liánjiē shībài: Chāoshí"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "Failed to create continuous channels: invalid arg"
-msgstr ""
+msgstr "Wúfǎ chuàngjiàn liánxù tōngdào: Cānshù wúxiào"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "Failed to create continuous channels: invalid state"
-msgstr ""
+msgstr "Wúfǎ chuàngjiàn liánxù tōngdào: Zhuàngtài wúxiào"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "Failed to create continuous channels: no mem"
-msgstr ""
+msgstr "Wúfǎ chuàngjiàn liánxù tōngdào: Wú nèicún"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "Failed to create continuous channels: not found"
-msgstr ""
+msgstr "Wúfǎ chuàngjiàn liánxù tōngdào: Wèi zhǎodào"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "Failed to enable continuous"
-msgstr ""
+msgstr "Wúfǎ qǐyòng liánxù"
 
 #: shared-module/audiomp3/MP3Decoder.c
 msgid "Failed to parse MP3 file"
@@ -1059,7 +1059,7 @@ msgstr "Wúfǎ jiěxī MP3 wénjiàn"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "Failed to register continuous events callback"
-msgstr ""
+msgstr "Liánxù shìjiàn huítiáo zhùcè shībài"
 
 #: ports/nordic/sd_mutex.c
 #, c-format
@@ -1068,7 +1068,7 @@ msgstr "Wúfǎ shìfàng mutex, err 0x%04x"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "Failed to start async audio"
-msgstr ""
+msgstr "Wúfǎ qǐdòng yìbù yīnpín"
 
 #: supervisor/shared/safe_mode.c
 msgid "Failed to write internal flash."
@@ -1769,7 +1769,7 @@ msgstr "PWM qiē piàn tōng dào A yǐ zài shǐ yòng zhōng"
 
 #: shared-bindings/spitarget/SPITarget.c
 msgid "Packet buffers for an SPI transfer must have the same length."
-msgstr ""
+msgstr "SPI chuánshū de shùjù bāo huǎnchōng qū bìxū jùyǒu xiāngtóng de chángdù."
 
 #: shared-module/jpegio/JpegDecoder.c
 msgid "Parameter error"
@@ -2494,7 +2494,7 @@ msgstr "dìzhǐ wèi kōng"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "already playing"
-msgstr ""
+msgstr "yǐjīng zàiwán le"
 
 #: py/compile.c
 msgid "annotation must be an identifier"
@@ -2576,7 +2576,7 @@ msgstr "bù zhīchí de shǔxìng"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "audio format not supported"
-msgstr ""
+msgstr "bù zhīchí yīnpín géshì"
 
 #: extmod/ulab/code/ulab_tools.c
 msgid "axis is out of bounds"
