@@ -58,6 +58,9 @@ CFLAGS += -DCIRCUITPY=$(CIRCUITPY)
 CIRCUITPY_FULL_BUILD ?= 1
 CFLAGS += -DCIRCUITPY_FULL_BUILD=$(CIRCUITPY_FULL_BUILD)
 
+# Smaller builds can't support newest Circuitpython features
+CIRCUITPY_NOTFLASH_LIMITED ?= 1
+
 # By default, aggressively reduce the size of in-flash messages, at the cost of
 # increased build time
 CIRCUITPY_MESSAGE_COMPRESSION_LEVEL ?= 9

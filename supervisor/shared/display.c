@@ -36,7 +36,9 @@
 
 #if CIRCUITPY_TERMINALIO
 #include "supervisor/port.h"
+#if CIRCUITPY_NOTFLASH_LIMITED
 #include "shared-module/os/__init__.h"
+#endif
 #endif
 
 #if CIRCUITPY_REPL_LOGO
@@ -67,7 +69,9 @@ void supervisor_start_terminal(uint16_t width_px, uint16_t height_px) {
     if (width_in_tiles <= 80) {
         scale = 1;
     }
+    #if CIRCUITPY_NOTFLASH_LIMITED
     (void)common_hal_os_getenv_int("CIRCUITPY_TERMINAL_SCALE", &scale);
+    #endif
 
     width_in_tiles = MAX(1, width_px / (scroll_area->tile_width * scale));
     uint16_t height_in_tiles = MAX(2, height_px / (scroll_area->tile_height * scale));
