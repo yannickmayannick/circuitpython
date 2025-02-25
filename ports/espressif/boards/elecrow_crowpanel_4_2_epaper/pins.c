@@ -37,7 +37,7 @@ static const mp_rom_map_elem_t board_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR_EPD_DC), MP_ROM_PTR(&pin_GPIO46) },
     { MP_ROM_QSTR(MP_QSTR_EPD_CS), MP_ROM_PTR(&pin_GPIO45) },
     { MP_ROM_QSTR(MP_QSTR_EPD_CLK), MP_ROM_PTR(&pin_GPIO12) },
-    { MP_ROM_QSTR(MP_QSTR_EPD_MOSI), MP_ROM_PTR(&pin_GPIO10) },
+    { MP_ROM_QSTR(MP_QSTR_EPD_MOSI), MP_ROM_PTR(&pin_GPIO11) },
 
     // TF Slot
     { MP_ROM_QSTR(MP_QSTR_TF_CS), MP_ROM_PTR(&pin_GPIO10) },
@@ -59,9 +59,9 @@ static const mp_rom_map_elem_t board_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR_IO21), MP_ROM_PTR(&pin_GPIO21) },
     { MP_ROM_QSTR(MP_QSTR_IO38), MP_ROM_PTR(&pin_GPIO38) },
 
-    // TODO: Are the UART pins really this, or are they reversed?
-    { MP_ROM_QSTR(MP_QSTR_TX), MP_ROM_PTR(&pin_GPIO44) },
-    { MP_ROM_QSTR(MP_QSTR_RX), MP_ROM_PTR(&pin_GPIO43) },
+    // UART
+    { MP_ROM_QSTR(MP_QSTR_TX), MP_ROM_PTR(&pin_GPIO43) },
+    { MP_ROM_QSTR(MP_QSTR_RX), MP_ROM_PTR(&pin_GPIO44) },
 
     // Objects
     { MP_ROM_QSTR(MP_QSTR_TF_SPI), MP_ROM_PTR(&board_tf_spi_obj) },
