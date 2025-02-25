@@ -174,3 +174,11 @@ Example: Configure the display to 640x480 black and white (1 bit per pixel):
 
 `Adafruit Feather RP2350 <https://circuitpython.org/board/adafruit_feather_rp2350/>`_
 `Adafruit Metro RP2350 <https://circuitpython.org/board/adafruit_metro_rp2350/>`_
+
+CIRCUITPY_TERMINAL_SCALE
+~~~~~~~~~~~~~~~~~~~~~~~~
+Allows the entry of a display scaling factor used during the terminalio console construction.
+The entered scaling factor only affects the terminalio console and has no impact on
+the UART, Web Workflow, BLE Workflow, etc consoles.
+
+`boards that the terminalio core module is available on <https://docs.circuitpython.org/en/latest/shared-bindings/terminalio/>`
