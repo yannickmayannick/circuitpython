@@ -36,7 +36,7 @@
 
 #if CIRCUITPY_TERMINALIO
 #include "supervisor/port.h"
-#if CIRCUITPY_NOTFLASH_LIMITED
+#if CIRCUITPY_FULL_BUILD
 #include "shared-module/os/__init__.h"
 #endif
 #endif
@@ -69,7 +69,7 @@ void supervisor_start_terminal(uint16_t width_px, uint16_t height_px) {
     if (width_in_tiles <= 80) {
         scale = 1;
     }
-    #if CIRCUITPY_NOTFLASH_LIMITED
+    #if CIRCUITPY_FULL_BUILD
     (void)common_hal_os_getenv_int("CIRCUITPY_TERMINAL_SCALE", &scale);
     #endif
 
