@@ -181,7 +181,8 @@ Allows the entry of a display scaling factor used during the terminalio console 
 The entered scaling factor only affects the terminalio console and has no impact on
 the UART, Web Workflow, BLE Workflow, etc consoles.
 
-This feature is not enabled on some CircuitPython board with limited Flash, currently
-this includes some of the Atmel_samd boards based on the M0 microprocessor.
+This feature is not enabled on boards that the CIRCUITPY_OS_GETENV (os CIRCUIPTY_FULL_BUILD)
+flag has been set to 0. Currently this is primarily boards with limited flash including some
+of the Atmel_samd boards based on the SAMD21/M0 microprocessor.
 
 `boards that the terminalio core module is available on <https://docs.circuitpython.org/en/latest/shared-bindings/terminalio/>`_
