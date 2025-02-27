@@ -33,6 +33,20 @@
 //|     * ``ESC [ #### D`` - Move the cursor to the left by ####
 //|     * ``ESC [ 2 J`` - Erase the entire display
 //|     * ``ESC [ nnnn ; mmmm H`` - Move the cursor to mmmm, nnnn.
+//|     * ``ESC [ nn m`` - Set the terminal display attributes.
+//|     * ``ESC [ nn ; nn m`` - Set the terminal display attributes.
+//|
+//|     Supported Display attributes:
+//|     0 - Reset all attributes
+//|     Foreground Colors    Background Colors
+//|     30 - Black           40 - Black
+//|     31 - Red             41 - Red
+//|     32 - Green           42 - Green
+//|     33 - Yellow          43 - Yellow
+//|     34 - Blue            44 - Blue
+//|     35 - Magenta         45 - Magenta
+//|     36 - Cyan            46 - Cyan
+//|     37 - White           47 - White
 //|     """
 //|
 //|     def __init__(
