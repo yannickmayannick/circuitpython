@@ -14,6 +14,7 @@
 #include "shared-bindings/board/__init__.h"
 #include "shared-bindings/digitalio/DigitalInOut.h"
 
+// SSD1683 EPD Driver chip
 const uint8_t display_start_sequence[] = {
     // Init
     0x12, 0x80, 0x0a,                   // Soft reset
