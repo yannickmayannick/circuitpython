@@ -8,6 +8,7 @@
 
 #include "shared-module/fontio/BuiltinFont.h"
 #include "shared-bindings/displayio/TileGrid.h"
+#include "shared-bindings/displayio/Palette.h"
 #include "shared-bindings/terminalio/Terminal.h"
 
 #if CIRCUITPY_STATUS_BAR
@@ -46,6 +47,22 @@ size_t common_hal_terminalio_terminal_write(terminalio_terminal_obj_t *self, con
         return len;
     }
 
+    uint32_t _select_color(uint16_t ascii_color) {
+        uint32_t color_value = 0;
+        if ((ascii_color & 1) > 0) {
+            color_value += 0xff0000;
+        }
+        if ((ascii_color & 2) > 0) {
+            color_value += 0x00ff00;
+        }
+        if ((ascii_color & 4) > 0) {
+            color_value += 0x0000ff;
+        }
+
+        return color_value;
+    }
+
+    displayio_palette_t *terminal_palette = self->scroll_area->pixel_shader;
     const byte *i = data;
     uint16_t start_y = self->cursor_y;
     while (i < data + len) {
@@ -127,6 +144,15 @@ size_t common_hal_terminalio_terminal_write(terminalio_terminal_obj_t *self, con
                                 common_hal_displayio_tilegrid_set_all_tiles(self->scroll_area, 0);
                             }
                         }
+                        if (c == 'm') {
+                            if ((n >= 40 && n <= 47) || (n >= 30 && n <= 37)) {
+                                common_hal_displayio_palette_set_color(terminal_palette, 1 - (n / 40), _select_color(n % 10));
+                            }
+                            if (n == 0) {
+                                common_hal_displayio_palette_set_color(terminal_palette, 0, 0x000000);
+                                common_hal_displayio_palette_set_color(terminal_palette, 1, 0xffffff);
+                            }
+                        }
                         if (c == ';') {
                             uint16_t m = 0;
                             for (++j; j < 9; j++) {
@@ -154,6 +180,22 @@ size_t common_hal_terminalio_terminal_write(terminalio_terminal_obj_t *self, con
                                 self->cursor_x = m;
                                 self->cursor_y = n;
                                 start_y = self->cursor_y;
+                            }
+                            if (c == 'm') {
+                                if ((n >= 40 && n <= 47) || (n >= 30 && n <= 37)) {
+                                    common_hal_displayio_palette_set_color(terminal_palette, 1 - (n / 40), _select_color(n % 10));
+                                }
+                                if (n == 0) {
+                                    common_hal_displayio_palette_set_color(terminal_palette, 0, 0x000000);
+                                    common_hal_displayio_palette_set_color(terminal_palette, 1, 0xffffff);
+                                }
+                                if ((m >= 40 && m <= 47) || (m >= 30 && m <= 37)) {
+                                    common_hal_displayio_palette_set_color(terminal_palette, 1 - (m / 40), _select_color(m % 10));
+                                }
+                                if (m == 0) {
+                                    common_hal_displayio_palette_set_color(terminal_palette, 0, 0x000000);
+                                    common_hal_displayio_palette_set_color(terminal_palette, 1, 0xffffff);
+                                }
                             }
                         }
                         i += j + 1;
