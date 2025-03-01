@@ -33,8 +33,12 @@
 //|     * ``ESC [ #### D`` - Move the cursor to the left by ####
 //|     * ``ESC [ 2 J`` - Erase the entire display
 //|     * ``ESC [ nnnn ; mmmm H`` - Move the cursor to mmmm, nnnn.
-//|     * ``ESC [ nn m`` - Set the terminal display attributes.
-//|     * ``ESC [ nn ; nn m`` - Set the terminal display attributes.
+//|     * ``ESC [ H`` - Move the cursor to 0,0.
+//|     * ``ESC M`` - Move the cursor up one line, scrolling if necessary.
+//|     * ``ESC D`` - Move the cursor down one line, scrolling if necessary.
+//|     * ``ESC [ ## m`` - Set the terminal display attributes.
+//|     * ``ESC [ ## ; ## m`` - Set the terminal display attributes.
+//|     * ``ESC [ ## ; ## ; ## m`` - Set the terminal display attributes.
 //|
 //|     Supported Display attributes:
 //|     0 - Reset all attributes

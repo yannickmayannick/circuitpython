@@ -113,6 +113,7 @@ size_t common_hal_terminalio_terminal_write(terminalio_terminal_obj_t *self, con
                 // Handle commands of the form [ESC].<digits><command-char> where . is not yet known.
                 uint16_t n = 0;
                 uint8_t j = 1;
+                uint8_t j2 = 0;
                 for (; j < 6; j++) {
                     if ('0' <= i[j] && i[j] <= '9') {
                         n = n * 10 + (i[j] - '0');
@@ -128,6 +129,18 @@ size_t common_hal_terminalio_terminal_write(terminalio_terminal_obj_t *self, con
                             common_hal_displayio_tilegrid_set_tile(self->scroll_area, k, self->cursor_y, 0);
                         }
                         i += 2;
+                    } else if (i[1] == '?') {
+                        if (i[2] == '2' && i[3] == '5') {
+                            // cursor visibility commands
+                            if (i[4] == 'h') {
+                                // make cursor visible
+                                // not implemented yet
+                            } else if (i[4] == 'l') {
+                                // make cursor invisible
+                                // not implemented yet
+                            }
+                        }
+                        i += 5;
                     } else {
                         if (c == 'D') {
                             if (n > self->cursor_x) {
@@ -153,14 +166,28 @@ size_t common_hal_terminalio_terminal_write(terminalio_terminal_obj_t *self, con
                                 common_hal_displayio_palette_set_color(terminal_palette, 1, 0xffffff);
                             }
                         }
+                        if (c == 'H') {
+                            self->cursor_x = self->cursor_y = start_y = 0;
+                        }
                         if (c == ';') {
                             uint16_t m = 0;
+                            uint8_t m2 = 0;
                             for (++j; j < 9; j++) {
                                 if ('0' <= i[j] && i[j] <= '9') {
                                     m = m * 10 + (i[j] - '0');
                                 } else {
                                     c = i[j];
                                     break;
+                                }
+                            }
+                            if (c == ';') {
+                                for (++j2; j2 < 9; j2++) {
+                                    if ('0' <= i[j2] && i[j2] <= '9') {
+                                        m2 = m2 * 10 + (i[j2] - '0');
+                                    } else {
+                                        c = i[j2];
+                                        break;
+                                    }
                                 }
                             }
                             if (c == 'H') {
@@ -196,11 +223,51 @@ size_t common_hal_terminalio_terminal_write(terminalio_terminal_obj_t *self, con
                                     common_hal_displayio_palette_set_color(terminal_palette, 0, 0x000000);
                                     common_hal_displayio_palette_set_color(terminal_palette, 1, 0xffffff);
                                 }
+                                if ((m2 >= 40 && m2 <= 47) || (m2 >= 30 && m2 <= 37)) {
+                                    common_hal_displayio_palette_set_color(terminal_palette, 1 - (m2 / 40), _select_color(m2 % 10));
+                                }
+                                if (m2 == 0) {
+                                    common_hal_displayio_palette_set_color(terminal_palette, 0, 0x000000);
+                                    common_hal_displayio_palette_set_color(terminal_palette, 1, 0xffffff);
+                                }
                             }
                         }
-                        i += j + 1;
+                        i += j + j2 + 1;
                         continue;
                     }
+                } else if (i[0] == 'M') {
+                    if (self->cursor_y != self->scroll_area->top_left_y) {
+                        if (self->cursor_y > 0) {
+                            self->cursor_y = self->cursor_y - 1;
+                        } else {
+                            self->cursor_y = self->scroll_area->height_in_tiles - 1;
+                        }
+                    } else {
+                        if (self->cursor_y > 0) {
+                            common_hal_displayio_tilegrid_set_top_left(self->scroll_area, 0, self->cursor_y - 1);
+                        } else {
+                            common_hal_displayio_tilegrid_set_top_left(self->scroll_area, 0, self->scroll_area->height_in_tiles - 1);
+                        }
+                        for (uint8_t icol = 0; icol < self->scroll_area->width_in_tiles; icol++) {
+                            common_hal_displayio_tilegrid_set_tile(self->scroll_area, icol, self->scroll_area->top_left_y, 0);
+                        }
+
+                        self->cursor_x = 0;
+                        self->cursor_y = self->scroll_area->top_left_y;
+                    }
+                    start_y = self->cursor_y;
+                    i++;
+                } else if (i[0] == 'D') {
+                    self->cursor_y = (self->cursor_y + 1) % self->scroll_area->height_in_tiles;
+                    if (self->cursor_y == self->scroll_area->top_left_y) {
+                        common_hal_displayio_tilegrid_set_top_left(self->scroll_area, 0, (self->cursor_y + 1) % self->scroll_area->height_in_tiles);
+                        for (uint8_t icol = 0; icol < self->scroll_area->width_in_tiles; icol++) {
+                            common_hal_displayio_tilegrid_set_tile(self->scroll_area, icol, self->cursor_y, 0);
+                        }
+                        self->cursor_x = 0;
+                    }
+                    start_y = self->cursor_y;
+                    i++;
                 } else if (i[0] == ']' && c == ';') {
                     self->in_osc_command = true;
                     self->osc_command = n;
