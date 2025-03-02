@@ -24,7 +24,7 @@
 
 //| class UART:
 //|     """A bidirectional serial protocol. Already initialized for Zephyr defined
-//|        busses in `board`.
+//|        busses in :py:mod:`board`.
 //|
 //|     .. raw:: html
 //|
