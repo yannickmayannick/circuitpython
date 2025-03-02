@@ -45,12 +45,12 @@
 //| """
 //|
 
-//| AnyDisplayBus: fourwire.FourWire | i2cdisplaybus.I2cDisplayBus
+//| AnyDisplayBus = fourwire.FourWire | i2cdisplaybus.I2CDisplayBus | is31fl3741.IS31FL3741
 //| """Type-checking shorthand for any kind of display bus. Not actually defined in CircuitPython."""
 //|
-//| AnyFramebuffer: (
+//| AnyFramebuffer = (
 //|     rgbmatrix.RGBMatrix
-//|     | is31fl3741.FrameBuffer
+//|     | is31fl3741.IS31FL3741_FrameBuffer
 //|     | sharpdisplay.SharpMemoryFramebuffer
 //|     | videocore.Framebuffer
 //|     | picodvi.Framebuffer
@@ -58,8 +58,8 @@
 //| )
 //| """Type-checking shorthand for any kind of framebuffer. Not actually defined in CircuitPython."""
 //|
-//| AnyDisplay: (
-//|     busdisplay.BusDisplay | epaperdisplay.EPaperDisplay | framebufferio.FrameBufferDisplay
+//| AnyDisplay = (
+//|     busdisplay.BusDisplay | epaperdisplay.EPaperDisplay | framebufferio.FramebufferDisplay
 //| )
 //| """Type-checking shorthand for any kind of display. Not actually defined in CircuitPython."""
 //| CIRCUITPYTHON_TERMINAL: Group
