@@ -45,6 +45,23 @@
 //| """
 //|
 
+//| AnyDisplayBus: fourwire.FourWire | i2cdisplaybus.I2cDisplayBus
+//| """Type-checking shorthand for any kind of display bus. Not actually defined in CircuitPython."""
+//|
+//| AnyFramebuffer: (
+//|     rgbmatrix.RGBMatrix
+//|     | is31fl3741.FrameBuffer
+//|     | sharpdisplay.SharpMemoryFramebuffer
+//|     | videocore.Framebuffer
+//|     | picodvi.Framebuffer
+//|     | aurora_epaper.AuroraMemoryFramebuffer
+//| )
+//| """Type-checking shorthand for any kind of framebuffer. Not actually defined in CircuitPython."""
+//|
+//| AnyDisplay: (
+//|     busdisplay.BusDisplay | epaperdisplay.EPaperDisplay | framebufferio.FrameBufferDisplay
+//| )
+//| """Type-checking shorthand for any kind of display. Not actually defined in CircuitPython."""
 //| CIRCUITPYTHON_TERMINAL: Group
 //| """The `displayio.Group` that is the displayed serial terminal (REPL)."""
 //|

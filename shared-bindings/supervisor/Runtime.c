@@ -208,7 +208,7 @@ MP_PROPERTY_GETSET(supervisor_runtime_rgb_status_brightness_obj,
     (mp_obj_t)&supervisor_runtime_set_rgb_status_brightness_obj);
 
 #if CIRCUITPY_DISPLAYIO
-//|     display: Any
+//|     display: displayio.AnyDisplay | None
 //|     """The primary configured displayio display, if any.
 //|
 //|     If the board has a display that is hard coded, or that was explicitly set
