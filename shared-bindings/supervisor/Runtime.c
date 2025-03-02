@@ -213,7 +213,7 @@ MP_PROPERTY_GETSET(supervisor_runtime_rgb_status_brightness_obj,
 //|
 //|     If the board has a display that is hard coded, or that was explicitly set
 //|     in boot.py or code.py (including a previous run of code.py), it is
-//|     available here until it is released with ``displayio.releasee_displays()``.
+//|     available here until it is released with ``displayio.release_displays()``.
 //|
 //|     The display can be of any supported display type, such as `busdisplay.BusDisplay`.
 //|
