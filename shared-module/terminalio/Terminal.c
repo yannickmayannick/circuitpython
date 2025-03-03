@@ -128,7 +128,7 @@ size_t common_hal_terminalio_terminal_write(terminalio_terminal_obj_t *self, con
                 if (i[0] == '[') {
                     for (uint8_t i_args = 1; i_args < 3 && c == ';'; i_args++) {
                         vt_args[i_args] = 0;
-                        for (++j; j < 9; j++) {
+                        for (++j; j < 12; j++) {
                             if ('0' <= i[j] && i[j] <= '9') {
                                 vt_args[i_args] = vt_args[i_args] * 10 + (i[j] - '0');
                                 n_args = i_args + 1;
