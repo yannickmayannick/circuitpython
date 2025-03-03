@@ -30,6 +30,9 @@
 //|
 //|     VT100 control sequences:
 //|     * ``ESC [ K`` - Clear the remainder of the line
+//|     * ``ESC [ 0 K`` - Clear the remainder of the line
+//|     * ``ESC [ 1 K`` - Clear start of the line to cursor
+//|     * ``ESC [ 2 K`` - Clear the entire line
 //|     * ``ESC [ #### D`` - Move the cursor to the left by ####
 //|     * ``ESC [ 2 J`` - Erase the entire display
 //|     * ``ESC [ nnnn ; mmmm H`` - Move the cursor to mmmm, nnnn.
