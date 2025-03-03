@@ -265,9 +265,8 @@ stubs:
 	@mkdir circuitpython-stubs
 	@$(PYTHON) tools/extract_pyi.py shared-bindings/ $(STUBDIR)
 	@$(PYTHON) tools/extract_pyi.py extmod/ulab/code/ $(STUBDIR)/ulab
-	@$(PYTHON) tools/extract_pyi.py ports/atmel-samd/bindings $(STUBDIR)
-	@$(PYTHON) tools/extract_pyi.py ports/espressif/bindings $(STUBDIR)
-	@$(PYTHON) tools/extract_pyi.py ports/raspberrypi/bindings $(STUBDIR)
+	@for d in ports/*/bindings; do \
+	    $(PYTHON) tools/extract_pyi.py "$$d" $(STUBDIR); done
 	@sed -e "s,__version__,`python -msetuptools_scm`," < setup.py-stubs > circuitpython-stubs/setup.py
 	@cp README.rst-stubs circuitpython-stubs/README.rst
 	@cp MANIFEST.in-stubs circuitpython-stubs/MANIFEST.in
