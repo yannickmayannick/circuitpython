@@ -114,43 +114,30 @@ size_t common_hal_terminalio_terminal_write(terminalio_terminal_obj_t *self, con
                 }
             } else if (c == 0x1b) {
                 // Handle commands of the form [ESC].<digits><command-char> where . is not yet known.
-                uint16_t n = 0;
+                uint8_t vt_args[3] = {0,-1,-1};
+                uint8_t n_args = 1;
                 uint8_t j = 1;
                 for (; j < 6; j++) {
                     if ('0' <= i[j] && i[j] <= '9') {
-                        n = n * 10 + (i[j] - '0');
+                        vt_args[0] = vt_args[0] * 10 + (i[j] - '0');
                     } else {
                         c = i[j];
                         break;
                     }
                 }
                 if (i[0] == '[') {
-                    uint16_t m = -1;
-                    if (c == ';') {
-                        m = 0;
+                    for (uint8_t i_args = 1; i_args < 3 && c == ';'; i_args++) {
+                        vt_args[i_args] = 0;
                         for (++j; j < 9; j++) {
                             if ('0' <= i[j] && i[j] <= '9') {
-                                m = m * 10 + (i[j] - '0');
+                                vt_args[i_args] = vt_args[i_args] * 10 + (i[j] - '0');
+                                n_args = i_args + 1;
                             } else {
                                 c = i[j];
                                 break;
                             }
                         }
                     }
-                    #if CIRCUITPY_TERMINALIO_VT100
-                    uint8_t m2 = -1;
-                    if (c == ';') {
-                        m2 = 0;
-                        for (++j; j < 12; j++) {
-                            if ('0' <= i[j] && i[j] <= '9') {
-                                m2 = m2 * 10 + (i[j] - '0');
-                            } else {
-                                c = i[j];
-                                break;
-                            }
-                        }
-                    }
-                    #endif
                     if (c == '?') {
                         #if CIRCUITPY_TERMINALIO_VT100
                         if (i[2] == '2' && i[3] == '5') {
@@ -167,78 +154,62 @@ size_t common_hal_terminalio_terminal_write(terminalio_terminal_obj_t *self, con
                         #endif
                     } else {
                         if (c == 'K') {
-                            if (n == 0) {
-                                // Clear the rest of the line.
-                                for (uint16_t k = self->cursor_x; k < self->scroll_area->width_in_tiles; k++) {
-                                    common_hal_displayio_tilegrid_set_tile(self->scroll_area, k, self->cursor_y, 0);
-                                }
+                            uint8_t clr_start = self->cursor_x;
+                            uint8_t clr_end = self->scroll_area->width_in_tiles;
                             #if CIRCUITPY_TERMINALIO_VT100
-                            } else if (n == 1) {
-                                // Clear start to cursor
-                                for (uint16_t k = 0; k < self->cursor_x; k++) {
-                                    common_hal_displayio_tilegrid_set_tile(self->scroll_area, k, self->cursor_y, 0);
-                                }
-                            } else if (n == 2) {
-                                // Clear entire line
-                                for (uint16_t k = 0; k < self->scroll_area->width_in_tiles; k++) {
-                                    common_hal_displayio_tilegrid_set_tile(self->scroll_area, k, self->cursor_y, 0);
-                                }
+                            if (vt_args[0] == 1) {
+                                clr_start = 0;
+                                clr_end = self->cursor_x;
+                            } else if (vt_args[0] == 2) {
+                                clr_start = 0;
+                            }
                             #endif
+                            // Clear the (start/rest/all) of the line.
+                            for (uint16_t k = clr_start; k < clr_end; k++) {
+                                common_hal_displayio_tilegrid_set_tile(self->scroll_area, k, self->cursor_y, 0);
                             }
                         } else if (c == 'D') {
-                            if (n > self->cursor_x) {
+                            if (vt_args[0] > self->cursor_x) {
                                 self->cursor_x = 0;
                             } else {
-                                self->cursor_x -= n;
+                                self->cursor_x -= vt_args[0];
                             }
                         } else if (c == 'J') {
-                            if (n == 2) {
+                            if (vt_args[0] == 2) {
                                 common_hal_displayio_tilegrid_set_top_left(self->scroll_area, 0, 0);
                                 self->cursor_x = self->cursor_y = start_y = 0;
                                 common_hal_displayio_tilegrid_set_all_tiles(self->scroll_area, 0);
                             }
                         } else if (c == 'H') {
-                            if (n > 0) {
-                                n--;
+                            if (vt_args[0] > 0) {
+                                vt_args[0]--;
                             }
-                            if (m == -1) {
-                                m = 0;
+                            if (vt_args[1] == -1) {
+                                vt_args[1] = 0;
                             }
-                            if (m > 0) {
-                                m--;
+                            if (vt_args[1] > 0) {
+                                vt_args[1]--;
                             }
-                            if (n >= self->scroll_area->height_in_tiles) {
-                                n = self->scroll_area->height_in_tiles - 1;
+                            if (vt_args[0] >= self->scroll_area->height_in_tiles) {
+                                vt_args[0] = self->scroll_area->height_in_tiles - 1;
                             }
-                            if (m >= self->scroll_area->width_in_tiles) {
-                                m = self->scroll_area->width_in_tiles - 1;
+                            if (vt_args[1] >= self->scroll_area->width_in_tiles) {
+                                vt_args[1] = self->scroll_area->width_in_tiles - 1;
                             }
-                            n = (n + self->scroll_area->top_left_y) % self->scroll_area->height_in_tiles;
-                            self->cursor_x = m;
-                            self->cursor_y = n;
+                            vt_args[0] = (vt_args[0] + self->scroll_area->top_left_y) % self->scroll_area->height_in_tiles;
+                            self->cursor_x = vt_args[1];
+                            self->cursor_y = vt_args[0];
                             start_y = self->cursor_y;
                         #if CIRCUITPY_TERMINALIO_VT100
                         } else if (c == 'm') {
-                            if ((n >= 40 && n <= 47) || (n >= 30 && n <= 37)) {
-                                common_hal_displayio_palette_set_color(terminal_palette, 1 - (n / 40), _select_color(n % 10));
-                            }
-                            if (n == 0) {
-                                common_hal_displayio_palette_set_color(terminal_palette, 0, 0x000000);
-                                common_hal_displayio_palette_set_color(terminal_palette, 1, 0xffffff);
-                            }
-                            if ((m >= 40 && m <= 47) || (m >= 30 && m <= 37)) {
-                                common_hal_displayio_palette_set_color(terminal_palette, 1 - (m / 40), _select_color(m % 10));
-                            }
-                            if (m == 0) {
-                                common_hal_displayio_palette_set_color(terminal_palette, 0, 0x000000);
-                                common_hal_displayio_palette_set_color(terminal_palette, 1, 0xffffff);
-                            }
-                            if ((m2 >= 40 && m2 <= 47) || (m2 >= 30 && m2 <= 37)) {
-                                common_hal_displayio_palette_set_color(terminal_palette, 1 - (m2 / 40), _select_color(m2 % 10));
-                            }
-                            if (m2 == 0) {
-                                common_hal_displayio_palette_set_color(terminal_palette, 0, 0x000000);
-                                common_hal_displayio_palette_set_color(terminal_palette, 1, 0xffffff);
+                            for (uint8_t i_args = 0; i_args < n_args; i_args++) {
+                                if ((vt_args[i_args] >= 40 && vt_args[i_args] <= 47) || (vt_args[i_args] >= 30 && vt_args[i_args] <= 37)) {
+                                    common_hal_displayio_palette_set_color(terminal_palette, 1 - (vt_args[i_args] / 40), _select_color(vt_args[i_args] % 10));
+                                }
+                                if (vt_args[i_args] == 0) {
+                                    common_hal_displayio_palette_set_color(terminal_palette, 0, 0x000000);
+                                    common_hal_displayio_palette_set_color(terminal_palette, 1, 0xffffff);
+                                }
                             }
                         #endif
                         }
@@ -281,7 +252,7 @@ size_t common_hal_terminalio_terminal_write(terminalio_terminal_obj_t *self, con
                 #endif
                 } else if (i[0] == ']' && c == ';') {
                     self->in_osc_command = true;
-                    self->osc_command = n;
+                    self->osc_command = vt_args[0];
                     i += j + 1;
                 }
             }
