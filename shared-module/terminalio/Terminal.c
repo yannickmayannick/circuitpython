@@ -115,8 +115,10 @@ size_t common_hal_terminalio_terminal_write(terminalio_terminal_obj_t *self, con
             } else if (c == 0x1b) {
                 // Handle commands of the form [ESC].<digits><command-char> where . is not yet known.
                 uint8_t vt_args[3] = {0, -1, -1};
-                uint8_t n_args = 1;
                 uint8_t j = 1;
+                #if CIRCUITPY_TERMINALIO_VT100
+                uint8_t n_args = 1;
+                #endif
                 for (; j < 6; j++) {
                     if ('0' <= i[j] && i[j] <= '9') {
                         vt_args[0] = vt_args[0] * 10 + (i[j] - '0');
@@ -131,7 +133,9 @@ size_t common_hal_terminalio_terminal_write(terminalio_terminal_obj_t *self, con
                         for (++j; j < 12; j++) {
                             if ('0' <= i[j] && i[j] <= '9') {
                                 vt_args[i_args] = vt_args[i_args] * 10 + (i[j] - '0');
+                                #if CIRCUITPY_TERMINALIO_VT100
                                 n_args = i_args + 1;
+                                #endif
                             } else {
                                 c = i[j];
                                 break;
