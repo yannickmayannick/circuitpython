@@ -114,7 +114,7 @@ size_t common_hal_terminalio_terminal_write(terminalio_terminal_obj_t *self, con
                 }
             } else if (c == 0x1b) {
                 // Handle commands of the form [ESC].<digits><command-char> where . is not yet known.
-                uint8_t vt_args[3] = {0,-1,-1};
+                uint8_t vt_args[3] = {0, -1, -1};
                 uint8_t n_args = 1;
                 uint8_t j = 1;
                 for (; j < 6; j++) {
