@@ -17,6 +17,10 @@
 #include "shared-bindings/displayio/ColorConverter.h"
 #include "shared-bindings/displayio/OnDiskBitmap.h"
 #include "shared-bindings/displayio/Palette.h"
+#ifdef CIRCUITPY_TILEPALETTEMAPPER
+#include "shared-bindings/tilepalettemapper/TilePaletteMapper.h"
+#endif
+
 
 //| class TileGrid:
 //|     """A grid of tiles sourced out of one bitmap
@@ -323,8 +327,19 @@ MP_DEFINE_CONST_FUN_OBJ_1(displayio_tilegrid_get_pixel_shader_obj, displayio_til
 
 static mp_obj_t displayio_tilegrid_obj_set_pixel_shader(mp_obj_t self_in, mp_obj_t pixel_shader) {
     displayio_tilegrid_t *self = native_tilegrid(self_in);
+    bool valid_type = true;
     if (!mp_obj_is_type(pixel_shader, &displayio_palette_type) && !mp_obj_is_type(pixel_shader, &displayio_colorconverter_type)) {
-        mp_raise_TypeError_varg(MP_ERROR_TEXT("unsupported %q type"), MP_QSTR_pixel_shader);
+      valid_type = false;
+    }
+  mp_printf(&mp_plat_print, "checking tilepalettemapper\n");
+  #ifdef CIRCUITPY_TILEPALETTEMAPPER
+    mp_printf(&mp_plat_print, "tilepalettemapper enabled inside set pixel shader\n");
+    if (mp_obj_is_type(pixel_shader, &tilepalettemapper_tilepalettemapper_type)) {
+      valid_type = true;
+    }
+    #endif
+    if (!valid_type) {
+      mp_raise_TypeError_varg(MP_ERROR_TEXT("unsupported %q type"), MP_QSTR_pixel_shader);
     }
 
     common_hal_displayio_tilegrid_set_pixel_shader(self, pixel_shader);

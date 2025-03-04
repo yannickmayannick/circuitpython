@@ -11,6 +11,9 @@
 #include "shared-bindings/displayio/ColorConverter.h"
 #include "shared-bindings/displayio/OnDiskBitmap.h"
 #include "shared-bindings/displayio/Palette.h"
+#ifdef CIRCUITPY_TILEPALETTEMAPPER
+#include "shared-bindings/tilepalettemapper/TilePaletteMapper.h"
+#endif
 
 void common_hal_displayio_tilegrid_construct(displayio_tilegrid_t *self, mp_obj_t bitmap,
     uint16_t bitmap_width_in_tiles, uint16_t bitmap_height_in_tiles,
@@ -485,6 +488,11 @@ bool displayio_tilegrid_fill_area(displayio_tilegrid_t *self,
             }
 
             output_pixel.opaque = true;
+            #ifdef CIRCUITPY_TILEPALETTEMAPPER
+            if (mp_obj_is_type(self->pixel_shader, &tilepalettemapper_tilepalettemapper_type)){
+              output_pixel.pixel = common_hal_tilepalettemapper_tilepalettemapper_get_color(self->pixel_shader, tile_location, input_pixel.pixel);
+            }
+            #endif
             if (self->pixel_shader == mp_const_none) {
                 output_pixel.pixel = input_pixel.pixel;
             } else if (mp_obj_is_type(self->pixel_shader, &displayio_palette_type)) {
