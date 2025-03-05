@@ -15,11 +15,11 @@
 
 //| class TilePaletteMapper:
 //|     """Contains a displayio.Palette a series of mappings from one palette color_index to another palette color_index.
-//|        One mapping for tile in a 2D grid. Can be set as the pixel_shader for a TileGrid to re-map the colors for
-//|        spedific tile(s) within the TileGrid."""
+//|     One mapping for tile in a 2D grid. Can be set as the pixel_shader for a TileGrid to re-map the colors for
+//|     specific tile(s) within the TileGrid."""
 //|
 //|     def __init__(self, palette: displayio.Palette, width: int, height: int) -> None:
-//|         """Create a TilePaletteMApper object to store a set color mappings for tiles.
+//|         """Create a TilePaletteMApper object to store a set of color mappings for tiles.
 //|
 //|         :param displayio.Palette palette: The palette to get mapped colors from.
 //|         :param int width: The width of the grid in tiles.
@@ -71,6 +71,7 @@ MP_PROPERTY_GETTER(tilepalettemapper_tilepalettemapper_height_obj,
 
 //|     palette: displayio.Palette
 //|     """The palette that the mapper uses."""
+//|
 static mp_obj_t tilepalettemapper_tilepalettemapper_obj_get_palette(mp_obj_t self_in) {
     tilepalettemapper_tilepalettemapper_t *self = MP_OBJ_TO_PTR(self_in);
     return common_hal_tilepalettemapper_tilepalettemapper_get_palette(self);
