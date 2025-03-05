@@ -292,7 +292,7 @@ size_t common_hal_terminalio_terminal_write(terminalio_terminal_obj_t *self, con
                         self->cursor_x = 0;
                     }
                     start_y = self->cursor_y;
-*/                        
+*/
                     self->cursor_y++;
                     i++;
                 #endif
