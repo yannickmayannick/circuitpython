@@ -27,7 +27,7 @@ void displayio_tilegrid_validate_pixel_shader(mp_obj_t pixel_shader) {
     if (!mp_obj_is_type(pixel_shader, &displayio_palette_type) && !mp_obj_is_type(pixel_shader, &displayio_colorconverter_type)) {
         valid_type = false;
     }
-    #ifdef CIRCUITPY_TILEPALETTEMAPPER
+    #if CIRCUITPY_TILEPALETTEMAPPER
     if (mp_obj_is_type(pixel_shader, &tilepalettemapper_tilepalettemapper_type)) {
         valid_type = true;
     }

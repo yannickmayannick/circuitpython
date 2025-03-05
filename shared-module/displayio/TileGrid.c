@@ -11,7 +11,7 @@
 #include "shared-bindings/displayio/ColorConverter.h"
 #include "shared-bindings/displayio/OnDiskBitmap.h"
 #include "shared-bindings/displayio/Palette.h"
-#ifdef CIRCUITPY_TILEPALETTEMAPPER
+#if CIRCUITPY_TILEPALETTEMAPPER
 #include "shared-bindings/tilepalettemapper/TilePaletteMapper.h"
 #endif
 
@@ -488,7 +488,7 @@ bool displayio_tilegrid_fill_area(displayio_tilegrid_t *self,
             }
 
             output_pixel.opaque = true;
-            #ifdef CIRCUITPY_TILEPALETTEMAPPER
+            #if CIRCUITPY_TILEPALETTEMAPPER
             if (mp_obj_is_type(self->pixel_shader, &tilepalettemapper_tilepalettemapper_type)) {
                 output_pixel.pixel = tilepalettemapper_tilepalettemapper_get_color(self->pixel_shader, tile_location, input_pixel.pixel);
             }
@@ -558,7 +558,7 @@ void displayio_tilegrid_finish_refresh(displayio_tilegrid_t *self) {
     } else if (mp_obj_is_type(self->pixel_shader, &displayio_colorconverter_type)) {
         displayio_colorconverter_finish_refresh(self->pixel_shader);
     }
-    #ifdef CIRCUITPY_TILEPALETTEMAPPER
+    #if CIRCUITPY_TILEPALETTEMAPPER
     if (mp_obj_is_type(self->pixel_shader, &tilepalettemapper_tilepalettemapper_type)) {
         tilepalettemapper_tilepalettemapper_finish_refresh(self->pixel_shader);
     }
@@ -616,7 +616,7 @@ displayio_area_t *displayio_tilegrid_get_refresh_areas(displayio_tilegrid_t *sel
             displayio_palette_needs_refresh(self->pixel_shader)) ||
         (mp_obj_is_type(self->pixel_shader, &displayio_colorconverter_type) &&
             displayio_colorconverter_needs_refresh(self->pixel_shader));
-    #ifdef CIRCUITPY_TILEPALETTEMAPPER
+    #if CIRCUITPY_TILEPALETTEMAPPER
     self->full_change = self->full_change ||
         (mp_obj_is_type(self->pixel_shader, &tilepalettemapper_tilepalettemapper_type) &&
             tilepalettemapper_tilepalettemapper_needs_refresh(self->pixel_shader));
