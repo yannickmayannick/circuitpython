@@ -13,6 +13,20 @@
 #include "shared-bindings/displayio/Palette.h"
 #include "shared-bindings/tilepalettemapper/TilePaletteMapper.h"
 
+//| class TilePaletteMapper:
+//|     """Contains a displayio.Palette a series of mappings from one palette color_index to another palette color_index.
+//|        One mapping for tile in a 2D grid. Can be set as the pixel_shader for a TileGrid to re-map the colors for
+//|        spedific tile(s) within the TileGrid."""
+//|
+//|     def __init__(self, palette: displayio.Palette, width: int, height: int) -> None:
+//|         """Create a TilePaletteMApper object to store a set color mappings for tiles.
+//|
+//|         :param displayio.Palette palette: The palette to get mapped colors from.
+//|         :param int width: The width of the grid in tiles.
+//|         :param int height: The height of the grid in tiles.
+//|         """
+//|         ...
+//|
 static mp_obj_t tilepalettemapper_tilepalettemapper_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *all_args) {
     enum { ARG_palette, ARG_width, ARG_height };
     static const mp_arg_t allowed_args[] = {
