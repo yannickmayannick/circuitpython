@@ -267,32 +267,6 @@ size_t common_hal_terminalio_terminal_write(terminalio_terminal_obj_t *self, con
                     start_y = self->cursor_y;
                     i++;
                 } else if (i[0] == 'D') {
-/*
-                    if (self->cursor_y != scrnmod(self->vt_scroll_end)) {
-                        self->cursor_y = (self->cursor_y + 1) % self->scroll_area->height_in_tiles;
-                    } else {
-                        if (self->vt_scroll_top != 0 || self->vt_scroll_end != self->scroll_area->height_in_tiles) {
-                            // Scroll range defined, manually move tiles to perform scroll
-                            for (int16_t irow = self->vt_scroll_top; irow < self->vt_scroll_end; irow++) {
-                                for (int16_t icol = 0; icol < self->scroll_area->width_in_tiles; icol++) {
-                                    common_hal_displayio_tilegrid_set_tile(self->scroll_area, icol, scrnmod(irow), common_hal_displayio_tilegrid_get_tile(self->scroll_area, icol, scrnmod(irow + 1)));
-                                }
-                            }
-                            for (int16_t icol = 0; icol < self->scroll_area->width_in_tiles; icol++) {
-                                common_hal_displayio_tilegrid_set_tile(self->scroll_area, icol, self->cursor_y, 0);
-                            }
-                        } else {
-                            // Full screen scroll, just set new top_y pointer and clear row
-                            self->cursor_y = (self->cursor_y + 1) % self->scroll_area->height_in_tiles;
-                            common_hal_displayio_tilegrid_set_top_left(self->scroll_area, 0, (self->cursor_y + 1) % self->scroll_area->height_in_tiles);
-                            for (int16_t icol = 0; icol < self->scroll_area->width_in_tiles; icol++) {
-                                common_hal_displayio_tilegrid_set_tile(self->scroll_area, icol, self->cursor_y, 0);
-                            }
-                        }
-                        self->cursor_x = 0;
-                    }
-                    start_y = self->cursor_y;
-*/
                     self->cursor_y++;
                     i++;
                 #endif
