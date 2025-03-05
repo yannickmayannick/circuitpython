@@ -14,29 +14,29 @@
 #include "shared-bindings/tilepalettemapper/TilePaletteMapper.h"
 
 static mp_obj_t tilepalettemapper_tilepalettemapper_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *all_args) {
-  enum { ARG_palette, ARG_width, ARG_height };
-  static const mp_arg_t allowed_args[] = {
-    { MP_QSTR_palette, MP_ARG_OBJ | MP_ARG_REQUIRED },
-    { MP_QSTR_width, MP_ARG_INT | MP_ARG_REQUIRED, {.u_int = 1} },
-    { MP_QSTR_height, MP_ARG_INT | MP_ARG_REQUIRED, {.u_int = 1} },
-};
-  mp_arg_val_t args[MP_ARRAY_SIZE(allowed_args)];
-  mp_arg_parse_all_kw_array(n_args, n_kw, all_args, MP_ARRAY_SIZE(allowed_args), allowed_args, args);
-  mp_obj_t palette = args[ARG_palette].u_obj;
-  if (!mp_obj_is_type(palette, &displayio_palette_type)) {
-    mp_raise_TypeError_varg(MP_ERROR_TEXT("unsupported %q type"), MP_QSTR_pixel_shader);
-  }
-  tilepalettemapper_tilepalettemapper_t *self = mp_obj_malloc(tilepalettemapper_tilepalettemapper_t, &tilepalettemapper_tilepalettemapper_type);
-  common_hal_tilepalettemapper_tilepalettemapper_construct(self, palette, args[ARG_width].u_int, args[ARG_height].u_int);
+    enum { ARG_palette, ARG_width, ARG_height };
+    static const mp_arg_t allowed_args[] = {
+        { MP_QSTR_palette, MP_ARG_OBJ | MP_ARG_REQUIRED },
+        { MP_QSTR_width, MP_ARG_INT | MP_ARG_REQUIRED, {.u_int = 1} },
+        { MP_QSTR_height, MP_ARG_INT | MP_ARG_REQUIRED, {.u_int = 1} },
+    };
+    mp_arg_val_t args[MP_ARRAY_SIZE(allowed_args)];
+    mp_arg_parse_all_kw_array(n_args, n_kw, all_args, MP_ARRAY_SIZE(allowed_args), allowed_args, args);
+    mp_obj_t palette = args[ARG_palette].u_obj;
+    if (!mp_obj_is_type(palette, &displayio_palette_type)) {
+        mp_raise_TypeError_varg(MP_ERROR_TEXT("unsupported %q type"), MP_QSTR_pixel_shader);
+    }
+    tilepalettemapper_tilepalettemapper_t *self = mp_obj_malloc(tilepalettemapper_tilepalettemapper_t, &tilepalettemapper_tilepalettemapper_type);
+    common_hal_tilepalettemapper_tilepalettemapper_construct(self, palette, args[ARG_width].u_int, args[ARG_height].u_int);
 
-  return MP_OBJ_FROM_PTR(self);
+    return MP_OBJ_FROM_PTR(self);
 }
 
 //|     width: int
 //|     """Width of the tile palette mapper in tiles."""
 static mp_obj_t tilepalettemapper_tilepalettemapper_obj_get_width(mp_obj_t self_in) {
-  tilepalettemapper_tilepalettemapper_t *self = MP_OBJ_TO_PTR(self_in);
-  return MP_OBJ_NEW_SMALL_INT(common_hal_tilepalettemapper_tilepalettemapper_get_width(self));
+    tilepalettemapper_tilepalettemapper_t *self = MP_OBJ_TO_PTR(self_in);
+    return MP_OBJ_NEW_SMALL_INT(common_hal_tilepalettemapper_tilepalettemapper_get_width(self));
 }
 MP_DEFINE_CONST_FUN_OBJ_1(tilepalettemapper_tilepalettemapper_get_width_obj, tilepalettemapper_tilepalettemapper_obj_get_width);
 
@@ -46,8 +46,8 @@ MP_PROPERTY_GETTER(tilepalettemapper_tilepalettemapper_width_obj,
 //|     height: int
 //|     """Height of the tile palette mapper in tiles."""
 static mp_obj_t tilepalettemapper_tilepalettemapper_obj_get_height(mp_obj_t self_in) {
-  tilepalettemapper_tilepalettemapper_t *self = MP_OBJ_TO_PTR(self_in);
-  return MP_OBJ_NEW_SMALL_INT(common_hal_tilepalettemapper_tilepalettemapper_get_height(self));
+    tilepalettemapper_tilepalettemapper_t *self = MP_OBJ_TO_PTR(self_in);
+    return MP_OBJ_NEW_SMALL_INT(common_hal_tilepalettemapper_tilepalettemapper_get_height(self));
 }
 MP_DEFINE_CONST_FUN_OBJ_1(tilepalettemapper_tilepalettemapper_get_height_obj, tilepalettemapper_tilepalettemapper_obj_get_height);
 
@@ -58,8 +58,8 @@ MP_PROPERTY_GETTER(tilepalettemapper_tilepalettemapper_height_obj,
 //|     palette: displayio.Palette
 //|     """The palette that the mapper uses."""
 static mp_obj_t tilepalettemapper_tilepalettemapper_obj_get_palette(mp_obj_t self_in) {
-  tilepalettemapper_tilepalettemapper_t *self = MP_OBJ_TO_PTR(self_in);
-  return common_hal_tilepalettemapper_tilepalettemapper_get_palette(self);
+    tilepalettemapper_tilepalettemapper_t *self = MP_OBJ_TO_PTR(self_in);
+    return common_hal_tilepalettemapper_tilepalettemapper_get_palette(self);
 }
 MP_DEFINE_CONST_FUN_OBJ_1(tilepalettemapper_tilepalettemapper_get_palette_obj, tilepalettemapper_tilepalettemapper_obj_get_palette);
 
@@ -91,51 +91,51 @@ MP_PROPERTY_GETTER(tilepalettemapper_tilepalettemapper_palette_obj,
 //|
 //|
 static mp_obj_t tilepalettemapper_subscr(mp_obj_t self_in, mp_obj_t index_obj, mp_obj_t value_obj) {
-  tilepalettemapper_tilepalettemapper_t *self = MP_OBJ_TO_PTR(self_in);
-  if (mp_obj_is_type(index_obj, &mp_type_slice)) {
-    mp_raise_NotImplementedError(MP_ERROR_TEXT("Slices not supported"));
-  } else {
-    uint16_t x = 0;
-    uint16_t y = 0;
-    if (mp_obj_is_small_int(index_obj)) {
-      mp_int_t i = MP_OBJ_SMALL_INT_VALUE(index_obj);
-      uint16_t width = common_hal_tilepalettemapper_tilepalettemapper_get_width(self);
-      x = i % width;
-      y = i / width;
+    tilepalettemapper_tilepalettemapper_t *self = MP_OBJ_TO_PTR(self_in);
+    if (mp_obj_is_type(index_obj, &mp_type_slice)) {
+        mp_raise_NotImplementedError(MP_ERROR_TEXT("Slices not supported"));
     } else {
-      mp_obj_t *items;
-      mp_obj_get_array_fixed_n(index_obj, 2, &items);
-      x = mp_obj_get_int(items[0]);
-      y = mp_obj_get_int(items[1]);
-    }
-    if (x >= common_hal_tilepalettemapper_tilepalettemapper_get_width(self) ||
-        y >= common_hal_tilepalettemapper_tilepalettemapper_get_height(self)) {
-      mp_raise_IndexError(MP_ERROR_TEXT("Tile index out of bounds"));
+        uint16_t x = 0;
+        uint16_t y = 0;
+        if (mp_obj_is_small_int(index_obj)) {
+            mp_int_t i = MP_OBJ_SMALL_INT_VALUE(index_obj);
+            uint16_t width = common_hal_tilepalettemapper_tilepalettemapper_get_width(self);
+            x = i % width;
+            y = i / width;
+        } else {
+            mp_obj_t *items;
+            mp_obj_get_array_fixed_n(index_obj, 2, &items);
+            x = mp_obj_get_int(items[0]);
+            y = mp_obj_get_int(items[1]);
+        }
+        if (x >= common_hal_tilepalettemapper_tilepalettemapper_get_width(self) ||
+            y >= common_hal_tilepalettemapper_tilepalettemapper_get_height(self)) {
+            mp_raise_IndexError(MP_ERROR_TEXT("Tile index out of bounds"));
         }
 
-    if (value_obj == MP_OBJ_SENTINEL) {
-      // load
-      return common_hal_tilepalettemapper_tilepalettemapper_get_mapping(self, x, y);
-    } else if (value_obj == mp_const_none) {
-      return MP_OBJ_NULL; // op not supported
-    } else {
-        size_t len = 0;
-        mp_obj_t *items;
-        mp_obj_list_get(value_obj, &len, &items);
-        uint32_t palette_len = common_hal_displayio_palette_get_len(self->palette);
+        if (value_obj == MP_OBJ_SENTINEL) {
+            // load
+            return common_hal_tilepalettemapper_tilepalettemapper_get_mapping(self, x, y);
+        } else if (value_obj == mp_const_none) {
+            return MP_OBJ_NULL; // op not supported
+        } else {
+            size_t len = 0;
+            mp_obj_t *items;
+            mp_obj_list_get(value_obj, &len, &items);
+            uint32_t palette_len = common_hal_displayio_palette_get_len(self->palette);
 
-        mp_arg_validate_int_range(len, 0, palette_len, MP_QSTR_mapping_length);
-        common_hal_tilepalettemapper_tilepalettemapper_set_mapping(self, x, y, len, items);
+            mp_arg_validate_int_range(len, 0, palette_len, MP_QSTR_mapping_length);
+            common_hal_tilepalettemapper_tilepalettemapper_set_mapping(self, x, y, len, items);
+        }
     }
-  }
-  return mp_const_none;
+    return mp_const_none;
 }
 
 
 static const mp_rom_map_elem_t tilepalettemapper_tilepalettemapper_locals_dict_table[] = {
-  { MP_ROM_QSTR(MP_QSTR_width), MP_ROM_PTR(&tilepalettemapper_tilepalettemapper_width_obj) },
-  { MP_ROM_QSTR(MP_QSTR_height), MP_ROM_PTR(&tilepalettemapper_tilepalettemapper_height_obj) },
-  { MP_ROM_QSTR(MP_QSTR_palette), MP_ROM_PTR(&tilepalettemapper_tilepalettemapper_palette_obj) },
+    { MP_ROM_QSTR(MP_QSTR_width), MP_ROM_PTR(&tilepalettemapper_tilepalettemapper_width_obj) },
+    { MP_ROM_QSTR(MP_QSTR_height), MP_ROM_PTR(&tilepalettemapper_tilepalettemapper_height_obj) },
+    { MP_ROM_QSTR(MP_QSTR_palette), MP_ROM_PTR(&tilepalettemapper_tilepalettemapper_palette_obj) },
 };
 static MP_DEFINE_CONST_DICT(tilepalettemapper_tilepalettemapper_locals_dict, tilepalettemapper_tilepalettemapper_locals_dict_table);
 

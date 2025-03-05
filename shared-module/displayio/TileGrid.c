@@ -489,8 +489,8 @@ bool displayio_tilegrid_fill_area(displayio_tilegrid_t *self,
 
             output_pixel.opaque = true;
             #ifdef CIRCUITPY_TILEPALETTEMAPPER
-            if (mp_obj_is_type(self->pixel_shader, &tilepalettemapper_tilepalettemapper_type)){
-              output_pixel.pixel = common_hal_tilepalettemapper_tilepalettemapper_get_color(self->pixel_shader, tile_location, input_pixel.pixel);
+            if (mp_obj_is_type(self->pixel_shader, &tilepalettemapper_tilepalettemapper_type)) {
+                output_pixel.pixel = tilepalettemapper_tilepalettemapper_get_color(self->pixel_shader, tile_location, input_pixel.pixel);
             }
             #endif
             if (self->pixel_shader == mp_const_none) {
@@ -558,6 +558,11 @@ void displayio_tilegrid_finish_refresh(displayio_tilegrid_t *self) {
     } else if (mp_obj_is_type(self->pixel_shader, &displayio_colorconverter_type)) {
         displayio_colorconverter_finish_refresh(self->pixel_shader);
     }
+    #ifdef CIRCUITPY_TILEPALETTEMAPPER
+    if (mp_obj_is_type(self->pixel_shader, &tilepalettemapper_tilepalettemapper_type)) {
+        tilepalettemapper_tilepalettemapper_finish_refresh(self->pixel_shader);
+    }
+    #endif
     if (mp_obj_is_type(self->bitmap, &displayio_bitmap_type)) {
         displayio_bitmap_finish_refresh(self->bitmap);
     } else if (mp_obj_is_type(self->bitmap, &displayio_ondiskbitmap_type)) {
@@ -611,6 +616,12 @@ displayio_area_t *displayio_tilegrid_get_refresh_areas(displayio_tilegrid_t *sel
             displayio_palette_needs_refresh(self->pixel_shader)) ||
         (mp_obj_is_type(self->pixel_shader, &displayio_colorconverter_type) &&
             displayio_colorconverter_needs_refresh(self->pixel_shader));
+    #ifdef CIRCUITPY_TILEPALETTEMAPPER
+    self->full_change = self->full_change ||
+        (mp_obj_is_type(self->pixel_shader, &tilepalettemapper_tilepalettemapper_type) &&
+            tilepalettemapper_tilepalettemapper_needs_refresh(self->pixel_shader));
+    #endif
+
     if (self->full_change || first_draw) {
         self->current_area.next = tail;
         return &self->current_area;
