@@ -118,7 +118,7 @@ size_t common_hal_terminalio_terminal_write(terminalio_terminal_obj_t *self, con
                 }
             } else if (c == 0x1b) {
                 // Handle commands of the form [ESC].<digits><command-char> where . is not yet known.
-                int16_t vt_args[3] = {0, -1, -1};
+                int16_t vt_args[3] = {0, 0, 0};
                 uint8_t j = 1;
                 #if CIRCUITPY_TERMINALIO_VT100
                 uint8_t n_args = 1;
@@ -191,9 +191,6 @@ size_t common_hal_terminalio_terminal_write(terminalio_terminal_obj_t *self, con
                         } else if (c == 'H') {
                             if (vt_args[0] > 0) {
                                 vt_args[0]--;
-                            }
-                            if (vt_args[1] == -1) {
-                                vt_args[1] = 0;
                             }
                             if (vt_args[1] > 0) {
                                 vt_args[1]--;
@@ -270,6 +267,7 @@ size_t common_hal_terminalio_terminal_write(terminalio_terminal_obj_t *self, con
                     start_y = self->cursor_y;
                     i++;
                 } else if (i[0] == 'D') {
+/*
                     if (self->cursor_y != scrnmod(self->vt_scroll_end)) {
                         self->cursor_y = (self->cursor_y + 1) % self->scroll_area->height_in_tiles;
                     } else {
@@ -294,6 +292,8 @@ size_t common_hal_terminalio_terminal_write(terminalio_terminal_obj_t *self, con
                         self->cursor_x = 0;
                     }
                     start_y = self->cursor_y;
+*/                        
+                    self->cursor_y++;
                     i++;
                 #endif
                 } else if (i[0] == ']' && c == ';') {
