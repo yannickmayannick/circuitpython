@@ -6,6 +6,7 @@
 
 #include "common-hal/microcontroller/Pin.h"
 #include "hardware/gpio.h"
+#include "py/mphal.h"
 #include "shared-bindings/usb_host/Port.h"
 #include "supervisor/board.h"
 
@@ -13,6 +14,7 @@
 
 // Use the MP_WEAK supervisor/shared/board.c versions of routines not defined here.
 
+#define I2S_RESET_PIN_NUMBER 22
 
 #if defined(DEFAULT_USB_HOST_5V_POWER)
 bool board_reset_pin_number(uint8_t pin_number) {
@@ -28,7 +30,7 @@ bool board_reset_pin_number(uint8_t pin_number) {
         return true;
     }
     // Set I2S out of reset.
-    if (pin_number == 22) {
+    if (pin_number == I2S_RESET_PIN_NUMBER) {
         gpio_put(pin_number, 1);
         gpio_set_dir(pin_number, GPIO_OUT);
         gpio_set_function(pin_number, GPIO_FUNC_SIO);
@@ -40,6 +42,13 @@ bool board_reset_pin_number(uint8_t pin_number) {
 #endif
 
 void board_init(void) {
+    // Reset the DAC to put it in a known state.
+    gpio_put(I2S_RESET_PIN_NUMBER, 0);
+    gpio_set_dir(I2S_RESET_PIN_NUMBER, GPIO_OUT);
+    gpio_set_function(I2S_RESET_PIN_NUMBER, GPIO_FUNC_SIO);
+    mp_hal_delay_us(1);
+    board_reset_pin_number(I2S_RESET_PIN_NUMBER);
+
     #if defined(DEFAULT_USB_HOST_DATA_PLUS)
     common_hal_usb_host_port_construct(DEFAULT_USB_HOST_DATA_PLUS, DEFAULT_USB_HOST_DATA_MINUS);
     #endif
