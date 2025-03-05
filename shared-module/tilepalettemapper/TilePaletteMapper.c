@@ -49,9 +49,6 @@ mp_obj_t common_hal_tilepalettemapper_tilepalettemapper_get_mapping(tilepalettem
 }
 
 void common_hal_tilepalettemapper_tilepalettemapper_set_mapping(tilepalettemapper_tilepalettemapper_t *self, uint16_t x, uint16_t y, size_t len, mp_obj_t *items) {
-//  size_t len = 0;
-//  mp_obj_t *items;
-//  mp_obj_list_get(mapping, &len, &items);
     uint32_t palette_len = common_hal_displayio_palette_get_len(self->palette);
     for (uint16_t i = 0; i < len; i++) {
         int mapping_val = mp_arg_validate_type_int(items[i], MP_QSTR_mapping_value);
