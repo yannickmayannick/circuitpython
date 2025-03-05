@@ -1,6 +1,8 @@
+// This file is part of the CircuitPython project: https://circuitpython.org
 //
-// Created by timc on 3/4/25.
+// SPDX-FileCopyrightText: Copyright (c) 2025 Tim Cocks for Adafruit Industries
 //
+// SPDX-License-Identifier: MIT
 #include "shared-module/tilepalettemapper/TilePaletteMapper.h"
 
 extern const mp_obj_type_t tilepalettemapper_tilepalettemapper_type;

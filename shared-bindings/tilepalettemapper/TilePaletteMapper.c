@@ -1,6 +1,6 @@
 // This file is part of the CircuitPython project: https://circuitpython.org
 //
-// SPDX-FileCopyrightText: Copyright (c) 2017 Scott Shawcroft for Adafruit Industries
+// SPDX-FileCopyrightText: Copyright (c) 2025 Tim Cocks for Adafruit Industries
 //
 // SPDX-License-Identifier: MIT
 #include <stdint.h>
