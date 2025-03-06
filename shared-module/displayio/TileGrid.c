@@ -471,7 +471,9 @@ bool displayio_tilegrid_fill_area(displayio_tilegrid_t *self,
                 continue;
             }
             int16_t local_x = input_pixel.x / self->absolute_transform->scale;
-            uint16_t tile_location = ((local_y / self->tile_height + self->top_left_y) % self->height_in_tiles) * self->width_in_tiles + (local_x / self->tile_width + self->top_left_x) % self->width_in_tiles;
+            uint16_t x_tile_index = (local_x / self->tile_width + self->top_left_x) % self->width_in_tiles;
+            uint16_t y_tile_index = (local_y / self->tile_height + self->top_left_y) % self->height_in_tiles;
+            uint16_t tile_location = y_tile_index * self->width_in_tiles + x_tile_index;
             input_pixel.tile = tiles[tile_location];
             input_pixel.tile_x = (input_pixel.tile % self->bitmap_width_in_tiles) * self->tile_width + local_x % self->tile_width;
             input_pixel.tile_y = (input_pixel.tile / self->bitmap_width_in_tiles) * self->tile_height + local_y % self->tile_height;
@@ -490,7 +492,7 @@ bool displayio_tilegrid_fill_area(displayio_tilegrid_t *self,
             output_pixel.opaque = true;
             #if CIRCUITPY_TILEPALETTEMAPPER
             if (mp_obj_is_type(self->pixel_shader, &tilepalettemapper_tilepalettemapper_type)) {
-                output_pixel.pixel = tilepalettemapper_tilepalettemapper_get_color(self->pixel_shader, tile_location, input_pixel.pixel);
+                tilepalettemapper_tilepalettemapper_get_color(self->pixel_shader, colorspace, &input_pixel, &output_pixel, x_tile_index, y_tile_index);
             }
             #endif
             if (self->pixel_shader == mp_const_none) {

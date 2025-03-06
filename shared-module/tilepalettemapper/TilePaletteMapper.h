@@ -11,12 +11,14 @@
 #include <stdint.h>
 
 #include "py/obj.h"
+#include "shared-module/displayio/Palette.h"
 
 typedef struct {
     mp_obj_base_t base;
     mp_obj_t palette;
     uint16_t width_in_tiles;
     uint16_t height_in_tiles;
+    uint16_t input_color_count;
     uint16_t **tile_mappings;
     bool needs_refresh;
 } tilepalettemapper_tilepalettemapper_t;
@@ -24,4 +26,4 @@ typedef struct {
 bool tilepalettemapper_tilepalettemapper_needs_refresh(tilepalettemapper_tilepalettemapper_t *self);
 void tilepalettemapper_tilepalettemapper_finish_refresh(tilepalettemapper_tilepalettemapper_t *self);
 
-uint32_t tilepalettemapper_tilepalettemapper_get_color(tilepalettemapper_tilepalettemapper_t *self, uint16_t tile_index, uint32_t palette_index);
+void tilepalettemapper_tilepalettemapper_get_color(tilepalettemapper_tilepalettemapper_t *self, const _displayio_colorspace_t *colorspace, displayio_input_pixel_t *input_pixel, displayio_output_pixel_t *output_color, uint16_t x_tile_index, uint16_t y_tile_index);

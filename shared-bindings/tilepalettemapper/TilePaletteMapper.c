@@ -14,23 +14,28 @@
 #include "shared-bindings/tilepalettemapper/TilePaletteMapper.h"
 
 //| class TilePaletteMapper:
-//|     """Contains a displayio.Palette a series of mappings from one palette color_index to another palette color_index.
-//|     One mapping for tile in a 2D grid. Can be set as the pixel_shader for a TileGrid to re-map the colors for
-//|     specific tile(s) within the TileGrid."""
+//|     """Remaps color indices from the source bitmap to alternate indices on a
+//|		   per-tile basis. This allows for altering coloring of tiles based on
+//|		   their tilegrid location. It also allows for using a limited color
+//|                                                        bitmap with a wider array of colors."""
 //|
-//|     def __init__(self, palette: displayio.Palette, width: int, height: int) -> None:
+//|     def __init__(
+//|         self, palette: displayio.Palette, input_color_count: int, width: int, height: int
+//|     ) -> None:
 //|         """Create a TilePaletteMApper object to store a set of color mappings for tiles.
 //|
 //|         :param displayio.Palette palette: The palette to get mapped colors from.
+//|         :param int input_color_count: The number of colors in in the input bitmap.
 //|         :param int width: The width of the grid in tiles.
 //|         :param int height: The height of the grid in tiles.
 //|         """
 //|         ...
 //|
 static mp_obj_t tilepalettemapper_tilepalettemapper_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *all_args) {
-    enum { ARG_palette, ARG_width, ARG_height };
+    enum { ARG_palette, ARG_input_color_count, ARG_width, ARG_height };
     static const mp_arg_t allowed_args[] = {
         { MP_QSTR_palette, MP_ARG_OBJ | MP_ARG_REQUIRED },
+        { MP_QSTR_input_color_count, MP_ARG_INT | MP_ARG_REQUIRED, {.u_int = 1} },
         { MP_QSTR_width, MP_ARG_INT | MP_ARG_REQUIRED, {.u_int = 1} },
         { MP_QSTR_height, MP_ARG_INT | MP_ARG_REQUIRED, {.u_int = 1} },
     };
@@ -41,7 +46,7 @@ static mp_obj_t tilepalettemapper_tilepalettemapper_make_new(const mp_obj_type_t
         mp_raise_TypeError_varg(MP_ERROR_TEXT("unsupported %q type"), MP_QSTR_pixel_shader);
     }
     tilepalettemapper_tilepalettemapper_t *self = mp_obj_malloc(tilepalettemapper_tilepalettemapper_t, &tilepalettemapper_tilepalettemapper_type);
-    common_hal_tilepalettemapper_tilepalettemapper_construct(self, palette, args[ARG_width].u_int, args[ARG_height].u_int);
+    common_hal_tilepalettemapper_tilepalettemapper_construct(self, palette, args[ARG_input_color_count].u_int, args[ARG_width].u_int, args[ARG_height].u_int);
 
     return MP_OBJ_FROM_PTR(self);
 }
@@ -137,9 +142,7 @@ static mp_obj_t tilepalettemapper_subscr(mp_obj_t self_in, mp_obj_t index_obj, m
             size_t len = 0;
             mp_obj_t *items;
             mp_obj_list_get(value_obj, &len, &items);
-            uint32_t palette_len = common_hal_displayio_palette_get_len(self->palette);
-
-            mp_arg_validate_int_range(len, 0, palette_len, MP_QSTR_mapping_length);
+            mp_arg_validate_int_range(len, 0, self->input_color_count, MP_QSTR_mapping_length);
             common_hal_tilepalettemapper_tilepalettemapper_set_mapping(self, x, y, len, items);
         }
     }
