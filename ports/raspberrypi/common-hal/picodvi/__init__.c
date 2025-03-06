@@ -17,7 +17,7 @@
 #include "supervisor/port_heap.h"
 
 #if defined(DEFAULT_DVI_BUS_CLK_DP)
-static bool picodvi_autoconstruct_enabled(void) {
+static bool picodvi_autoconstruct_enabled(mp_int_t *default_width, mp_int_t *default_height) {
     char buf[sizeof("detect")];
     buf[0] = 0;
 
@@ -42,6 +42,48 @@ static bool picodvi_autoconstruct_enabled(void) {
         return false;
     }
     bool probed = common_hal_busio_i2c_probe(i2c, 0x50);
+    if (probed) {
+        uint8_t edid[128];
+        uint8_t out[1] = {0};
+        common_hal_busio_i2c_write_read(i2c, 0x50, out, 1, edid, sizeof(edid));
+        bool edid_ok = true;
+        if (edid[0] != 0x00 || edid[1] != 0xFF || edid[2] != 0xFF || edid[3] != 0xFF || edid[4] != 0xFF || edid[5] != 0xFF || edid[6] != 0xFF || edid[7] != 0x00) {
+            edid_ok = false;
+        }
+        uint8_t checksum = 0;
+        for (size_t i = 0; i < sizeof(edid); i++) {
+            checksum += edid[i];
+        }
+        if (checksum != 0) {
+            edid_ok = false;
+        }
+
+        if (edid_ok) {
+            uint8_t established_timings = edid[35];
+            if ((established_timings & 0xa0) == 0) {
+                // Check that 720x400@70Hz or 640x480@60Hz is supported. If not
+                // and we read EDID ok, then don't autostart.
+                probed = false;
+            } else {
+                size_t offset = 54;
+                uint16_t preferred_pixel_clock = edid[offset] | (edid[offset + 1] << 8);
+                if (preferred_pixel_clock != 0) {
+                    size_t preferred_width = ((edid[offset + 4] & 0xf0) << 4) | edid[offset + 2];
+                    size_t preferred_height = ((edid[offset + 7] & 0xf0) << 4) | edid[offset + 5];
+                    // Use 720x400 on 1080p, 4k and 8k displays.
+                    if ((established_timings & 0x80) != 0 &&
+                        preferred_width % 1920 == 0 &&
+                        preferred_height % 1080 == 0) {
+                        *default_width = 720 / 2;
+                        *default_height = 400 / 2;
+                    } else {
+                        *default_width = 640 / 2;
+                        *default_height = 480 / 2;
+                    }
+                }
+            }
+        }
+    }
     common_hal_busio_i2c_unlock(i2c);
     return probed;
 }
@@ -53,11 +95,13 @@ void picodvi_autoconstruct(void) {
         return;
     }
 
-    if (!picodvi_autoconstruct_enabled()) {
+    mp_int_t default_width = 320;
+    mp_int_t default_height = 240;
+    if (!picodvi_autoconstruct_enabled(&default_width, &default_height)) {
         return;
     }
 
-    mp_int_t width = 320;
+    mp_int_t width = default_width;
     mp_int_t height = 0;
     mp_int_t color_depth = 16;
     mp_int_t rotation = 0;
@@ -75,6 +119,9 @@ void picodvi_autoconstruct(void) {
             case 320:
                 height = 240;
                 break;
+            case 360:
+                height = 200;
+                break;
         }
     }
 
@@ -85,8 +132,8 @@ void picodvi_autoconstruct(void) {
 
     if (!common_hal_picodvi_framebuffer_preflight(width, height, color_depth)) {
         // invalid configuration, set back to default
-        width = 320;
-        height = 240;
+        width = default_width;
+        height = default_height;
         color_depth = 16;
     }
 
