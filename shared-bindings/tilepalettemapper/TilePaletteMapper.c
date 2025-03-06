@@ -15,9 +15,9 @@
 
 //| class TilePaletteMapper:
 //|     """Remaps color indices from the source bitmap to alternate indices on a
-//|		   per-tile basis. This allows for altering coloring of tiles based on
-//|		   their tilegrid location. It also allows for using a limited color
-//|                                                        bitmap with a wider array of colors."""
+//|     per-tile basis. This allows for altering coloring of tiles based on
+//|     their tilegrid location. It also allows for using a limited color
+//|     bitmap with a wider array of colors."""
 //|
 //|     def __init__(
 //|         self, palette: displayio.Palette, input_color_count: int, width: int, height: int
@@ -27,10 +27,9 @@
 //|         :param displayio.Palette palette: The palette to get mapped colors from.
 //|         :param int input_color_count: The number of colors in in the input bitmap.
 //|         :param int width: The width of the grid in tiles.
-//|         :param int height: The height of the grid in tiles.
-//|         """
-//|         ...
+//|         :param int height: The height of the grid in tiles."""
 //|
+
 static mp_obj_t tilepalettemapper_tilepalettemapper_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *all_args) {
     enum { ARG_palette, ARG_input_color_count, ARG_width, ARG_height };
     static const mp_arg_t allowed_args[] = {
