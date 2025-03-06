@@ -34,9 +34,9 @@ static mp_obj_t tilepalettemapper_tilepalettemapper_make_new(const mp_obj_type_t
     enum { ARG_palette, ARG_input_color_count, ARG_width, ARG_height };
     static const mp_arg_t allowed_args[] = {
         { MP_QSTR_palette, MP_ARG_OBJ | MP_ARG_REQUIRED },
-        { MP_QSTR_input_color_count, MP_ARG_INT | MP_ARG_REQUIRED, {.u_int = 1} },
-        { MP_QSTR_width, MP_ARG_INT | MP_ARG_REQUIRED, {.u_int = 1} },
-        { MP_QSTR_height, MP_ARG_INT | MP_ARG_REQUIRED, {.u_int = 1} },
+        { MP_QSTR_input_color_count, MP_ARG_INT | MP_ARG_REQUIRED },
+        { MP_QSTR_width, MP_ARG_INT | MP_ARG_REQUIRED },
+        { MP_QSTR_height, MP_ARG_INT | MP_ARG_REQUIRED },
     };
     mp_arg_val_t args[MP_ARRAY_SIZE(allowed_args)];
     mp_arg_parse_all_kw_array(n_args, n_kw, all_args, MP_ARRAY_SIZE(allowed_args), allowed_args, args);
