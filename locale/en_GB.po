@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2025-02-19 11:46+0000\n"
+"PO-Revision-Date: 2025-03-06 13:42+0000\n"
 "Last-Translator: Andi Chandler <andi@gowling.com>\n"
 "Language-Team: none\n"
 "Language: en_GB\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.1-dev\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 
 #: main.c
 msgid ""
@@ -1055,7 +1055,7 @@ msgstr "Failed to release mutex, err 0x%04x"
 
 #: ports/zephyr-cp/common-hal/wifi/Radio.c
 msgid "Failed to set hostname"
-msgstr ""
+msgstr "Failed to set hostname"
 
 #: ports/espressif/common-hal/audioio/AudioOut.c
 msgid "Failed to start async audio"
