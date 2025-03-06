@@ -86,7 +86,7 @@ MP_PROPERTY_GETTER(tilepalettemapper_tilepalettemapper_palette_obj,
     (mp_obj_t)&tilepalettemapper_tilepalettemapper_get_palette_obj);
 
 
-//|     def __getitem__(self, index: Union[Tuple[int, int], int]) -> List[int]:
+//|     def __getitem__(self, index: Union[Tuple[int, int], int]) -> Tuple[int]:
 //|         """Returns the mapping for the given index. The index can either be an x,y tuple or an int equal
 //|         to ``y * width + x``.
 //|
