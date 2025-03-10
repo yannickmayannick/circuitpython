@@ -292,7 +292,7 @@ void common_hal_picodvi_framebuffer_construct(picodvi_framebuffer_obj_t *self,
         self->dma_commands_len = (MODE_720_V_FRONT_PORCH + MODE_720_V_SYNC_WIDTH + MODE_720_V_BACK_PORCH + 2 * MODE_720_V_ACTIVE_LINES + 1) * dma_command_size;
     }
     self->dma_commands = (uint32_t *)port_malloc(self->dma_commands_len * sizeof(uint32_t), true);
-    if (self->dma_commands == NULL || ((size_t)self->framebuffer & 0xf0000000) == 0x10000000) {
+    if (self->dma_commands == NULL || ((size_t)self->dma_commands & 0xf0000000) == 0x10000000) {
         common_hal_picodvi_framebuffer_deinit(self);
         m_malloc_fail(self->dma_commands_len * sizeof(uint32_t));
         return;
