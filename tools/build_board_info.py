@@ -249,22 +249,20 @@ def generate_download_info():
     board_mapping = get_board_mapping()
 
     for board_id, board_info in board_mapping.items():
-        for alias in [board_id] + board_info["aliases"]:
-            alias_info = board_mapping[alias]
-            if alias not in current_info:
-                changes["new_boards"].append(alias)
-                current_info[alias] = {"downloads": 0, "versions": []}
-            new_version = {
-                "stable": new_stable,
-                "version": new_tag,
-                "languages": languages,
-                # add modules, extensions, frozen_libraries explicitly
-                "modules": support_matrix[alias]["modules"],
-                "extensions": support_matrix[alias]["extensions"],
-                "frozen_libraries": support_matrix[alias]["frozen_libraries"],
-            }
-            current_info[alias]["downloads"] = alias_info["download_count"]
-            current_info[alias]["versions"].append(new_version)
+        if board_id not in current_info:
+            changes["new_boards"].append(board_id)
+            current_info[board_id] = {"downloads": 0, "versions": []}
+        new_version = {
+            "stable": new_stable,
+            "version": new_tag,
+            "languages": languages,
+            # add modules, extensions, frozen_libraries explicitly
+            "modules": support_matrix[board_id]["modules"],
+            "extensions": support_matrix[board_id]["extensions"],
+            "frozen_libraries": support_matrix[board_id]["frozen_libraries"],
+        }
+        current_info[board_id]["downloads"] = board_info["download_count"]
+        current_info[board_id]["versions"].append(new_version)
 
     changes["new_languages"] = set(languages) - previous_languages
 
