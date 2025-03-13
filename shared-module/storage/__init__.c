@@ -190,7 +190,9 @@ void common_hal_storage_remount(const char *mount_path, bool readonly, bool disa
     filesystem_set_concurrent_write_protection(fs_usermount, !disable_concurrent_write_protection);
     blockdev_unlock(fs_usermount);
 
+    #if CIRCUITPY_USB_DEVICE && CIRCUITPY_USB_MSC
     usb_msc_remount(fs_usermount);
+    #endif
 }
 
 void common_hal_storage_erase_filesystem(bool extended) {
