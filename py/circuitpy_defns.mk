@@ -396,6 +396,9 @@ endif
 ifeq ($(CIRCUITPY_FONTIO),1)
 SRC_PATTERNS += fontio/%
 endif
+ifeq ($(CIRCUITPY_LVFONTIO),1)
+SRC_PATTERNS += lvfontio/%
+endif
 ifeq ($(CIRCUITPY_TILEPALETTEMAPPER),1)
 SRC_PATTERNS += tilepalettemapper/%
 endif
@@ -675,6 +678,8 @@ SRC_SHARED_MODULE_ALL = \
 	floppyio/__init__.c \
 	fontio/BuiltinFont.c \
 	fontio/__init__.c \
+	lvfontio/OnDiskFont.c\
+	lvfontio/__init__.c \
 	fourwire/__init__.c \
 	fourwire/FourWire.c \
 	framebufferio/FramebufferDisplay.c \
