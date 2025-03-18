@@ -19,8 +19,8 @@
 
 // Can be removed once CircuitPython 10 is released.
 // Print warnings or not about deprecated names. See objmodule.c.
-#ifndef CIRCUITPY_8_9_WARNINGS
-#define CIRCUITPY_8_9_WARNINGS (0)
+#ifndef CIRCUITPY_9_10_WARNINGS
+#define CIRCUITPY_9_10_WARNINGS (1)
 #endif
 
 // REPR_C encodes qstrs, 31-bit ints, and 30-bit floats in a single 32-bit word.
