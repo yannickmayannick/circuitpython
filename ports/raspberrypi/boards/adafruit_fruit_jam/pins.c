@@ -9,6 +9,10 @@
 static const mp_rom_map_elem_t board_module_globals_table[] = {
     CIRCUITPYTHON_BOARD_DICT_STANDARD_ITEMS
 
+
+    // On JST PH connector.
+    { MP_OBJ_NEW_QSTR(MP_QSTR_A0), MP_ROM_PTR(&pin_GPIO40) },
+
     { MP_OBJ_NEW_QSTR(MP_QSTR_A1), MP_ROM_PTR(&pin_GPIO41) },
     { MP_OBJ_NEW_QSTR(MP_QSTR_A2), MP_ROM_PTR(&pin_GPIO42) },
     { MP_OBJ_NEW_QSTR(MP_QSTR_A3), MP_ROM_PTR(&pin_GPIO43) },
