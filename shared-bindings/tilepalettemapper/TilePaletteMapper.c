@@ -75,7 +75,7 @@ MP_PROPERTY_GETTER(tilepalettemapper_tilepalettemapper_height_obj,
     (mp_obj_t)&tilepalettemapper_tilepalettemapper_get_height_obj);
 
 
-//|     palette: Union[displayio.Palette, displayio.ColorConverter]
+//|     pixel_shader: Union[displayio.Palette, displayio.ColorConverter]
 //|     """The palette or ColorConverter that the mapper uses."""
 //|
 static mp_obj_t tilepalettemapper_tilepalettemapper_obj_get_pixel_shader(mp_obj_t self_in) {
