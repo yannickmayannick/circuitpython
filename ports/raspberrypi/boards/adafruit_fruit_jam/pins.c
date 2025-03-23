@@ -9,6 +9,10 @@
 static const mp_rom_map_elem_t board_module_globals_table[] = {
     CIRCUITPYTHON_BOARD_DICT_STANDARD_ITEMS
 
+
+    // On JST PH connector.
+    { MP_OBJ_NEW_QSTR(MP_QSTR_A0), MP_ROM_PTR(&pin_GPIO40) },
+
     { MP_OBJ_NEW_QSTR(MP_QSTR_A1), MP_ROM_PTR(&pin_GPIO41) },
     { MP_OBJ_NEW_QSTR(MP_QSTR_A2), MP_ROM_PTR(&pin_GPIO42) },
     { MP_OBJ_NEW_QSTR(MP_QSTR_A3), MP_ROM_PTR(&pin_GPIO43) },
@@ -27,7 +31,6 @@ static const mp_rom_map_elem_t board_module_globals_table[] = {
     { MP_OBJ_NEW_QSTR(MP_QSTR_BOOT), MP_ROM_PTR(&pin_GPIO0) },
 
     { MP_OBJ_NEW_QSTR(MP_QSTR_BUTTON1), MP_ROM_PTR(&pin_GPIO4) },
-
     { MP_OBJ_NEW_QSTR(MP_QSTR_BUTTON2), MP_ROM_PTR(&pin_GPIO5) },
 
     { MP_OBJ_NEW_QSTR(MP_QSTR_SDA), MP_ROM_PTR(&pin_GPIO20) },
@@ -37,7 +40,7 @@ static const mp_rom_map_elem_t board_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR_MOSI), MP_ROM_PTR(&pin_GPIO31) },
     { MP_ROM_QSTR(MP_QSTR_MISO), MP_ROM_PTR(&pin_GPIO28) },
 
-    { MP_ROM_QSTR(MP_QSTR_TFT_CS), MP_ROM_PTR(&pin_GPIO46) },
+    { MP_ROM_QSTR(MP_QSTR_ESP_CS), MP_ROM_PTR(&pin_GPIO46) },
 
     { MP_OBJ_NEW_QSTR(MP_QSTR_NEOPIXEL), MP_ROM_PTR(&pin_GPIO32) },
 
@@ -50,7 +53,8 @@ static const mp_rom_map_elem_t board_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR_D2N), MP_ROM_PTR(&pin_GPIO18) },
     { MP_ROM_QSTR(MP_QSTR_D2P), MP_ROM_PTR(&pin_GPIO19) },
 
-    { MP_ROM_QSTR(MP_QSTR_I2S_RESET), MP_ROM_PTR(&pin_GPIO22) },
+    { MP_ROM_QSTR(MP_QSTR_PERIPH_RESET), MP_ROM_PTR(&pin_GPIO22) },
+
     { MP_ROM_QSTR(MP_QSTR_I2S_MCLK), MP_ROM_PTR(&pin_GPIO27) },
     { MP_ROM_QSTR(MP_QSTR_I2S_BCLK), MP_ROM_PTR(&pin_GPIO26) },
     { MP_ROM_QSTR(MP_QSTR_I2S_WS), MP_ROM_PTR(&pin_GPIO25) },
