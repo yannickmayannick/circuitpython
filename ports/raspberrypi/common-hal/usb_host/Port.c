@@ -11,17 +11,16 @@
 #include "supervisor/shared/serial.h"
 #include "supervisor/usb.h"
 
-#include "src/common/pico_time/include/pico/time.h"
+#include "pico/time.h"
+#include "hardware/structs/mpu.h"
 #ifdef PICO_RP2040
-#include "src/rp2040/hardware_structs/include/hardware/structs/mpu.h"
-#include "src/rp2_common/cmsis/stub/CMSIS/Device/RP2040/Include/RP2040.h"
+#include "RP2040.h" // (cmsis)
 #endif
 #ifdef PICO_RP2350
-#include "src/rp2350/hardware_structs/include/hardware/structs/mpu.h"
-#include "src/rp2_common/cmsis/stub/CMSIS/Device/RP2350/Include/RP2350.h"
+#include "RP2350.h" // (cmsis)
 #endif
-#include "src/rp2_common/hardware_dma/include/hardware/dma.h"
-#include "src/rp2_common/pico_multicore/include/pico/multicore.h"
+#include "hardware/dma.h"
+#include "pico/multicore.h"
 
 #include "py/runtime.h"
 
