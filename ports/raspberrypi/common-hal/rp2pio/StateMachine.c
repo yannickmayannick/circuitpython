@@ -14,18 +14,12 @@
 #include "shared-bindings/microcontroller/Pin.h"
 #include "shared-bindings/memorymap/AddressRange.h"
 
-#if defined(PICO_RP2040)
-#include "src/rp2040/hardware_regs/include/hardware/platform_defs.h"
-#include "src/rp2040/hardware_structs/include/hardware/structs/iobank0.h"
-#elif defined(PICO_RP2350)
-#include "src/rp2350/hardware_regs/include/hardware/platform_defs.h"
-#include "src/rp2350/hardware_structs/include/hardware/structs/iobank0.h"
-#endif
-
-#include "src/rp2_common/hardware_clocks/include/hardware/clocks.h"
-#include "src/rp2_common/hardware_dma/include/hardware/dma.h"
-#include "src/rp2_common/hardware_pio/include/hardware/pio_instructions.h"
-#include "src/rp2_common/hardware_irq/include/hardware/irq.h"
+#include "hardware/platform_defs.h"
+#include "hardware/structs/iobank0.h"
+#include "hardware/clocks.h"
+#include "hardware/dma.h"
+#include "hardware/pio_instructions.h"
+#include "hardware/irq.h"
 
 #include "shared/runtime/interrupt_char.h"
 #include "py/obj.h"
