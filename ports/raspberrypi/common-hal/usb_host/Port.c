@@ -138,10 +138,11 @@ usb_host_port_obj_t *common_hal_usb_host_port_construct(const mcu_pin_obj_t *dp,
     }
     pio_cfg.pio_tx_num = get_usb_pio();
     pio_cfg.pio_rx_num = pio_cfg.pio_tx_num;
-    pio_cfg.tx_ch = dma_claim_unused_channel(false); // DMA channel
-    if (pio_cfg.tx_ch < 0) {
+    int dma_ch = dma_claim_unused_channel(false);
+    if (dma_ch < 0) {
         mp_raise_RuntimeError(MP_ERROR_TEXT("All dma channels in use"));
     }
+    pio_cfg.tx_ch = dma_ch;
 
     self->base.type = &usb_host_port_type;
     self->dp = dp;
