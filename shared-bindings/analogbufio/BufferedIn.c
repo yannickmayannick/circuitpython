@@ -39,6 +39,9 @@
 //|     def __init__(self, pin: microcontroller.Pin, *, sample_rate: int) -> None:
 //|         """Create a `BufferedIn` on the given pin and given sample rate.
 //|
+//|         **Limitations**: On Pi Pico W and Pi Pico 2 W, pin ``board.A3`` is not supported
+//|         because it is also used to control the CYW43 radio module.
+//|
 //|         :param ~microcontroller.Pin pin: the pin to read from
 //|         :param ~int sample_rate: rate: sampling frequency, in samples per second"""
 //|         ...
