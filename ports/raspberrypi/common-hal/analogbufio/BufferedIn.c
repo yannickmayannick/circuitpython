@@ -20,11 +20,14 @@
 
 void common_hal_analogbufio_bufferedin_construct(analogbufio_bufferedin_obj_t *self, const mcu_pin_obj_t *pin, uint32_t sample_rate) {
     // Make sure pin number is in range for ADC
-    if ((pin->number < ADC_BASE_PIN) ||
-        (pin->number > ADC_BASE_PIN + NUM_ADC_CHANNELS - 1) ||
-        // On Pico W and Pico 2 W, GPIO29 is both a voltage monitor and used for SPI to the CYW43.
+    if ((pin->number < ADC_BASE_PIN)
+        || (pin->number > ADC_BASE_PIN + NUM_ADC_CHANNELS - 1)
+        // On many boards with a CYW43 radio co-processor, CYW43_DEFAULT_PIN_WL_CLOCK (usually GPIO29),
+        // is both a voltage monitor and also SPI SCK to the CYW43.
         // Disallow its use for BufferedIn.
-        (CIRCUITPY_CYW43 && pin->number == 29)
+        #if defined(CIRCUITPY_CYW43) && defined(CYW43_DEFAULT_PIN_WL_CLOCK)
+        || (pin->number == CYW43_DEFAULT_PIN_WL_CLOCK)
+        #endif
         ) {
         raise_ValueError_invalid_pin();
     }

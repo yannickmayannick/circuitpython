@@ -12,12 +12,12 @@
 
 #include "hardware/adc.h"
 
-// Voltage monitor is special on Pico W and Pico 2 W, because this pin is shared between the
-// voltage monitor function and the wifi function. Special handling is required
-// to read the analog voltage.
+// On many boards with a CYW43 radio co-processor, CYW43_DEFAULT_PIN_WL_CLOCK (usually GPIO29),
+// is both a voltage monitor and also SPI SCK to the CYW43.
+// Special handling is required to read the analog voltage.
 #if CIRCUITPY_CYW43
 #include "bindings/cyw43/__init__.h"
-#define SPECIAL_PIN(pin) (pin->number == 29)
+#define SPECIAL_PIN(pin) (pin->number == CYW43_DEFAULT_PIN_WL_CLOCK)
 
 const mcu_pin_obj_t *common_hal_analogio_analogin_validate_pin(mp_obj_t obj) {
     return validate_obj_is_free_pin_or_gpio29(obj, MP_QSTR_pin);

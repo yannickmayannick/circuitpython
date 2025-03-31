@@ -39,11 +39,13 @@
 //|     def __init__(self, pin: microcontroller.Pin, *, sample_rate: int) -> None:
 //|         """Create a `BufferedIn` on the given pin and given sample rate.
 //|
-//|         **Limitations**: On Pi Pico W and Pi Pico 2 W, pin ``board.A3`` is not supported
-//|         because it is also used to control the CYW43 radio module.
-//|
 //|         :param ~microcontroller.Pin pin: the pin to read from
-//|         :param ~int sample_rate: rate: sampling frequency, in samples per second"""
+//|         :param ~int sample_rate: rate: sampling frequency, in samples per second
+//|
+//|         **Limitations**: On many boards with a CYW43 radio module, such as Pico W,
+//|         GPIO29 (often ``board.A3``) is also used to control the CYW43,
+//|         and is therefore not available to use as the `BufferedIn` pin.
+//|         """
 //|         ...
 //|
 static mp_obj_t analogbufio_bufferedin_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *all_args) {
