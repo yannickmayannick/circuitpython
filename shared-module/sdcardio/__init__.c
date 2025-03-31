@@ -26,6 +26,8 @@ static bool _mounted = false;
 
 #ifdef DEFAULT_SD_MOSI
 static busio_spi_obj_t busio_spi_obj;
+#else
+#include "shared-bindings/board/__init__.h"
 #endif
 #endif
 
@@ -82,7 +84,12 @@ void automount_sd_card(void) {
     mp_rom_error_text_t error = sdcardio_sdcard_construct(&sdcard, spi_obj, DEFAULT_SD_CS, 25000000);
     if (error != NULL) {
         // Failed to communicate with the card.
+        _mounted = false;
         _init_error = true;
+        #ifdef DEFAULT_SD_MOSI
+        common_hal_busio_spi_deinit(spi_obj);
+        #endif
+        return;
     }
     common_hal_digitalio_digitalinout_never_reset(&sdcard.cs);
 

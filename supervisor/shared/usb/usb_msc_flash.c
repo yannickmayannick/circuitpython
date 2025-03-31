@@ -12,6 +12,7 @@
 #include "extmod/vfs_fat.h"
 #include "lib/oofatfs/diskio.h"
 #include "lib/oofatfs/ff.h"
+#include "py/gc.h"
 #include "py/mpstate.h"
 
 #include "shared-module/storage/__init__.h"
@@ -125,11 +126,13 @@ static fs_user_mount_t *get_vfs(int lun) {
     if (lun == 0) {
         return root;
     }
+    // Other filesystems must be native because we don't guard against exceptions.
+    // They must also be off the VM heap so they don't disappear on autoreload.
     #ifdef SAVES_LUN
     if (lun == SAVES_LUN) {
         const char *path_under_mount;
         fs_user_mount_t *saves = filesystem_for_path("/saves", &path_under_mount);
-        if (saves != root) {
+        if (saves != root && (saves->blockdev.flags & MP_BLOCKDEV_FLAG_NATIVE) != 0 && gc_nbytes(saves) == 0) {
             return saves;
         }
     }
@@ -138,7 +141,7 @@ static fs_user_mount_t *get_vfs(int lun) {
     if (lun == SDCARD_LUN) {
         const char *path_under_mount;
         fs_user_mount_t *sdcard = filesystem_for_path("/sd", &path_under_mount);
-        if (sdcard != root) {
+        if (sdcard != root && (sdcard->blockdev.flags & MP_BLOCKDEV_FLAG_NATIVE) != 0 && gc_nbytes(sdcard) == 0) {
             return sdcard;
         } else {
             // Clear any ejected state so that a re-insert causes it to reappear.
