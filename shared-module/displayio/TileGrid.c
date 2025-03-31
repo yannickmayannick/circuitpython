@@ -11,6 +11,9 @@
 #include "shared-bindings/displayio/ColorConverter.h"
 #include "shared-bindings/displayio/OnDiskBitmap.h"
 #include "shared-bindings/displayio/Palette.h"
+#if CIRCUITPY_TILEPALETTEMAPPER
+#include "shared-bindings/tilepalettemapper/TilePaletteMapper.h"
+#endif
 
 void common_hal_displayio_tilegrid_construct(displayio_tilegrid_t *self, mp_obj_t bitmap,
     uint16_t bitmap_width_in_tiles, uint16_t bitmap_height_in_tiles,
@@ -448,8 +451,6 @@ bool displayio_tilegrid_fill_area(displayio_tilegrid_t *self,
         y_shift = temp_shift;
     }
 
-    uint8_t pixels_per_byte = 8 / colorspace->depth;
-
     displayio_input_pixel_t input_pixel;
     displayio_output_pixel_t output_pixel;
 
@@ -470,7 +471,9 @@ bool displayio_tilegrid_fill_area(displayio_tilegrid_t *self,
                 continue;
             }
             int16_t local_x = input_pixel.x / self->absolute_transform->scale;
-            uint16_t tile_location = ((local_y / self->tile_height + self->top_left_y) % self->height_in_tiles) * self->width_in_tiles + (local_x / self->tile_width + self->top_left_x) % self->width_in_tiles;
+            uint16_t x_tile_index = (local_x / self->tile_width + self->top_left_x) % self->width_in_tiles;
+            uint16_t y_tile_index = (local_y / self->tile_height + self->top_left_y) % self->height_in_tiles;
+            uint16_t tile_location = y_tile_index * self->width_in_tiles + x_tile_index;
             input_pixel.tile = tiles[tile_location];
             input_pixel.tile_x = (input_pixel.tile % self->bitmap_width_in_tiles) * self->tile_width + local_x % self->tile_width;
             input_pixel.tile_y = (input_pixel.tile / self->bitmap_width_in_tiles) * self->tile_height + local_y % self->tile_height;
@@ -487,6 +490,11 @@ bool displayio_tilegrid_fill_area(displayio_tilegrid_t *self,
             }
 
             output_pixel.opaque = true;
+            #if CIRCUITPY_TILEPALETTEMAPPER
+            if (mp_obj_is_type(self->pixel_shader, &tilepalettemapper_tilepalettemapper_type)) {
+                tilepalettemapper_tilepalettemapper_get_color(self->pixel_shader, colorspace, &input_pixel, &output_pixel, x_tile_index, y_tile_index);
+            }
+            #endif
             if (self->pixel_shader == mp_const_none) {
                 output_pixel.pixel = input_pixel.pixel;
             } else if (mp_obj_is_type(self->pixel_shader, &displayio_palette_type)) {
@@ -503,9 +511,13 @@ bool displayio_tilegrid_fill_area(displayio_tilegrid_t *self,
                     *(((uint16_t *)buffer) + offset) = output_pixel.pixel;
                 } else if (colorspace->depth == 32) {
                     *(((uint32_t *)buffer) + offset) = output_pixel.pixel;
+                } else if (colorspace->depth == 24) {
+                    memcpy(((uint8_t *)buffer) + offset * 3, &output_pixel.pixel, 3);
                 } else if (colorspace->depth == 8) {
                     *(((uint8_t *)buffer) + offset) = output_pixel.pixel;
                 } else if (colorspace->depth < 8) {
+                    uint8_t pixels_per_byte = 8 / colorspace->depth;
+
                     // Reorder the offsets to pack multiple rows into a byte (meaning they share a column).
                     if (!colorspace->pixels_in_byte_share_row) {
                         uint16_t width = displayio_area_width(area);
@@ -548,6 +560,11 @@ void displayio_tilegrid_finish_refresh(displayio_tilegrid_t *self) {
     } else if (mp_obj_is_type(self->pixel_shader, &displayio_colorconverter_type)) {
         displayio_colorconverter_finish_refresh(self->pixel_shader);
     }
+    #if CIRCUITPY_TILEPALETTEMAPPER
+    if (mp_obj_is_type(self->pixel_shader, &tilepalettemapper_tilepalettemapper_type)) {
+        tilepalettemapper_tilepalettemapper_finish_refresh(self->pixel_shader);
+    }
+    #endif
     if (mp_obj_is_type(self->bitmap, &displayio_bitmap_type)) {
         displayio_bitmap_finish_refresh(self->bitmap);
     } else if (mp_obj_is_type(self->bitmap, &displayio_ondiskbitmap_type)) {
@@ -601,6 +618,12 @@ displayio_area_t *displayio_tilegrid_get_refresh_areas(displayio_tilegrid_t *sel
             displayio_palette_needs_refresh(self->pixel_shader)) ||
         (mp_obj_is_type(self->pixel_shader, &displayio_colorconverter_type) &&
             displayio_colorconverter_needs_refresh(self->pixel_shader));
+    #if CIRCUITPY_TILEPALETTEMAPPER
+    self->full_change = self->full_change ||
+        (mp_obj_is_type(self->pixel_shader, &tilepalettemapper_tilepalettemapper_type) &&
+            tilepalettemapper_tilepalettemapper_needs_refresh(self->pixel_shader));
+    #endif
+
     if (self->full_change || first_draw) {
         self->current_area.next = tail;
         return &self->current_area;

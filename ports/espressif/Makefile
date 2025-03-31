@@ -6,26 +6,6 @@
 
 include ../../py/circuitpy_mkenv.mk
 
-ifeq ($(IDF_TARGET),esp32c2)
-IDF_TARGET_ARCH = riscv
-CROSS_COMPILE = riscv32-esp-elf-
-else ifeq ($(IDF_TARGET),esp32c3)
-IDF_TARGET_ARCH = riscv
-CROSS_COMPILE = riscv32-esp-elf-
-else ifeq ($(IDF_TARGET),esp32p4)
-IDF_TARGET_ARCH = riscv
-CROSS_COMPILE = riscv32-esp-elf-
-else ifeq ($(IDF_TARGET),esp32c6)
-IDF_TARGET_ARCH = riscv
-CROSS_COMPILE = riscv32-esp-elf-
-else ifeq ($(IDF_TARGET),esp32h2)
-IDF_TARGET_ARCH = riscv
-CROSS_COMPILE = riscv32-esp-elf-
-else
-IDF_TARGET_ARCH = xtensa
-CROSS_COMPILE = xtensa-$(IDF_TARGET)-elf-
-endif
-
 ifeq ($(IDF_TARGET),esp32s3)
 BT_IDF_TARGET = esp32c3
 else
@@ -95,6 +75,7 @@ INC += \
 	-isystem esp-idf/components/esp_hw_support/dma/include \
 	-isystem esp-idf/components/esp_hw_support/include \
 	-isystem esp-idf/components/esp_hw_support/include/soc \
+	-isystem esp-idf/components/esp_hw_support/port/$(IDF_TARGET)/private_include \
 	-isystem esp-idf/components/esp_mm/include \
 	-isystem esp-idf/components/esp_netif/include \
 	-isystem esp-idf/components/esp_partition/include \
@@ -265,6 +246,7 @@ CHIP_COMPONENTS = \
 
 else ifeq ($(IDF_TARGET),esp32c2)
 LDFLAGS += \
+	-Tesp32c2.rom.ble.ld \
 	-Tesp32c2.rom.heap.ld \
 	-Tesp32c2.rom.newlib.ld \
 	-Tesp32c2.rom.version.ld \
@@ -281,7 +263,8 @@ LDFLAGS += \
 	-Tesp32c3.rom.newlib.ld \
 	-Tesp32c3.rom.newlib-time.ld \
 	-Tesp32c3.rom.version.ld \
-	-Tesp32c3.rom.eco3.ld
+	-Tesp32c3.rom.eco3.ld \
+	-Tesp32c3.rom.bt_funcs.ld
 
 CHIP_COMPONENTS = \
 	esp_driver_tsens
@@ -337,7 +320,8 @@ LDFLAGS += \
 	-Tesp32s3.rom.newlib.ld \
 	-Tesp32s3.rom.version.ld \
 	-Tesp32s3.rom.systimer.ld \
-	-Tesp32s3.rom.wdt.ld
+	-Tesp32s3.rom.wdt.ld \
+	-Tesp32s3.rom.bt_funcs.ld
 
 CHIP_COMPONENTS = \
 	esp_driver_tsens
@@ -635,8 +619,12 @@ ifneq ($(CIRCUITPY_BLEIO_NATIVE),0)
 	endif
 
 	ifeq ($(BLE_IMPL),libble)
-	BINARY_BLOBS += esp-idf/components/esp_phy/lib/$(IDF_TARGET)/libbtbb.a \
-					esp-idf/components/bt/controller/lib_$(IDF_TARGET)/$(IDF_TARGET)-bt-lib/libble_app.a
+	BINARY_BLOBS += esp-idf/components/esp_phy/lib/$(IDF_TARGET)/libbtbb.a
+	ifeq ($(IDF_TARGET),esp32c6)
+		BINARY_BLOBS += esp-idf/components/bt/controller/lib_$(IDF_TARGET)/$(IDF_TARGET)-bt-lib/$(IDF_TARGET)/libble_app.a
+	else
+		BINARY_BLOBS += esp-idf/components/bt/controller/lib_$(IDF_TARGET)/$(IDF_TARGET)-bt-lib/libble_app.a
+	endif
 	endif
 endif
 ifneq ($(CIRCUITPY_ESPULP),0)

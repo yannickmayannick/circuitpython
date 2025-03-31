@@ -19,8 +19,8 @@
 
 // Can be removed once CircuitPython 10 is released.
 // Print warnings or not about deprecated names. See objmodule.c.
-#ifndef CIRCUITPY_8_9_WARNINGS
-#define CIRCUITPY_8_9_WARNINGS (0)
+#ifndef CIRCUITPY_9_10_WARNINGS
+#define CIRCUITPY_9_10_WARNINGS (1)
 #endif
 
 // REPR_C encodes qstrs, 31-bit ints, and 30-bit floats in a single 32-bit word.
@@ -283,7 +283,7 @@ typedef long mp_off_t;
 #define MICROPY_PY_REVERSE_SPECIAL_METHODS    (CIRCUITPY_ULAB || CIRCUITPY_FULL_BUILD)
 #endif
 
-#if INTERNAL_FLASH_FILESYSTEM == 0 && QSPI_FLASH_FILESYSTEM == 0 && SPI_FLASH_FILESYSTEM == 0 && !DISABLE_FILESYSTEM
+#if !defined(__ZEPHYR__) && INTERNAL_FLASH_FILESYSTEM == 0 && QSPI_FLASH_FILESYSTEM == 0 && SPI_FLASH_FILESYSTEM == 0 && !DISABLE_FILESYSTEM
 #error No *_FLASH_FILESYSTEM set!
 #endif
 
@@ -328,9 +328,20 @@ typedef long mp_off_t;
 #define CIRCUITPY_CONSOLE_UART (1)
 #ifndef CIRCUITPY_CONSOLE_UART_BAUDRATE
 #define CIRCUITPY_CONSOLE_UART_BAUDRATE (115200)
+#if !defined(CIRCUITPY_CONSOLE_UART_PRINTF)
+#define CIRCUITPY_CONSOLE_UART_PRINTF(...) mp_printf(&console_uart_print, __VA_ARGS__)
+#endif
+#if !defined(CIRCUITPY_CONSOLE_UART_HEXDUMP)
+#define CIRCUITPY_CONSOLE_UART_HEXDUMP(pfx, buf, len) print_hexdump(&console_uart_print, pfx, (const uint8_t *)buf, len)
+#endif
+#if !defined(CIRCUITPY_CONSOLE_UART_TIMESTAMP)
+#define CIRCUITPY_CONSOLE_UART_TIMESTAMP (0)
+#endif
 #endif
 #else
 #define CIRCUITPY_CONSOLE_UART (0)
+#define CIRCUITPY_CONSOLE_UART_PRINTF(...) (void)0
+#define CIRCUITPY_CONSOLE_UART_HEXDUMP(...) (void)0
 #endif
 
 // These CIRCUITPY_xxx values should all be defined in the *.mk files as being on or off.
@@ -604,7 +615,11 @@ void background_callback_run_all(void);
 #define CIRCUITPY_MIN_GCC_VERSION 13
 #endif
 
-#if defined(__GNUC__)
+#ifndef CIRCUITPY_SAVES_PARTITION_SIZE
+#define CIRCUITPY_SAVES_PARTITION_SIZE 0
+#endif
+
+#if defined(__GNUC__) && !defined(__ZEPHYR__)
 #if __GNUC__ < CIRCUITPY_MIN_GCC_VERSION
 // (the 3 level scheme here is required to get expansion & stringization
 // correct)

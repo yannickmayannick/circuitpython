@@ -97,11 +97,9 @@ void init_usb_hardware(void) {
         .target = USB_PHY_TARGET_INT,
 
         .otg_mode = USB_OTG_MODE_DEVICE,
-        #ifdef CONFIG_IDF_TARGET_ESP32P4
-        .otg_speed = USB_PHY_SPEED_HIGH,
-        #else
-        .otg_speed = USB_PHY_SPEED_FULL,
-        #endif
+        // https://github.com/hathach/tinyusb/issues/2943#issuecomment-2601888322
+        // Set speed to undefined (auto-detect) to avoid timing/race issue with S3 with host such as macOS
+        .otg_speed = USB_PHY_SPEED_UNDEFINED,
     };
     usb_new_phy(&phy_conf, &phy_hdl);
 

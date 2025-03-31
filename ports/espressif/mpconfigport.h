@@ -17,7 +17,8 @@
 
 #define CIRCUITPY_DIGITALIO_HAVE_INPUT_ONLY (1)
 
-#define CIRCUITPY_USB_DEVICE_INSTANCE 1
+#define MICROPY_PY_FUNCTION_ATTRS           (1)
+#define MICROPY_PY_REVERSE_SPECIAL_METHODS  (1)
 
 #include "py/circuitpy_mpconfig.h"
 
