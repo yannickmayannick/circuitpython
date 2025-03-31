@@ -38,9 +38,11 @@
 
 #define LUN_COUNT (1 + SAVES_COUNT + SDCARD_COUNT)
 
-static bool ejected[LUN_COUNT];
-static bool eject_once[LUN_COUNT];
-static bool locked[LUN_COUNT];
+// The ellipsis range in the designated initializer of `ejected` is not standard C,
+// but it works in both gcc and clang.
+static bool ejected[LUN_COUNT] = { [0 ... (LUN_COUNT - 1)] = true};
+static bool eject_once[LUN_COUNT] = { [0 ... (LUN_COUNT - 1)] = false};
+static bool locked[LUN_COUNT] = { [0 ... (LUN_COUNT - 1)] = false};
 
 #include "tusb.h"
 
