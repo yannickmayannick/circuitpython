@@ -307,7 +307,7 @@ CIRCUITPY__EVE = 0
 endif
 
 # default BLEIO after flash-size based defaults
-CIRCUITPY_BLEIO ?= 1
+CIRCUITPY_BLEIO_NATIVE ?= 1
 
 # Modules dependent on other modules
 CIRCUITPY_ESPNOW ?= $(CIRCUITPY_WIFI)
