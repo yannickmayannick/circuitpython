@@ -133,11 +133,12 @@ void supervisor_start_terminal(uint16_t width_px, uint16_t height_px) {
     if (supervisor_terminal_started()) {
         return;
     }
+
+    #if CIRCUITPY_TERMINALIO
     // Default the scale to 2 because we may show blinka without the terminal for
     // languages that don't have font support.
     mp_int_t scale = 2;
 
-    #if CIRCUITPY_TERMINALIO
     displayio_tilegrid_t *scroll_area = &supervisor_terminal_scroll_area_text_grid;
     displayio_tilegrid_t *status_bar = &supervisor_terminal_status_bar_text_grid;
     bool reset_tiles = false;
