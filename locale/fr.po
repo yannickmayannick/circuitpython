@@ -1090,7 +1090,7 @@ msgstr "Échec de l'écriture vers flash interne."
 msgid "File exists"
 msgstr "Le fichier existe"
 
-#: shared-module/os/getenv.c
+#: shared-module/lvfontio/OnDiskFont.c shared-module/os/getenv.c
 msgid "File not found"
 msgstr "Fichier non trouvé"
 
@@ -1294,6 +1294,7 @@ msgstr "Interrompu par la fonction de sortie"
 #: shared-bindings/digitalio/DigitalInOut.c
 #: shared-bindings/epaperdisplay/EPaperDisplay.c shared-bindings/pwmio/PWMOut.c
 #: shared-module/aurora_epaper/aurora_framebuffer.c
+#: shared-module/lvfontio/OnDiskFont.c
 msgid "Invalid %q"
 msgstr "%q invalide"
 
@@ -2040,6 +2041,7 @@ msgstr "Tranche et valeur de tailles différentes."
 #: shared-bindings/displayio/TileGrid.c
 #: shared-bindings/memorymonitor/AllocationSize.c
 #: shared-bindings/pulseio/PulseIn.c
+#: shared-bindings/tilepalettemapper/TilePaletteMapper.c
 msgid "Slices not supported"
 msgstr "Tranches non supportées"
 
@@ -2110,7 +2112,9 @@ msgstr ""
 msgid "Tile height must exactly divide bitmap height"
 msgstr "La hauteur de la tuile doit diviser exactement la hauteur de l'image"
 
-#: shared-bindings/displayio/TileGrid.c shared-module/displayio/TileGrid.c
+#: shared-bindings/displayio/TileGrid.c
+#: shared-bindings/tilepalettemapper/TilePaletteMapper.c
+#: shared-module/displayio/TileGrid.c
 msgid "Tile index out of bounds"
 msgstr "Index des tuiles hors limites"
 
@@ -4382,7 +4386,9 @@ msgstr "'%c' sans correspondance dans le format"
 msgid "unreadable attribute"
 msgstr "attribut illisible"
 
-#: shared-bindings/displayio/TileGrid.c shared-bindings/vectorio/VectorShape.c
+#: shared-bindings/displayio/TileGrid.c shared-bindings/terminalio/Terminal.c
+#: shared-bindings/tilepalettemapper/TilePaletteMapper.c
+#: shared-bindings/vectorio/VectorShape.c
 msgid "unsupported %q type"
 msgstr "type %q non pris on charge"
 

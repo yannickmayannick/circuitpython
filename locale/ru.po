@@ -1082,7 +1082,7 @@ msgstr "Не удалось записать внутреннюю флэш-па�
 msgid "File exists"
 msgstr "Файл существует"
 
-#: shared-module/os/getenv.c
+#: shared-module/lvfontio/OnDiskFont.c shared-module/os/getenv.c
 msgid "File not found"
 msgstr "Файл не найден"
 
@@ -1288,6 +1288,7 @@ msgstr "Прерывается функцией выхода"
 #: shared-bindings/digitalio/DigitalInOut.c
 #: shared-bindings/epaperdisplay/EPaperDisplay.c shared-bindings/pwmio/PWMOut.c
 #: shared-module/aurora_epaper/aurora_framebuffer.c
+#: shared-module/lvfontio/OnDiskFont.c
 msgid "Invalid %q"
 msgstr "Недопустимый %q"
 
@@ -2028,6 +2029,7 @@ msgstr "Нарежьте и оцените разную длину."
 #: shared-bindings/displayio/TileGrid.c
 #: shared-bindings/memorymonitor/AllocationSize.c
 #: shared-bindings/pulseio/PulseIn.c
+#: shared-bindings/tilepalettemapper/TilePaletteMapper.c
 msgid "Slices not supported"
 msgstr "Фрагменты не поддерживаются"
 
@@ -2100,7 +2102,9 @@ msgstr ""
 msgid "Tile height must exactly divide bitmap height"
 msgstr "Высота плитки должна точно делить высоту растрового изображения"
 
-#: shared-bindings/displayio/TileGrid.c shared-module/displayio/TileGrid.c
+#: shared-bindings/displayio/TileGrid.c
+#: shared-bindings/tilepalettemapper/TilePaletteMapper.c
+#: shared-module/displayio/TileGrid.c
 msgid "Tile index out of bounds"
 msgstr "Выход индекса плитки за пределы"
 
@@ -4370,7 +4374,9 @@ msgstr "Несовпадающий '%c' в формате"
 msgid "unreadable attribute"
 msgstr "Нечитаемый атрибут"
 
-#: shared-bindings/displayio/TileGrid.c shared-bindings/vectorio/VectorShape.c
+#: shared-bindings/displayio/TileGrid.c shared-bindings/terminalio/Terminal.c
+#: shared-bindings/tilepalettemapper/TilePaletteMapper.c
+#: shared-bindings/vectorio/VectorShape.c
 msgid "unsupported %q type"
 msgstr "Неподдерживаемый тип %Q"
 

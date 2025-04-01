@@ -1069,7 +1069,7 @@ msgstr "Nie udało się zapisać wewnętrznej pamięci flash."
 msgid "File exists"
 msgstr "Plik istnieje"
 
-#: shared-module/os/getenv.c
+#: shared-module/lvfontio/OnDiskFont.c shared-module/os/getenv.c
 msgid "File not found"
 msgstr "Plik nie znaleziony"
 
@@ -1271,6 +1271,7 @@ msgstr ""
 #: shared-bindings/digitalio/DigitalInOut.c
 #: shared-bindings/epaperdisplay/EPaperDisplay.c shared-bindings/pwmio/PWMOut.c
 #: shared-module/aurora_epaper/aurora_framebuffer.c
+#: shared-module/lvfontio/OnDiskFont.c
 msgid "Invalid %q"
 msgstr "Nieprawidłowe %q"
 
@@ -2003,6 +2004,7 @@ msgstr "Fragment i wartość są różnych długości."
 #: shared-bindings/displayio/TileGrid.c
 #: shared-bindings/memorymonitor/AllocationSize.c
 #: shared-bindings/pulseio/PulseIn.c
+#: shared-bindings/tilepalettemapper/TilePaletteMapper.c
 msgid "Slices not supported"
 msgstr "Fragmenty nieobsługiwane"
 
@@ -2070,7 +2072,9 @@ msgstr ""
 msgid "Tile height must exactly divide bitmap height"
 msgstr "Wysokość bitmapy musi być wielokrotnością wysokości kafelka"
 
-#: shared-bindings/displayio/TileGrid.c shared-module/displayio/TileGrid.c
+#: shared-bindings/displayio/TileGrid.c
+#: shared-bindings/tilepalettemapper/TilePaletteMapper.c
+#: shared-module/displayio/TileGrid.c
 msgid "Tile index out of bounds"
 msgstr ""
 
@@ -4309,7 +4313,9 @@ msgstr ""
 msgid "unreadable attribute"
 msgstr "nieczytelny atrybut"
 
-#: shared-bindings/displayio/TileGrid.c shared-bindings/vectorio/VectorShape.c
+#: shared-bindings/displayio/TileGrid.c shared-bindings/terminalio/Terminal.c
+#: shared-bindings/tilepalettemapper/TilePaletteMapper.c
+#: shared-bindings/vectorio/VectorShape.c
 msgid "unsupported %q type"
 msgstr "zły typ %q"
 
