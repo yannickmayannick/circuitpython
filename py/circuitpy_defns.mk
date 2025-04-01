@@ -732,7 +732,6 @@ SRC_SHARED_MODULE_ALL = \
 	supervisor/__init__.c \
 	supervisor/StatusBar.c \
 	synthio/Biquad.c \
-	synthio/BlockBiquad.c \
 	synthio/LFO.c \
 	synthio/Math.c \
 	synthio/MidiTrack.c \
