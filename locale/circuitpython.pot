@@ -82,7 +82,7 @@ msgstr ""
 msgid "%q and %q contain duplicate pins"
 msgstr ""
 
-#: ports/atmel-samd/common-hal/audioio/AudioOut.c
+#: shared-bindings/audioio/AudioOut.c
 msgid "%q and %q must be different"
 msgstr ""
 
@@ -154,7 +154,7 @@ msgstr ""
 msgid "%q length must be >= %d"
 msgstr ""
 
-#: py/modsys.c py/objmodule.c py/runtime.c
+#: py/modsys.c py/runtime.c
 msgid "%q moved from %q to %q"
 msgstr ""
 
