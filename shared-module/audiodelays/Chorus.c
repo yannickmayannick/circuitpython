@@ -10,7 +10,7 @@
 #include "py/runtime.h"
 
 void common_hal_audiodelays_chorus_construct(audiodelays_chorus_obj_t *self, uint32_t max_delay_ms,
-    mp_obj_t delay_ms, mp_obj_t voices,
+    mp_obj_t delay_ms, mp_obj_t voices, mp_obj_t mix,
     uint32_t buffer_size, uint8_t bits_per_sample,
     bool samples_signed, uint8_t channel_count, uint32_t sample_rate) {
 
@@ -65,6 +65,11 @@ void common_hal_audiodelays_chorus_construct(audiodelays_chorus_obj_t *self, uin
         delay_ms = mp_obj_new_float(MICROPY_FLOAT_CONST(50.0));
     }
     synthio_block_assign_slot(delay_ms, &self->delay_ms, MP_QSTR_delay_ms);
+
+    if (mix == MP_OBJ_NULL) {
+        mix = mp_obj_new_float(MICROPY_FLOAT_CONST(0.5));
+    }
+    synthio_block_assign_slot(mix, &self->mix, MP_QSTR_mix);
 
     // Many effects may need buffers of what was played this shows how it was done for the chorus
     // A maximum length buffer was created and then the current chorus length can be dynamically changes
@@ -148,6 +153,14 @@ void audiodelays_chorus_reset_buffer(audiodelays_chorus_obj_t *self,
     memset(self->chorus_buffer, 0, self->chorus_buffer_len);
 }
 
+mp_obj_t common_hal_audiodelays_chorus_get_mix(audiodelays_chorus_obj_t *self) {
+    return self->mix.obj;
+}
+
+void common_hal_audiodelays_chorus_set_mix(audiodelays_chorus_obj_t *self, mp_obj_t arg) {
+    synthio_block_assign_slot(arg, &self->mix, MP_QSTR_mix);
+}
+
 bool common_hal_audiodelays_chorus_get_playing(audiodelays_chorus_obj_t *self) {
     return self->sample != NULL;
 }
@@ -225,6 +238,7 @@ audioio_get_buffer_result_t audiodelays_chorus_get_buffer(audiodelays_chorus_obj
 
         int32_t voices = (int32_t)MAX(synthio_block_slot_get(&self->voices), 1.0);
         int32_t mix_down_scale = SYNTHIO_MIX_DOWN_SCALE(voices);
+        mp_float_t mix = synthio_block_slot_get_limited(&self->mix, MICROPY_FLOAT_CONST(0.0), MICROPY_FLOAT_CONST(1.0));
 
         mp_float_t f_delay_ms = synthio_block_slot_get(&self->delay_ms);
         if (MICROPY_FLOAT_C_FUN(fabs)(self->current_delay_ms - f_delay_ms) >= self->sample_ms) {
@@ -286,6 +300,10 @@ audioio_get_buffer_result_t audiodelays_chorus_get_buffer(audiodelays_chorus_obj
 
                     word = synthio_mix_down_sample(word, mix_down_scale);
                 }
+
+                // Add original sample + effect
+                word = sample_word + (word * mix);
+                word = synthio_mix_down_sample(word, 2);
 
                 if (MP_LIKELY(self->base.bits_per_sample == 16)) {
                     word_buffer[i] = word;

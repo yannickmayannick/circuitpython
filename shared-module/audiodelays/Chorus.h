@@ -19,6 +19,7 @@ typedef struct {
     mp_float_t current_delay_ms;
     mp_float_t sample_ms;
     synthio_block_slot_t voices;
+    synthio_block_slot_t mix;
 
     int8_t *buffer[2];
     uint8_t last_buf_idx;

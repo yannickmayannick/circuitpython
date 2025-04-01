@@ -41,6 +41,7 @@
 //|         :param int max_delay_ms: The maximum time the chorus can be in milliseconds
 //|         :param synthio.BlockInput delay_ms: The current time of the chorus delay in milliseconds. Must be less the max_delay_ms.
 //|         :param synthio.BlockInput voices: The number of voices playing split evenly over the delay buffer.
+//|         :param synthio.BlockInput mix: How much of the wet audio to include along with the original signal.
 //|         :param int buffer_size: The total size in bytes of each of the two playback buffers to use
 //|         :param int sample_rate: The sample rate to be used
 //|         :param int channel_count: The number of channels the source samples contain. 1 = mono; 2 = stereo.
@@ -70,11 +71,12 @@
 //|         ...
 //|
 static mp_obj_t audiodelays_chorus_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *all_args) {
-    enum { ARG_max_delay_ms, ARG_delay_ms, ARG_voices, ARG_buffer_size, ARG_sample_rate, ARG_bits_per_sample, ARG_samples_signed, ARG_channel_count, };
+    enum { ARG_max_delay_ms, ARG_delay_ms, ARG_voices, ARG_mix, ARG_buffer_size, ARG_sample_rate, ARG_bits_per_sample, ARG_samples_signed, ARG_channel_count, };
     static const mp_arg_t allowed_args[] = {
         { MP_QSTR_max_delay_ms, MP_ARG_INT | MP_ARG_KW_ONLY, {.u_int = 50 } },
         { MP_QSTR_delay_ms, MP_ARG_OBJ | MP_ARG_KW_ONLY, {.u_obj = MP_OBJ_NULL} },
         { MP_QSTR_voices, MP_ARG_OBJ | MP_ARG_KW_ONLY,  {.u_obj = MP_OBJ_NULL} },
+        { MP_QSTR_mix, MP_ARG_OBJ | MP_ARG_KW_ONLY,  {.u_obj = MP_OBJ_NULL} },
         { MP_QSTR_buffer_size, MP_ARG_INT | MP_ARG_KW_ONLY, {.u_int = 512} },
         { MP_QSTR_sample_rate, MP_ARG_INT | MP_ARG_KW_ONLY, {.u_int = 8000} },
         { MP_QSTR_bits_per_sample, MP_ARG_INT | MP_ARG_KW_ONLY, {.u_int = 16} },
@@ -95,7 +97,7 @@ static mp_obj_t audiodelays_chorus_make_new(const mp_obj_type_t *type, size_t n_
     }
 
     audiodelays_chorus_obj_t *self = mp_obj_malloc(audiodelays_chorus_obj_t, &audiodelays_chorus_type);
-    common_hal_audiodelays_chorus_construct(self, max_delay_ms, args[ARG_delay_ms].u_obj, args[ARG_voices].u_obj, args[ARG_buffer_size].u_int, bits_per_sample, args[ARG_samples_signed].u_bool, channel_count, sample_rate);
+    common_hal_audiodelays_chorus_construct(self, max_delay_ms, args[ARG_delay_ms].u_obj, args[ARG_voices].u_obj, args[ARG_mix].u_obj, args[ARG_buffer_size].u_int, bits_per_sample, args[ARG_samples_signed].u_bool, channel_count, sample_rate);
 
     return MP_OBJ_FROM_PTR(self);
 }
@@ -173,6 +175,24 @@ MP_PROPERTY_GETSET(audiodelays_chorus_voices_obj,
     (mp_obj_t)&audiodelays_chorus_get_voices_obj,
     (mp_obj_t)&audiodelays_chorus_set_voices_obj);
 
+//|     mix: synthio.BlockInput
+//|     """The rate the echo mix between 0 and 1 where 0 is only sample and 1 is all effect."""
+static mp_obj_t audiodelays_chorus_obj_get_mix(mp_obj_t self_in) {
+    return common_hal_audiodelays_chorus_get_mix(self_in);
+}
+MP_DEFINE_CONST_FUN_OBJ_1(audiodelays_chorus_get_mix_obj, audiodelays_chorus_obj_get_mix);
+
+static mp_obj_t audiodelays_chorus_obj_set_mix(mp_obj_t self_in, mp_obj_t mix_in) {
+    audiodelays_chorus_obj_t *self = MP_OBJ_TO_PTR(self_in);
+    common_hal_audiodelays_chorus_set_mix(self, mix_in);
+    return mp_const_none;
+}
+MP_DEFINE_CONST_FUN_OBJ_2(audiodelays_chorus_set_mix_obj, audiodelays_chorus_obj_set_mix);
+
+MP_PROPERTY_GETSET(audiodelays_chorus_mix_obj,
+    (mp_obj_t)&audiodelays_chorus_get_mix_obj,
+    (mp_obj_t)&audiodelays_chorus_set_mix_obj);
+
 //|     playing: bool
 //|     """True when the effect is playing a sample. (read-only)"""
 //|
@@ -237,6 +257,7 @@ static const mp_rom_map_elem_t audiodelays_chorus_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_playing), MP_ROM_PTR(&audiodelays_chorus_playing_obj) },
     { MP_ROM_QSTR(MP_QSTR_delay_ms), MP_ROM_PTR(&audiodelays_chorus_delay_ms_obj) },
     { MP_ROM_QSTR(MP_QSTR_voices), MP_ROM_PTR(&audiodelays_chorus_voices_obj) },
+    { MP_ROM_QSTR(MP_QSTR_mix), MP_ROM_PTR(&audiodelays_chorus_mix_obj) },
     AUDIOSAMPLE_FIELDS,
 };
 static MP_DEFINE_CONST_DICT(audiodelays_chorus_locals_dict, audiodelays_chorus_locals_dict_table);
