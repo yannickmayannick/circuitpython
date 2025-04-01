@@ -269,6 +269,7 @@ MP_DEFINE_CONST_FUN_OBJ_2(synthio_synthesizer_note_info_obj, synthio_synthesizer
 //|
 //|     This property is read-only but its contents may be modified by e.g., calling ``synth.blocks.append()`` or ``synth.blocks.remove()``. It is initially an empty list."""
 //|
+//|
 static mp_obj_t synthio_synthesizer_obj_get_blocks(mp_obj_t self_in) {
     synthio_synthesizer_obj_t *self = MP_OBJ_TO_PTR(self_in);
     check_for_deinit(self);
