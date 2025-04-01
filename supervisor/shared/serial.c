@@ -198,12 +198,12 @@ void serial_early_init(void) {
 
     #if CIRCUITPY_PORT_SERIAL
     port_serial_early_init();
+    #endif
 
     _serial_console_early_inited = true;
 
     // Do an initial print so that we can confirm the serial output is working.
     CIRCUITPY_CONSOLE_UART_PRINTF("Serial console setup\n");
-    #endif
 }
 
 void serial_init(void) {
@@ -298,7 +298,7 @@ char serial_read(void) {
 
     #if CIRCUITPY_WEB_WORKFLOW
     if (websocket_available()) {
-        char c = websocket_read_char();
+        int c = websocket_read_char();
         if (c != -1) {
             return c;
         }
@@ -523,4 +523,16 @@ void print_hexdump(const mp_print_t *printer, const char *prefix, const uint8_t 
         }
         mp_printf(printer, "\n");
     }
+}
+
+int console_uart_printf(const char *fmt, ...) {
+    #if CIRCUITPY_CONSOLE_UART
+    va_list args;
+    va_start(args, fmt);
+    int ret = mp_vprintf(&console_uart_print, fmt, args);
+    va_end(args);
+    return ret;
+    #else
+    return 0;
+    #endif
 }

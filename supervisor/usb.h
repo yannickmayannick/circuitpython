@@ -73,6 +73,8 @@ void usb_keyboard_init(void);
 uint32_t usb_keyboard_chars_available(void);
 char usb_keyboard_read_char(void);
 
+void usb_keyboard_status(void);
+
 bool usb_keyboard_in_use(uint8_t dev_addr, uint8_t interface);
 void usb_keyboard_detach(uint8_t dev_addr, uint8_t interface);
 void usb_keyboard_attach(uint8_t dev_addr, uint8_t interface);

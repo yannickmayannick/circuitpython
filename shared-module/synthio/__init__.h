@@ -20,6 +20,7 @@
 
 #include "shared-module/audiocore/__init__.h"
 #include "shared-bindings/synthio/__init__.h"
+#include "shared-bindings/synthio/Biquad.h"
 
 typedef struct {
     uint16_t dur;

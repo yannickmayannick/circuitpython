@@ -40,7 +40,12 @@
 //|         """Create a `BufferedIn` on the given pin and given sample rate.
 //|
 //|         :param ~microcontroller.Pin pin: the pin to read from
-//|         :param ~int sample_rate: rate: sampling frequency, in samples per second"""
+//|         :param ~int sample_rate: rate: sampling frequency, in samples per second
+//|
+//|         **Limitations**: On many boards with a CYW43 radio module, such as Pico W,
+//|         GPIO29 (often ``board.A3``) is also used to control the CYW43,
+//|         and is therefore not available to use as the `BufferedIn` pin.
+//|         """
 //|         ...
 //|
 static mp_obj_t analogbufio_bufferedin_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *all_args) {
@@ -91,12 +96,7 @@ static void check_for_deinit(analogbufio_bufferedin_obj_t *self) {
 //|         :ref:`lifetime-and-contextmanagers` for more info."""
 //|         ...
 //|
-static mp_obj_t analogbufio_bufferedin___exit__(size_t n_args, const mp_obj_t *args) {
-    (void)n_args;
-    common_hal_analogbufio_bufferedin_deinit(args[0]);
-    return mp_const_none;
-}
-static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(analogbufio_bufferedin___exit___obj, 4, 4, analogbufio_bufferedin___exit__);
+//  Provided by context manager helper.
 
 //|     def readinto(self, buffer: WriteableBuffer, loop: bool = False) -> int:
 //|         """Fills the provided buffer with ADC voltage values.
@@ -144,7 +144,7 @@ static const mp_rom_map_elem_t analogbufio_bufferedin_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR___del__),    MP_ROM_PTR(&analogbufio_bufferedin_deinit_obj) },
     { MP_ROM_QSTR(MP_QSTR_deinit),     MP_ROM_PTR(&analogbufio_bufferedin_deinit_obj) },
     { MP_ROM_QSTR(MP_QSTR___enter__),  MP_ROM_PTR(&default___enter___obj) },
-    { MP_ROM_QSTR(MP_QSTR___exit__),   MP_ROM_PTR(&analogbufio_bufferedin___exit___obj) },
+    { MP_ROM_QSTR(MP_QSTR___exit__),   MP_ROM_PTR(&default___exit___obj) },
     { MP_ROM_QSTR(MP_QSTR_readinto),   MP_ROM_PTR(&analogbufio_bufferedin_readinto_obj)},
 };
 

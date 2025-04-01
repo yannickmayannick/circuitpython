@@ -369,6 +369,9 @@ endif
 ifeq ($(CIRCUITPY_SOCKETPOOL),1)
 SRC_PATTERNS += socketpool/%
 endif
+ifeq ($(CIRCUITPY_SPITARGET),1)
+SRC_PATTERNS += spitarget/%
+endif
 ifeq ($(CIRCUITPY_SSL),1)
 SRC_PATTERNS += ssl/%
 endif
@@ -392,6 +395,12 @@ SRC_PATTERNS += terminalio/% fontio/%
 endif
 ifeq ($(CIRCUITPY_FONTIO),1)
 SRC_PATTERNS += fontio/%
+endif
+ifeq ($(CIRCUITPY_LVFONTIO),1)
+SRC_PATTERNS += lvfontio/%
+endif
+ifeq ($(CIRCUITPY_TILEPALETTEMAPPER),1)
+SRC_PATTERNS += tilepalettemapper/%
 endif
 ifeq ($(CIRCUITPY_TIME),1)
 SRC_PATTERNS += time/%
@@ -539,6 +548,8 @@ SRC_COMMON_HAL_ALL = \
 	socketpool/__init__.c \
 	socketpool/SocketPool.c \
 	socketpool/Socket.c \
+	spitarget/SPITarget.c \
+	spitarget/__init__.c \
 	usb_host/__init__.c \
 	usb_host/Port.c \
 	watchdog/WatchDogMode.c \
@@ -625,6 +636,7 @@ SRC_SHARED_MODULE_ALL = \
 	audiocore/__init__.c \
 	audiodelays/Echo.c \
 	audiodelays/Chorus.c \
+	audiodelays/PitchShift.c \
 	audiodelays/__init__.c \
 	audiofilters/Distortion.c \
 	audiofilters/Filter.c \
@@ -667,6 +679,8 @@ SRC_SHARED_MODULE_ALL = \
 	floppyio/__init__.c \
 	fontio/BuiltinFont.c \
 	fontio/__init__.c \
+	lvfontio/OnDiskFont.c\
+	lvfontio/__init__.c \
 	fourwire/__init__.c \
 	fourwire/FourWire.c \
 	framebufferio/FramebufferDisplay.c \
@@ -719,7 +733,6 @@ SRC_SHARED_MODULE_ALL = \
 	supervisor/__init__.c \
 	supervisor/StatusBar.c \
 	synthio/Biquad.c \
-	synthio/BlockBiquad.c \
 	synthio/LFO.c \
 	synthio/Math.c \
 	synthio/MidiTrack.c \
@@ -728,12 +741,15 @@ SRC_SHARED_MODULE_ALL = \
 	synthio/__init__.c \
 	terminalio/Terminal.c \
 	terminalio/__init__.c \
+	tilepalettemapper/__init__.c \
+	tilepalettemapper/TilePaletteMapper.c \
 	time/__init__.c \
 	traceback/__init__.c \
 	uheap/__init__.c \
 	usb/__init__.c \
 	usb/core/__init__.c \
 	usb/core/Device.c \
+	usb/util/__init__.c \
 	ustack/__init__.c \
 	vectorio/Circle.c \
 	vectorio/Polygon.c \
@@ -933,7 +949,7 @@ SRC_CIRCUITPY_COMMON = \
 
 ifeq ($(CIRCUITPY_QRIO),1)
 SRC_CIRCUITPY_COMMON += lib/quirc/lib/decode.c lib/quirc/lib/identify.c lib/quirc/lib/quirc.c lib/quirc/lib/version_db.c
-$(BUILD)/lib/quirc/lib/%.o: CFLAGS += -Wno-shadow -Wno-sign-compare -include shared-module/qrio/quirc_alloc.h
+$(BUILD)/lib/quirc/lib/%.o: CFLAGS += -Wno-type-limits -Wno-shadow -Wno-sign-compare -include shared-module/qrio/quirc_alloc.h
 endif
 
 ifdef LD_TEMPLATE_FILE

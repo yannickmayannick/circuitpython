@@ -28,10 +28,15 @@
 //|         """Create a AudioOut object associated with the given pin(s). This allows you to
 //|         play audio signals out on the given pin(s).
 //|
-//|         :param ~microcontroller.Pin left_channel: The pin to output the left channel to
-//|         :param ~microcontroller.Pin right_channel: The pin to output the right channel to
+//|         :param ~microcontroller.Pin left_channel: Output left channel data to this pin
+//|         :param ~microcontroller.Pin right_channel: Output right channel data to this pin. May be ``None``.
 //|         :param int quiescent_value: The output value when no signal is present. Samples should start
 //|             and end with this value to prevent audible popping.
+//|
+//|         .. note:: On ESP32 and ESP32-S2, the DAC channels are usually designated
+//|           as ``DAC_1`` (right stereo channel) and DAC_2 (left stereo channel).
+//|           These pins are sometimes labelled as ``A0`` and ``A1``, but they may be assigned
+//|           in either order. Check your board's pinout to verify which pin is which channel.
 //|
 //|         Simple 8ksps 440 Hz sin wave::
 //|
@@ -90,6 +95,12 @@ static mp_obj_t audioio_audioout_make_new(const mp_obj_type_t *type, size_t n_ar
     const mcu_pin_obj_t *right_channel_pin =
         validate_obj_is_free_pin_or_none(args[ARG_right_channel].u_obj, MP_QSTR_right_channel);
 
+    // Can't use the same pin for both left and right channels.
+    if (left_channel_pin == right_channel_pin) {
+        mp_raise_ValueError_varg(MP_ERROR_TEXT("%q and %q must be different"),
+            MP_QSTR_left_channel, MP_QSTR_right_channel);
+    }
+
     // create AudioOut object from the given pin
     audioio_audioout_obj_t *self = mp_obj_malloc_with_finaliser(audioio_audioout_obj_t, &audioio_audioout_type);
     common_hal_audioio_audioout_construct(self, left_channel_pin, right_channel_pin, args[ARG_quiescent_value].u_int);
@@ -124,13 +135,7 @@ static void check_for_deinit(audioio_audioout_obj_t *self) {
 //|         :ref:`lifetime-and-contextmanagers` for more info."""
 //|         ...
 //|
-static mp_obj_t audioio_audioout_obj___exit__(size_t n_args, const mp_obj_t *args) {
-    (void)n_args;
-    common_hal_audioio_audioout_deinit(args[0]);
-    return mp_const_none;
-}
-static MP_DEFINE_CONST_FUN_OBJ_VAR_BETWEEN(audioio_audioout___exit___obj, 4, 4, audioio_audioout_obj___exit__);
-
+//  Provided by context manager helper.
 
 //|     def play(self, sample: circuitpython_typing.AudioSample, *, loop: bool = False) -> None:
 //|         """Plays the sample once when loop=False and continuously when loop=True.
@@ -237,7 +242,7 @@ static const mp_rom_map_elem_t audioio_audioout_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR___del__), MP_ROM_PTR(&audioio_audioout_deinit_obj) },
     { MP_ROM_QSTR(MP_QSTR_deinit), MP_ROM_PTR(&audioio_audioout_deinit_obj) },
     { MP_ROM_QSTR(MP_QSTR___enter__), MP_ROM_PTR(&default___enter___obj) },
-    { MP_ROM_QSTR(MP_QSTR___exit__), MP_ROM_PTR(&audioio_audioout___exit___obj) },
+    { MP_ROM_QSTR(MP_QSTR___exit__), MP_ROM_PTR(&default___exit___obj) },
     { MP_ROM_QSTR(MP_QSTR_play), MP_ROM_PTR(&audioio_audioout_play_obj) },
     { MP_ROM_QSTR(MP_QSTR_stop), MP_ROM_PTR(&audioio_audioout_stop_obj) },
     { MP_ROM_QSTR(MP_QSTR_pause), MP_ROM_PTR(&audioio_audioout_pause_obj) },
