@@ -1051,7 +1051,7 @@ msgstr ""
 msgid "File exists"
 msgstr ""
 
-#: shared-module/os/getenv.c
+#: shared-module/lvfontio/OnDiskFont.c shared-module/os/getenv.c
 msgid "File not found"
 msgstr ""
 
@@ -1247,6 +1247,7 @@ msgstr ""
 #: shared-bindings/digitalio/DigitalInOut.c
 #: shared-bindings/epaperdisplay/EPaperDisplay.c shared-bindings/pwmio/PWMOut.c
 #: shared-module/aurora_epaper/aurora_framebuffer.c
+#: shared-module/lvfontio/OnDiskFont.c
 msgid "Invalid %q"
 msgstr ""
 
@@ -4280,7 +4281,7 @@ msgstr ""
 msgid "unreadable attribute"
 msgstr ""
 
-#: shared-bindings/displayio/TileGrid.c
+#: shared-bindings/displayio/TileGrid.c shared-bindings/terminalio/Terminal.c
 #: shared-bindings/tilepalettemapper/TilePaletteMapper.c
 #: shared-bindings/vectorio/VectorShape.c
 msgid "unsupported %q type"
