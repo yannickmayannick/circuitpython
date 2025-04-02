@@ -97,7 +97,7 @@ msgstr ""
 msgid "%q and %q contain duplicate pins"
 msgstr "%q y %q contienen pines duplicados"
 
-#: ports/atmel-samd/common-hal/audioio/AudioOut.c
+#: shared-bindings/audioio/AudioOut.c
 msgid "%q and %q must be different"
 msgstr "%q y %q deben ser diferentes"
 
@@ -169,7 +169,7 @@ msgstr "%q longitud debe ser <= %d"
 msgid "%q length must be >= %d"
 msgstr "%q longitud debe ser >= %d"
 
-#: py/modsys.c py/objmodule.c py/runtime.c
+#: py/modsys.c py/runtime.c
 msgid "%q moved from %q to %q"
 msgstr "%q movido de %q a %q"
 
@@ -813,8 +813,8 @@ msgid "Cannot record to a file"
 msgstr "No se puede grabar en un archivo"
 
 #: shared-module/storage/__init__.c
-msgid "Cannot remount '/' when visible via USB."
-msgstr "No se puede remountar '/' cuanto se es visible vía USB."
+msgid "Cannot remount path when visible via USB."
+msgstr ""
 
 #: shared-bindings/digitalio/DigitalInOut.c
 msgid "Cannot set value when direction is input."
@@ -4513,6 +4513,9 @@ msgstr "zi debe ser de tipo flotante"
 #: extmod/ulab/code/scipy/signal/signal.c
 msgid "zi must be of shape (n_section, 2)"
 msgstr "zi debe ser una forma (n_section,2)"
+
+#~ msgid "Cannot remount '/' when visible via USB."
+#~ msgstr "No se puede remountar '/' cuanto se es visible vía USB."
 
 #~ msgid "%q must be a %q object, %q, or %q"
 #~ msgstr "%q tiene que ser un %q objeto, %q, o %q"

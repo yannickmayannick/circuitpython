@@ -95,7 +95,7 @@ msgstr ""
 msgid "%q and %q contain duplicate pins"
 msgstr "%q 및 %q에 중복된 핀이 포함"
 
-#: ports/atmel-samd/common-hal/audioio/AudioOut.c
+#: shared-bindings/audioio/AudioOut.c
 msgid "%q and %q must be different"
 msgstr "%q와 %q는 달라야 합니다"
 
@@ -167,7 +167,7 @@ msgstr "%q 길이는 <= %d>여야 합니다"
 msgid "%q length must be >= %d"
 msgstr "%q 길이는 >= %d이어야 합니다"
 
-#: py/modsys.c py/objmodule.c py/runtime.c
+#: py/modsys.c py/runtime.c
 #, fuzzy
 msgid "%q moved from %q to %q"
 msgstr "%q가 %q에서 %q로 이동했습니다"
@@ -834,8 +834,8 @@ msgid "Cannot record to a file"
 msgstr "파일에 녹음 할 수 없습니다"
 
 #: shared-module/storage/__init__.c
-msgid "Cannot remount '/' when visible via USB."
-msgstr "USB를 통해 표시될 때 '/'은 다시 마운트할 수 없습니다."
+msgid "Cannot remount path when visible via USB."
+msgstr ""
 
 #: shared-bindings/digitalio/DigitalInOut.c
 msgid "Cannot set value when direction is input."
@@ -4506,6 +4506,9 @@ msgstr ""
 #: extmod/ulab/code/scipy/signal/signal.c
 msgid "zi must be of shape (n_section, 2)"
 msgstr ""
+
+#~ msgid "Cannot remount '/' when visible via USB."
+#~ msgstr "USB를 통해 표시될 때 '/'은 다시 마운트할 수 없습니다."
 
 #~ msgid "Data chunk must follow fmt chunk"
 #~ msgstr "데이터 청크는 fmt 청크를 따라야 합니다"

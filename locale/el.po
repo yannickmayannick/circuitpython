@@ -97,7 +97,7 @@ msgstr ""
 msgid "%q and %q contain duplicate pins"
 msgstr "%q και %q περιέχουν διπλότυπα pins"
 
-#: ports/atmel-samd/common-hal/audioio/AudioOut.c
+#: shared-bindings/audioio/AudioOut.c
 msgid "%q and %q must be different"
 msgstr "%q και %q πρεπει να είναι διαφορετικά"
 
@@ -169,7 +169,7 @@ msgstr "%q μήκος πρέπει να είναι <= %d"
 msgid "%q length must be >= %d"
 msgstr "%q μήκος πρέπει να είναι >= %d"
 
-#: py/modsys.c py/objmodule.c py/runtime.c
+#: py/modsys.c py/runtime.c
 msgid "%q moved from %q to %q"
 msgstr "%q μετακινήθηκε από το %q στο %q"
 
@@ -810,8 +810,8 @@ msgid "Cannot record to a file"
 msgstr "Δεν μπορεί να γίνει καταγραφή σε αρχείο"
 
 #: shared-module/storage/__init__.c
-msgid "Cannot remount '/' when visible via USB."
-msgstr "Δεν μπορεί να γίνει remount του '/' όταν είναι ορατό μέσω USB."
+msgid "Cannot remount path when visible via USB."
+msgstr ""
 
 #: shared-bindings/digitalio/DigitalInOut.c
 msgid "Cannot set value when direction is input."
@@ -4456,6 +4456,9 @@ msgstr ""
 #: extmod/ulab/code/scipy/signal/signal.c
 msgid "zi must be of shape (n_section, 2)"
 msgstr ""
+
+#~ msgid "Cannot remount '/' when visible via USB."
+#~ msgstr "Δεν μπορεί να γίνει remount του '/' όταν είναι ορατό μέσω USB."
 
 #~ msgid "Data chunk must follow fmt chunk"
 #~ msgstr "Το data chunk πρέπει να ακολουθεί το fmt chunk"
