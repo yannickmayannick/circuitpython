@@ -95,7 +95,7 @@ msgstr "%dアドレスピン、%dRGBピン、%dタイルは%dの高さを指示�
 msgid "%q and %q contain duplicate pins"
 msgstr "%q と %q に重複するピンがあります"
 
-#: ports/atmel-samd/common-hal/audioio/AudioOut.c
+#: shared-bindings/audioio/AudioOut.c
 msgid "%q and %q must be different"
 msgstr "%qと%qが必ず異なるのは必要"
 
@@ -167,7 +167,7 @@ msgstr "%q の長さは <= %d である必要があります"
 msgid "%q length must be >= %d"
 msgstr "%q の長さは >= %d である必要があります"
 
-#: py/modsys.c py/objmodule.c py/runtime.c
+#: py/modsys.c py/runtime.c
 msgid "%q moved from %q to %q"
 msgstr "%q は %q から %q へ移動しました"
 
@@ -229,7 +229,7 @@ msgstr "%q は 8 の倍数である必要があります"
 #: shared-bindings/bitmapfilter/__init__.c shared-bindings/canio/CAN.c
 #: shared-bindings/digitalio/Pull.c shared-bindings/supervisor/__init__.c
 #: shared-module/audiofilters/Filter.c shared-module/displayio/__init__.c
-#: shared-module/synthio/Biquad.c shared-module/synthio/Synthesizer.c
+#: shared-module/synthio/Synthesizer.c
 msgid "%q must be of type %q or %q, not %q"
 msgstr "%q は %q 型か %q 型である必要があります、 %q 型は使用できません"
 
@@ -239,7 +239,7 @@ msgstr ""
 "%q は %q 型や %q 型または %q 型である必要があります、 %q 型は使用できません"
 
 #: py/argcheck.c py/runtime.c shared-bindings/bitmapfilter/__init__.c
-#: shared-module/synthio/__init__.c
+#: shared-module/synthio/Note.c shared-module/synthio/__init__.c
 msgid "%q must be of type %q, not %q"
 msgstr "%q は %q 型である必要があります、 %q 型は使用できません"
 
@@ -808,7 +808,7 @@ msgid "Cannot record to a file"
 msgstr "ファイルへ記録できません"
 
 #: shared-module/storage/__init__.c
-msgid "Cannot remount '/' when visible via USB."
+msgid "Cannot remount path when visible via USB."
 msgstr ""
 
 #: shared-bindings/digitalio/DigitalInOut.c

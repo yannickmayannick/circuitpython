@@ -94,7 +94,7 @@ msgstr ""
 msgid "%q and %q contain duplicate pins"
 msgstr "%q och %q innehåller duplicerade pinnar"
 
-#: ports/atmel-samd/common-hal/audioio/AudioOut.c
+#: shared-bindings/audioio/AudioOut.c
 msgid "%q and %q must be different"
 msgstr "%q och %q måste vara olika"
 
@@ -166,7 +166,7 @@ msgstr "längden på %q måste vara <= %d"
 msgid "%q length must be >= %d"
 msgstr "längden på %q måste vara >= %d"
 
-#: py/modsys.c py/objmodule.c py/runtime.c
+#: py/modsys.c py/runtime.c
 msgid "%q moved from %q to %q"
 msgstr "%q flyttad från %q till %q"
 
@@ -229,7 +229,7 @@ msgstr "%q måste vara en multipel av 8."
 #: shared-bindings/bitmapfilter/__init__.c shared-bindings/canio/CAN.c
 #: shared-bindings/digitalio/Pull.c shared-bindings/supervisor/__init__.c
 #: shared-module/audiofilters/Filter.c shared-module/displayio/__init__.c
-#: shared-module/synthio/Biquad.c shared-module/synthio/Synthesizer.c
+#: shared-module/synthio/Synthesizer.c
 msgid "%q must be of type %q or %q, not %q"
 msgstr "%q måste vara av typen %q eller %q, inte %q"
 
@@ -238,7 +238,7 @@ msgid "%q must be of type %q, %q, or %q, not %q"
 msgstr "%q måste vara av typen %q, %q, eller %q, inte %q"
 
 #: py/argcheck.c py/runtime.c shared-bindings/bitmapfilter/__init__.c
-#: shared-module/synthio/__init__.c
+#: shared-module/synthio/Note.c shared-module/synthio/__init__.c
 msgid "%q must be of type %q, not %q"
 msgstr "%q måste vara av typen %q, inte %q"
 
@@ -807,8 +807,8 @@ msgid "Cannot record to a file"
 msgstr "Det går inte att spela in till en fil"
 
 #: shared-module/storage/__init__.c
-msgid "Cannot remount '/' when visible via USB."
-msgstr "Det går inte att montera om '/' när den är synlig via USB."
+msgid "Cannot remount path when visible via USB."
+msgstr ""
 
 #: shared-bindings/digitalio/DigitalInOut.c
 msgid "Cannot set value when direction is input."
@@ -4479,6 +4479,9 @@ msgstr "zi måste vara av typ float"
 #: extmod/ulab/code/scipy/signal/signal.c
 msgid "zi must be of shape (n_section, 2)"
 msgstr "zi måste vara i formen (n_section, 2)"
+
+#~ msgid "Cannot remount '/' when visible via USB."
+#~ msgstr "Det går inte att montera om '/' när den är synlig via USB."
 
 #~ msgid "Data chunk must follow fmt chunk"
 #~ msgstr "Datasegmentet måste följa fmt-segmentet"

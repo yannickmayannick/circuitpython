@@ -97,7 +97,7 @@ msgstr ""
 msgid "%q and %q contain duplicate pins"
 msgstr "%q и %q содержат пины дупликаты"
 
-#: ports/atmel-samd/common-hal/audioio/AudioOut.c
+#: shared-bindings/audioio/AudioOut.c
 msgid "%q and %q must be different"
 msgstr "%q и %q должны быть разными"
 
@@ -169,7 +169,7 @@ msgstr "Длинна %q должна быть <= %d"
 msgid "%q length must be >= %d"
 msgstr "Длинна %q должна быть >= %d"
 
-#: py/modsys.c py/objmodule.c py/runtime.c
+#: py/modsys.c py/runtime.c
 msgid "%q moved from %q to %q"
 msgstr "%q переместился из %q в %q"
 
@@ -230,7 +230,7 @@ msgstr "%q должно быть кратно 8."
 #: shared-bindings/bitmapfilter/__init__.c shared-bindings/canio/CAN.c
 #: shared-bindings/digitalio/Pull.c shared-bindings/supervisor/__init__.c
 #: shared-module/audiofilters/Filter.c shared-module/displayio/__init__.c
-#: shared-module/synthio/Biquad.c shared-module/synthio/Synthesizer.c
+#: shared-module/synthio/Synthesizer.c
 msgid "%q must be of type %q or %q, not %q"
 msgstr "%q должно быть типа%q или%q, а не%q"
 
@@ -239,7 +239,7 @@ msgid "%q must be of type %q, %q, or %q, not %q"
 msgstr "%q должен иметь тип %q, %q или %q, а не %q"
 
 #: py/argcheck.c py/runtime.c shared-bindings/bitmapfilter/__init__.c
-#: shared-module/synthio/__init__.c
+#: shared-module/synthio/Note.c shared-module/synthio/__init__.c
 msgid "%q must be of type %q, not %q"
 msgstr "%q должно быть типа %q, а не %q"
 
@@ -812,8 +812,8 @@ msgid "Cannot record to a file"
 msgstr "Невозможно записать в файл"
 
 #: shared-module/storage/__init__.c
-msgid "Cannot remount '/' when visible via USB."
-msgstr "Невозможно перемонтировать '/' пока он виден через USB."
+msgid "Cannot remount path when visible via USB."
+msgstr ""
 
 #: shared-bindings/digitalio/DigitalInOut.c
 msgid "Cannot set value when direction is input."
@@ -4524,6 +4524,9 @@ msgstr "zi должно быть типа float"
 #: extmod/ulab/code/scipy/signal/signal.c
 msgid "zi must be of shape (n_section, 2)"
 msgstr "zi должен иметь форму (n_section, 2)"
+
+#~ msgid "Cannot remount '/' when visible via USB."
+#~ msgstr "Невозможно перемонтировать '/' пока он виден через USB."
 
 #~ msgid "%q must be a %q object, %q, or %q"
 #~ msgstr "%q должен быть объектом %q, %q или %q"

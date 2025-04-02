@@ -96,7 +96,7 @@ msgstr ""
 msgid "%q and %q contain duplicate pins"
 msgstr "%q et %q contiennent des broches en double"
 
-#: ports/atmel-samd/common-hal/audioio/AudioOut.c
+#: shared-bindings/audioio/AudioOut.c
 msgid "%q and %q must be different"
 msgstr "%q et %q doivent être différents"
 
@@ -168,7 +168,7 @@ msgstr "La longueur de %q doit être <= %d"
 msgid "%q length must be >= %d"
 msgstr "La longueur de %q doit être >= %d"
 
-#: py/modsys.c py/objmodule.c py/runtime.c
+#: py/modsys.c py/runtime.c
 msgid "%q moved from %q to %q"
 msgstr "% déplacé de %q à %q"
 
@@ -229,7 +229,7 @@ msgstr "%q doit être un multiple de 8."
 #: shared-bindings/bitmapfilter/__init__.c shared-bindings/canio/CAN.c
 #: shared-bindings/digitalio/Pull.c shared-bindings/supervisor/__init__.c
 #: shared-module/audiofilters/Filter.c shared-module/displayio/__init__.c
-#: shared-module/synthio/Biquad.c shared-module/synthio/Synthesizer.c
+#: shared-module/synthio/Synthesizer.c
 msgid "%q must be of type %q or %q, not %q"
 msgstr "%q doit être de type %q ou %q, pas %q"
 
@@ -238,7 +238,7 @@ msgid "%q must be of type %q, %q, or %q, not %q"
 msgstr "%q doit être de type %q, %q ou %q, pas %q"
 
 #: py/argcheck.c py/runtime.c shared-bindings/bitmapfilter/__init__.c
-#: shared-module/synthio/__init__.c
+#: shared-module/synthio/Note.c shared-module/synthio/__init__.c
 msgid "%q must be of type %q, not %q"
 msgstr "%q doit être de type %q, pas %q"
 
@@ -817,10 +817,8 @@ msgid "Cannot record to a file"
 msgstr "Impossible d'enregistrer vers un fichier"
 
 #: shared-module/storage/__init__.c
-msgid "Cannot remount '/' when visible via USB."
+msgid "Cannot remount path when visible via USB."
 msgstr ""
-"Ne peut démonter '/' la racine du système de fichier quand elle est déja vue "
-"par le port USB."
 
 #: shared-bindings/digitalio/DigitalInOut.c
 msgid "Cannot set value when direction is input."
@@ -4535,6 +4533,11 @@ msgstr "zi doit être de type float"
 #: extmod/ulab/code/scipy/signal/signal.c
 msgid "zi must be of shape (n_section, 2)"
 msgstr "zi doit être de forme (n_section, 2)"
+
+#~ msgid "Cannot remount '/' when visible via USB."
+#~ msgstr ""
+#~ "Ne peut démonter '/' la racine du système de fichier quand elle est déja "
+#~ "vue par le port USB."
 
 #~ msgid "%q must be a %q object, %q, or %q"
 #~ msgstr "%q doit être un objet %q, %q ou %q"
