@@ -6,6 +6,7 @@
 //
 // SPDX-License-Identifier: MIT
 
+#include <stdint.h>
 #include <stdio.h>
 #include <stdbool.h>
 #include <string.h>
@@ -35,46 +36,17 @@
 #define DEBUG_OP_printf(...) (void)0
 #endif
 
-#define SDRAM_TIMEOUT                            ((uint32_t)0xFFFF)
-#define SDRAM_MODEREG_BURST_LENGTH_1             ((uint16_t)0x0000)
-#define SDRAM_MODEREG_BURST_LENGTH_2             ((uint16_t)0x0001)
-#define SDRAM_MODEREG_BURST_LENGTH_4             ((uint16_t)0x0002)
-#define SDRAM_MODEREG_BURST_LENGTH_8             ((uint16_t)0x0004)
-#define SDRAM_MODEREG_BURST_TYPE_SEQUENTIAL      ((uint16_t)0x0000)
-#define SDRAM_MODEREG_BURST_TYPE_INTERLEAVED     ((uint16_t)0x0008)
-#define SDRAM_MODEREG_CAS_LATENCY_2              ((uint16_t)0x0020)
-#define SDRAM_MODEREG_CAS_LATENCY_3              ((uint16_t)0x0030)
-#define SDRAM_MODEREG_OPERATING_MODE_STANDARD    ((uint16_t)0x0000)
-#define SDRAM_MODEREG_WRITEBURST_MODE_PROGRAMMED ((uint16_t)0x0000)
-#define SDRAM_MODEREG_WRITEBURST_MODE_SINGLE     ((uint16_t)0x0200)
-
-#if defined(CIRCUITPY_HW_FMC_SDCKE0) && defined(CIRCUITPY_HW_FMC_SDNE0)
-#define FMC_SDRAM_BANK FMC_SDRAM_BANK1
-#define FMC_SDRAM_CMD_TARGET_BANK FMC_SDRAM_CMD_TARGET_BANK1
-#if CIRCUITPY_HW_FMC_SWAP_BANKS
-#define SDRAM_START_ADDRESS 0x60000000
-#else
-#define SDRAM_START_ADDRESS 0xC0000000
-#endif
-#elif defined(CIRCUITPY_HW_FMC_SDCKE1) && defined(CIRCUITPY_HW_FMC_SDNE1)
-#define FMC_SDRAM_BANK FMC_SDRAM_BANK2
-#define FMC_SDRAM_CMD_TARGET_BANK FMC_SDRAM_CMD_TARGET_BANK2
-#if CIRCUITPY_HW_FMC_SWAP_BANKS
-#define SDRAM_START_ADDRESS 0x70000000
-#else
-#define SDRAM_START_ADDRESS 0xD0000000
-#endif
-#endif
-
-#ifdef FMC_SDRAM_BANK
+#define SDRAM_TIMEOUT          ((uint32_t)0xFFFF)
+#define CIRCUITPY_HW_SDRAM_STARTUP_TEST       (0)
 
 static uint8_t FMC_Initialized = 0;
 static SDRAM_HandleTypeDef hsdram = {0};
+static uint32_t sdram_start_address = 0;
 
 
-static void sdram_init_seq(void);
+static void sdram_init_seq(const struct stm32_sdram_config *config);
 
-bool sdram_init(void) {
+void sdram_init(const struct stm32_sdram_config *config) {
     FMC_SDRAM_TimingTypeDef SDRAM_Timing = {0};
 
     if (!FMC_Initialized) {
@@ -91,65 +63,37 @@ bool sdram_init(void) {
         /* Peripheral clock enable */
         __HAL_RCC_FMC_CLK_ENABLE();
         FMC_Initialized = 1;
+        for (uint i = 0; i < MP_ARRAY_SIZE(sdram_pin_list); i++) {
+            GPIO_InitTypeDef GPIO_InitStruct = {0};
+            GPIO_InitStruct.Pin = pin_mask(sdram_pin_list[i].pin->number);
+            GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+            GPIO_InitStruct.Pull = GPIO_NOPULL;
+            GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+            GPIO_InitStruct.Alternate = GPIO_AF12_FMC;
+            HAL_GPIO_Init(pin_port(sdram_pin_list[i].pin->port), &GPIO_InitStruct);
+            never_reset_pin_number(sdram_pin_list[i].pin->port, sdram_pin_list[i].pin->number);
+        }
     }
 
-    #if CIRCUITPY_HW_FMC_SWAP_BANKS
-    HAL_SetFMCMemorySwappingConfig(FMC_SWAPBMAP_SDRAM_SRAM);
-    #endif
-
-    for (uint i = 0; i < MP_ARRAY_SIZE(sdram_pin_list); i++) {
-        GPIO_InitTypeDef GPIO_InitStruct = {0};
-        GPIO_InitStruct.Pin = pin_mask(sdram_pin_list[i].pin->number);
-        GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
-        GPIO_InitStruct.Pull = GPIO_NOPULL;
-        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-        GPIO_InitStruct.Alternate = GPIO_AF12_FMC;
-        HAL_GPIO_Init(pin_port(sdram_pin_list[i].pin->port), &GPIO_InitStruct);
-        never_reset_pin_number(sdram_pin_list[i].pin->port, sdram_pin_list[i].pin->number);
-    }
     /* SDRAM device configuration */
-    hsdram.Instance = FMC_SDRAM_DEVICE;
-    /* Timing configuration for 90 Mhz of SD clock frequency (180Mhz/2) */
-    /* TMRD: 2 Clock cycles */
-    SDRAM_Timing.LoadToActiveDelay = CIRCUITPY_HW_SDRAM_TIMING_TMRD;
-    /* TXSR: min=70ns (6x11.90ns) */
-    SDRAM_Timing.ExitSelfRefreshDelay = CIRCUITPY_HW_SDRAM_TIMING_TXSR;
-    /* TRAS */
-    SDRAM_Timing.SelfRefreshTime = CIRCUITPY_HW_SDRAM_TIMING_TRAS;
-    /* TRC */
-    SDRAM_Timing.RowCycleDelay = CIRCUITPY_HW_SDRAM_TIMING_TRC;
-    /* TWR */
-    SDRAM_Timing.WriteRecoveryTime = CIRCUITPY_HW_SDRAM_TIMING_TWR;
-    /* TRP */
-    SDRAM_Timing.RPDelay = CIRCUITPY_HW_SDRAM_TIMING_TRP;
-    /* TRCD */
-    SDRAM_Timing.RCDDelay = CIRCUITPY_HW_SDRAM_TIMING_TRCD;
+    hsdram.Instance = config->sdram;
 
-    #define _FMC_INIT(x, n) x##_##n
-    #define FMC_INIT(x, n) _FMC_INIT(x,  n)
+    for (size_t i = 0U; i < config->banks_len; i++) {
+        hsdram.State = HAL_SDRAM_STATE_RESET;
 
-    hsdram.Init.SDBank = FMC_SDRAM_BANK;
-    hsdram.Init.ColumnBitsNumber = FMC_INIT(FMC_SDRAM_COLUMN_BITS_NUM, CIRCUITPY_HW_SDRAM_COLUMN_BITS_NUM);
-    hsdram.Init.RowBitsNumber = FMC_INIT(FMC_SDRAM_ROW_BITS_NUM, CIRCUITPY_HW_SDRAM_ROW_BITS_NUM);
-    hsdram.Init.MemoryDataWidth = FMC_INIT(FMC_SDRAM_MEM_BUS_WIDTH, CIRCUITPY_HW_SDRAM_MEM_BUS_WIDTH);
-    hsdram.Init.InternalBankNumber = FMC_INIT(FMC_SDRAM_INTERN_BANKS_NUM, CIRCUITPY_HW_SDRAM_INTERN_BANKS_NUM);
-    hsdram.Init.CASLatency = FMC_INIT(FMC_SDRAM_CAS_LATENCY, CIRCUITPY_HW_SDRAM_CAS_LATENCY);
-    hsdram.Init.SDClockPeriod = FMC_INIT(FMC_SDRAM_CLOCK_PERIOD, CIRCUITPY_HW_SDRAM_CLOCK_PERIOD);
-    hsdram.Init.ReadPipeDelay = FMC_INIT(FMC_SDRAM_RPIPE_DELAY, CIRCUITPY_HW_SDRAM_RPIPE_DELAY);
-    hsdram.Init.ReadBurst = (CIRCUITPY_HW_SDRAM_RBURST) ? FMC_SDRAM_RBURST_ENABLE : FMC_SDRAM_RBURST_DISABLE;
-    hsdram.Init.WriteProtection = (CIRCUITPY_HW_SDRAM_WRITE_PROTECTION) ? FMC_SDRAM_WRITE_PROTECTION_ENABLE : FMC_SDRAM_WRITE_PROTECTION_DISABLE;
+        memcpy(&hsdram.Init, &config->banks[i].init, sizeof(hsdram.Init));
 
-    /* Initialize the SDRAM controller */
-    if (HAL_SDRAM_Init(&hsdram, &SDRAM_Timing) != HAL_OK) {
-        DEBUG_printf("sdram: %s", "init error");
-        return false;
+        memcpy(&SDRAM_Timing, &config->banks[i].timing, sizeof(SDRAM_Timing));
+
+        /* Initialize the SDRAM controller */
+        if (HAL_SDRAM_Init(&hsdram, &SDRAM_Timing) != HAL_OK) {
+            DEBUG_printf("sdram bank[%d]: %s", i, "init error");
+        }
     }
 
-    sdram_init_seq();
+    sdram_init_seq(config);
 
-    return true;
 }
-
 void sdram_deinit(void) {
     FMC_SDRAM_CommandTypeDef command = {0};
     if (FMC_Initialized) {
@@ -167,78 +111,55 @@ void sdram_deinit(void) {
 }
 
 void *sdram_start(void) {
-    return (void *)SDRAM_START_ADDRESS;
+    return (void *)sdram_start_address;
 }
 
 void *sdram_end(void) {
-    return (void *)(SDRAM_START_ADDRESS + CIRCUITPY_HW_SDRAM_SIZE);
+    return (void *)(sdram_start_address + CIRCUITPY_HW_SDRAM_SIZE);
 }
 
 uint32_t sdram_size(void) {
     return CIRCUITPY_HW_SDRAM_SIZE;
 }
 
-static void sdram_init_seq(void) {
+static void sdram_init_seq(const struct stm32_sdram_config *config) {
     FMC_SDRAM_CommandTypeDef command = {0};
     /* Program the SDRAM external device */
-    __IO uint32_t tmpmrd = 0;
+
+    command.AutoRefreshNumber = config->num_auto_refresh;
+    command.ModeRegisterDefinition = config->mode_register;
+    if (config->banks_len == 2U) {
+        command.CommandTarget = FMC_SDRAM_CMD_TARGET_BANK1_2;
+        sdram_start_address = 0xC0000000;
+    } else if (config->banks[0].init.SDBank == FMC_SDRAM_BANK1) {
+        command.CommandTarget = FMC_SDRAM_CMD_TARGET_BANK1;
+        sdram_start_address = 0xC0000000;
+    } else {
+        command.CommandTarget = FMC_SDRAM_CMD_TARGET_BANK2;
+        sdram_start_address = 0xD0000000;
+
+    }
 
     /* Configure a clock configuration enable command */
     command.CommandMode = FMC_SDRAM_CMD_CLK_ENABLE;
-    command.CommandTarget = FMC_SDRAM_CMD_TARGET_BANK;
-    command.AutoRefreshNumber = 1;
-    command.ModeRegisterDefinition = 0;
-
-    /* Send the command */
     HAL_SDRAM_SendCommand(&hsdram, &command, HAL_MAX_DELAY);
 
-    /* Insert 100 ms delay */
     HAL_Delay(100);
 
     /* Configure a PALL (precharge all) command */
     command.CommandMode = FMC_SDRAM_CMD_PALL;
-    command.CommandTarget = FMC_SDRAM_CMD_TARGET_BANK;
-    command.AutoRefreshNumber = 1;
-    command.ModeRegisterDefinition = 0;
-
-    /* Send the command */
     HAL_SDRAM_SendCommand(&hsdram, &command, HAL_MAX_DELAY);
 
     /* Configure a Auto-Refresh command */
     command.CommandMode = FMC_SDRAM_CMD_AUTOREFRESH_MODE;
-    command.CommandTarget = FMC_SDRAM_CMD_TARGET_BANK;
-    command.AutoRefreshNumber = CIRCUITPY_HW_SDRAM_AUTOREFRESH_NUM;
-    command.ModeRegisterDefinition = 0;
-
-    /* Send the command */
     HAL_SDRAM_SendCommand(&hsdram, &command, HAL_MAX_DELAY);
-
-    /* Program the external memory mode register */
-    tmpmrd = (uint32_t)0x0 | FMC_INIT(SDRAM_MODEREG_BURST_LENGTH, CIRCUITPY_HW_SDRAM_BURST_LENGTH) |
-        SDRAM_MODEREG_BURST_TYPE_SEQUENTIAL |
-        FMC_INIT(SDRAM_MODEREG_CAS_LATENCY, CIRCUITPY_HW_SDRAM_CAS_LATENCY) |
-        SDRAM_MODEREG_WRITEBURST_MODE_SINGLE;
 
     command.CommandMode = FMC_SDRAM_CMD_LOAD_MODE;
-    command.CommandTarget = FMC_SDRAM_CMD_TARGET_BANK;
-    command.AutoRefreshNumber = 1;
-    command.ModeRegisterDefinition = tmpmrd;
-
-    /* Send the command */
+    /* load mode */
     HAL_SDRAM_SendCommand(&hsdram, &command, HAL_MAX_DELAY);
 
-    /* Set the refresh rate counter.
-       Assuming 100MHz frequency, 8192 refresh cycles and 64ms refresh rate:
-       RefreshRate = 64 ms / 8192 cyc = 7.8125 us/cyc
-       RefreshCycles = 7.8125 us * 100 MHz = 782
-       According to the formula on p.1665 of the reference manual,
-       we also need to subtract 20 from the value, so the target
-       refresh rate is 782 - 20 = 762
-     */
-
-    #define REFRESH_COUNT (CIRCUITPY_HW_SDRAM_REFRESH_RATE * CIRCUITPY_HW_SDRAM_FREQUENCY_KHZ / CIRCUITPY_HW_SDRAM_REFRESH_CYCLES - 20)
-
-    HAL_SDRAM_ProgramRefreshRate(&hsdram, REFRESH_COUNT);
+    /* program refresh count */
+    HAL_SDRAM_ProgramRefreshRate(&hsdram, config->refresh_rate);
 
     #if defined(STM32F7) || defined(STM32H7)
     __disable_irq();
@@ -247,7 +168,7 @@ static void sdram_init_seq(void) {
     */
     MPU_InitStruct.Enable = MPU_REGION_ENABLE;
     MPU_InitStruct.Number = CPY_SDRAM_REGION;
-    MPU_InitStruct.BaseAddress = SDRAM_START_ADDRESS;
+    MPU_InitStruct.BaseAddress = sdram_start_address;
     MPU_InitStruct.Size = CPY_SDRAM_REGION_SIZE;
     MPU_InitStruct.SubRegionDisable = 0x0;
     MPU_InitStruct.TypeExtField = MPU_TEX_LEVEL1;
@@ -266,6 +187,8 @@ static void sdram_init_seq(void) {
     #endif
 
 }
+
+#if defined(CIRCUITPY_HW_SDRAM_STARTUP_TEST) && (CIRCUITPY_HW_SDRAM_STARTUP_TEST == 1)
 
 bool __attribute__((optimize("Os"))) sdram_test(bool exhaustive) {
     uint8_t const pattern = 0xaa;
@@ -293,7 +216,7 @@ bool __attribute__((optimize("Os"))) sdram_test(bool exhaustive) {
     #endif
 
     // Test data bus
-    for (uint32_t i = 0; i < CIRCUITPY_HW_SDRAM_MEM_BUS_WIDTH; i++) {
+    for (uint32_t i = 0; i < hsdram.Init.MemoryDataWidth; i++) {
         *((volatile uint32_t *)mem_base) = (1u << i);
         __DSB();
         if (*((volatile uint32_t *)mem_base) != (1u << i)) {
@@ -367,5 +290,4 @@ bool __attribute__((optimize("Os"))) sdram_test(bool exhaustive) {
     return true;
 }
 
-
-#endif // FMC_SDRAM_BANK
+#endif  // sdram_test

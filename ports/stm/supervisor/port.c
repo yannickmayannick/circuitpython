@@ -42,14 +42,12 @@
 void NVIC_SystemReset(void) NORETURN;
 
 #if (CPY_STM32H7) || (CPY_STM32F7)
-#ifdef STM32H750xx
-// Assumes H750 board has external SDRAM -- currently Diasy Seed
-// TODO: find a way to detect if SDRAM actually exists
+#if defined(CIRCUITPY_HW_SDRAM_SIZE)
 #include "sdram.h"
 #include <stdbool.h>
 #include <stddef.h>
 #include "lib/tlsf/tlsf.h"
-
+// internal SRAM + external SDRAM
 #define CIRCUITPY_RAM_DEVICE_COUNT (2)
 #endif
 
@@ -177,7 +175,7 @@ __attribute__((used, naked)) void Reset_Handler(void) {
 // Low power clock variables
 static volatile uint32_t systick_ms;
 
-#ifdef STM32H750xx
+#if  defined(CIRCUITPY_HW_SDRAM_SIZE)
 static tlsf_t _heap = NULL;
 static pool_t pools[CIRCUITPY_RAM_DEVICE_COUNT] = {NULL};
 
@@ -186,20 +184,19 @@ void port_heap_init(void) {
     // heap init in _port_heap_init called from port_init
 }
 
+void port_add_sdram_to_heap(void) {
+    size_t sdram_memory_size = sdram_size();
+    pools[1] = tlsf_add_pool(_heap, sdram_start(), sdram_memory_size);
+}
+
 static void _port_heap_init(void) {
     uint32_t *heap_bottom = port_heap_get_bottom();
     uint32_t *heap_top = port_heap_get_top();
     size_t size = (heap_top - heap_bottom) * sizeof(uint32_t);
-    #if  defined(CIRCUITPY_HW_SDRAM_SIZE) && (CIRCUITPY_HW_SDRAM_SIZE != 0)
     size_t sdram_memory_size = sdram_size();
-    #else
-    size_t sdram_memory_size = 0;
-    #endif
+
     _heap = tlsf_create_with_pool(heap_bottom, size, size + sdram_memory_size);
     pools[0] = tlsf_get_pool(_heap);
-    #if  defined(CIRCUITPY_HW_SDRAM_SIZE) && (CIRCUITPY_HW_SDRAM_SIZE != 0)
-    pools[1] = tlsf_add_pool(_heap, sdram_start(), sdram_memory_size);
-    #endif
 }
 
 static bool max_size_walker(void *ptr, size_t size, int used, void *user) {
@@ -267,9 +264,7 @@ safe_mode_t port_init(void) {
     __HAL_PWR_CLEAR_FLAG(PWR_FLAG_WU);
     stm32_peripherals_rtc_reset_alarms();
 
-    #ifdef STM32H750xx
-    sdram_init();
-    // sdram_test(false);
+    #if  defined(CIRCUITPY_HW_SDRAM_SIZE)
     _port_heap_init();
     #endif
     // Turn off SysTick
