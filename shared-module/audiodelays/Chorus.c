@@ -302,7 +302,7 @@ audioio_get_buffer_result_t audiodelays_chorus_get_buffer(audiodelays_chorus_obj
                 }
 
                 // Add original sample + effect
-                word = sample_word + (word * mix);
+                word = sample_word + (int32_t)(word * mix);
                 word = synthio_mix_down_sample(word, 2);
 
                 if (MP_LIKELY(self->base.bits_per_sample == 16)) {
