@@ -43,6 +43,7 @@ void NVIC_SystemReset(void) NORETURN;
 
 #if (CPY_STM32H7) || (CPY_STM32F7)
 #if defined(CIRCUITPY_HW_SDRAM_SIZE)
+#include "stm.h"
 #include "sdram.h"
 #include <stdbool.h>
 #include <stddef.h>
@@ -184,7 +185,7 @@ void port_heap_init(void) {
     // heap init in _port_heap_init called from port_init
 }
 
-void port_add_sdram_to_heap(void) {
+void stm_add_sdram_to_heap(void) {
     size_t sdram_memory_size = sdram_size();
     pools[1] = tlsf_add_pool(_heap, sdram_start(), sdram_memory_size);
 }

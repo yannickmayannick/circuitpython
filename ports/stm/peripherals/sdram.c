@@ -144,7 +144,7 @@ static void sdram_init_seq(const struct stm32_sdram_config *config) {
     command.CommandMode = FMC_SDRAM_CMD_CLK_ENABLE;
     HAL_SDRAM_SendCommand(&hsdram, &command, HAL_MAX_DELAY);
 
-    HAL_Delay(100);
+    HAL_Delay(config->power_up_delay);
 
     /* Configure a PALL (precharge all) command */
     command.CommandMode = FMC_SDRAM_CMD_PALL;

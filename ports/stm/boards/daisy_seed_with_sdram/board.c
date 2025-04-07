@@ -6,9 +6,9 @@
 #include STM32_HAL_H
 
 #include "supervisor/board.h"
+#include "supervisor/stm.h"
 #include "sdram.h"
 
-extern void port_add_sdram_to_heap(void);
 
 /** SDRAM banks configuration. */
 static const struct stm32_sdram_bank_config bank_config[] = {
@@ -38,7 +38,7 @@ static const struct stm32_sdram_bank_config bank_config[] = {
 /* SDRAM configuration. */
 static const struct stm32_sdram_config config = {
     .sdram = FMC_SDRAM_DEVICE,
-    .power_up_delay = 0,
+    .power_up_delay = 100,
     .num_auto_refresh = 8,
     .mode_register = SDRAM_MODEREG_BURST_LENGTH_4 |
         SDRAM_MODEREG_BURST_TYPE_SEQUENTIAL |
@@ -56,5 +56,5 @@ static const struct stm32_sdram_config config = {
 void board_init(void) {
     sdram_init(&config);
 //    sdram_test(true);
-    port_add_sdram_to_heap();
+    stm_add_sdram_to_heap();
 }
