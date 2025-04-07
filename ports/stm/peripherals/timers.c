@@ -164,7 +164,7 @@ uint32_t stm_peripherals_timer_get_source_freq(TIM_TypeDef *timer) {
         source = HAL_RCC_GetPCLK2Freq();
         // 0b0xx means not divided; 0b100 is divide by 2; 0b101 by 4; 0b110 by 8; 0b111 by 16.
         #ifdef STM32H7
-        clk_div = (RCC->CFGR & RCC_D2CFGR_D2PPRE2);
+        clk_div = (RCC->D2CFGR & RCC_D2CFGR_D2PPRE2) >> RCC_D2CFGR_D2PPRE2_Pos;
         #else
         clk_div = (RCC->CFGR & RCC_CFGR_PPRE2) >> RCC_CFGR_PPRE2_Pos;
         #endif
@@ -173,7 +173,7 @@ uint32_t stm_peripherals_timer_get_source_freq(TIM_TypeDef *timer) {
         source = HAL_RCC_GetPCLK1Freq();
         // 0b0xx means not divided; 0b100 is divide by 2; 0b101 by 4; 0b110 by 8; 0b111 by 16.
         #ifdef STM32H7
-        clk_div = (RCC->CFGR & RCC_D1CFGR_D1PPRE_Msk);
+        clk_div = (RCC->D1CFGR & RCC_D1CFGR_D1PPRE) >> RCC_D1CFGR_D1PPRE_Pos;
         #else
         clk_div = (RCC->CFGR & RCC_CFGR_PPRE1) >> RCC_CFGR_PPRE1_Pos;
         #endif
